@@ -1,5 +1,8 @@
 import React from 'react';
 import {FormattedDate} from 'react-intl';
+import {Pagination} from 'react-bootstrap';
+
+import TrackActions from '../data/TrackActions';
 
 class Transactions extends React.Component {
     constructor(props) {
@@ -7,12 +10,20 @@ class Transactions extends React.Component {
         this.state = {
             is_filtered: false,
         };
+
+        this.handleSelectPage = this.handleSelectPage.bind(this);
+        TrackActions.selectTransactionPage(1);
     }
+
+    handleSelectPage(eventKey){
+        TrackActions.selectTransactionPage(eventKey);
+    }
+
     render() {
         if (this.props.transactions === undefined) {
             return null;
         }
-        
+
         return (
           <div>
           <h3>Transactions</h3>
@@ -20,7 +31,7 @@ class Transactions extends React.Component {
             <div className="col-md-10">
               <table className="table table-condensed">
                 <tbody>
-                {[...this.props.transactions.values()].map(trans => {
+                {[...this.props.transactions.transactions.values()].map(trans => {
                   return (
                     <tr key={trans.id}>
                       <td><FormattedDate value={trans.when}/></td>
@@ -62,6 +73,19 @@ class Transactions extends React.Component {
                 </div>
             </div>
           </div>
+          <Pagination 
+            prev
+            next
+            first
+            last
+            ellipsis
+            boundaryLinks
+            items={this.props.transactions.num_pages}
+            maxButtons={5}
+            bsSize="medium"
+            activePage={ this.props.transactions.active_page}
+            onSelect={this.handleSelectPage}
+          />
           </div>
         );
     }

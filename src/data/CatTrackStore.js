@@ -13,27 +13,43 @@ class CatTrackStore extends ReduceStore {
   }
 
   getInitialState() {
-    return Immutable.OrderedMap();
+    return {
+      active_page: 1,
+      num_pages: 1,
+      page_size: 20,
+      transactions: Immutable.OrderedMap(),
+    }
   }
 
   reduce(state, action) {
     switch (action.type) {
       case TrackActionTypes.ADD_TRANSACTION:
         const id = Counter.increment();
-        return state.set(id, new Transaction({
-          id,
-          when: action.when,
-          description: action.description,
-          amount: action.amount,
-        }));
+        return {
+          active_page: 1,
+          num_pages: 1,
+          page_size: state.page_size,
+          transactions: state.transactions.set(id, new Transaction({
+            id,
+            when: action.when,
+            description: action.description,
+            amount: action.amount,
+          }))
+        };
       case TrackActionTypes.SELECT_TRANSACTION_PAGE:
-        CatTrackDataManager.loadTransactions(action.page_num);
+        CatTrackDataManager.loadTransactions(action.page_num, state.page_size);
         return state;
       case TrackActionTypes.TRANSACTION_PAGE_LOADED:
-        return state.merge(action.transactions.map(transaction => [
-          transaction.id,
-          transaction,
-        ]));
+        const num_pages = Math.ceil(action.num_records / state.page_size);
+        return {
+          active_page: action.page_num,
+          num_pages: num_pages,
+          page_size: state.page_size,
+          transactions: Immutable.OrderedMap(action.transactions.map(transaction => [
+            transaction.id,
+            transaction,
+          ])),
+        };
       default:
         return state;
     }

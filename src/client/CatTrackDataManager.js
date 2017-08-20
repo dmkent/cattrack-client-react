@@ -15,9 +15,9 @@ import CatTrackAPI from './CatTrackAPI';
 import TrackDispatcher from '../data/TrackDispatcher';
 
 const CatTrackDataManager = {
-  loadTransactions(page_num: number) {
+  loadTransactions(page_num: number, page_size: number) {
     CatTrackAPI
-      .get('/api/transactions', {page_num})
+      .get('/api/transactions/', {page: page_num, page_size: page_size})
       .then(rawTransactions => {
         TrackDispatcher.dispatch({
           type: 'transactions/loaded',
@@ -25,6 +25,7 @@ const CatTrackDataManager = {
           transactions: rawTransactions.results.map(rawTransaction => {
               return new Transaction(rawTransaction);
           }),
+          num_records: rawTransactions.count,
         });
       })
       .catch(error => {

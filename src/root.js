@@ -13,7 +13,3 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 ReactDOM.render(<AppContainer/>, document.getElementById('root'));
-
-import TrackActions from './data/TrackActions';
-TrackActions.addTransaction(Date(2017, 1, 1), "got money", -30.0);
-TrackActions.selectTransactionPage(1);

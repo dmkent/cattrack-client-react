@@ -32,7 +32,7 @@ type TransactionObject = {
 // this at runtime though, so it's not actually sound. But we're all good if
 // we trust the API implementation :)
 declare class CatTrackAPI {
-  static get(uri: '/api/transactions/', data: {page_num: number}): Promise<Array<TransactionObject>>;
+  static get(uri: '/api/transactions/', data: {page: number, page_size: number}): Promise<Array<TransactionObject>>;
 }
 
 // $FlowExpectedError: Intentional rebinding of variable.
