@@ -36,6 +36,42 @@ const CatTrackDataManager = {
         });
       });
   },
+
+  performLogin(username: string, password: string) {
+    CatTrackAPI
+      .post('/api-token-auth/', {username: username, password: password})
+      .then(resp => {
+        TrackDispatcher.dispatch({
+          type: 'auth/response',
+          token: resp.token,
+        })
+      })
+      .catch(error => {
+        TrackDispatcher.dispatch({
+          type: "auth/failure",
+          error,
+          username,
+        })
+      });
+  },
+
+  updateToken(token: string) {
+    CatTrackAPI
+      .post('/api-token-refresh/', {token: token})
+      .then(resp => {
+        TrackDispatcher.dispatch({
+          type: 'auth/response',
+          token: resp,
+        })
+      })
+      .catch(error => {
+        TrackDispatcher.dispatch({
+          type: "auth/failure",
+          error,
+          user,
+        })
+      });
+  }
 };
 
 

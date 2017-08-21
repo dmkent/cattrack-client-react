@@ -1,10 +1,12 @@
 import AppView from '../views/AppView';
 import CatTrackStore from '../data/CatTrackStore';
+import AuthStore from '../data/AuthStore';
 import {Container} from 'flux/utils';
 
 function getStores() {
   return [
-    CatTrackStore
+    CatTrackStore,
+    AuthStore,
   ];
 }
 
@@ -13,6 +15,7 @@ function getState() {
      version: "2.0",
      title: "CatTrack",
      transactions: CatTrackStore.getState(),
+     auth: AuthStore.getState(),
   };
 }
 

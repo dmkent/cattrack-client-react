@@ -13,8 +13,20 @@ const Actions = {
   selectTransactionPage(page_num) {
     TrackDispatcher.dispatch({
       type: TrackActionTypes.SELECT_TRANSACTION_PAGE,
-       page_num,
+      page_num,
     });
+  },
+  attemptLogin(username, password) {
+    TrackDispatcher.dispatch({
+      type: TrackActionTypes.AUTH_REQUEST,
+      username,
+      password,
+    });
+  },
+  logout() {
+    TrackDispatcher.dispatch({
+      type: TrackActionTypes.AUTH_LOGOUT,
+    })
   }
 };
 
