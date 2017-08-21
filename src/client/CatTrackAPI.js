@@ -51,18 +51,29 @@ const CatTrackAPI = {
  * advanced but works with our server's API.
  */
 function promiseXHR(method: 'get' | 'post', uri, data) {
+  let send_body = null;
+  let suffix = '';
+  let headers = {};
+  if (method == 'post') {
+    send_body = JSON.stringify(data);
+    headers["Content-Type"] = "application/json";
+  } else {
   const query = [];
-  if (data) {
-    Object.keys(data).forEach(key => {
-      query.push(key + '=' + JSON.stringify(data[key]));
-    });
+    if (data) {
+      Object.keys(data).forEach(key => {
+        query.push(key + '=' + JSON.stringify(data[key]));
+      });
+    }
+    suffix = query.length > 0
+      ? '?' + query.join('&')
+      : '';
   }
-  const suffix = query.length > 0
-    ? '?' + query.join('&')
-    : '';
   return new Promise((resolve, reject) => {
-    xhr[method](
-      PREFIX + uri + suffix,
+    xhr[method]({
+        uri: PREFIX + uri + suffix,
+        body: send_body,
+        headers: headers,
+      },
       (err, res, body) => {
         if (err) {
           reject(err);
