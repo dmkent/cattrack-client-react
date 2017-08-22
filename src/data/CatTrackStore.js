@@ -22,6 +22,7 @@ class CatTrackStore extends ReduceStore {
   }
 
   reduce(state, action) {
+    console.log(action);
     switch (action.type) {
       case TrackActionTypes.ADD_TRANSACTION:
         const id = Counter.increment();
@@ -36,9 +37,6 @@ class CatTrackStore extends ReduceStore {
             amount: action.amount,
           }))
         };
-      case TrackActionTypes.SELECT_TRANSACTION_PAGE:
-        CatTrackDataManager.loadTransactions(action.page_num, state.page_size);
-        return state;
       case TrackActionTypes.TRANSACTION_PAGE_LOADED:
         const num_pages = Math.ceil(action.num_records / state.page_size);
         return {
