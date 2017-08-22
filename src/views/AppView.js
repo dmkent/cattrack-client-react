@@ -14,23 +14,29 @@ import {
   Redirect,
 } from 'react-router-dom';
  
-function AppView(props) {
-  return (
-    <IntlProvider locale="en">
-      <Router>
-        <div>
-          <NavComponent auth={props.auth}/>
-          <div className="container-fluid">
-            <h1>{props.title}</h1>
-            <ContentView transactions={props.transactions} auth={props.auth}/>
-          </div>
+class AppView extends React.Component {
+  componentWillMount() {
+    TrackActions.restoreLogin();
+  }
+
+  render() {
+    return (
+      <IntlProvider locale="en">
+        <Router>
           <div>
-            <p className="pull-right text-muted"><small>Client version: { props.version }</small></p>
+            <NavComponent auth={this.props.auth}/>
+            <div className="container-fluid">
+              <h1>{this.props.title}</h1>
+              <ContentView transactions={this.props.transactions} auth={this.props.auth}/>
+            </div>
+            <div>
+              <p className="pull-right text-muted"><small>Client version: { this.props.version }</small></p>
+            </div>
           </div>
-        </div>
-      </Router>
-    </IntlProvider>
-  );
+        </Router>
+      </IntlProvider>
+    );
+  }
 }
 
 class NavComponent extends React.Component {

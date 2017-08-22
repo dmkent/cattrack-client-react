@@ -2,22 +2,30 @@ import AppView from '../views/AppView';
 import CatTrackStore from '../data/CatTrackStore';
 import AuthStore from '../data/AuthStore';
 import {Container} from 'flux/utils';
+import React from 'react';
 
-function getStores() {
-  return [
-    CatTrackStore,
-    AuthStore,
-  ];
+class AppContainer extends React.Component {
+  static getStores() {
+    return [
+     CatTrackStore,
+     AuthStore,
+    ];
+  }
+
+  static calculateState(prevState) {
+    return {
+      version: "2.0",
+      title: "CatTrack",
+      transactions: CatTrackStore.getState(),
+      auth: AuthStore.getState(),
+    };
+  }
+
+  render() {
+    return <AppView {...this.state}/>;
+  }
 }
 
-function getState() {
-  return {
-     version: "2.0",
-     title: "CatTrack",
-     transactions: CatTrackStore.getState(),
-     auth: AuthStore.getState(),
-  };
-}
+const container = Container.create(AppContainer);
 
-export default Container.createFunctional(AppView,
-                                          getStores, getState);
+export default container;
