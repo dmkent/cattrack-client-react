@@ -37,8 +37,8 @@ declare class CatTrackAPI {
 
 // $FlowExpectedError: Intentional rebinding of variable.
 const CatTrackAPI = {
-  get(uri, data) {
-    return promiseXHR('get', uri, data);
+  get(uri, data, token) {
+    return promiseXHR('get', uri, data, token);
   },
 
   post(uri, data) {
@@ -50,7 +50,7 @@ const CatTrackAPI = {
  * This is a simple wrapper around XHR that let's us use promises. Not very
  * advanced but works with our server's API.
  */
-function promiseXHR(method: 'get' | 'post', uri, data) {
+function promiseXHR(method: 'get' | 'post', uri, data, token) {
   let send_body = null;
   let suffix = '';
   let headers = {};
@@ -67,6 +67,10 @@ function promiseXHR(method: 'get' | 'post', uri, data) {
     suffix = query.length > 0
       ? '?' + query.join('&')
       : '';
+  }
+  
+  if (token !== undefined) {
+    headers['Authorization'] = 'JWT ' + token;
   }
   return new Promise((resolve, reject) => {
     xhr[method]({
