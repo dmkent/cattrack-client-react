@@ -86,19 +86,40 @@ class Logout extends React.Component {
   }
 
   render() {
-    return <Redirect to="/"/>;
+    return <Redirect to="/login"/>;
   }
 }
+
+const PrivateRoute = ({ component: Component, auth, render, ...rest }) => {
+  return (
+    <Route {...rest} render={props => {
+      if (auth.is_logged_in) {
+        if (render !== undefined) {
+          return render(props);
+        } else {
+          return <Component {...props}/>;
+        }
+      } else {
+        return (
+          <Redirect to={{
+            pathname: '/login',
+            state: { from: props.location }
+          }}/>
+        );
+      }
+    }}/>
+  )
+};
 
 class ContentView extends React.Component {
   render() {
     return (
       <div>
-      <Route exact path="/" component={Dashboard}/>
-      <Route path="/login" render={(props) => { return <Login is_logged_in={this.props.auth.is_logged_in} {...props}/>}}/>
-      <Route path="/accounts" component={Dashboard}/>
-      <Route path="/transactions" render={() => { return <Transactions transactions={this.props.transactions}/>}}/>
+      <Route path="/login" render={(props) => { return <Login {...props} {...this.props}/>}}/>
       <Route path="/logout" component={Logout}/>
+      <Route exact path="/" auth={this.props.auth} component={Dashboard}/>
+      <PrivateRoute path="/accounts" auth={this.props.auth} component={Dashboard}/>
+      <PrivateRoute path="/transactions" auth={this.props.auth} render={() => { return <Transactions transactions={this.props.transactions}/>}}/>
       </div>
     );
   }

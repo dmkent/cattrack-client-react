@@ -34,10 +34,10 @@ class Login extends React.Component {
 
   render() {
     let from_route = this.props.location.state;
-    if (from_route === undefined) {
+    if (from_route === undefined || from_route === "/login") {
       from_route = '/';
     }
-    if (this.props.is_logged_in) {
+    if (this.props.auth.is_logged_in) {
       return (
         <Redirect to={from_route}/>
       );
