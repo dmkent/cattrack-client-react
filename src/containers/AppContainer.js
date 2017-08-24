@@ -1,5 +1,6 @@
 import AppView from '../views/AppView';
 import CatTrackStore from '../data/CatTrackStore';
+import AccountsStore from '../data/AccountsStore';
 import AuthStore from '../data/AuthStore';
 import {Container} from 'flux/utils';
 import React from 'react';
@@ -8,6 +9,7 @@ class AppContainer extends React.Component {
   static getStores() {
     return [
      CatTrackStore,
+     AccountsStore,
      AuthStore,
     ];
   }
@@ -18,6 +20,7 @@ class AppContainer extends React.Component {
       title: "CatTrack",
       transactions: CatTrackStore.getState(),
       auth: AuthStore.getState(),
+      accounts: AccountsStore.getState(),
     };
   }
 
@@ -26,6 +29,6 @@ class AppContainer extends React.Component {
   }
 }
 
-const container = Container.create(AppContainer);
+const container = Container.create(AppContainer, {pure: false});
 
 export default container;

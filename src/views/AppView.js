@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Modal, Nav, Navbar, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import Dashboard from './Dashboard';
+import Accounts from './Accounts';
 import Transactions from './Transactions';
 import Login from './Login';
 import TrackActions from '../data/TrackActions'
@@ -15,7 +16,7 @@ import {
 } from 'react-router-dom';
  
 class AppView extends React.Component {
-  componentWillMount() {
+  componentDidMount() {
     TrackActions.restoreLogin();
   }
 
@@ -27,7 +28,7 @@ class AppView extends React.Component {
             <NavComponent auth={this.props.auth}/>
             <div className="container-fluid">
               <h1>{this.props.title}</h1>
-              <ContentView transactions={this.props.transactions} auth={this.props.auth}/>
+              <ContentView {...this.props}/>
             </div>
             <div>
               <p className="pull-right text-muted"><small>Client version: { this.props.version }</small></p>
@@ -66,7 +67,7 @@ class NavComponent extends React.Component {
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav>
-            <LinkContainer to="/"><NavItem>Dashboard</NavItem></LinkContainer>
+            <LinkContainer exact to="/"><NavItem>Dashboard</NavItem></LinkContainer>
             <LinkContainer to="/accounts"><NavItem>Accounts</NavItem></LinkContainer>
             <LinkContainer to="/transactions"><NavItem>Transactions</NavItem></LinkContainer>
           </Nav>
@@ -118,7 +119,7 @@ class ContentView extends React.Component {
       <Route path="/login" render={(props) => { return <Login {...props} {...this.props}/>}}/>
       <Route path="/logout" component={Logout}/>
       <Route exact path="/" auth={this.props.auth} component={Dashboard}/>
-      <PrivateRoute path="/accounts" auth={this.props.auth} component={Dashboard}/>
+      <PrivateRoute path="/accounts" auth={this.props.auth} render={(props) => {return <Accounts accounts={this.props.accounts}/>}}/>
       <PrivateRoute path="/transactions" auth={this.props.auth} render={() => { return <Transactions transactions={this.props.transactions}/>}}/>
       </div>
     );

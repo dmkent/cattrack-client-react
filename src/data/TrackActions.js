@@ -39,6 +39,39 @@ const Actions = {
         });
       });
   },
+  uploadToAccount(account, upload_file) {
+    let data = new FormData();
+    data.append('data_file', upload_file);
+    data.append('name', name);
+
+    const auth_token = AuthStore.getState().token;
+    CatTrackAPI
+      .upload_form('/api/accounts/' + account + '/load/',
+                   data, auth_token, {
+                     beforeSend: function(xhrObject){ 
+                       xhrObject.onprogress = function(event){
+                        TrackDispatcher.dispatch({
+                          type: 'accounts/upload-progress-update',
+                          progress: event.loaded / event.total * 100,
+                        });
+                       }}
+                    }
+                  )
+      .then(() => {
+        TrackDispatcher.dispatch({
+          type: 'accounts/upload-success',
+          account,
+        });
+      })
+      .catch(error => {
+        TrackDispatcher.dispatch({
+          type: 'accounts/upload-failed',
+          account,
+          error,
+        });
+      });
+  },
+
   attemptLogin(username, password) {
     CatTrackAPI
       .post('/api-token-auth/', {username: username, password: password})

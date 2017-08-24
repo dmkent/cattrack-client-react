@@ -41,8 +41,12 @@ const CatTrackAPI = {
     return promiseXHR('get', uri, data, token);
   },
 
-  post(uri, data) {
+  post(uri, data, token) {
     return promiseXHR('post', uri, data);
+  },
+
+  upload_form(uri, formdata, token, options) {
+    return promiseXHRFormUpload(uri, formdata, token, options);
   },
 };
 
@@ -110,4 +114,48 @@ function promiseXHR(method: 'get' | 'post', uri, data, token) {
   });
 }
 
+function promiseXHRFormUpload(uri, formdata, token, options) {
+  let headers = {};
+
+  if (token !== undefined) {
+    headers['Authorization'] = 'JWT ' + token;
+  }
+  return new Promise((resolve, reject) => {
+    xhr.post({
+        uri: PREFIX + uri,
+        body: formdata,
+        headers: headers,
+        ...options
+      },
+      (err, res, body) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        if (res.statusCode !== 200) {
+          reject(new Error(
+            '[status: ' + res.statusCode + '] ' + res.body,
+          ));
+          return;
+        }
+
+        // It's fine if the body is empty.
+        if (body == null) {
+          resolve(undefined);
+        }
+
+        // Not okay if the body isn't a string though.
+        if (typeof body !== 'string') {
+          reject(new Error('Responses from server must be JSON strings.'));
+        }
+
+        try {
+          resolve(JSON.parse(body));
+        } catch (e) {
+          reject(new Error('Responses from server must be JSON strings.'));
+        }
+      },
+    );
+  });
+}
 export default CatTrackAPI;
