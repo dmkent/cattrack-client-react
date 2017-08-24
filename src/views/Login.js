@@ -66,7 +66,7 @@ class Login extends React.Component {
                            onChange={this.handleChange} />
             </Col>
           </FormGroup>
-          <Button onClick={this.handleSubmit}>Submit</Button>
+          <Button type="submit">Submit</Button>
         </Form>
       </div>
     );
