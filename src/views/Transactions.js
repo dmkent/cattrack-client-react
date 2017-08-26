@@ -1,6 +1,6 @@
 import React from 'react';
 import {FormattedDate} from 'react-intl';
-import {Pagination} from 'react-bootstrap';
+import {Pagination, Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 class Transactions extends React.Component {
     constructor(props) {
@@ -17,6 +17,9 @@ class Transactions extends React.Component {
             return null;
         }
 
+        const tooltips = this.props.transactions.transactions.map((trans) => {
+            return <Tooltip id={"tooltip-" + trans.id}>{trans.description}</Tooltip>;
+        });
         return (
           <div>
           <h3>Transactions</h3>
@@ -28,7 +31,11 @@ class Transactions extends React.Component {
                   return (
                     <tr key={trans.id}>
                       <td><FormattedDate value={trans.when}/></td>
-                      <td>{trans.description}</td>
+                      <td>
+                        <OverlayTrigger placement="bottom" overlay={tooltips.get(trans.id)}>
+                            <span>{(trans.description.length > 50) ? trans.description.substr(0, 50) + '...' : trans.description}</span>
+                        </OverlayTrigger>
+                      </td>
                       <td className="text-right">{trans.amount}</td>
                       <td><span className="label label-default">{trans.category_name}</span></td>
                       <td>
@@ -42,7 +49,8 @@ class Transactions extends React.Component {
                           <button className="btn btn-default btn-sm">
                               <span className="glyphicon glyphicon-remove" aria-hidden="true"></span>
                           </button>
-                      </div>
+                        </div>
+                        {tooltips.get(trans.id)}
                       </td>
                     </tr>
                   );
