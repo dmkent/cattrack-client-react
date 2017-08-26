@@ -27,10 +27,11 @@ class AccountDetail extends React.Component {
     event.preventDefault();
   }
 
-  render() {           
+  render() {  
+    const account_obj = this.props.accounts.accounts.get(parseInt(this.props.account));        
     return (
       <div>
-        <h2>{this.props.account}</h2>
+        <h2>{account_obj.name}</h2>
         <Form onSubmit={this.handleSubmit}>
           <FormGroup controlId="form-upload">
             <ControlLabel>Load data: </ControlLabel>

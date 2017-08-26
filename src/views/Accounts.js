@@ -13,12 +13,19 @@ class Accounts extends React.Component {
         this.selectAccount = this.selectAccount.bind(this);
     }
     
+    componentDidMount() {
+        this.props.loadAccounts();
+    }
+
     createAccount(event) {
       console.log("create: " + event);
     }
 
     selectAccount(event) {
-      const target = event.target;
+      let target = event.target;
+      if (target.tagName === "TD") {
+        target = target.parentNode;
+      }
       this.setState({selected_account: target.getAttribute('data-item')});
     }
 
@@ -35,7 +42,7 @@ class Accounts extends React.Component {
             {
               [...this.props.accounts.accounts.values()].map((account) => {
                 return (<tr key={account.id} data-item={account.id} onClick={this.selectAccount}>
-                  <td data-item={account.id}>{account.name}</td>
+                  <td>{account.name}</td>
                   <td>...</td>
                 </tr>);
               })
