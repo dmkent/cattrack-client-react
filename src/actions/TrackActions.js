@@ -3,6 +3,7 @@ import TrackActionTypes from '../data/TrackActionTypes';
 import CatTrackAPI from '../client/CatTrackAPI';
 import store from '../store';
 import Transaction from '../data/Transaction';
+import Account from '../data/Account';
 
 function refreshLogin(dispatch) {
   const auth = store.getState().auth;
@@ -71,6 +72,28 @@ const TrackActions = {
           dispatch({
             type: 'transactions/load-error',
             page_num,
+            error,
+          });
+        });
+    };
+  },
+  loadAccounts() {
+    const auth_token = store.getState().auth.token;
+    return (dispatch) => {
+      refreshLogin(dispatch);
+      return CatTrackAPI
+        .get('/api/accounts/', {}, auth_token)
+        .then(rawAccounts => {
+          dispatch({
+            type: 'accounts/loaded',
+            accounts: rawAccounts.map(rawAccount => {
+                return new Account(rawAccount);
+            }),
+          });
+        })
+        .catch(error => {
+          dispatch({
+            type: 'accounts/load-error',
             error,
           });
         });

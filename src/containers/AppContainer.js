@@ -17,6 +17,9 @@ const mapDispatchToProps = dispatch => {
     },
     restoreLogin: () => {
       dispatch(TrackActions.restoreLogin())
+    },
+    loadAccounts: () => {
+      dispatch(TrackActions.loadAccounts());
     }
   }
 }

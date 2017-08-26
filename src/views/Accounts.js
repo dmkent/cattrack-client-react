@@ -33,7 +33,7 @@ class Accounts extends React.Component {
           <Table>
           <tbody>
             {
-              [...this.props.accounts.accounts].map((account) => {
+              [...this.props.accounts.accounts.values()].map((account) => {
                 return (<tr key={account.id} data-item={account.id} onClick={this.selectAccount}>
                   <td data-item={account.id}>{account.name}</td>
                   <td>...</td>

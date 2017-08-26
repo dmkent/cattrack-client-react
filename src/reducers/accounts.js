@@ -5,7 +5,7 @@ import TrackActionTypes from '../data/TrackActionTypes';
 
 function getInitialState() {
   return {
-    accounts: [{id:0,name:'test'},{id:1,name:'test2'}],//Immutable.Map(),
+    accounts: Immutable.OrderedMap(),
     upload_in_progress: false,
     upload_progress: 0,
     upload_result: null,
@@ -18,6 +18,13 @@ const accounts = (state = null, action) => {
   }
   console.log(action);
   switch (action.type) {
+    case 'accounts/loaded':
+      return Object.assign({}, state, {
+        accounts: Immutable.OrderedMap(action.accounts.map(account => [
+          account.id,
+          account,
+        ])),
+      });
     case 'accounts/upload-started':
       return Object.assign({}, state, {
         upload_in_progress: true,

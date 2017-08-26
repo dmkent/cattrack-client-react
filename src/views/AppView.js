@@ -19,6 +19,7 @@ import {
 class AppView extends React.Component {
   componentDidMount() {
     this.props.restoreLogin();
+    this.props.loadAccounts();
   }
 
   render() {
