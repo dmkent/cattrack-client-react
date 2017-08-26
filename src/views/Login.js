@@ -3,7 +3,7 @@ import React from 'react';
 import {Redirect} from 'react-router-dom';
 import {Form, FormGroup, Col, FormControl, Button, ControlLabel} from 'react-bootstrap';
 
-import TrackActions from '../data/TrackActions';
+import TrackActions from '../actions/TrackActions';
 
 class Login extends React.Component {
   constructor(props) {
@@ -28,14 +28,17 @@ class Login extends React.Component {
   }
 
   handleSubmit(event) {
-    TrackActions.attemptLogin(this.state.username, this.state.password);
+    this.props.onLogin(this.state.username, this.state.password);
     event.preventDefault();
   }
 
   render() {
-    let from_route = this.props.location.state;
-    if (from_route === undefined || from_route === "/login") {
+    var from_route;
+    let from_state = this.props.location.state;
+    if (from_state === undefined || from_state === "/login") {
       from_route = '/';
+    } else {
+      from_route = from_state.from;
     }
     if (this.props.auth.is_logged_in) {
       return (

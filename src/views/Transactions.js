@@ -2,8 +2,6 @@ import React from 'react';
 import {FormattedDate} from 'react-intl';
 import {Pagination} from 'react-bootstrap';
 
-import TrackActions from '../data/TrackActions';
-
 class Transactions extends React.Component {
     constructor(props) {
         super(props);
@@ -11,12 +9,7 @@ class Transactions extends React.Component {
             is_filtered: false,
         };
 
-        this.handleSelectPage = this.handleSelectPage.bind(this);
-        TrackActions.selectTransactionPage(1);
-    }
-
-    handleSelectPage(eventKey){
-        TrackActions.selectTransactionPage(eventKey);
+        props.onSelectPage(1);
     }
 
     render() {
@@ -84,7 +77,7 @@ class Transactions extends React.Component {
             maxButtons={5}
             bsSize="medium"
             activePage={ this.props.transactions.active_page}
-            onSelect={this.handleSelectPage}
+            onSelect={this.props.onSelectPage}
           />
           </div>
         );

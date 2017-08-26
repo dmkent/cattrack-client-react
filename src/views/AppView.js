@@ -1,11 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Button, Modal, Nav, Navbar, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import Dashboard from './Dashboard';
 import Accounts from './Accounts';
-import Transactions from './Transactions';
-import Login from './Login';
-import TrackActions from '../data/TrackActions'
+import TransactionList from '../containers/TransactionList';
+import LoginContainer from '../containers/LoginContainer';
+import TrackActions from '../actions/TrackActions'
 import {IntlProvider} from 'react-intl';
 import {
   BrowserRouter as Router,
@@ -17,7 +18,7 @@ import {
  
 class AppView extends React.Component {
   componentDidMount() {
-    TrackActions.restoreLogin();
+    this.props.restoreLogin();
   }
 
   render() {
@@ -83,13 +84,24 @@ class NavComponent extends React.Component {
 
 class Logout extends React.Component {
   componentWillMount() {
-    TrackActions.logout();
+    this.props.logout();
   }
 
   render() {
     return <Redirect to="/login"/>;
   }
 }
+const logoutMapDispatchToProps = dispatch => {
+  return {
+    logout: () => {
+      dispatch(TrackActions.logout())
+    }
+  }
+}
+const LogoutContainer = connect(
+  (state) => {return {}},
+  logoutMapDispatchToProps
+)(Logout)
 
 const PrivateRoute = ({ component: Component, auth, render, ...rest }) => {
   return (
@@ -104,7 +116,7 @@ const PrivateRoute = ({ component: Component, auth, render, ...rest }) => {
         return (
           <Redirect to={{
             pathname: '/login',
-            state: { from: props.location }
+            state: { from: props.location.pathname }
           }}/>
         );
       }
@@ -116,11 +128,11 @@ class ContentView extends React.Component {
   render() {
     return (
       <div>
-      <Route path="/login" render={(props) => { return <Login {...props} {...this.props}/>}}/>
-      <Route path="/logout" component={Logout}/>
+      <Route path="/login" component={LoginContainer}/>
+      <Route path="/logout" component={LogoutContainer}/>
       <Route exact path="/" auth={this.props.auth} component={Dashboard}/>
       <PrivateRoute path="/accounts" auth={this.props.auth} render={(props) => {return <Accounts accounts={this.props.accounts}/>}}/>
-      <PrivateRoute path="/transactions" auth={this.props.auth} render={() => { return <Transactions transactions={this.props.transactions}/>}}/>
+      <PrivateRoute path="/transactions" auth={this.props.auth} component={TransactionList}/>
       </div>
     );
   }

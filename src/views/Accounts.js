@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Table } from 'react-bootstrap';
 
-import AccountDetail from './AccountDetail.js';
+import AccountDetailContainer from '../containers/AccountDetailContainer';
 
 class Accounts extends React.Component {
     constructor(props) {
@@ -45,7 +45,7 @@ class Accounts extends React.Component {
           <div>
           {
             (this.state.selected_account !== null) ?
-            <AccountDetail accounts={this.props.accounts} account={this.state.selected_account}/> : null
+            <AccountDetailContainer account={this.state.selected_account}/> : null
           }
           </div>
           </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, FormGroup, ControlLabel, FormControl, ProgressBar, Button } from 'react-bootstrap';
 
-import TrackActions from '../data/TrackActions';
+import TrackActions from '../actions/TrackActions';
 
 class AccountDetail extends React.Component {
   constructor(props) {
@@ -23,7 +23,7 @@ class AccountDetail extends React.Component {
   }
 
   handleSubmit(event) {
-    TrackActions.uploadToAccount(this.props.account, this.state.upload_file);
+    this.props.uploadToAccount(this.props.account, this.state.upload_file);
     event.preventDefault();
   }
 

@@ -1,12 +1,10 @@
 import { connect } from 'react-redux';
 import TrackActions from '../actions/TrackActions'
-import AppView from '../views/AppView'
+import Login from '../views/Login'
 
 const mapStateToProps = state => {
   return {
-    transactions: state.transactions,
     auth: state.auth,
-    accounts: state.accounts,
   }
 }
 
@@ -14,16 +12,13 @@ const mapDispatchToProps = dispatch => {
   return {
     onLogin: (username, password) => {
       dispatch(TrackActions.attemptLogin(username, password))
-    },
-    restoreLogin: () => {
-      dispatch(TrackActions.restoreLogin())
     }
   }
 }
 
-const AppContainer = connect(
+const LoginContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(AppView)
+)(Login)
 
-export default AppContainer
+export default LoginContainer

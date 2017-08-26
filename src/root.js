@@ -9,7 +9,19 @@
 'use strict';
 
 import AppContainer from './containers/AppContainer';
+//import catTrackApp from './reducers';
+import store from './store';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
+import { Provider } from 'react-redux';
+//import { createStore } from 'redux';
 
-ReactDOM.render(<AppContainer/>, document.getElementById('root'));
+
+//let store = createStore(catTrackApp);
+
+render(
+  <Provider store={store}>
+    <AppContainer />
+  </Provider>,
+  document.getElementById('root')
+)
