@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Button, Modal, Nav, Navbar, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import Dashboard from './Dashboard';
-import Accounts from './Accounts';
+import AccountsContainer from '../containers/AccountsContainer';
 import TransactionList from '../containers/TransactionList';
 import LoginContainer from '../containers/LoginContainer';
 import TrackActions from '../actions/TrackActions'
@@ -19,7 +19,6 @@ import {
 class AppView extends React.Component {
   componentDidMount() {
     this.props.restoreLogin();
-    this.props.loadAccounts();
   }
 
   render() {
@@ -131,8 +130,8 @@ class ContentView extends React.Component {
       <div>
       <Route path="/login" component={LoginContainer}/>
       <Route path="/logout" component={LogoutContainer}/>
-      <Route exact path="/" auth={this.props.auth} component={Dashboard}/>
-      <PrivateRoute path="/accounts" auth={this.props.auth} render={(props) => {return <Accounts accounts={this.props.accounts}/>}}/>
+      <Route exact path="/" component={Dashboard}/>
+      <PrivateRoute path="/accounts" auth={this.props.auth} component={AccountsContainer}/>
       <PrivateRoute path="/transactions" auth={this.props.auth} component={TransactionList}/>
       </div>
     );

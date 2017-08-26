@@ -84,7 +84,9 @@ const TrackActions = {
   loadAccounts() {
     const auth_token = store.getState().auth.token;
     return (dispatch) => {
-      refreshLogin(dispatch);
+      if (!refreshLogin(dispatch)) {
+        return;
+      }
       return CatTrackAPI
         .get('/api/accounts/', {}, auth_token)
         .then(rawAccounts => {
@@ -110,6 +112,9 @@ const TrackActions = {
 
     const auth_token = store.getState().auth.token;
     return (dispatch) => {
+      if (!refreshLogin(dispatch)) {
+        return;
+      }
       return CatTrackAPI
         .upload_form('/api/accounts/' + account + '/load/',
                     data, auth_token, {

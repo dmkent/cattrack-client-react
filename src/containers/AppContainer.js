@@ -4,9 +4,8 @@ import AppView from '../views/AppView'
 
 const mapStateToProps = state => {
   return {
-    transactions: state.transactions,
     auth: state.auth,
-    accounts: state.accounts,
+    ...state.app
   }
 }
 
@@ -18,9 +17,6 @@ const mapDispatchToProps = dispatch => {
     restoreLogin: () => {
       dispatch(TrackActions.restoreLogin())
     },
-    loadAccounts: () => {
-      dispatch(TrackActions.loadAccounts());
-    }
   }
 }
 
