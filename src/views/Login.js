@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {Redirect} from 'react-router-dom';
 import {Form, FormGroup, Col, FormControl, Button, ControlLabel} from 'react-bootstrap';

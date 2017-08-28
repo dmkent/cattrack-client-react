@@ -1,6 +1,8 @@
 import React from 'react';
 import {FormattedDate} from 'react-intl';
-import {Pagination, Tooltip, OverlayTrigger} from 'react-bootstrap';
+import {Button, Pagination, Tooltip, OverlayTrigger} from 'react-bootstrap';
+
+import CategorisorContainer from '../containers/CategorisorContainer';
 
 class Transactions extends React.Component {
     constructor(props) {
@@ -10,6 +12,17 @@ class Transactions extends React.Component {
         };
 
         props.onSelectPage(1);
+        this.showCategorisor = this.showCategorisor.bind(this);
+        this.reloadPage = this.reloadPage.bind(this);
+      }
+
+    showCategorisor(trans) {
+      this.props.setCategorisorTransaction(trans);
+      this.props.showCategorisor();
+    }
+
+    reloadPage() {
+      this.props.onSelectPage(this.props.transactions.active_page);
     }
 
     render() {
@@ -43,20 +56,20 @@ class Transactions extends React.Component {
                           <button className="btn btn-default btn-sm">
                               <span className="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                           </button>
-                          <button className="btn btn-default btn-sm">
+                          <Button bsSize="small" onClick={() => this.showCategorisor(trans)}>
                               <span className="glyphicon glyphicon-tags" aria-hidden="true"></span>
-                          </button>
+                          </Button>
                           <button className="btn btn-default btn-sm">
                               <span className="glyphicon glyphicon-remove" aria-hidden="true"></span>
                           </button>
                         </div>
-                        {tooltips.get(trans.id)}
                       </td>
                     </tr>
                   );
                 })}
                 </tbody>
                 </table>
+                <CategorisorContainer reloadPage={this.reloadPage}/>
             </div>
             <div className="col-md-2">
                 <h3>Time</h3>

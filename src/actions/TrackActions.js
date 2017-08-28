@@ -4,6 +4,7 @@ import CatTrackAPI from '../client/CatTrackAPI';
 import store from '../store';
 import Transaction from '../data/Transaction';
 import Account from '../data/Account';
+import Category from '../data/Category';
 
 function refreshLogin(dispatch) {
   const auth = store.getState().auth;
@@ -177,6 +178,133 @@ const TrackActions = {
     localStorage.removeItem('jwt');
     return {
       type: TrackActionTypes.AUTH_LOGOUT,
+    };
+  },
+
+  categorisorSetTransaction(transaction) {
+    const auth_token = store.getState().auth.token;
+    return (dispatch) => {
+      if (!refreshLogin(dispatch)) {
+        return;
+      }
+
+      dispatch({
+        type: 'categorisor/set-transaction',
+        transaction: transaction,
+      });
+
+      CatTrackAPI
+        .get('/api/transactions/' + transaction.id + '/suggest', {}, auth_token)
+        .then(resp => {
+          dispatch({
+            type: 'categorisor/suggestions-received',
+            categories: resp.map(cat => {
+                return new Category(cat);
+            }),
+          });
+        })
+        .catch(error => {
+          dispatch({
+            type: 'categorisor/suggestions-error',
+            error,
+          });
+        });
+    }
+  },
+
+  loadCategories() {
+    const auth_token = store.getState().auth.token;
+    return (dispatch) => {
+      return CatTrackAPI
+        .get('/api/categories', {}, auth_token)
+        .then(resp => {
+          dispatch({
+            type: 'categorisor/categories-received',
+            categories: resp.map(cat => {
+                return new Category(cat);
+            }),
+          });
+        })
+        .catch(error => {
+          dispatch({
+            type: 'categorisor/categories-error',
+            error,
+          });
+        })
+    };
+  },
+
+  categorisorAddSplit() {
+    return {
+      type: 'categorisor/add-split',
+    }
+  },
+
+  categorisorRemoveSplit(idx) {
+    return {
+      type: 'categorisor/remove-split',
+      idx
+    }
+  },
+
+  categorisorSetSplit(idx, name, value) {
+    return {
+      type: 'categorisor/set-split',
+      idx,
+      name,
+      value,
+    }
+  },
+
+  categorisorHide() {
+    return {
+      type: 'categorisor/hide',
+    };
+  },
+
+  categorisorSave(transaction, splits, onDone) {
+    const auth_token = store.getState().auth.token;
+    return (dispatch) => {
+      if (!refreshLogin(dispatch)) {
+        return;
+      }
+      let updated = transaction;
+      if (splits !== null && splits.size === 1) {
+          let new_category = splits.get(0).category;
+          updated = updated.set("category", new_category);
+      }
+      CatTrackAPI
+        .put('/api/transactions/' + updated.id + '/', updated, auth_token)
+        .then(resp => {
+          dispatch({
+            type: 'transaction/updated',
+            transaction: new Transaction(resp),
+          });
+
+          if (splits !== null && splits.size > 1) {
+            CatTrackAPI
+              .post('/api/transactions/' + updated.id + '/split/', splits, auth_token)
+              .then((resp) => {
+                dispatch({
+                  type: 'transaction/split-success',
+                });
+                onDone();
+              })
+              .catch(error => {
+                dispatch({
+                  type: 'transaction/split-error',
+                  error,
+                });
+              });
+          }
+          dispatch(this.categorisorHide())
+        })
+        .catch(error => {
+          dispatch({
+            type: 'transaction/update-error',
+            error,
+          });
+        });
     };
   }
 };

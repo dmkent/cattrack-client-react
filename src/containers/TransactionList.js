@@ -13,7 +13,18 @@ const mapDispatchToProps = dispatch => {
   return {
     onSelectPage: id => {
       dispatch(TrackActions.selectTransactionPage(id))
-    }
+    },
+    updateTransaction: (transaction) => {
+      dispatch(TrackActions.updateTransaction(transaction));
+    },
+    setCategorisorTransaction: (transaction) => {
+      dispatch(TrackActions.categorisorSetTransaction(transaction));
+    },
+    showCategorisor: () => {
+      dispatch({
+        type: 'categorisor/show',
+      })
+    },
   }
 }
 
