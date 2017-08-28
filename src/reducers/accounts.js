@@ -16,7 +16,7 @@ const accounts = (state = null, action) => {
   if (state === null) {
     state = getInitialState();
   }
-  console.log(action);
+
   switch (action.type) {
     case 'accounts/loaded':
       return Object.assign({}, state, {

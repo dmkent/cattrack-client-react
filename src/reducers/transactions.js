@@ -17,21 +17,22 @@ const transactions = (state = null, action) => {
   if (state ===  null) {
     state = getInitialState();
   }
-  console.log(action);
+
   switch (action.type) {
     case TrackActionTypes.ADD_TRANSACTION:
       const id = Counter.increment();
-      return {
-        active_page: 1,
-        num_pages: 1,
-        page_size: state.page_size,
+      return Object.assign({}, state, {
         transactions: state.transactions.set(id, new Transaction({
           id,
           when: action.when,
           description: action.description,
           amount: action.amount,
         }))
-      };
+      });
+    case 'transaction/updated':
+      return Object.assign({}, state, {
+        transactions: state.transactions.set(action.transaction.id, action.transaction),
+      });
     case TrackActionTypes.TRANSACTION_PAGE_LOADED:
       const num_pages = Math.ceil(action.num_records / state.page_size);
       return {
