@@ -42,7 +42,11 @@ const CatTrackAPI = {
   },
 
   post(uri, data, token) {
-    return promiseXHR('post', uri, data);
+    return promiseXHR('post', uri, data, token);
+  },
+
+  put(uri, data, token) {
+    return promiseXHR('put', uri, data, token);
   },
 
   upload_form(uri, formdata, token, options) {
@@ -54,11 +58,11 @@ const CatTrackAPI = {
  * This is a simple wrapper around XHR that let's us use promises. Not very
  * advanced but works with our server's API.
  */
-function promiseXHR(method: 'get' | 'post', uri, data, token) {
+function promiseXHR(method: 'get' | 'post' | 'put', uri, data, token) {
   let send_body = null;
   let suffix = '';
   let headers = {};
-  if (method == 'post') {
+  if (method == 'post' || method == 'put') {
     send_body = JSON.stringify(data);
     headers["Content-Type"] = "application/json";
   } else {
