@@ -3,6 +3,7 @@ import {FormattedDate} from 'react-intl';
 import {Button, Pagination, Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 import CategorisorContainer from '../containers/CategorisorContainer';
+import TransactionFilterContainer from '../containers/TransactionFilterContainer';
 
 class Transactions extends React.Component {
     constructor(props) {
@@ -11,9 +12,10 @@ class Transactions extends React.Component {
             is_filtered: false,
         };
 
-        props.onSelectPage(1);
+        props.onSelectTransactions(1, this.props.page_size, this.props.filters);
         this.showCategorisor = this.showCategorisor.bind(this);
         this.reloadPage = this.reloadPage.bind(this);
+        this.filterTransactions = this.filterTransactions.bind(this);
       }
 
     showCategorisor(trans) {
@@ -22,7 +24,18 @@ class Transactions extends React.Component {
     }
 
     reloadPage() {
-      this.props.onSelectPage(this.props.transactions.active_page);
+      this.props.onSelectTransactions(this.props.active_page, 
+                                      this.props.page_size,
+                                      this.props.filters);
+    }
+
+    filterTransactions(name, value) {
+        const new_filter = Object.assign({}, this.props.filters, {
+            [name]: value
+        });
+        this.props.onSelectTransactions(1, 
+                                        this.props.page_size,
+                                        new_filter)
     }
 
     render() {
@@ -30,7 +43,7 @@ class Transactions extends React.Component {
             return null;
         }
 
-        const tooltips = this.props.transactions.transactions.map((trans) => {
+        const tooltips = this.props.transactions.map((trans) => {
             return <Tooltip id={"tooltip-" + trans.id}>{trans.description}</Tooltip>;
         });
         return (
@@ -40,7 +53,7 @@ class Transactions extends React.Component {
             <div className="col-md-10">
               <table className="table table-condensed">
                 <tbody>
-                {[...this.props.transactions.transactions.values()].map(trans => {
+                {[...this.props.transactions.values()].map(trans => {
                   return (
                     <tr key={trans.id}>
                       <td><FormattedDate value={trans.when}/></td>
@@ -71,21 +84,7 @@ class Transactions extends React.Component {
                 </table>
                 <CategorisorContainer reloadPage={this.reloadPage}/>
             </div>
-            <div className="col-md-2">
-                <h3>Time</h3>
-                <p>-- OR --</p>
-                <div className="btn-group-vertical" role="group">
-                    <button className="btn btn-default btn-xs">All</button>
-                </div>
-                <h3>Category</h3>
-                <div className="btn-group-vertical" role="group">
-                    <button className="btn btn-default btn-xs">All</button>
-                </div>
-                <h3>Account</h3>
-                <div className="btn-group-vertical" role="group">
-                    <button className="btn btn-default btn-xs">All</button>
-                </div>
-            </div>
+            <TransactionFilterContainer onFilter={this.filterTransactions}/>
           </div>
           <Pagination 
             prev
@@ -94,11 +93,13 @@ class Transactions extends React.Component {
             last
             ellipsis
             boundaryLinks
-            items={this.props.transactions.num_pages}
+            items={this.props.num_pages}
             maxButtons={5}
             bsSize="medium"
-            activePage={ this.props.transactions.active_page}
-            onSelect={this.props.onSelectPage}
+            activePage={ this.props.active_page}
+            onSelect={(page_num) => {
+                this.props.onSelectTransactions(page_num, this.props.page_size, this.props.filters)
+            }}
           />
           </div>
         );

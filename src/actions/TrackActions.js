@@ -5,6 +5,7 @@ import store from '../store';
 import Transaction from '../data/Transaction';
 import Account from '../data/Account';
 import Category from '../data/Category';
+import Period from '../data/Period';
 
 function refreshLogin(dispatch) {
   const auth = store.getState().auth;
@@ -54,29 +55,64 @@ const TrackActions = {
       amount
     };
   },
-  selectTransactionPage(page_num) {
+  selectTransactions(page_num, page_size, filters) {
     const auth_token = store.getState().auth.token;
-    const page_size = store.getState().transactions.page_size;
+    const query_params = {
+      page: page_num,
+      page_size: page_size,
+    }
+    Object.keys(filters).forEach(function(keyval) {
+      if (filters[keyval] !== null) {
+        query_params[keyval] = filters[keyval];
+      }
+    }, this);
+
     return (dispatch) => {
       if (!refreshLogin(dispatch)) { 
         return;
       };
       return CatTrackAPI
-        .get('/api/transactions/', {page: page_num, page_size: page_size}, auth_token)
+        .get('/api/transactions/', query_params, auth_token)
         .then(rawTransactions => {
           dispatch({
             type: 'transactions/loaded',
             page_num: page_num,
+            page_size: page_size,
             transactions: rawTransactions.results.map(rawTransaction => {
                 return new Transaction(rawTransaction);
             }),
             num_records: rawTransactions.count,
+            filters: filters,
           });
         })
         .catch(error => {
           dispatch({
             type: 'transactions/load-error',
             page_num,
+            error,
+          });
+        });
+    };
+  },
+  loadPeriods() {
+    const auth_token = store.getState().auth.token;
+    return (dispatch) => {
+      if (!refreshLogin(dispatch)) {
+        return;
+      }
+      return CatTrackAPI
+        .get('/api/periods/', {}, auth_token)
+        .then(rawPeriods => {
+          dispatch({
+            type: 'periods/loaded',
+            periods: rawPeriods.map(rawPeriod => {
+                return new Period(rawPeriod);
+            }),
+          });
+        })
+        .catch(error => {
+          dispatch({
+            type: 'periods/load-error',
             error,
           });
         });

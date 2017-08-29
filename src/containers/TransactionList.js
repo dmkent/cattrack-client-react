@@ -4,15 +4,15 @@ import Transactions from '../views/Transactions'
 
 const mapStateToProps = state => {
   return {
-    transactions: state.transactions,
     auth: state.auth,
+    ...state.transactions
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    onSelectPage: id => {
-      dispatch(TrackActions.selectTransactionPage(id))
+    onSelectTransactions: (page_num, page_size, filters) => {
+      dispatch(TrackActions.selectTransactions(page_num, page_size, filters))
     },
     updateTransaction: (transaction) => {
       dispatch(TrackActions.updateTransaction(transaction));
