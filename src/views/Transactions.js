@@ -15,7 +15,6 @@ class Transactions extends React.Component {
         props.onSelectTransactions(1, this.props.page_size, this.props.filters);
         this.showCategorisor = this.showCategorisor.bind(this);
         this.reloadPage = this.reloadPage.bind(this);
-        this.filterTransactions = this.filterTransactions.bind(this);
       }
 
     showCategorisor(trans) {
@@ -27,15 +26,6 @@ class Transactions extends React.Component {
       this.props.onSelectTransactions(this.props.active_page, 
                                       this.props.page_size,
                                       this.props.filters);
-    }
-
-    filterTransactions(name, value) {
-        const new_filter = Object.assign({}, this.props.filters, {
-            [name]: value
-        });
-        this.props.onSelectTransactions(1, 
-                                        this.props.page_size,
-                                        new_filter)
     }
 
     render() {
@@ -84,7 +74,7 @@ class Transactions extends React.Component {
                 </table>
                 <CategorisorContainer reloadPage={this.reloadPage}/>
             </div>
-            <TransactionFilterContainer onFilter={this.filterTransactions}/>
+            <TransactionFilterContainer/>
           </div>
           <Pagination 
             prev

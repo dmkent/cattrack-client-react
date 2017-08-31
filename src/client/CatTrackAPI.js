@@ -69,7 +69,7 @@ function promiseXHR(method: 'get' | 'post' | 'put', uri, data, token) {
   const query = [];
     if (data) {
       Object.keys(data).forEach(key => {
-        query.push(key + '=' + JSON.stringify(data[key]));
+        query.push(key + '=' + data[key]);
       });
     }
     suffix = query.length > 0

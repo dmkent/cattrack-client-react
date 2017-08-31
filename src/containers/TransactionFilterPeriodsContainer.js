@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import TransactionFilter from '../views/TransactionFilter'
+import TransactionFilterPeriods from '../views/TransactionFilterPeriods'
 import TrackActions from '../actions/TrackActions'
 
 const mapStateToProps = state => {
@@ -25,9 +25,9 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-const TransactionFilterContainer = connect(
+const TransactionFilterPeriodsContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(TransactionFilter)
+)(TransactionFilterPeriods)
 
-export default TransactionFilterContainer;
+export default TransactionFilterPeriodsContainer;

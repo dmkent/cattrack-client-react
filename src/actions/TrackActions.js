@@ -16,7 +16,7 @@ function refreshLogin(dispatch) {
   // 1. check if we are expired - clear auth
   if (now > auth.expires) {
       console.log("Auth expired. Expiry: " + auth);
-      TrackActions.logout();
+      dispatch(TrackActions.logout());
       return false;
   }
 
@@ -89,6 +89,48 @@ const TrackActions = {
           dispatch({
             type: 'transactions/load-error',
             page_num,
+            error,
+          });
+        });
+    };
+  },
+  updateTransactionFilter(new_filters) {
+    const state = store.getState().transactions;
+    const merged = Object.assign({}, state.filters, new_filters);
+    return (dispatch) => {
+      dispatch(this.selectTransactions(1, state.page_size, merged));
+      dispatch(this.loadTransactionSummary(merged));
+    }
+  },
+  loadTransactionSummary(filters) {
+    const auth_token = store.getState().auth.token;
+    const query_params = {};
+    Object.keys(filters).forEach(function(keyval) {
+      if (filters[keyval] !== null) {
+        let val = filters[keyval];
+        if (keyval == "from_date" || keyval == "to_date") {
+
+        }
+        query_params[keyval] = filters[keyval];
+      }
+    }, this);
+
+    return (dispatch) => {
+      if (!refreshLogin(dispatch)) { 
+        return;
+      };
+      return CatTrackAPI
+        .get('/api/transactions/summary/', query_params, auth_token)
+        .then(rawSummary => {
+          dispatch({
+            type: 'transactions/summary-loaded',
+            summary: rawSummary,
+            filters: filters,
+          });
+        })
+        .catch(error => {
+          dispatch({
+            type: 'transactions/summary-load-error',
             error,
           });
         });
