@@ -8,16 +8,23 @@
 
 'use strict';
 
-import AppContainer from './containers/AppContainer';
-//import catTrackApp from './reducers';
-import store from './store';
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-//import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk'
+import { browserHistory } from 'react-router'
+import { routerMiddleware } from 'react-router-redux'
 
+import AppContainer from './containers/AppContainer';
+import catTrackApp from './reducers';
 
-//let store = createStore(catTrackApp);
+const router_middleware = routerMiddleware(browserHistory);
+
+let store = createStore(
+    catTrackApp,
+    applyMiddleware(thunk, router_middleware)
+);
 
 render(
   <Provider store={store}>

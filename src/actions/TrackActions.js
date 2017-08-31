@@ -1,14 +1,13 @@
 import TrackActionTypes from '../data/TrackActionTypes';
 
 import CatTrackAPI from '../client/CatTrackAPI';
-import store from '../store';
 import Transaction from '../data/Transaction';
 import Account from '../data/Account';
 import Category from '../data/Category';
 import Period from '../data/Period';
 
-function refreshLogin(dispatch) {
-  const auth = store.getState().auth;
+function refreshLogin(dispatch, getState) {
+  const auth = getState().auth;
   if (!auth.is_logged_in) {
     return false;
   }
@@ -56,7 +55,6 @@ const TrackActions = {
     };
   },
   selectTransactions(page_num, page_size, filters) {
-    const auth_token = store.getState().auth.token;
     const query_params = {
       page: page_num,
       page_size: page_size,
@@ -67,10 +65,11 @@ const TrackActions = {
       }
     }, this);
 
-    return (dispatch) => {
-      if (!refreshLogin(dispatch)) { 
+    return (dispatch, getState) => {
+      if (!refreshLogin(dispatch, getState)) { 
         return;
       };
+      const auth_token = getState().auth.token;
       return CatTrackAPI
         .get('/api/transactions/', query_params, auth_token)
         .then(rawTransactions => {
@@ -95,15 +94,15 @@ const TrackActions = {
     };
   },
   updateTransactionFilter(new_filters) {
-    const state = store.getState().transactions;
     const merged = Object.assign({}, state.filters, new_filters);
-    return (dispatch) => {
+    return (dispatch, getState) => {
+      const state = getState().transactions;
+    
       dispatch(this.selectTransactions(1, state.page_size, merged));
       dispatch(this.loadTransactionSummary(merged));
     }
   },
   loadTransactionSummary(filters) {
-    const auth_token = store.getState().auth.token;
     const query_params = {};
     Object.keys(filters).forEach(function(keyval) {
       if (filters[keyval] !== null) {
@@ -115,10 +114,12 @@ const TrackActions = {
       }
     }, this);
 
-    return (dispatch) => {
-      if (!refreshLogin(dispatch)) { 
+    return (dispatch, getState) => {
+      if (!refreshLogin(dispatch, getState)) { 
         return;
       };
+      const auth_token = getState().auth.token;
+    
       return CatTrackAPI
         .get('/api/transactions/summary/', query_params, auth_token)
         .then(rawSummary => {
@@ -137,11 +138,13 @@ const TrackActions = {
     };
   },
   loadPeriods() {
-    const auth_token = store.getState().auth.token;
-    return (dispatch) => {
-      if (!refreshLogin(dispatch)) {
+    return (dispatch, getState) => {
+      if (!refreshLogin(dispatch, getState)) {
         return;
       }
+    
+      const auth_token = getState().auth.token;
+    
       return CatTrackAPI
         .get('/api/periods/', {}, auth_token)
         .then(rawPeriods => {
@@ -161,11 +164,13 @@ const TrackActions = {
     };
   },
   loadAccounts() {
-    const auth_token = store.getState().auth.token;
-    return (dispatch) => {
-      if (!refreshLogin(dispatch)) {
+    return (dispatch, getState) => {
+      if (!refreshLogin(dispatch, getState)) {
         return;
       }
+      
+      const auth_token = getState().auth.token;
+    
       return CatTrackAPI
         .get('/api/accounts/', {}, auth_token)
         .then(rawAccounts => {
@@ -189,11 +194,13 @@ const TrackActions = {
     data.append('data_file', upload_file);
     data.append('name', name);
 
-    const auth_token = store.getState().auth.token;
-    return (dispatch) => {
-      if (!refreshLogin(dispatch)) {
+    return (dispatch, getState) => {
+      if (!refreshLogin(dispatch, getState)) {
         return;
       }
+      
+      const auth_token = getState().auth.token;
+    
       return CatTrackAPI
         .upload_form('/api/accounts/' + account + '/load/',
                     data, auth_token, {
@@ -260,11 +267,12 @@ const TrackActions = {
   },
 
   categorisorSetTransaction(transaction) {
-    const auth_token = store.getState().auth.token;
-    return (dispatch) => {
-      if (!refreshLogin(dispatch)) {
+    return (dispatch, getState) => {
+      if (!refreshLogin(dispatch, getState)) {
         return;
       }
+
+      const auth_token = getState().auth.token;
 
       dispatch({
         type: TrackActionTypes.CATEGORISOR_SET_TRANSACTION,
@@ -291,8 +299,9 @@ const TrackActions = {
   },
 
   loadCategories() {
-    const auth_token = store.getState().auth.token;
-    return (dispatch) => {
+    return (dispatch, getState) => {
+      const auth_token = getState().auth.token;
+    
       return CatTrackAPI
         .get('/api/categories', {}, auth_token)
         .then(resp => {
@@ -347,11 +356,13 @@ const TrackActions = {
   },
 
   categorisorSave(transaction, splits, onDone) {
-    const auth_token = store.getState().auth.token;
-    return (dispatch) => {
-      if (!refreshLogin(dispatch)) {
+    return (dispatch, getState) => {
+      if (!refreshLogin(dispatch, getState)) {
         return;
       }
+
+      const auth_token = getState().auth.token;
+    
       let updated = transaction;
       if (splits !== null && splits.size === 1) {
           let new_category = splits.get(0).category;
