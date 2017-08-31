@@ -55,7 +55,8 @@ class Login extends React.Component {
             </Col>
             <Col sm={10}>
               <FormControl type="text" placeholder="Username" name="username"
-                           onChange={this.handleChange} />
+                           onChange={this.handleChange} 
+                           autoFocus/>
             </Col>
           </FormGroup>
 
