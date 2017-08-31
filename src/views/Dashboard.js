@@ -1,46 +1,32 @@
 import React from 'react';
+import PlotlyPie from './PlotlyPie';
+import {Grid, Col, Row} from 'react-bootstrap';
+
+import TransactionFilterPeriodsContainer from '../containers/TransactionFilterPeriodsContainer';
+
 
 class Dashboard extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            is_filtered: false,
-        };
+    componentDidMount() {
+      this.props.loadSummary(this.props.filters);
     }
+
     render() {
-        var cnt = 0;
-        const period_buttons = ["P1", "P2"].map((period) => {
-          cnt++;
-          return (<button key={cnt} className="btn btn-default btn-xs">
-            {period}
-          </button>);
-        });
         return (
           <div>
           <h3>Recent transactions</h3>
-          <div className="btn-group-vertical" role="group">
-            <button /*active={this.state.is_filtered} */
-                    className="btn btn-default btn-xs">All</button>
-            { period_buttons }
+          <Grid>
+            <Row>
+              <Col md={10}>
+                <PlotlyPie summary={this.props.summary}/>
+              </Col>
+              <Col md={2}>
+                <div className="btn-group-vertical" role="group">
+                  <TransactionFilterPeriodsContainer/>
+                </div>
+              </Col>
+            </Row>
+          </Grid>
           </div>
-          </div>
-/*<table *ngIf="summaries !== null && summaries.length > 0" className="table">
-  <tr>
-    <th>Category</th>
-    <th>Total from {{filterFrom | date}} to {{filterTo | date}}</th>
-  </tr>
-  <tr *ngFor="let summary of summaries">
-    <td>{{summary.category_name}}</td>
-    <td>{{summary.total | currency:AUD:true }}</td>
-  </tr>
-</table>
-<div className="grid grid-pad">
-  <div *ngFor="let trans of transactions" (click)="gotoDetail(trans)" className="col-1-4">
-    <div className="module transactions">
-      <h4>{{trans.description}}</h4>
-    </div>
-  </div>
-</div>*/
         );
     }
 }

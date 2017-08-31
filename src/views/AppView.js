@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Button, Modal, Nav, Navbar, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import Dashboard from './Dashboard';
+import DashboardContainer from '../containers/DashboardContainer';
 import AccountsContainer from '../containers/AccountsContainer';
 import TransactionList from '../containers/TransactionList';
 import LoginContainer from '../containers/LoginContainer';
@@ -130,7 +130,7 @@ class ContentView extends React.Component {
       <div>
       <Route path="/login" component={LoginContainer}/>
       <Route path="/logout" component={LogoutContainer}/>
-      <Route exact path="/" component={Dashboard}/>
+      <PrivateRoute exact path="/" auth={this.props.auth} component={DashboardContainer}/>
       <PrivateRoute path="/accounts" auth={this.props.auth} component={AccountsContainer}/>
       <PrivateRoute path="/transactions" auth={this.props.auth} component={TransactionList}/>
       </div>
