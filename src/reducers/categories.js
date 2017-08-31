@@ -82,7 +82,7 @@ const categories = (state = null, action) => {
   }
   let new_state = null;
   switch (action.type) {
-    case 'categorisor/set-transaction':
+    case TrackActionTypes.CATEGORISOR_SET_TRANSACTION:
       return Object.assign({}, state, {
         transaction: action.transaction,
         splits: initialSplits(action.transaction, state.suggestions),
@@ -90,7 +90,7 @@ const categories = (state = null, action) => {
           valid: true,
         }
       });
-    case 'categorisor/add-split':
+    case TrackActionTypes.CATEGORISOR_ADD_SPLIT:
       return Object.assign({}, state, {
         splits: state.splits.push({
           category: state.categories.get(0, {id: 0}).id,
@@ -100,7 +100,7 @@ const categories = (state = null, action) => {
           valid: null,
         }
       });
-    case 'categorisor/set-split':
+    case TrackActionTypes.CATEGORISOR_SET_SPLIT:
       const new_split = Object.assign({}, state.splits.get(action.idx), {
         [action.name]: action.value,
       });
@@ -109,31 +109,31 @@ const categories = (state = null, action) => {
       });
       new_state.is_valid = splitsAreValid(new_state.transaction, new_state.splits);
       return new_state;    
-    case 'categorisor/remove-split':
+    case TrackActionTypes.CATEGORISOR_REMOVE_SPLIT:
       new_state = Object.assign({}, state, {
         splits: state.splits.delete(action.idx),
       });
       new_state.is_valid = splitsAreValid(new_state.transaction, new_state.splits);      
       return new_state;
-    case 'categorisor/categories-received':
+    case TrackActionTypes.CATEGORISOR_CATEGORIES_RECEIVED:
       return Object.assign({}, state, {
         categories: Immutable.List(action.categories),
       });
-    case 'categorisor/categories-error':
+    case TrackActionTypes.CATEGORISOR_CATEGORIES_ERROR:
       return state;
-    case 'categorisor/suggestions-received':
+    case TrackActionTypes.CATEGORISOR_SUGGESTIONS_RECEIVED:
       const new_suggestions = Immutable.List(action.categories);
       return Object.assign({}, state, {
         suggestions: new_suggestions,
         splits: initialSplits(state.transaction, new_suggestions),
       });
-    case 'categorisor/suggestions-error':
+    case TrackActionTypes.CATEGORISOR_SUGGESTIONS_ERROR:
       return state;
-    case 'categorisor/show':
+    case TrackActionTypes.CATEGORISOR_SHOW:
       return Object.assign({}, state, {
         show_categorisor: true,
       });
-    case 'categorisor/hide':
+    case TrackActionTypes.CATEGORISOR_HIDE:
       return Object.assign({}, state, {
         show_categorisor: false,
       });

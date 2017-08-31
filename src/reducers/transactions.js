@@ -41,7 +41,7 @@ const transactions = (state = null, action) => {
           })
         )
       });
-    case 'transaction/updated':
+    case TrackActionTypes.TRANSACTION_UPDATED:
       return Object.assign({}, state, {
         transactions: state.transactions.set(action.transaction.id, action.transaction),
       });
@@ -56,7 +56,7 @@ const transactions = (state = null, action) => {
         ])),
         filters: action.filters,
       });
-   case 'transactions/summary-loaded':
+   case TrackActionTypes.TRANSACTION_SUMMARY_LOADED:
       return Object.assign({}, state, {
         summary: Immutable.OrderedMap(action.summary.map(item => [
           item.category,
@@ -64,6 +64,8 @@ const transactions = (state = null, action) => {
         ])),
         filters: action.filters,
       });
+    case TrackActionTypes.TRANSACTION_SUMMARY_LOAD_ERROR:
+      return state;
     default:
       return state;
   }

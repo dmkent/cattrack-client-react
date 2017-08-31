@@ -21,9 +21,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(TrackActions.categorisorSetTransaction(transaction));
     },
     showCategorisor: () => {
-      dispatch({
-        type: 'categorisor/show',
-      })
+      dispatch(TrackActions.categorisorShow());
     },
   }
 }

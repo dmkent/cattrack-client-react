@@ -9,8 +9,10 @@ const periods = (state = null, action) => {
   }
 
   switch (action.type) {
-    case 'periods/loaded':
+    case TrackActionTypes.PERIODS_LOADED:
       return Immutable.List(action.periods);
+    case TrackActionTypes.PERIODS_LOAD_ERROR:
+      return state;
     default:
       return state;
   }

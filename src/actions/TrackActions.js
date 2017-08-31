@@ -75,7 +75,7 @@ const TrackActions = {
         .get('/api/transactions/', query_params, auth_token)
         .then(rawTransactions => {
           dispatch({
-            type: 'transactions/loaded',
+            type: TrackActionTypes.TRANSACTION_PAGE_LOADED,
             page_num: page_num,
             page_size: page_size,
             transactions: rawTransactions.results.map(rawTransaction => {
@@ -87,7 +87,7 @@ const TrackActions = {
         })
         .catch(error => {
           dispatch({
-            type: 'transactions/load-error',
+            type: TrackActionTypes.TRANSACTION_PAGE_LOAD_ERROR,
             page_num,
             error,
           });
@@ -123,14 +123,14 @@ const TrackActions = {
         .get('/api/transactions/summary/', query_params, auth_token)
         .then(rawSummary => {
           dispatch({
-            type: 'transactions/summary-loaded',
+            type: TrackActionTypes.TRANSACTION_SUMMARY_LOADED,
             summary: rawSummary,
             filters: filters,
           });
         })
         .catch(error => {
           dispatch({
-            type: 'transactions/summary-load-error',
+            type: TrackActionTypes.TRANSACTION_SUMMARY_LOAD_ERROR,
             error,
           });
         });
@@ -146,7 +146,7 @@ const TrackActions = {
         .get('/api/periods/', {}, auth_token)
         .then(rawPeriods => {
           dispatch({
-            type: 'periods/loaded',
+            type: TrackActionTypes.PERIODS_LOADED,
             periods: rawPeriods.map(rawPeriod => {
                 return new Period(rawPeriod);
             }),
@@ -154,7 +154,7 @@ const TrackActions = {
         })
         .catch(error => {
           dispatch({
-            type: 'periods/load-error',
+            type: TrackActionTypes.PERIODS_LOAD_ERROR,
             error,
           });
         });
@@ -170,7 +170,7 @@ const TrackActions = {
         .get('/api/accounts/', {}, auth_token)
         .then(rawAccounts => {
           dispatch({
-            type: 'accounts/loaded',
+            type: TrackActionTypes.ACCOUNTS_LOADED,
             accounts: rawAccounts.map(rawAccount => {
                 return new Account(rawAccount);
             }),
@@ -178,7 +178,7 @@ const TrackActions = {
         })
         .catch(error => {
           dispatch({
-            type: 'accounts/load-error',
+            type: TrackActionTypes.ACCOUNTS_LOAD_ERROR,
             error,
           });
         });
@@ -200,7 +200,7 @@ const TrackActions = {
                       beforeSend: function(xhrObject){ 
                         xhrObject.onprogress = function(event){
                           dispatch({
-                            type: 'accounts/upload-progress-update',
+                            type: TrackActionTypes.ACCOUNT_UPLOAD_PROGRESS_UPDATE,
                             progress: event.loaded / event.total * 100,
                           });
                         }}
@@ -208,13 +208,13 @@ const TrackActions = {
                     )
         .then(() => {
           dispatch({
-            type: 'accounts/upload-success',
+            type: TrackActionTypes.ACCOUNT_UPLOAD_SUCESS,
             account,
           });
         })
         .catch(error => {
           dispatch({
-            type: 'accounts/upload-failed',
+            type: TrackActionTypes.ACCOUNT_UPLOAD_ERROR,
             account,
             error,
           });
@@ -229,13 +229,13 @@ const TrackActions = {
         .then(resp => {
           localStorage.setItem('jwt', resp.token);
           dispatch({
-            type: 'auth/response',
+            type: TrackActionTypes.AUTH_RESPONSE_RECEIVED,
             token: resp.token,
           })
         })
         .catch(error => {
           dispatch({
-            type: "auth/failure",
+            type: TrackActionTypes.AUTH_ERROR,
             error,
             username,
           });
@@ -267,7 +267,7 @@ const TrackActions = {
       }
 
       dispatch({
-        type: 'categorisor/set-transaction',
+        type: TrackActionTypes.CATEGORISOR_SET_TRANSACTION,
         transaction: transaction,
       });
 
@@ -275,7 +275,7 @@ const TrackActions = {
         .get('/api/transactions/' + transaction.id + '/suggest', {}, auth_token)
         .then(resp => {
           dispatch({
-            type: 'categorisor/suggestions-received',
+            type: TrackActionTypes.CATEGORISOR_SUGGESTIONS_RECEIVED,
             categories: resp.map(cat => {
                 return new Category(cat);
             }),
@@ -283,7 +283,7 @@ const TrackActions = {
         })
         .catch(error => {
           dispatch({
-            type: 'categorisor/suggestions-error',
+            type: TrackActionTypes.CATEGORISOR_SUGGESTIONS_ERROR,
             error,
           });
         });
@@ -297,7 +297,7 @@ const TrackActions = {
         .get('/api/categories', {}, auth_token)
         .then(resp => {
           dispatch({
-            type: 'categorisor/categories-received',
+            type: TrackActionTypes.CATEGORISOR_CATEGORIES_RECEIVED,
             categories: resp.map(cat => {
                 return new Category(cat);
             }),
@@ -305,7 +305,7 @@ const TrackActions = {
         })
         .catch(error => {
           dispatch({
-            type: 'categorisor/categories-error',
+            type: TrackActionTypes.CATEGORISOR_CATEGORIES_ERROR,
             error,
           });
         })
@@ -314,29 +314,35 @@ const TrackActions = {
 
   categorisorAddSplit() {
     return {
-      type: 'categorisor/add-split',
+      type: TrackActionTypes.CATEGORISOR_ADD_SPLIT,
     }
   },
 
   categorisorRemoveSplit(idx) {
     return {
-      type: 'categorisor/remove-split',
+      type: TrackActionTypes.CATEGORISOR_REMOVE_SPLIT,
       idx
     }
   },
 
   categorisorSetSplit(idx, name, value) {
     return {
-      type: 'categorisor/set-split',
+      type: TrackActionTypes.CATEGORISOR_SET_SPLIT,
       idx,
       name,
       value,
     }
   },
 
+  categorisorShow() {
+    return {
+      type: TrackActionTypes.CATEGORISOR_SHOW,
+    };
+  },
+
   categorisorHide() {
     return {
-      type: 'categorisor/hide',
+      type: TrackActionTypes.CATEGORISOR_HIDE,
     };
   },
 
@@ -355,7 +361,7 @@ const TrackActions = {
         .put('/api/transactions/' + updated.id + '/', updated, auth_token)
         .then(resp => {
           dispatch({
-            type: 'transaction/updated',
+            type: TrackActionTypes.TRANSACTION_UPDATED,
             transaction: new Transaction(resp),
           });
 
@@ -364,13 +370,13 @@ const TrackActions = {
               .post('/api/transactions/' + updated.id + '/split/', splits, auth_token)
               .then((resp) => {
                 dispatch({
-                  type: 'transaction/split-success',
+                  type: TrackActionTypes.TRANSACTION_SPLIT_SUCCESS,
                 });
                 onDone();
               })
               .catch(error => {
                 dispatch({
-                  type: 'transaction/split-error',
+                  type: TrackActionTypes.TRANSACTION_SPLIT_ERROR,
                   error,
                 });
               });
@@ -379,7 +385,7 @@ const TrackActions = {
         })
         .catch(error => {
           dispatch({
-            type: 'transaction/update-error',
+            type: TrackActionTypes.TRANSACTION_UPDATE_ERROR,
             error,
           });
         });
