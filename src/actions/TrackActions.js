@@ -1,6 +1,7 @@
 import TrackActionTypes from '../data/TrackActionTypes';
 
 import CatTrackAPI from '../client/CatTrackAPI';
+
 import Transaction from '../data/Transaction';
 import Account from '../data/Account';
 import Category from '../data/Category';
@@ -94,10 +95,10 @@ const TrackActions = {
     };
   },
   updateTransactionFilter(new_filters) {
-    const merged = Object.assign({}, state.filters, new_filters);
     return (dispatch, getState) => {
       const state = getState().transactions;
-    
+      const merged = Object.assign({}, state.filters, new_filters);
+      
       dispatch(this.selectTransactions(1, state.page_size, merged));
       dispatch(this.loadTransactionSummary(merged));
     }
