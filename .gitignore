@@ -3,3 +3,4 @@ node_modules
 bundle.js*
 lib
 .DS_Store
+npm-debug.log
