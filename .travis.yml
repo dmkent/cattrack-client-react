@@ -1,7 +1,6 @@
 language: node_js
 node_js:
 - stable
-sudo: required
 os:
 - linux
 branches:
@@ -12,14 +11,21 @@ notifications:
   email: true
 cache:
   directories: node_modules
+before_install:
+- openssl aes-256-cbc -K $encrypted_c3859ad72456_key -iv $encrypted_c3859ad72456_iv
+  -in deploy_key.enc -out ./.travis/deploy_key -d
 script:
 - ./.travis/run.sh
 deploy:
-  provider: releases
-  api_key:
-    secure: MtlTvOcOc39qAf1Rwrii8cfdxkmrenHBXiYi4jpQelDYesqvO2SfY0G5h6A9LUzZeRCHrrw4z7C0YHDkXlVFpZ+NE1XRIUtBzaLo9iic1wgNqlxdFi6NByDYIrVSQBqDabyjWKUeCNTiCtQfo5eVZ6Er/fQYU/MJDgyyJ8riUbu7s+CcPp0n38f166HVI1CMsgoisutbvDOkeREfTirs+QOWDXHF/PViqgBSPI8CJ416EXZ2EW5PGlwo05+dcjiEkaDDacXh3A/hWQcwGIAytzdftO5k/Gbs09KQVYfXYfArmjFeJOMDFO8H49SxujtTYIBN8MgyzsDJJAQA3UId8KZFl4MYIHeR7vyt+krd+lakwXnIviCLuDkPiKM+oe/XDN+t/NOuMky/GdteFKdpq0gRuzgd+9K+BW+EEM0azeQNsJ6pWjQgKJq2FNAJ0km6hnnq7608cOGoi0bFVeqq3LAxeSv8bVSA9bKjCKmycTz4l8Z/Q4KcRarcrwF6MT1qNHN0FBfcxW4IPuuRCJdcYNAmI/vMFMM8kUTdvAYEbMK45LI6lwLPrnQ9yJPZBDQx3b4NLK1b32eH7Z+h7HfP/AQNxjPvncicOepWEp4HNFhxuz+WOA6lP+vl3tqZnsnoQIlxdoCVRPWC8MvKE7bsOq43jjjPLsulvQnO69UEnEA=
-  file: cattrack-client-react.tar.gz
-  skip_cleanup: true
-  on:
-    tags: true
-    repo: dmkent/cattrack-client-react
+  - provider: releases
+    api_key:
+      secure: MtlTvOcOc39qAf1Rwrii8cfdxkmrenHBXiYi4jpQelDYesqvO2SfY0G5h6A9LUzZeRCHrrw4z7C0YHDkXlVFpZ+NE1XRIUtBzaLo9iic1wgNqlxdFi6NByDYIrVSQBqDabyjWKUeCNTiCtQfo5eVZ6Er/fQYU/MJDgyyJ8riUbu7s+CcPp0n38f166HVI1CMsgoisutbvDOkeREfTirs+QOWDXHF/PViqgBSPI8CJ416EXZ2EW5PGlwo05+dcjiEkaDDacXh3A/hWQcwGIAytzdftO5k/Gbs09KQVYfXYfArmjFeJOMDFO8H49SxujtTYIBN8MgyzsDJJAQA3UId8KZFl4MYIHeR7vyt+krd+lakwXnIviCLuDkPiKM+oe/XDN+t/NOuMky/GdteFKdpq0gRuzgd+9K+BW+EEM0azeQNsJ6pWjQgKJq2FNAJ0km6hnnq7608cOGoi0bFVeqq3LAxeSv8bVSA9bKjCKmycTz4l8Z/Q4KcRarcrwF6MT1qNHN0FBfcxW4IPuuRCJdcYNAmI/vMFMM8kUTdvAYEbMK45LI6lwLPrnQ9yJPZBDQx3b4NLK1b32eH7Z+h7HfP/AQNxjPvncicOepWEp4HNFhxuz+WOA6lP+vl3tqZnsnoQIlxdoCVRPWC8MvKE7bsOq43jjjPLsulvQnO69UEnEA=
+    file: cattrack-client-react.tar.gz
+    skip_cleanup: true
+    on:
+      tags: true
+      repo: dmkent/cattrack-client-react
+  - provider: script
+    script: .travis/deploy.sh
+    on:
+      repo: dmkent/cattrack-client-react
