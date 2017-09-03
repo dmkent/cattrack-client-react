@@ -14,13 +14,6 @@
 
 import xhr from 'xhr';
 
-// The port is hard coded in the server too. If you change it make sure to
-// update it there as well.
-let API_URI = "http://localhost:8080"
-if (process.env.NODE_ENV !== 'production') {
-  API_URI = '/be';
-}
-
 type TransactionObject = {
   id: string,
   when: string,
@@ -60,6 +53,11 @@ const CatTrackAPI = {
  * advanced but works with our server's API.
  */
 function promiseXHR(method: 'get' | 'post' | 'put', uri, data, token) {
+  let API_URI = "http://localhost:8080"
+  if (process.env.NODE_ENV === 'production') {
+    API_URI = '/be';
+  }
+
   let send_body = null;
   let suffix = '';
   let headers = {};
