@@ -31,3 +31,4 @@ deploy:
     skip_cleanup: true
     on:
       repo: dmkent/cattrack-client-react
+      all_branches: true
