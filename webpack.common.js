@@ -27,7 +27,6 @@ module.exports = {
       'react-intl',
       'react-redux',
       'babel-preset-react',
-      'bootstrap',
       'redux',
       'redux-thunk',
       'immutable',

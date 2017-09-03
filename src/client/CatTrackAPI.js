@@ -53,7 +53,7 @@ const CatTrackAPI = {
  * advanced but works with our server's API.
  */
 function promiseXHR(method: 'get' | 'post' | 'put', uri, data, token) {
-  let API_URI = "http://localhost:8080"
+  let API_URI = "http://localhost:8000"
   if (process.env.NODE_ENV === 'production') {
     API_URI = '/be';
   }
