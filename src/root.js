@@ -19,6 +19,8 @@ import { routerMiddleware } from 'react-router-redux'
 import AppContainer from './containers/AppContainer';
 import catTrackApp from './reducers';
 
+import 'bootstrap/dist/css/bootstrap.css';
+
 const router_middleware = routerMiddleware(browserHistory);
 
 let store = createStore(

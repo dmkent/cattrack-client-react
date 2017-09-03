@@ -1,9 +1,10 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
+const ArchivePlugin = require('webpack-archive-plugin');
 
 module.exports = merge(common, {
-  devtool: 'source-map',
+  //devtool: 'source-map',
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
@@ -16,6 +17,9 @@ module.exports = merge(common, {
       comments: false,
       minimize: false
     }),
-    new webpack.optimize.AggressiveMergingPlugin()
+    new webpack.optimize.AggressiveMergingPlugin(),
+    new ArchivePlugin({
+      output: 'cattrack-client-react'
+    }),
   ]
 });

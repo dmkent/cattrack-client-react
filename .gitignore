@@ -4,3 +4,5 @@ bundle.js*
 lib
 .DS_Store
 npm-debug.log
+dist
+cattrack-client-react.*
