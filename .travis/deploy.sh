@@ -3,7 +3,7 @@
 if [ "master" = "${TRAVIS_BRANCH}" ] ;
 then
     DEST=""
-else if [ "stage" = "${TRAVIS_BRANCH}" ] ;
+elif [ "stage" = "${TRAVIS_BRANCH}" ] ;
 then
     DEST="stage/"
 else
