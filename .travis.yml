@@ -27,5 +27,6 @@ deploy:
       repo: dmkent/cattrack-client-react
   - provider: script
     script: .travis/deploy.sh
+    skip_cleanup: true
     on:
       repo: dmkent/cattrack-client-react
