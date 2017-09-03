@@ -16,9 +16,10 @@ import xhr from 'xhr';
 
 // The port is hard coded in the server too. If you change it make sure to
 // update it there as well.
-
-const PORT = 8000;
-const PREFIX = 'http://localhost:' + PORT;
+let API_URI = "http://localhost:8080"
+if (process.env.NODE_ENV !== 'production') {
+  API_URI = '/be';
+}
 
 type TransactionObject = {
   id: string,
@@ -82,7 +83,7 @@ function promiseXHR(method: 'get' | 'post' | 'put', uri, data, token) {
   }
   return new Promise((resolve, reject) => {
     xhr[method]({
-        uri: PREFIX + uri + suffix,
+        uri: API_URI + uri + suffix,
         body: send_body,
         headers: headers,
       },
