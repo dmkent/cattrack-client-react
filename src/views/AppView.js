@@ -15,7 +15,7 @@ import {
   NavLink,
   Redirect,
 } from 'react-router-dom';
- 
+
 class AppView extends React.Component {
   componentDidMount() {
     this.props.restoreLogin();
@@ -24,7 +24,7 @@ class AppView extends React.Component {
   render() {
     return (
       <IntlProvider locale="en">
-        <Router>
+        <Router basename={process.env.BASENAME}>
           <div>
             <NavComponent auth={this.props.auth}/>
             <div className="container-fluid">
