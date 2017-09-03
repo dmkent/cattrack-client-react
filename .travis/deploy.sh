@@ -34,4 +34,4 @@ then
     echo "[${DEPLOY_HOST}]:${DEPLOY_SSH_PORT} ecdsa-sha2-nistp256 ${DEPLOY_HOST_FINGER}" >> ~/.ssh/known_hosts
 fi
 
-rsync -e "ssh -o BatchMode=yes -p ${DEPLOY_SSH_PORT} -i .travis/deploy_key" -avz dist/ ${DEPLOY_USER}@${DEPLOY_HOST}:${DEST}
+rsync -e "ssh -o BatchMode=yes -p ${DEPLOY_SSH_PORT} -i ./.travis/deploy_key" -avz dist/ ${DEPLOY_USER}@${DEPLOY_HOST}:${DEST}
