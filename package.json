@@ -17,7 +17,9 @@
     "immutable": "^3.8.0",
     "plotly.js": "^1.30.0",
     "react": "^15.0.2",
+    "react-addons-shallow-compare": "^15.6.0",
     "react-bootstrap": "^0.31.2",
+    "react-dates": "^12.5.1",
     "react-dom": "^15.0.1",
     "react-intl": "^2.3.0",
     "react-redux": "^5.0.6",
@@ -31,7 +33,6 @@
   "devDependencies": {
     "babel-core": "^6.7.6",
     "babel-loader": "^6.2.4",
-    "babel-minify-webpack-plugin": "^0.2.0",
     "babel-plugin-syntax-async-functions": "^6.5.0",
     "babel-plugin-syntax-flow": "^6.5.0",
     "babel-plugin-syntax-jsx": "^6.5.0",

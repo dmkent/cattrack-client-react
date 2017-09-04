@@ -1,19 +1,39 @@
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import {Button, Form, FormGroup, ControlLabel, FormControl} from 'react-bootstrap';
+import { DateRangePicker, toMomentObject } from 'react-dates';
 
 class TransactionFilterPeriods extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      focusedInput: null,
+    }
+  }
+
   componentDidMount() {
     if (this.props.periods.size == 0) {
       this.props.loadPeriods();
     }
   }
-
+  
   render() {
     let all_periods = ((this.props.filters.from_date === null) &&
                        (this.props.filters.to_date === null));
     return (
         <div>
             <h3>Time</h3>
+            <DateRangePicker
+              startDate={toMomentObject(this.props.filters.from_date)}
+              endDate={toMomentObject(this.props.filters.to_date)}
+              onDatesChange={({ startDate, endDate }) => this.props.onFilter({
+                from_date: (startDate === null) ? null : startDate.format('YYYY-MM-DD'),
+                to_date: (endDate === null) ? null : endDate.format('YYYY-MM-DD'),
+              })}
+              focusedInput={this.state.focusedInput}
+              onFocusChange={focusedInput => this.setState({ focusedInput })}
+              isOutsideRange={() => {return false;}}
+            />
+
             <p>-- OR --</p>
             <div className="btn-group-vertical" role="group">
                 <Button className="btn btn-default btn-xs"

@@ -21,6 +21,7 @@ module.exports = {
       'react-dom',
       'react-bootstrap',
       'react-router-bootstrap',
+      'react-dates',
       'react-router-dom',
       'react-router-redux',
       'react-router',
