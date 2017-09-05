@@ -6,6 +6,7 @@ import DashboardContainer from '../containers/DashboardContainer';
 import AccountsContainer from '../containers/AccountsContainer';
 import TransactionList from '../containers/TransactionList';
 import LoginContainer from '../containers/LoginContainer';
+import ErrorsContainer from '../containers/ErrorsContainer';
 import TrackActions from '../actions/TrackActions'
 import {IntlProvider} from 'react-intl';
 import {
@@ -28,6 +29,7 @@ class AppView extends React.Component {
           <div>
             <NavComponent auth={this.props.auth}/>
             <div className="container-fluid">
+              <ErrorsContainer/>
               <h1>{this.props.title}</h1>
               <ContentView {...this.props}/>
             </div>

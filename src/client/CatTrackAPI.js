@@ -14,6 +14,63 @@
 
 import xhr from 'xhr';
 
+function parseErrors(data) {
+    /**
+     * Based on https://gist.github.com/kottenator/433f677e5fdddf78d195
+     */
+
+    function isString(val) {
+      return (typeof val === 'string' || val instanceof String);
+    }
+
+    function _camelCaseToVerbose(text) {
+        return text.replace(/(?=[A-Z])/g, ' ');
+    }
+    
+    function _underscoredToVerbose(text) {
+        return text.replace(/[\d_]/g, ' ');
+    }
+    
+    function _capitalize(text) {
+        text = text.toLowerCase();
+        text = text.charAt(0).toUpperCase() + text.slice(1);
+        return text;
+    }
+
+    function _parseErrorItem(item, listPos) {
+        var output = [];
+
+        Object.entries(item).map(function([key, value]) {
+            var content;
+
+            if (isString(value)) {
+                content = value;
+            } else if (Array.isArray(value)) {
+                if (isString(value[0])) {
+                    content = value.join(' ');
+                } else {
+                    content = JSON.stringify(value, {}, 2);
+                }
+            }
+
+            if (content) {
+                if (key.search(/[A-Z]/) != -1)
+                    key = _camelCaseToVerbose(key);
+                
+                if (key.search(/[\d_]/) != -1)
+                    key = _underscoredToVerbose(key);
+                
+                key = _capitalize(key);
+                
+                output.push([key, content]);
+            }
+        });
+        return output;
+    }
+
+    return _parseErrorItem(data);
+};
+
 type TransactionObject = {
   id: string,
   when: string,
@@ -91,9 +148,10 @@ function promiseXHR(method: 'get' | 'post' | 'put', uri, data, token) {
           return;
         }
         if (res.statusCode !== 200) {
-          reject(new Error(
-            '[status: ' + res.statusCode + '] ' + res.body,
-          ));
+          reject({
+            code: res.statusCode,
+            message: parseErrors(JSON.parse(res.body)),
+          });
           return;
         }
 
@@ -136,9 +194,10 @@ function promiseXHRFormUpload(uri, formdata, token, options) {
           return;
         }
         if (res.statusCode !== 200) {
-          reject(new Error(
-            '[status: ' + res.statusCode + '] ' + res.body,
-          ));
+          reject({
+            code: res.statusCode,
+            message: parseErrors(JSON.parse(res.body)),
+          });
           return;
         }
 

@@ -47,6 +47,12 @@ function refreshLogin(dispatch, getState) {
 }
 
 const TrackActions = {
+  clearError(idx) {
+    return {
+      type: TrackActionTypes.CLEAR_ERROR,
+      error_number: idx,
+    }
+  },
   addTransaction(when, description, amount) {
     return {
       type: TrackActionTypes.ADD_TRANSACTION,

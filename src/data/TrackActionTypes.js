@@ -1,4 +1,6 @@
 const ActionTypes = {
+  CLEAR_ERROR: 'CLEAR_ERROR',
+  
   AUTH_RESPONSE_RECEIVED: 'auth/response',
   AUTH_ERROR: 'auth/failure',
   AUTH_REQUEST: 'auth/request',
