@@ -68,6 +68,7 @@
     "webpack-merge": "^4.1.0"
   },
   "jest": {
-    "collectCoverage": true
+    "collectCoverage": true,
+    "collectCoverageFrom": ["src/**/*js"]
   }
 }
