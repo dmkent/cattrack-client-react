@@ -6,6 +6,6 @@ set -e
 if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
     exit 1
 else
-    npm run test
+    npm run test:cov
     npm run build
 fi
