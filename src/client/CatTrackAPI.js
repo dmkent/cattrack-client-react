@@ -176,6 +176,11 @@ function promiseXHR(method: 'get' | 'post' | 'put', uri, data, token) {
 }
 
 function promiseXHRFormUpload(uri, formdata, token, options) {
+  let API_URI = "http://localhost:8000"
+  if (process.env.NODE_ENV === 'production') {
+    API_URI = '/be';
+  }
+  
   let headers = {};
 
   if (token !== undefined) {
@@ -183,7 +188,7 @@ function promiseXHRFormUpload(uri, formdata, token, options) {
   }
   return new Promise((resolve, reject) => {
     xhr.post({
-        uri: PREFIX + uri,
+        uri: API_URI + uri,
         body: formdata,
         headers: headers,
         ...options
