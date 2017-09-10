@@ -11,7 +11,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-
+import * as Cookies from "js-cookie"
 import xhr from 'xhr';
 
 function parseErrors(data) {
@@ -133,6 +133,11 @@ function promiseXHR(method: 'get' | 'post' | 'put', uri, data, token) {
       : '';
   }
   
+  const csrf_token = Cookies.get("csrftoken");
+  if (csrf_token !== null) {
+    headers['X-CSRFToken'] = csrf_token;
+  }
+
   if (token !== undefined) {
     headers['Authorization'] = 'JWT ' + token;
   }
@@ -182,6 +187,10 @@ function promiseXHRFormUpload(uri, formdata, token, options) {
   }
   
   let headers = {};
+  const csrf_token = Cookies.get("csrftoken");
+  if (csrf_token !== null) {
+    headers['X-CSRFToken'] = csrf_token;
+  }
 
   if (token !== undefined) {
     headers['Authorization'] = 'JWT ' + token;
