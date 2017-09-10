@@ -24,7 +24,7 @@ class AppView extends React.Component {
 
   render() {
     return (
-      <IntlProvider locale="en">
+      <IntlProvider locale="en-AU">
         <Router basename={process.env.BASENAME}>
           <div>
             <NavComponent auth={this.props.auth}/>
