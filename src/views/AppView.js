@@ -7,6 +7,7 @@ import AccountsContainer from '../containers/AccountsContainer';
 import TransactionList from '../containers/TransactionList';
 import LoginContainer from '../containers/LoginContainer';
 import ErrorsContainer from '../containers/ErrorsContainer';
+import NavComponent from './NavComponent';
 import TrackActions from '../actions/TrackActions'
 import {IntlProvider} from 'react-intl';
 import {
@@ -40,47 +41,6 @@ class AppView extends React.Component {
         </Router>
       </IntlProvider>
     );
-  }
-}
-
-class NavComponent extends React.Component {
-  render() {
-    let auth_link = null;
-    if (this.props.auth.is_logged_in) {
-      auth_link = (
-        <Nav pullRight>
-          <LinkContainer to="/logout"><NavItem>Logout</NavItem></LinkContainer>
-        </Nav>
-      );
-    } else {
-      auth_link = (
-        <Nav pullRight>
-          <LinkContainer to="/login"><NavItem>Login</NavItem></LinkContainer>
-        </Nav>
-      );
-    }
-
-    return (
-      <Navbar inverse collapseOnSelect>
-        <Navbar.Header>
-          <Navbar.Brand>
-            <Link to="/">CatTrack</Link>
-          </Navbar.Brand>
-          <Navbar.Toggle/>
-        </Navbar.Header>
-        <Navbar.Collapse>
-          <Nav>
-            <LinkContainer exact to="/"><NavItem>Dashboard</NavItem></LinkContainer>
-            <LinkContainer to="/accounts"><NavItem>Accounts</NavItem></LinkContainer>
-            <LinkContainer to="/transactions"><NavItem>Transactions</NavItem></LinkContainer>
-          </Nav>
-          {this.props.auth.is_logged_in ? 
-           <Navbar.Text pullRight>{this.props.auth.username}</Navbar.Text> :
-           null}
-          {auth_link}
-        </Navbar.Collapse>
-      </Navbar>                  
-    )
   }
 }
 
