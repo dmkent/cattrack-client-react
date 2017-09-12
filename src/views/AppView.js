@@ -44,7 +44,7 @@ class AppView extends React.Component {
   }
 }
 
-class Logout extends React.Component {
+export class Logout extends React.Component {
   componentWillMount() {
     this.props.logout();
   }
@@ -60,12 +60,12 @@ const logoutMapDispatchToProps = dispatch => {
     }
   }
 }
-const LogoutContainer = connect(
+export const LogoutContainer = connect(
   (state) => {return {}},
   logoutMapDispatchToProps
 )(Logout)
 
-const PrivateRoute = ({ component: Component, auth, render, ...rest }) => {
+export const PrivateRoute = ({ component: Component, auth, render, ...rest }) => {
   return (
     <Route {...rest} render={props => {
       if (auth.is_logged_in) {
@@ -86,7 +86,7 @@ const PrivateRoute = ({ component: Component, auth, render, ...rest }) => {
   )
 };
 
-class ContentView extends React.Component {
+export class ContentView extends React.Component {
   render() {
     return (
       <div>
