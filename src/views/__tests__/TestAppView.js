@@ -1,7 +1,8 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import AppView, {PrivateRoute, ContentView, Logout, LogoutContainer} from '../AppView'
 import { Route, Redirect } from 'react-router-dom'
+import configureStore from 'redux-mock-store'
 
 function setup() {
   const props = {
@@ -47,7 +48,8 @@ describe('components', () => {
 
 describe('LogoutContainer', () => {
     it('should render self and subcomponents', () => {
-      const enzymeWrapper = shallow(<LogoutContainer store={{getState: () => {}}}/>)
+      const store = configureStore([])
+      const enzymeWrapper = shallow(<LogoutContainer store={store()}/>)
       expect(enzymeWrapper.find('Logout').length).toBe(1)
     })
   })
