@@ -12,7 +12,7 @@
  *
  */
 import * as Cookies from "js-cookie"
-import xhr from 'xhr';
+import xhr from 'request';
 
 function parseErrors(data) {
     /**
@@ -141,6 +141,7 @@ function promiseXHR(method: 'get' | 'post' | 'put', uri, data, token) {
   if (token !== undefined) {
     headers['Authorization'] = 'JWT ' + token;
   }
+
   return new Promise((resolve, reject) => {
     xhr[method]({
         uri: API_URI + uri + suffix,

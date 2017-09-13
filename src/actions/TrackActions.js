@@ -38,9 +38,8 @@ function refreshLogin(dispatch, getState) {
   })
   .catch(error => {
     dispatch({
-      type: TrackActionTypes.AUTH_FAILED,
-      error,
-      username,
+      type: TrackActionTypes.AUTH_ERROR,
+      error
     });
   });
   return true;

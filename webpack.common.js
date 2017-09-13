@@ -55,5 +55,10 @@ module.exports = {
       filename: '[file].map',
     }),
     new ExtractTextPlugin("[name].css")
-  ]
+  ],
+  resolve: {
+    alias: {
+      request$: "xhr"
+    }
+  }
 };
