@@ -3,8 +3,6 @@ import diff from 'jest-diff'
 import reducer from '../errors'
 import TrackActionTypes from '../../data/TrackActionTypes'
 
-import TestUtils from '../../../utils/test_utils'
-
 describe('errors reducer', () => {
   
   it('should return the initial state', () => {

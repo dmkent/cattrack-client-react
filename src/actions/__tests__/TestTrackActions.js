@@ -7,8 +7,6 @@ import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import nock from 'nock'
 
-import TestUtils from '../../../utils/test_utils';
-
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
