@@ -1,6 +1,6 @@
 import TrackActions from '../TrackActions'
 import TrackActionTypes from '../../data/TrackActionTypes'
-import Account from '../../data/account'
+import Account from '../../data/Account'
 import Category from '../../data/Category'
 import Period from '../../data/Period'
 
