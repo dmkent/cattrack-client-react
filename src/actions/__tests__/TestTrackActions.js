@@ -1,5 +1,6 @@
 import TrackActions from '../TrackActions'
 import TrackActionTypes from '../../data/TrackActionTypes'
+import Account from '../../data/account'
 import Category from '../../data/Category'
 import Period from '../../data/Period'
 
@@ -9,6 +10,18 @@ import nock from 'nock'
 
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
+
+function dummyLoggedInState() {
+    const auth_expires = new Date()
+    auth_expires.setHours(auth_expires.getHours() + 1)
+    return {
+      auth: {
+        token: '', 
+        is_logged_in: true, 
+        expires: auth_expires
+      }
+    }
+}
 
 describe('simple actions', () => {
   it('should create an action to clear error', () => {
@@ -65,7 +78,7 @@ describe('api actions', () => {
 
   it('should create load category actions', () => {
     nock('http://localhost:8000')
-      .get('/api/categories')
+      .get('/api/categories/')
       .reply(200, [
         {"url": "http://localhost:8000/api/categories/48/", "id": 48, "name": "Bank - Fees"},
         {"url": "http://localhost:8000/api/categories/15/", "id": 15, "name": "Bank - Interest"},
@@ -82,7 +95,7 @@ describe('api actions', () => {
         ]
       }
     ]
-    const store = mockStore({auth: {token: ''}})
+    const store = mockStore({...dummyLoggedInState()})
 
     return store.dispatch(TrackActions.loadCategories()).then(() => {
       // Return of async actions
@@ -92,7 +105,7 @@ describe('api actions', () => {
 
   it('should create load category error action', () => {
     nock('http://localhost:8000')
-      .get('/api/categories')
+      .get('/api/categories/')
       .reply(404, {error: "not found"})
         
     const expectedActions = [
@@ -134,9 +147,7 @@ describe('api actions', () => {
         ]
       }
     ]
-    const auth_expires = new Date()
-    auth_expires.setHours(auth_expires.getHours() + 1)
-    const store = mockStore({auth: {token: '', is_logged_in: true, expires: auth_expires}})
+    const store = mockStore({...dummyLoggedInState()})
 
     return store.dispatch(TrackActions.loadPeriods()).then(() => {
       // Return of async actions
@@ -163,11 +174,63 @@ describe('api actions', () => {
         }
       }
     ]
-    const auth_expires = new Date()
-    auth_expires.setHours(auth_expires.getHours() + 1)
-    const store = mockStore({auth: {token: '', is_logged_in: true, expires: auth_expires}})
+
+    const store = mockStore({...dummyLoggedInState()})
 
     return store.dispatch(TrackActions.loadPeriods()).then(() => {
+      // Return of async actions
+      expect(store.getActions()).toEqual(expectedActions)
+    })
+  })
+
+  it('should create load accounts actions', () => {
+    nock('http://localhost:8000')
+      .get('/api/accounts/')
+      .reply(200, [
+        {id: 4, name: "Account1"},
+        {id: 1, name: "Account2"},
+      ])
+        
+    const expectedActions = [
+      { 
+        type: TrackActionTypes.ACCOUNTS_LOADED, 
+        accounts: [
+          new Account({id: 4, name: "Account1"}),
+          new Account({id: 1, name: "Account2"}),
+        ]
+      }
+    ]
+    const store = mockStore({...dummyLoggedInState()})
+
+    return store.dispatch(TrackActions.loadAccounts()).then(() => {
+      // Return of async actions
+      expect(store.getActions()).toEqualImmutable(expectedActions)
+    })
+  })
+
+  it('should create load accounts error action', () => {
+    nock('http://localhost:8000')
+      .get('/api/accounts/')
+      .reply(404, {error: "not found"})
+        
+    const expectedActions = [
+      { 
+        type: TrackActionTypes.ACCOUNTS_LOAD_ERROR, 
+        error: {
+          code: 404,
+          message: [
+            [
+              "Error", 
+              "not found"
+            ]
+          ]
+        }
+      }
+    ]
+
+    const store = mockStore({...dummyLoggedInState()})
+
+    return store.dispatch(TrackActions.loadAccounts()).then(() => {
       // Return of async actions
       expect(store.getActions()).toEqual(expectedActions)
     })

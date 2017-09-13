@@ -309,7 +309,7 @@ const TrackActions = {
       const auth_token = getState().auth.token;
     
       return CatTrackAPI
-        .get('/api/categories', {}, auth_token)
+        .get('/api/categories/', {}, auth_token)
         .then(resp => {
           dispatch({
             type: TrackActionTypes.CATEGORISOR_CATEGORIES_RECEIVED,
