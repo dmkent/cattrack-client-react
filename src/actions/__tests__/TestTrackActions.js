@@ -239,7 +239,7 @@ describe('api actions', () => {
 
   it('should create select transactions actions', () => {
     nock('http://localhost:8000')
-      .get(/\/api\/transactions\/\?page=.&page_size=../)
+      .get(/\/api\/transactions\/\?page=.+&page_size=.+(&.+)?/)
       .reply(200, {
         results: [
           {id: 4, when: "2011-01-01", amount: -34.2, description: "money"},
@@ -260,7 +260,8 @@ describe('api actions', () => {
         ],
         num_records: 2032,
         filters: {
-          category: 1
+          category: 1,
+          account: null
         }
       }
     ]
@@ -296,6 +297,65 @@ describe('api actions', () => {
     const store = mockStore({...dummyLoggedInState()})
 
     return store.dispatch(TrackActions.selectTransactions(1, 20, {})).then(() => {
+      // Return of async actions
+      expect(store.getActions()).toEqual(expectedActions)
+    })
+  })
+
+  it('should create select transactions summary actions', () => {
+    nock('http://localhost:8000')
+      .get(/\/api\/transactions\/summary\/(\?.+)?/)
+      .reply(200, [
+        {category: 4, category_name: "c1", total: -34.2},
+        {category: 2, category_name: "c4", total: 34.2},
+      ]
+    )
+        
+    const expectedActions = [
+      { 
+        type: TrackActionTypes.TRANSACTION_SUMMARY_LOADED, 
+        summary: [
+          {category: 4, category_name: "c1", total: -34.2},
+          {category: 2, category_name: "c4", total: 34.2},
+        ],
+        filters: {
+          category: 1,
+          account: null,
+          from_date: "2011-02-03"
+        }
+      }
+    ]
+    const store = mockStore({...dummyLoggedInState()})
+
+    return store.dispatch(TrackActions.loadTransactionSummary({category: 1, account: null, from_date: "2011-02-03"})).then(() => {
+      // Return of async actions
+      expect(store.getActions()).toEqualImmutable(expectedActions)
+    })
+  })
+
+  it('should create transaction page load error action', () => {
+    nock('http://localhost:8000')
+      .get('/api/transactions/summary/')
+      .reply(404, {error: "not found"})
+        
+    const expectedActions = [
+      { 
+        type: TrackActionTypes.TRANSACTION_SUMMARY_LOAD_ERROR, 
+        error: {
+          code: 404,
+          message: [
+            [
+              "Error", 
+              "not found"
+            ]
+          ]
+        }
+      }
+    ]
+
+    const store = mockStore({...dummyLoggedInState()})
+
+    return store.dispatch(TrackActions.loadTransactionSummary({})).then(() => {
       // Return of async actions
       expect(store.getActions()).toEqual(expectedActions)
     })
