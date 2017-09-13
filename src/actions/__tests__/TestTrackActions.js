@@ -2,7 +2,7 @@ import TrackActions from '../TrackActions'
 import TrackActionTypes from '../../data/TrackActionTypes'
 import Category from '../../data/Category'
 import Period from '../../data/Period'
-import Immutable from 'immutable'
+
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import nock from 'nock'
@@ -67,24 +67,25 @@ describe('api actions', () => {
     nock('http://localhost:8000')
       .get('/api/categories')
       .reply(200, [
-        {"url":"http://localhost:8000/api/categories/48/","id":48,"name":"Bank - Fees"},
-        {"url":"http://localhost:8000/api/categories/15/","id":15,"name":"Bank - Interest"},
-        {"url":"http://localhost:8000/api/categories/3/","id":3,"name":"Caffeine"},
+        {"url": "http://localhost:8000/api/categories/48/", "id": 48, "name": "Bank - Fees"},
+        {"url": "http://localhost:8000/api/categories/15/", "id": 15, "name": "Bank - Interest"},
+        {"url": "http://localhost:8000/api/categories/3/", "id": 3, "name": "Caffeine"},
       ])
         
     const expectedActions = [
-      { type: TrackActionTypes.CATEGORISOR_CATEGORIES_RECEIVED, 
+      {
+        type: TrackActionTypes.CATEGORISOR_CATEGORIES_RECEIVED, 
         categories: [
-          Category({id: 48, name: "Bank - Fees"}),
-          Category({id: 15, name: "Bank - Interest"}),
-          Category({id: 3, name: "Caffeine"})
+          new Category({id: 48, name: "Bank - Fees"}),
+          new Category({id: 15, name: "Bank - Interest"}),
+          new Category({id: 3, name: "Caffeine"})
         ]
       }
     ]
-    const store = mockStore({ auth: {token: '' }})
+    const store = mockStore({auth: {token: ''}})
 
     return store.dispatch(TrackActions.loadCategories()).then(() => {
-      // return of async actions
+      // Return of async actions
       expect(store.getActions()).toEqualImmutable(expectedActions)
     })
   })
@@ -95,17 +96,23 @@ describe('api actions', () => {
       .reply(404, {error: "not found"})
         
     const expectedActions = [
-      { type: TrackActionTypes.CATEGORISOR_CATEGORIES_ERROR, 
+      { 
+        type: TrackActionTypes.CATEGORISOR_CATEGORIES_ERROR, 
         error: {
           code: 404,
-          message: [["Error", "not found"]]
+          message: [
+            [
+              "Error",
+              "not found"
+            ]
+          ]
         }
       }
     ]
-    const store = mockStore({ auth: {token: '' }})
+    const store = mockStore({auth: {token: ''}})
 
     return store.dispatch(TrackActions.loadCategories()).then(() => {
-      // return of async actions
+      // Return of async actions
       expect(store.getActions()).toEqual(expectedActions)
     })
   })
@@ -115,23 +122,24 @@ describe('api actions', () => {
       .get('/api/periods/')
       .reply(200, [
         {id: 4, label: "Last month", from_date: "2011-01-02", to_date: "2011-02-02", offset: "1"},
-        {id:1, label: "Last week", from_date: "2011-01-24", to_date: "2011-02-02", offset: "1"},
+        {id: 1, label: "Last week", from_date: "2011-01-24", to_date: "2011-02-02", offset: "1"},
       ])
         
     const expectedActions = [
-      { type: TrackActionTypes.PERIODS_LOADED, 
+      { 
+        type: TrackActionTypes.PERIODS_LOADED, 
         periods: [
-          Period({id: 4, label: "Last month", offset: "1", from_date: "2011-01-02", to_date: "2011-02-02"}),
-          Period({id: 1, label: "Last week", from_date: "2011-01-24", to_date: "2011-02-02", offset: "1"}),
+          new Period({id: 4, label: "Last month", offset: "1", from_date: "2011-01-02", to_date: "2011-02-02"}),
+          new Period({id: 1, label: "Last week", from_date: "2011-01-24", to_date: "2011-02-02", offset: "1"}),
         ]
       }
     ]
     const auth_expires = new Date()
     auth_expires.setHours(auth_expires.getHours() + 1)
-    const store = mockStore({ auth: {token: '', is_logged_in: true, expires: auth_expires}})
+    const store = mockStore({auth: {token: '', is_logged_in: true, expires: auth_expires}})
 
     return store.dispatch(TrackActions.loadPeriods()).then(() => {
-      // return of async actions
+      // Return of async actions
       expect(store.getActions()).toEqualImmutable(expectedActions)
     })
   })
@@ -142,19 +150,25 @@ describe('api actions', () => {
       .reply(404, {error: "not found"})
         
     const expectedActions = [
-      { type: TrackActionTypes.PERIODS_LOAD_ERROR, 
+      { 
+        type: TrackActionTypes.PERIODS_LOAD_ERROR, 
         error: {
           code: 404,
-          message: [["Error", "not found"]]
+          message: [
+            [
+              "Error", 
+              "not found"
+            ]
+          ]
         }
       }
     ]
     const auth_expires = new Date()
     auth_expires.setHours(auth_expires.getHours() + 1)
-    const store = mockStore({ auth: {token: '', is_logged_in: true, expires: auth_expires}})
+    const store = mockStore({auth: {token: '', is_logged_in: true, expires: auth_expires}})
 
     return store.dispatch(TrackActions.loadPeriods()).then(() => {
-      // return of async actions
+      // Return of async actions
       expect(store.getActions()).toEqual(expectedActions)
     })
   })
