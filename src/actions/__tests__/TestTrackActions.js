@@ -3,6 +3,7 @@ import TrackActionTypes from '../../data/TrackActionTypes'
 import Account from '../../data/Account'
 import Category from '../../data/Category'
 import Period from '../../data/Period'
+import Transaction from '../../data/Transaction'
 
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
@@ -231,6 +232,70 @@ describe('api actions', () => {
     const store = mockStore({...dummyLoggedInState()})
 
     return store.dispatch(TrackActions.loadAccounts()).then(() => {
+      // Return of async actions
+      expect(store.getActions()).toEqual(expectedActions)
+    })
+  })
+
+  it('should create select transactions actions', () => {
+    nock('http://localhost:8000')
+      .get(/\/api\/transactions\/\?page=.&page_size=../)
+      .reply(200, {
+        results: [
+          {id: 4, when: "2011-01-01", amount: -34.2, description: "money"},
+          {id: 4, when: "2011-01-04", amount: 34.2, description: "money money"},
+        ],
+        count: 2032
+      }
+    )
+        
+    const expectedActions = [
+      { 
+        type: TrackActionTypes.TRANSACTION_PAGE_LOADED, 
+        page_num: 1,
+        page_size: 20,
+        transactions: [
+          new Transaction({id: 4, when: "2011-01-01", amount: -34.2, description: "money"}),
+          new Transaction({id: 4, when: "2011-01-04", amount: 34.2, description: "money money"}),
+        ],
+        num_records: 2032,
+        filters: {
+          category: 1
+        }
+      }
+    ]
+    const store = mockStore({...dummyLoggedInState()})
+
+    return store.dispatch(TrackActions.selectTransactions(1, 20, {category: 1, account: null})).then(() => {
+      // Return of async actions
+      expect(store.getActions()).toEqualImmutable(expectedActions)
+    })
+  })
+
+  it('should create transaction page load error action', () => {
+    nock('http://localhost:8000')
+      .get(/\/api\/transactions\/\?page=.&page_size=../)
+      .reply(404, {error: "not found"})
+        
+    const expectedActions = [
+      { 
+        type: TrackActionTypes.TRANSACTION_PAGE_LOAD_ERROR, 
+        error: {
+          code: 404,
+          message: [
+            [
+              "Error", 
+              "not found"
+            ]
+          ]
+        },
+        page_num: 1
+      }
+    ]
+
+    const store = mockStore({...dummyLoggedInState()})
+
+    return store.dispatch(TrackActions.selectTransactions(1, 20, {})).then(() => {
       // Return of async actions
       expect(store.getActions()).toEqual(expectedActions)
     })
