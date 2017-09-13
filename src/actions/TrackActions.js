@@ -52,14 +52,6 @@ const TrackActions = {
       error_number: idx,
     }
   },
-  addTransaction(when, description, amount) {
-    return {
-      type: TrackActionTypes.ADD_TRANSACTION,
-      when,
-      description,
-      amount
-    };
-  },
   selectTransactions(page_num, page_size, filters) {
     const query_params = {
       page: page_num,

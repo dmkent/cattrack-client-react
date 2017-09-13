@@ -30,17 +30,6 @@ const transactions = (state = null, action) => {
   }
 
   switch (action.type) {
-    case TrackActionTypes.ADD_TRANSACTION:
-      const id = Counter.increment();
-      return Object.assign({}, state, {
-          transactions: state.transactions.set(id, new Transaction({
-            id,
-            when: action.when,
-            description: action.description,
-            amount: action.amount,
-          })
-        )
-      });
     case TrackActionTypes.TRANSACTION_UPDATED:
       return Object.assign({}, state, {
         transactions: state.transactions.set(action.transaction.id, action.transaction),

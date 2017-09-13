@@ -6,7 +6,6 @@ const ActionTypes = {
   AUTH_REQUEST: 'auth/request',
   AUTH_LOGOUT: 'auth/logout',
 
-  ADD_TRANSACTION: 'ADD_TRANSACTION',
   SELECT_TRANSACTION_PAGE: 'SELECT_TRANSACTION_PAGE',
 
   TRANSACTION_PAGE_LOADED: 'transactions/loaded',
