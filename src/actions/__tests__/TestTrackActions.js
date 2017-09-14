@@ -123,7 +123,7 @@ describe('api actions', () => {
         }
       }
     ]
-    const store = mockStore({auth: {token: ''}})
+    const store = mockStore({...dummyLoggedInState()})
 
     return store.dispatch(TrackActions.loadCategories()).then(() => {
       // Return of async actions

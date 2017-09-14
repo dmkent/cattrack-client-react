@@ -48,6 +48,58 @@ function refreshLogin(dispatch, getState) {
   return true;
 }
 
+function fetch_from_api(dispatch, getState, uri, options = {}) {
+  let API_URI = "http://localhost:8000"
+  if (process.env.NODE_ENV === 'production') {
+    API_URI = '/be';
+  }
+
+  if (!refreshLogin(dispatch, getState)) {
+      return Promise.reject(new Error("Authentication failed."));
+  }
+    
+  // Set up authentication and security headers.
+  let headers = Object.assign({}, options.headers);
+  const token = getState().auth.token;
+  if (token !== undefined) {
+    headers.Authorization = 'JWT ' + token;
+  }
+  const csrf_token = Cookies.get("csrftoken");
+  if (csrf_token !== null) {
+    headers['X-CSRFToken'] = csrf_token;
+  }
+
+  return fetch(API_URI + uri, {
+    headers: headers,
+    ...options
+  })
+}
+
+function filters_to_params(filters) {
+  let query_params = Object.entries(filters).map(([key, val]) => {
+    if (val !== null) {
+      return `${key}=${val}`;
+    }
+    return '';
+  }).join('&');
+  if (query_params.length > 0) {
+    query_params = '?' + query_params;
+  }
+  return query_params;
+}
+
+function checkStatus(resp) {
+  if (resp.status == 200) {
+    return resp.json()
+  }
+  return Promise.resolve(resp.json()).then((error) => {
+    return Promise.reject({
+      code: resp.status,
+      message: parseErrors(error),
+    });
+  })
+}
+
 const TrackActions = {
   clearError(idx) {
     return {
@@ -56,23 +108,14 @@ const TrackActions = {
     }
   },
   selectTransactions(page_num, page_size, filters) {
-    const query_params = {
+    const params = filters_to_params({
       page: page_num,
       page_size: page_size,
-    }
-    Object.keys(filters).forEach(function(keyval) {
-      if (filters[keyval] !== null) {
-        query_params[keyval] = filters[keyval];
-      }
-    }, this);
-
+      ...filters
+    })
     return (dispatch, getState) => {
-      if (!refreshLogin(dispatch, getState)) { 
-        return;
-      };
-      const auth_token = getState().auth.token;
-      return CatTrackAPI
-        .get('/api/transactions/', query_params, auth_token)
+      return fetch_from_api(dispatch, getState, '/api/transactions/' + params)
+        .then(checkStatus)
         .then(rawTransactions => {
           dispatch({
             type: TrackActionTypes.TRANSACTION_PAGE_LOADED,
@@ -109,25 +152,10 @@ const TrackActions = {
     }
   },
   loadTransactionSummary(filters) {
-    const query_params = {};
-    Object.keys(filters).forEach(function(keyval) {
-      if (filters[keyval] !== null) {
-        let val = filters[keyval];
-        if (keyval == "from_date" || keyval == "to_date") {
-
-        }
-        query_params[keyval] = filters[keyval];
-      }
-    }, this);
-
+    const query_params = filters_to_params(filters);
     return (dispatch, getState) => {
-      if (!refreshLogin(dispatch, getState)) { 
-        return;
-      };
-      const auth_token = getState().auth.token;
-    
-      return CatTrackAPI
-        .get('/api/transactions/summary/', query_params, auth_token)
+      return fetch_from_api(dispatch, getState, '/api/transactions/summary/' + query_params)
+        .then(checkStatus)
         .then(rawSummary => {
           dispatch({
             type: TrackActionTypes.TRANSACTION_SUMMARY_LOADED,
@@ -145,14 +173,8 @@ const TrackActions = {
   },
   loadPeriods() {
     return (dispatch, getState) => {
-      if (!refreshLogin(dispatch, getState)) {
-        return;
-      }
-    
-      const auth_token = getState().auth.token;
-    
-      return CatTrackAPI
-        .get('/api/periods/', {}, auth_token)
+      return fetch_from_api(dispatch, getState, '/api/periods/')
+        .then(checkStatus)
         .then(rawPeriods => {
           dispatch({
             type: TrackActionTypes.PERIODS_LOADED,
@@ -171,14 +193,8 @@ const TrackActions = {
   },
   loadAccounts() {
     return (dispatch, getState) => {
-      if (!refreshLogin(dispatch, getState)) {
-        return;
-      }
-      
-      const auth_token = getState().auth.token;
-    
-      return CatTrackAPI
-        .get('/api/accounts/', {}, auth_token)
+      return fetch_from_api(dispatch, getState, '/api/accounts/')
+        .then(checkStatus)
         .then(rawAccounts => {
           dispatch({
             type: TrackActionTypes.ACCOUNTS_LOADED,
@@ -198,26 +214,12 @@ const TrackActions = {
   uploadToAccount(account, upload_file) {
     let data = new FormData();
     data.append('data_file', upload_file);
-    data.append('name', 'name');
+    data.append('name', account);
     
     return (dispatch, getState) => {
-      if (!refreshLogin(dispatch, getState)) {
-        return;
-      }
-      let headers = {};
-      const token = getState().auth.token;
-      if (token !== undefined) {
-        headers.Authorization = 'JWT ' + token;
-      }
-      const csrf_token = Cookies.get("csrftoken");
-      if (csrf_token !== null) {
-        headers['X-CSRFToken'] = csrf_token;
-      }
-
-      return fetch('http://localhost:8000/api/accounts/' + account + '/load/', {
+      return fetch_from_api(dispatch, getState, '/api/accounts/' + account + '/load/', {
         method: 'POST',
         body: data,
-        headers: headers
       }).then((resp) => {
         if (resp.status == 200) {
           dispatch({
@@ -282,19 +284,15 @@ const TrackActions = {
 
   categorisorSetTransaction(transaction) {
     return (dispatch, getState) => {
-      if (!refreshLogin(dispatch, getState)) {
-        return;
-      }
-
-      const auth_token = getState().auth.token;
-
       dispatch({
         type: TrackActionTypes.CATEGORISOR_SET_TRANSACTION,
         transaction: transaction,
       });
 
-      return CatTrackAPI
-        .get('/api/transactions/' + transaction.id + '/suggest/', {}, auth_token)
+      return fetch_from_api(
+        dispatch, getState, 
+        '/api/transactions/' + transaction.id + '/suggest/')
+        .then(checkStatus)
         .then(resp => {
           dispatch({
             type: TrackActionTypes.CATEGORISOR_SUGGESTIONS_RECEIVED,
@@ -314,10 +312,8 @@ const TrackActions = {
 
   loadCategories() {
     return (dispatch, getState) => {
-      const auth_token = getState().auth.token;
-    
-      return CatTrackAPI
-        .get('/api/categories/', {}, auth_token)
+      return fetch_from_api(dispatch, getState, '/api/categories/')
+        .then(checkStatus)
         .then(resp => {
           dispatch({
             type: TrackActionTypes.CATEGORISOR_CATEGORIES_RECEIVED,
