@@ -360,4 +360,66 @@ describe('api actions', () => {
       expect(store.getActions()).toEqual(expectedActions)
     })
   })
+
+  it('should create select transactions summary actions', () => {
+    nock('http://localhost:8000')
+      .get('/api/transactions/1/suggest/')
+      .reply(200, [
+        {id: 4, name: "c1"},
+        {id: 2, name: "c4"},
+      ]
+    )
+        
+    const expectedActions = [
+      {
+        type: TrackActionTypes.CATEGORISOR_SET_TRANSACTION,
+        transaction: {id: 1}
+      },
+      { 
+        type: TrackActionTypes.CATEGORISOR_SUGGESTIONS_RECEIVED, 
+        categories: [
+          {id: 4, name: "c1"},
+          {id: 2, name: "c4"},
+        ]
+      }
+    ]
+    const store = mockStore({...dummyLoggedInState()})
+
+    return store.dispatch(TrackActions.categorisorSetTransaction({id: 1})).then(() => {
+      // Return of async actions
+      expect(store.getActions()).toEqualImmutable(expectedActions)
+    })
+  })
+
+  it('should create suggestion load error action', () => {
+    nock('http://localhost:8000')
+      .get('/api/transactions/1/suggest/')
+      .reply(404, {error: "not found"})
+        
+    const expectedActions = [
+      {
+        type: TrackActionTypes.CATEGORISOR_SET_TRANSACTION,
+        transaction: {id: 1}
+      },
+      { 
+        type: TrackActionTypes.CATEGORISOR_SUGGESTIONS_ERROR, 
+        error: {
+          code: 404,
+          message: [
+            [
+              "Error", 
+              "not found"
+            ]
+          ]
+        }
+      }
+    ]
+
+    const store = mockStore({...dummyLoggedInState()})
+
+    return store.dispatch(TrackActions.categorisorSetTransaction({id: 1})).then(() => {
+      // Return of async actions
+      expect(store.getActions()).toEqual(expectedActions)
+    })
+  })
 })

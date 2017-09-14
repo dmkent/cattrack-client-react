@@ -277,8 +277,8 @@ const TrackActions = {
         transaction: transaction,
       });
 
-      CatTrackAPI
-        .get('/api/transactions/' + transaction.id + '/suggest', {}, auth_token)
+      return CatTrackAPI
+        .get('/api/transactions/' + transaction.id + '/suggest/', {}, auth_token)
         .then(resp => {
           dispatch({
             type: TrackActionTypes.CATEGORISOR_SUGGESTIONS_RECEIVED,
