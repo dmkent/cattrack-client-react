@@ -1,6 +1,9 @@
 import TrackActionTypes from '../data/TrackActionTypes';
 
-import CatTrackAPI from '../client/CatTrackAPI';
+import CatTrackAPI, {parseErrors} from '../client/CatTrackAPI';
+
+import fetch from 'isomorphic-fetch';
+import * as Cookies from "js-cookie"
 
 import Transaction from '../data/Transaction';
 import Account from '../data/Account';
@@ -195,39 +198,47 @@ const TrackActions = {
   uploadToAccount(account, upload_file) {
     let data = new FormData();
     data.append('data_file', upload_file);
-    data.append('name', name);
-
+    data.append('name', 'name');
+    
     return (dispatch, getState) => {
       if (!refreshLogin(dispatch, getState)) {
         return;
       }
-      
-      const auth_token = getState().auth.token;
-    
-      return CatTrackAPI
-        .upload_form('/api/accounts/' + account + '/load/',
-                    data, auth_token, {
-                      beforeSend: function(xhrObject){ 
-                        xhrObject.onprogress = function(event){
-                          dispatch({
-                            type: TrackActionTypes.ACCOUNT_UPLOAD_PROGRESS_UPDATE,
-                            progress: event.loaded / event.total * 100,
-                          });
-                        }}
-                      }
-                    )
-        .then(() => {
+      let headers = {};
+      const token = getState().auth.token;
+      if (token !== undefined) {
+        headers.Authorization = 'JWT ' + token;
+      }
+      const csrf_token = Cookies.get("csrftoken");
+      if (csrf_token !== null) {
+        headers['X-CSRFToken'] = csrf_token;
+      }
+
+      return fetch('http://localhost:8000/api/accounts/' + account + '/load/', {
+        method: 'POST',
+        body: data,
+        headers: headers
+      }).then((resp) => {
+        if (resp.status == 200) {
           dispatch({
             type: TrackActionTypes.ACCOUNT_UPLOAD_SUCESS,
             account,
           });
-        })
-        .catch(error => {
+          // All done. Resolve to null.
+          return Promise.resolve(null);
+        }
+        // Non-200 status, parse the content
+        return resp.json();
+      })
+      .then((data) => {
+          if (data === null) {
+            return;
+          }
           dispatch({
             type: TrackActionTypes.ACCOUNT_UPLOAD_ERROR,
             account,
-            error,
-          });
+            error: parseErrors(data),
+          })
         });
     };
   },

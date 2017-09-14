@@ -14,7 +14,7 @@
 import * as Cookies from "js-cookie"
 import xhr from 'request';
 
-function parseErrors(data) {
+export function parseErrors(data) {
     /**
      * Based on https://gist.github.com/kottenator/433f677e5fdddf78d195
      */
@@ -67,7 +67,6 @@ function parseErrors(data) {
         });
         return output;
     }
-
     return _parseErrorItem(data);
 };
 
@@ -98,11 +97,7 @@ const CatTrackAPI = {
 
   put(uri, data, token) {
     return promiseXHR('put', uri, data, token);
-  },
-
-  upload_form(uri, formdata, token, options) {
-    return promiseXHRFormUpload(uri, formdata, token, options);
-  },
+  }
 };
 
 /**
@@ -181,58 +176,4 @@ function promiseXHR(method: 'get' | 'post' | 'put', uri, data, token) {
   });
 }
 
-function promiseXHRFormUpload(uri, formdata, token, options) {
-  let API_URI = "http://localhost:8000"
-  if (process.env.NODE_ENV === 'production') {
-    API_URI = '/be';
-  }
-  
-  let headers = {};
-  const csrf_token = Cookies.get("csrftoken");
-  if (csrf_token !== null) {
-    headers['X-CSRFToken'] = csrf_token;
-  }
-
-  if (token !== undefined) {
-    headers['Authorization'] = 'JWT ' + token;
-  }
-  return new Promise((resolve, reject) => {
-    xhr.post({
-        uri: API_URI + uri,
-        body: formdata,
-        headers: headers,
-        ...options
-      },
-      (err, res, body) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        if (res.statusCode !== 200) {
-          reject({
-            code: res.statusCode,
-            message: parseErrors(JSON.parse(res.body)),
-          });
-          return;
-        }
-
-        // It's fine if the body is empty.
-        if (body == null) {
-          resolve(undefined);
-        }
-
-        // Not okay if the body isn't a string though.
-        if (typeof body !== 'string') {
-          reject(new Error('Responses from server must be JSON strings.'));
-        }
-
-        try {
-          resolve(JSON.parse(body));
-        } catch (e) {
-          reject(new Error('Responses from server must be JSON strings.'));
-        }
-      },
-    );
-  });
-}
 export default CatTrackAPI;

@@ -489,4 +489,48 @@ it('should deal with sequence of actions to reload on edit', () => {
       expect(store.getActions()).toEqualImmutable(expectedActions)
     })
   })
+
+ it('should create file upload actions', () => {
+    nock('http://localhost:8000')
+      .post('/api/accounts/1/load/')
+      .reply(200, {success: "done"})
+        
+    const expectedActions = [
+      {
+        type: TrackActionTypes.ACCOUNT_UPLOAD_SUCESS,
+        account: 1
+      },
+    ]
+
+    const store = mockStore({...dummyLoggedInState()})
+    return store.dispatch(TrackActions.uploadToAccount(1, 'dummy file object')).then(() => {
+      // Return of async actions
+      expect(store.getActions()).toEqual(expectedActions)
+    })
+  })
+
+ it('should upload error actions', () => {
+    nock('http://localhost:8000')
+      .post('/api/accounts/1/load/')
+      .reply(403, {error: "bad format"})
+        
+    const expectedActions = [
+      {
+        type: TrackActionTypes.ACCOUNT_UPLOAD_ERROR,
+        error: [
+          [
+            "Error", 
+            "bad format"
+          ]
+        ],
+        account: 1
+      },
+    ]
+
+    const store = mockStore({...dummyLoggedInState()})
+    return store.dispatch(TrackActions.uploadToAccount(1, 'dummy file object')).then(() => {
+      // Return of async actions
+      expect(store.getActions()).toEqual(expectedActions)
+    })
+  })
 })
