@@ -267,13 +267,15 @@ const TrackActions = {
   },
   restoreLogin() {
     const token = localStorage.getItem('jwt');
-    if (token !== undefined && token !== null) {
-      return {
-        type: TrackActionTypes.AUTH_RESPONSE_RECEIVED,
-        token: token,
-      };
+    return (dispatch) => {
+      if (token !== undefined && token !== null) {
+        dispatch({
+          type: TrackActionTypes.AUTH_RESPONSE_RECEIVED,
+          token: token,
+        });
+      }
+      return Promise.resolve();
     }
-    return (dispatch) => {};
   },
   logout() {
     localStorage.removeItem('jwt');

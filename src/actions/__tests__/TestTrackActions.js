@@ -70,12 +70,46 @@ describe('simple actions', () => {
     };
     expect(TrackActions.categorisorHide()).toEqual(expectedAction);
   });
+
+  it('should create a logout action', () => {
+    let expectedAction = {
+      type: TrackActionTypes.AUTH_LOGOUT,
+    };
+    expect(TrackActions.logout()).toEqual(expectedAction);
+  });
 })
 
 describe('api actions', () => {
   afterEach(() => {
     nock.cleanAll()
+    localStorage.clear()
   })
+
+  it('should create a restore login action', () => {
+    let expectedActions = [
+      {
+        type: TrackActionTypes.AUTH_RESPONSE_RECEIVED,
+        token: 'test'
+      }
+    ];
+    localStorage.setItem('jwt', 'test')
+    const store = mockStore({...dummyLoggedInState()})
+
+    return store.dispatch(TrackActions.restoreLogin()).then(() => {
+      // Return of async actions
+      expect(store.getActions()).toEqual(expectedActions)
+    })
+  });
+
+  it('should not create a restore login action if not in localStore', () => {
+    let expectedActions = [];
+    const store = mockStore({...dummyLoggedInState()})
+
+    return store.dispatch(TrackActions.restoreLogin()).then(() => {
+      // Return of async actions
+      expect(store.getActions()).toEqual(expectedActions)
+    })
+  });
 
   it('should create load category actions', () => {
     nock('http://localhost:8000')
