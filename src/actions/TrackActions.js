@@ -10,69 +10,74 @@ import Account from '../data/Account';
 import Category from '../data/Category';
 import Period from '../data/Period';
 
+let API_URI = "http://localhost:8000"
+if (process.env.NODE_ENV === 'production') {
+  API_URI = '/be';
+}
+
 function refreshLogin(dispatch, getState) {
   const auth = getState().auth;
   if (!auth.is_logged_in) {
-    return false;
+    return Promise.reject("Not logged in.");
   }
   let now = new Date();
   // 1. check if we are expired - clear auth
   if (now > auth.expires) {
       console.log("Auth expired. Expiry: " + auth);
       dispatch(TrackActions.logout());
-      return false;
+      return Promise.reject("Auth has expired.");
   }
 
   // 2. check if more than 5 mins until expire - don't refresh
   if ((auth.expires.getTime() - now.getTime()) > 300000 ) {
       // Hasn't expired and won't in next five minutes so bail.
-      return true;
+      return Promise.resolve(null);
   }
 
   // 3. not expired, but near expiry - refresh
-  CatTrackAPI
-  .post('/api-token-refresh/', {token: auth.token})
+  return fetch(API_URI + '/api-token-refresh/', {
+    method: 'POST',
+    body: JSON.stringify({token: auth.token}),
+    headers: {'Content-Type': 'application/json'},
+  })
+  .then(checkStatus)
   .then(resp => {
     localStorage.setItem('jwt', resp.token);
     dispatch({
       type: TrackActionTypes.AUTH_RESPONSE_RECEIVED,
       token: resp.token,
     });
+    return Promise.resolve();
   })
   .catch(error => {
     dispatch({
       type: TrackActionTypes.AUTH_ERROR,
       error
     });
+    return Promise.reject(new Error("Auth failed."));
   });
-  return true;
 }
 
 function fetch_from_api(dispatch, getState, uri, options = {}) {
-  let API_URI = "http://localhost:8000"
-  if (process.env.NODE_ENV === 'production') {
-    API_URI = '/be';
-  }
+  return refreshLogin(dispatch, getState)
+  .then(() => {
+    // Set up authentication and security headers.
+    let headers = Object.assign({}, options.headers);
+    const token = getState().auth.token;
+    if (token !== undefined) {
+      headers.Authorization = 'JWT ' + token;
+    }
+    const csrf_token = Cookies.get("csrftoken");
+    if (csrf_token !== null) {
+      headers['X-CSRFToken'] = csrf_token;
+    }
 
-  if (!refreshLogin(dispatch, getState)) {
-      return Promise.reject(new Error("Authentication failed."));
-  }
-    
-  // Set up authentication and security headers.
-  let headers = Object.assign({}, options.headers);
-  const token = getState().auth.token;
-  if (token !== undefined) {
-    headers.Authorization = 'JWT ' + token;
-  }
-  const csrf_token = Cookies.get("csrftoken");
-  if (csrf_token !== null) {
-    headers['X-CSRFToken'] = csrf_token;
-  }
-
-  return fetch(API_URI + uri, {
-    headers: headers,
-    ...options
+    return fetch(API_URI + uri, {
+      headers: headers,
+      ...options
+    })
   })
+  .catch(err => {console.log(err)})
 }
 
 function filters_to_params(filters) {
@@ -247,8 +252,12 @@ const TrackActions = {
 
   attemptLogin(username, password) {
     return (dispatch) => {
-      return CatTrackAPI
-        .post('/api-token-auth/', {username: username, password: password})
+      return fetch(API_URI + '/api-token-auth/', {
+          method: 'POST',
+          body: JSON.stringify({username: username, password: password}),
+          headers: {'Content-Type': 'application/json'}
+        })
+        .then(checkStatus)
         .then(resp => {
           localStorage.setItem('jwt', resp.token);
           dispatch({

@@ -85,6 +85,53 @@ describe('api actions', () => {
     localStorage.clear()
   })
 
+  it('should create a login action', () => {
+    nock('http://localhost:8000')
+      .post('/api-token-auth/')
+      .reply(200, {token: 'blahblahblah'})
+
+    let expectedActions = [
+      {
+        type: TrackActionTypes.AUTH_RESPONSE_RECEIVED,
+        token: 'blahblahblah'
+      }
+    ];
+    const store = mockStore({...dummyLoggedInState()})
+
+    return store.dispatch(TrackActions.attemptLogin('me', 'mysecret')).then(() => {
+      // Return of async actions
+      expect(store.getActions()).toEqual(expectedActions)
+    })
+  });
+
+  it('should create a login failure action', () => {
+    nock('http://localhost:8000')
+      .post('/api-token-auth/')
+      .reply(403, {error: 'naughty naughty'})
+
+    let expectedActions = [
+      {
+        type: TrackActionTypes.AUTH_ERROR,
+        error: {
+          code: 403,
+          message: [
+            [
+              "Error",
+              "naughty naughty"
+            ]
+          ]
+        },
+        username: "me"
+      }
+    ];
+    const store = mockStore({...dummyLoggedInState()})
+
+    return store.dispatch(TrackActions.attemptLogin('me', 'mysecret')).then(() => {
+      // Return of async actions
+      expect(store.getActions()).toEqual(expectedActions)
+    })
+  });
+
   it('should create a restore login action', () => {
     let expectedActions = [
       {
@@ -110,6 +157,68 @@ describe('api actions', () => {
       expect(store.getActions()).toEqual(expectedActions)
     })
   });
+
+  it('should create a login action with renewed token', () => {
+    nock('http://localhost:8000')
+      .post('/api-token-refresh/')
+      .reply(200, {token: 'new token'})
+      .get('/api/categories/')
+      .reply(200, {})
+
+    let expectedAction = {
+      type: TrackActionTypes.AUTH_RESPONSE_RECEIVED,
+      token: 'new token'
+    };
+    const auth_expires = new Date()
+    auth_expires.setMinutes(auth_expires.setMinutes() + 1)
+    const auth = {
+      auth: {
+        token: '', 
+        is_logged_in: true, 
+        expires: auth_expires
+      }
+    }
+    const store = mockStore(auth)
+    return store.dispatch(TrackActions.loadCategories()).then(() => {
+      // Return of async actions
+      expect(store.getActions()[0]).toEqualImmutable(expectedAction)
+    })
+  })
+
+  it('should create a login auth error action with renewed token', () => {
+    nock('http://localhost:8000')
+      .post('/api-token-refresh/')
+      .reply(403, {error: 'expired'})
+      .get('/api/categories/')
+      .reply(200, [])
+
+    let expectedAction = {
+      type: TrackActionTypes.AUTH_ERROR,
+      error: {
+        code: 403,
+        message: [
+          [
+            "Error",
+            "expired"
+          ]
+        ]
+      }
+    };
+    const auth_expires = new Date()
+    auth_expires.setMinutes(auth_expires.setMinutes() + 1)
+    const auth = {
+      auth: {
+        token: '', 
+        is_logged_in: true, 
+        expires: auth_expires
+      }
+    }
+    const store = mockStore(auth)
+    return store.dispatch(TrackActions.loadCategories()).then(() => {
+      // Return of async actions
+      expect(store.getActions()[0]).toEqualImmutable(expectedAction)
+    })
+  })
 
   it('should create load category actions', () => {
     nock('http://localhost:8000')
