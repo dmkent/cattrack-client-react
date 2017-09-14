@@ -422,4 +422,71 @@ describe('api actions', () => {
       expect(store.getActions()).toEqual(expectedActions)
     })
   })
+
+it('should deal with sequence of actions to reload on edit', () => {
+    nock('http://localhost:8000')
+      .get(/\/api\/transactions\/summary\/(\?.+)?/)
+      .reply(200, [
+        {category: 4, category_name: "c1", total: -34.2},
+        {category: 2, category_name: "c4", total: 34.2},
+      ])
+      .get(/\/api\/transactions\/\?page=.+&page_size=.+(&.+)?/)
+      .reply(200, {
+        results: [
+          {id: 4, when: "2011-01-01", amount: -34.2, description: "money"},
+          {id: 4, when: "2011-01-04", amount: 34.2, description: "money money"},
+        ],
+        count: 2032
+      }
+    )
+        
+    const expectedActions = [
+      { 
+        type: TrackActionTypes.TRANSACTION_PAGE_LOADED, 
+        page_num: 1,
+        page_size: 20,
+        transactions: [
+          new Transaction({id: 4, when: "2011-01-01", amount: -34.2, description: "money"}),
+          new Transaction({id: 4, when: "2011-01-04", amount: 34.2, description: "money money"}),
+        ],
+        num_records: 2032,
+        filters: {
+          category: 1,
+          account: null,
+          to_date: "2011-02-07",
+          from_date: "2011-02-03",
+        }
+      },
+      { 
+        type: TrackActionTypes.TRANSACTION_SUMMARY_LOADED, 
+        summary: [
+          {category: 4, category_name: "c1", total: -34.2},
+          {category: 2, category_name: "c4", total: 34.2},
+        ],
+        filters: {
+          category: 1,
+          account: null,
+          to_date: "2011-02-07",
+          from_date: "2011-02-03",
+        }
+      }
+    ]
+    const store = mockStore({
+      ...dummyLoggedInState(), 
+      transactions: {
+        page_size: 20,
+        filters: {
+          category: null,
+          account: 1,
+          to_date: "2011-02-07",
+          from_date: null
+        }
+      }
+    })
+
+    return store.dispatch(TrackActions.updateTransactionFilter({category: 1, account: null, from_date: "2011-02-03"})).then(() => {
+      // Return of async actions
+      expect(store.getActions()).toEqualImmutable(expectedActions)
+    })
+  })
 })

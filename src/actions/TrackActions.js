@@ -96,8 +96,13 @@ const TrackActions = {
       const state = getState().transactions;
       const merged = Object.assign({}, state.filters, new_filters);
       
-      dispatch(this.selectTransactions(1, state.page_size, merged));
-      dispatch(this.loadTransactionSummary(merged));
+      return new Promise(resolve => {
+        dispatch(this.selectTransactions(1, state.page_size, merged)).then(() => {
+          dispatch(this.loadTransactionSummary(merged)).then( () => {
+            resolve()
+          })
+        });
+      });
     }
   },
   loadTransactionSummary(filters) {
