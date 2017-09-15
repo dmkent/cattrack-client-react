@@ -12,7 +12,11 @@
  *
  */
 import * as Cookies from "js-cookie"
-import xhr from 'request';
+import fetch from 'isomorphic-fetch';
+
+import TrackActionTypes from '../data/TrackActionTypes';
+
+export const API_URI = (process.env.NODE_ENV === 'production') ? '/be' : "http://localhost:8000";
 
 export function parseErrors(data) {
     /**
@@ -70,110 +74,112 @@ export function parseErrors(data) {
     return _parseErrorItem(data);
 };
 
-type TransactionObject = {
-  id: string,
-  when: string,
-  description: string,
-  account: string,
-  amount: number,
-};
-
-// Using some flow trickery we can strongly type our requests! We don't verify
-// this at runtime though, so it's not actually sound. But we're all good if
-// we trust the API implementation :)
-declare class CatTrackAPI {
-  static get(uri: '/api/transactions/', data: {page: number, page_size: number}): Promise<Array<TransactionObject>>;
-}
-
-// $FlowExpectedError: Intentional rebinding of variable.
-const CatTrackAPI = {
-  get(uri, data, token) {
-    return promiseXHR('get', uri, data, token);
-  },
-
-  post(uri, data, token) {
-    return promiseXHR('post', uri, data, token);
-  },
-
-  put(uri, data, token) {
-    return promiseXHR('put', uri, data, token);
+export function refreshLogin(dispatch, getState) {
+  const auth = getState().auth;
+  if (!auth.is_logged_in) {
+    dispatch({
+      type: TrackActionTypes.AUTH_ERROR,
+      error: {
+        message: "Not logged in."
+      }
+    })
+    return Promise.reject(new Error("Not logged in."));
   }
-};
-
-/**
- * This is a simple wrapper around XHR that let's us use promises. Not very
- * advanced but works with our server's API.
- */
-function promiseXHR(method: 'get' | 'post' | 'put', uri, data, token) {
-  let API_URI = "http://localhost:8000"
-  if (process.env.NODE_ENV === 'production') {
-    API_URI = '/be';
-  }
-
-  let send_body = null;
-  let suffix = '';
-  let headers = {};
-  if (method == 'post' || method == 'put') {
-    send_body = JSON.stringify(data);
-    headers["Content-Type"] = "application/json";
-  } else {
-  const query = [];
-    if (data) {
-      Object.keys(data).forEach(key => {
-        query.push(key + '=' + data[key]);
+  let now = new Date();
+  // 1. check if we are expired - clear auth
+  if (now > auth.expires) {
+      console.log("Auth expired. Expiry: " + auth);
+      localStorage.removeItem('jwt');
+      dispatch({
+        type: TrackActionTypes.AUTH_LOGOUT,
       });
-    }
-    suffix = query.length > 0
-      ? '?' + query.join('&')
-      : '';
-  }
-  
-  const csrf_token = Cookies.get("csrftoken");
-  if (csrf_token !== null) {
-    headers['X-CSRFToken'] = csrf_token;
+      return Promise.reject("Auth has expired.");
   }
 
-  if (token !== undefined) {
-    headers['Authorization'] = 'JWT ' + token;
+  // 2. check if more than 5 mins until expire - don't refresh
+  if ((auth.expires.getTime() - now.getTime()) > 300000 ) {
+      // Hasn't expired and won't in next five minutes so bail.
+      return Promise.resolve(null);
   }
 
-  return new Promise((resolve, reject) => {
-    xhr[method]({
-        uri: API_URI + uri + suffix,
-        body: send_body,
-        headers: headers,
-      },
-      (err, res, body) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        if (res.statusCode !== 200) {
-          reject({
-            code: res.statusCode,
-            message: parseErrors(JSON.parse(res.body)),
-          });
-          return;
-        }
-
-        // It's fine if the body is empty.
-        if (body == null) {
-          resolve(undefined);
-        }
-
-        // Not okay if the body isn't a string though.
-        if (typeof body !== 'string') {
-          reject(new Error('Responses from server must be JSON strings.'));
-        }
-
-        try {
-          resolve(JSON.parse(body));
-        } catch (e) {
-          reject(new Error('Responses from server must be JSON strings.'));
-        }
-      },
-    );
+  // 3. not expired, but near expiry - refresh
+  return fetch(API_URI + '/api-token-refresh/', {
+    method: 'POST',
+    body: JSON.stringify({token: auth.token}),
+    headers: {'Content-Type': 'application/json'},
+  })
+  .then(checkStatus)
+  .then(resp => {
+    localStorage.setItem('jwt', resp.token);
+    dispatch({
+      type: TrackActionTypes.AUTH_RESPONSE_RECEIVED,
+      token: resp.token,
+    });
+    return Promise.resolve();
+  })
+  .catch(error => {
+    dispatch({
+      type: TrackActionTypes.AUTH_ERROR,
+      error
+    });
+    return Promise.reject(new Error("Auth failed."));
   });
 }
 
-export default CatTrackAPI;
+export function fetch_from_api(dispatch, getState, uri, options = {}) {
+  return refreshLogin(dispatch, getState)
+  .then(() => {
+    // Set up authentication and security headers.
+    let headers = Object.assign({
+      'Content-Type': 'application/json',
+    }, options.headers);
+    const token = getState().auth.token;
+    if (token !== undefined) {
+      headers.Authorization = 'JWT ' + token;
+    }
+    const csrf_token = Cookies.get("csrftoken");
+    if (csrf_token !== null) {
+      headers['X-CSRFToken'] = csrf_token;
+    }
+    options.headers = headers;
+    return fetch(API_URI + uri, {
+      ...options,
+    })
+  })
+  .catch(err => {console.log(err)})
+}
+
+export function filters_to_params(filters) {
+  let query_params = Object.entries(filters).map(([key, val]) => {
+    if (val !== null) {
+      return `${key}=${val}`;
+    }
+    return '';
+  }).join('&');
+  if (query_params.length > 0) {
+    query_params = '?' + query_params;
+  }
+  return query_params;
+}
+
+export function checkStatus(resp) {
+  if (resp === undefined) {
+    return Promise.reject(new Error("No response received"));
+  } else if (resp.status == 200) {
+    return resp.json()
+  }
+  return Promise.resolve(resp.json())
+  .catch(() => {
+    return Promise.reject({
+      code: resp.status,
+      message: [["Unable to decode response as JSON."]]
+    })
+  })
+  .then((error) => {
+    return Promise.reject({
+      code: resp.status,
+      message: parseErrors(error),
+    });
+  })
+
+}
