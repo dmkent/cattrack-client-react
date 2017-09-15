@@ -5,6 +5,7 @@ import Category from '../../data/Category'
 import Period from '../../data/Period'
 import Transaction from '../../data/Transaction'
 
+import Immutable from 'immutable'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import nock from 'nock'
@@ -566,7 +567,7 @@ describe('api actions', () => {
     })
   })
 
-it('should deal with sequence of actions to reload on edit', () => {
+  it('should deal with sequence of actions to reload on edit', () => {
     nock('http://localhost:8000')
       .get(/\/api\/transactions\/summary\/(\?.+)?/)
       .reply(200, [
@@ -633,7 +634,7 @@ it('should deal with sequence of actions to reload on edit', () => {
     })
   })
 
- it('should create file upload actions', () => {
+  it('should create file upload actions', () => {
     nock('http://localhost:8000')
       .post('/api/accounts/1/load/')
       .reply(200, {success: "done"})
@@ -652,7 +653,7 @@ it('should deal with sequence of actions to reload on edit', () => {
     })
   })
 
- it('should upload error actions', () => {
+  it('should upload error actions', () => {
     nock('http://localhost:8000')
       .post('/api/accounts/1/load/')
       .reply(403, {error: "bad format"})
@@ -674,6 +675,137 @@ it('should deal with sequence of actions to reload on edit', () => {
     return store.dispatch(TrackActions.uploadToAccount(1, 'dummy file object')).then(() => {
       // Return of async actions
       expect(store.getActions()).toEqual(expectedActions)
+    })
+  })
+
+  it('should create transactions split actions with no split', () => {
+    nock('http://localhost:8000')
+      .put('/api/transactions/4/')
+      .reply(200, {id: 4, when: "2011-01-01", description: "a", amount: -2})
+        
+    const expectedActions = [
+      {
+        type: TrackActionTypes.TRANSACTION_UPDATED,
+        transaction: new Transaction({id: 4, when: "2011-01-01", description: "a", amount: -2})
+      }
+    ]
+    const store = mockStore({...dummyLoggedInState()})
+
+    return store.dispatch(TrackActions.categorisorSave(
+      new Transaction({id: 4, when: "2011-01-01", description: "a", amount: -2}),
+      Immutable.List([{category: 2, amount: -2}]),
+      () => {}
+    )).then(() => {
+      // Return of async actions
+      expect(store.getActions()).toEqualImmutable(expectedActions)
+    })
+  })
+
+  it('should create transactions split actions with split', () => {
+    nock('http://localhost:8000')
+      .put('/api/transactions/4/')
+      .reply(200, {id: 4, when: "2011-01-01", description: "a", amount: -2})
+      .post('/api/transactions/4/split/')
+      .reply(200, {status: 'success'})
+        
+    const expectedActions = [
+      {
+        type: TrackActionTypes.TRANSACTION_UPDATED,
+        transaction: new Transaction({id: 4, when: "2011-01-01", description: "a", amount: -2})
+      },
+      {
+        type: TrackActionTypes.TRANSACTION_SPLIT_SUCCESS
+      },
+      {
+        type: TrackActionTypes.CATEGORISOR_HIDE
+      }
+    ]
+    const store = mockStore({...dummyLoggedInState()})
+
+    return store.dispatch(TrackActions.categorisorSave(
+      new Transaction({id: 4, when: "2011-01-01", description: "a", amount: -2}),
+      Immutable.List([
+        {category: 2, amount: -0.5}, 
+        {category: 4, amount: -1.5}
+      ]),
+      () => {}
+    )).then(() => {
+      // Return of async actions
+      expect(store.getActions()).toEqualImmutable(expectedActions)
+    })
+  })
+
+  it('should create transactions split error actions with split', () => {
+    nock('http://localhost:8000')
+      .put('/api/transactions/4/')
+      .reply(403, {error: 'failed'})
+        
+    const expectedActions = [
+      {
+        type: TrackActionTypes.TRANSACTION_UPDATE_ERROR,
+        error: {
+          code: 403,
+          message: [
+            [
+              "Error", 
+              "failed"
+            ]
+          ]
+        }
+      }
+    ]
+    const store = mockStore({...dummyLoggedInState()})
+
+    return store.dispatch(TrackActions.categorisorSave(
+      new Transaction({id: 4, when: "2011-01-01", description: "a", amount: -2}),
+      Immutable.List([
+        {category: 2, amount: -0.5}, 
+        {category: 4, amount: -1.5}
+      ]),
+      () => {}
+    )).then(() => {
+      // Return of async actions
+      expect(store.getActions()).toEqualImmutable(expectedActions)
+    })
+  })
+
+  it('should create transactions split error actions with split', () => {
+    nock('http://localhost:8000')
+      .put('/api/transactions/4/')
+      .reply(200, {id: 4, when: "2011-01-01", description: "a", amount: -2})
+      .post('/api/transactions/4/split/')
+      .reply(403, {error: 'failed'})
+        
+    const expectedActions = [
+      {
+        type: TrackActionTypes.TRANSACTION_UPDATED,
+        transaction: new Transaction({id: 4, when: "2011-01-01", description: "a", amount: -2})
+      },
+      {
+        type: TrackActionTypes.TRANSACTION_SPLIT_ERROR,
+        error: {
+          code: 403,
+          message: [
+            [
+              "Error", 
+              "failed"
+            ]
+          ]
+        }
+      }
+    ]
+    const store = mockStore({...dummyLoggedInState()})
+
+    return store.dispatch(TrackActions.categorisorSave(
+      new Transaction({id: 4, when: "2011-01-01", description: "a", amount: -2}),
+      Immutable.List([
+        {category: 2, amount: -0.5}, 
+        {category: 4, amount: -1.5}
+      ]),
+      () => {}
+    )).then(() => {
+      // Return of async actions
+      expect(store.getActions()).toEqualImmutable(expectedActions)
     })
   })
 })

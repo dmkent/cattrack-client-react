@@ -62,7 +62,9 @@ function fetch_from_api(dispatch, getState, uri, options = {}) {
   return refreshLogin(dispatch, getState)
   .then(() => {
     // Set up authentication and security headers.
-    let headers = Object.assign({}, options.headers);
+    let headers = Object.assign({
+      'Content-Type': 'application/json',
+    }, options.headers);
     const token = getState().auth.token;
     if (token !== undefined) {
       headers.Authorization = 'JWT ' + token;
@@ -71,10 +73,9 @@ function fetch_from_api(dispatch, getState, uri, options = {}) {
     if (csrf_token !== null) {
       headers['X-CSRFToken'] = csrf_token;
     }
-
+    options.headers = headers;
     return fetch(API_URI + uri, {
-      headers: headers,
-      ...options
+      ...options,
     })
   })
   .catch(err => {console.log(err)})
@@ -97,12 +98,20 @@ function checkStatus(resp) {
   if (resp.status == 200) {
     return resp.json()
   }
-  return Promise.resolve(resp.json()).then((error) => {
+  return Promise.resolve(resp.json())
+  .catch(() => {
+    return Promise.reject({
+      code: resp.status,
+      message: [["Unable to decode response as JSON."]]
+    })
+  })
+  .then((error) => {
     return Promise.reject({
       code: resp.status,
       message: parseErrors(error),
     });
   })
+
 }
 
 const TrackActions = {
@@ -378,40 +387,42 @@ const TrackActions = {
 
   categorisorSave(transaction, splits, onDone) {
     return (dispatch, getState) => {
-      if (!refreshLogin(dispatch, getState)) {
-        return;
-      }
-
-      const auth_token = getState().auth.token;
-    
       let updated = transaction;
       if (splits !== null && splits.size === 1) {
           let new_category = splits.get(0).category;
           updated = updated.set("category", new_category);
       }
-      CatTrackAPI
-        .put('/api/transactions/' + updated.id + '/', updated, auth_token)
-        .then(resp => {
+      return fetch_from_api(dispatch, getState, '/api/transactions/' + updated.id + '/', {
+        method: 'PUT',
+        body: JSON.stringify(updated),
+        headers: {'Content-Type': 'application/json'}
+      })
+      .then(checkStatus)
+      .then(resp => {
           dispatch({
             type: TrackActionTypes.TRANSACTION_UPDATED,
             transaction: new Transaction(resp),
           });
 
           if (splits !== null && splits.size > 1) {
-            CatTrackAPI
-              .post('/api/transactions/' + updated.id + '/split/', splits, auth_token)
-              .then((resp) => {
-                dispatch({
-                  type: TrackActionTypes.TRANSACTION_SPLIT_SUCCESS,
-                });
-                onDone();
-              })
-              .catch(error => {
-                dispatch({
-                  type: TrackActionTypes.TRANSACTION_SPLIT_ERROR,
-                  error,
-                });
+            return fetch_from_api(dispatch, getState, '/api/transactions/' + updated.id + '/split/', {
+              method: 'POST',
+              body: JSON.stringify(splits),
+              headers: {'Content-Type': 'application/json'}
+            })
+            .then(checkStatus)
+            .then(() => {
+              dispatch({
+                type: TrackActionTypes.TRANSACTION_SPLIT_SUCCESS,
               });
+              onDone();
+            })
+            .catch(error => {
+              dispatch({
+                type: TrackActionTypes.TRANSACTION_SPLIT_ERROR,
+                error,
+              });
+            });
           }
           dispatch(this.categorisorHide())
         })
