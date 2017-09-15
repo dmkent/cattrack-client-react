@@ -171,7 +171,7 @@ describe('api actions', () => {
       token: 'new token'
     };
     const auth_expires = new Date()
-    auth_expires.setMinutes(auth_expires.setMinutes() + 1)
+    auth_expires.setMinutes(auth_expires.getMinutes() + 1)
     const auth = {
       auth: {
         token: '', 
@@ -206,7 +206,7 @@ describe('api actions', () => {
       }
     };
     const auth_expires = new Date()
-    auth_expires.setMinutes(auth_expires.setMinutes() + 1)
+    auth_expires.setMinutes(auth_expires.getMinutes() + 1)
     const auth = {
       auth: {
         token: '', 
@@ -218,6 +218,73 @@ describe('api actions', () => {
     return store.dispatch(TrackActions.loadCategories()).then(() => {
       // Return of async actions
       expect(store.getActions()[0]).toEqualImmutable(expectedAction)
+    })
+  })
+
+  it('should create a login auth error action when renewing but not logged in', () => {
+    nock('http://localhost:8000')
+      .post('/api-token-refresh/')
+      .reply(200, {token: 'token'})
+      .get('/api/categories/')
+      .reply(200, [])
+
+    let expectedActions = [
+      {
+        type: TrackActionTypes.AUTH_ERROR,
+        error: {
+          message: "Not logged in."
+        }
+      },
+      {
+        type: TrackActionTypes.CATEGORISOR_CATEGORIES_ERROR,
+        error: new Error("No response received")
+      }
+    ];
+    const auth_expires = new Date()
+    auth_expires.setMinutes(auth_expires.getMinutes() + 1)
+    const auth = {
+      auth: {
+        token: '', 
+        is_logged_in: false, 
+        expires: auth_expires
+      }
+    }
+    const store = mockStore(auth)
+    return store.dispatch(TrackActions.loadCategories()).then(() => {
+      // Return of async actions
+      expect(store.getActions()).toEqual(expectedActions)
+    })
+  })
+
+  it('should create a login auth error action when renewing but log in expired', () => {
+    nock('http://localhost:8000')
+      .post('/api-token-refresh/')
+      .reply(200, {token: 'token'})
+      .get('/api/categories/')
+      .reply(200, [])
+
+    let expectedActions = [
+      {
+        type: TrackActionTypes.AUTH_LOGOUT
+      },
+      {
+        type: TrackActionTypes.CATEGORISOR_CATEGORIES_ERROR,
+        error: new Error("No response received")
+      }
+    ];
+    const auth_expires = new Date()
+    auth_expires.setMinutes(auth_expires.getMinutes() - 10)
+    const auth = {
+      auth: {
+        token: '', 
+        is_logged_in: true, 
+        expires: auth_expires
+      }
+    }
+    const store = mockStore(auth)
+    return store.dispatch(TrackActions.loadCategories()).then(() => {
+      // Return of async actions
+      expect(store.getActions()).toEqual(expectedActions)
     })
   })
 
@@ -687,6 +754,9 @@ describe('api actions', () => {
       {
         type: TrackActionTypes.TRANSACTION_UPDATED,
         transaction: new Transaction({id: 4, when: "2011-01-01", description: "a", amount: -2})
+      },
+      {
+        type: TrackActionTypes.CATEGORISOR_HIDE
       }
     ]
     const store = mockStore({...dummyLoggedInState()})

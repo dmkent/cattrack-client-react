@@ -18,7 +18,13 @@ if (process.env.NODE_ENV === 'production') {
 function refreshLogin(dispatch, getState) {
   const auth = getState().auth;
   if (!auth.is_logged_in) {
-    return Promise.reject("Not logged in.");
+    dispatch({
+      type: TrackActionTypes.AUTH_ERROR,
+      error: {
+        message: "Not logged in."
+      }
+    })
+    return Promise.reject(new Error("Not logged in."));
   }
   let now = new Date();
   // 1. check if we are expired - clear auth
@@ -95,7 +101,9 @@ function filters_to_params(filters) {
 }
 
 function checkStatus(resp) {
-  if (resp.status == 200) {
+  if (resp === undefined) {
+    return Promise.reject(new Error("No response received"));
+  } else if (resp.status == 200) {
     return resp.json()
   }
   return Promise.resolve(resp.json())
@@ -416,6 +424,7 @@ const TrackActions = {
                 type: TrackActionTypes.TRANSACTION_SPLIT_SUCCESS,
               });
               onDone();
+              dispatch(this.categorisorHide())
             })
             .catch(error => {
               dispatch({
