@@ -3,14 +3,14 @@ import Immutable from 'immutable';
 import TrackActionTypes from '../data/TrackActionTypes';
 
 
-const periods = (state = null, action) => {
+function periods(state = null, action) {
   if (state === null) {
-    state = Immutable.List();
+    state = new Immutable.List();
   }
 
   switch (action.type) {
     case TrackActionTypes.PERIODS_LOADED:
-      return Immutable.List(action.periods);
+      return new Immutable.List(action.periods);
     case TrackActionTypes.PERIODS_LOAD_ERROR:
       return state;
     default:
