@@ -1,5 +1,4 @@
 import Immutable from 'immutable'
-import diff from 'jest-diff'
 import reducer from '../errors'
 import TrackActionTypes from '../../data/TrackActionTypes'
 

@@ -6,9 +6,9 @@ function getInitialState() {
   return {
     show_categorisor: false,
     transaction: null,
-    suggestions: Immutable.List(),
-    categories: Immutable.List(),
-    splits: Immutable.List(),
+    suggestions: new Immutable.List(),
+    categories: new Immutable.List(),
+    splits: new Immutable.List(),
     is_valid: {
       valid: null,
       message: "",
@@ -25,9 +25,9 @@ function initialSplits(transaction, suggestions) {
       category = "";
     }
   }
-  return Immutable.List([
+  return new Immutable.List([
     {
-      category: "" + category,
+      category: String(category),
       amount: transaction.amount,
     }
   ]);
@@ -38,22 +38,22 @@ function splitsAreValid(transaction, splits) {
   let cats = [];
   let ncats = 0;
   splits.forEach(function(split) {
-    // ignore empty splits
+    // Ignore empty splits
     if (split.amount == "") {
       return;
     }
 
     // Add amounts to total
-    total = total + parseFloat(split.amount);
+    total += parseFloat(split.amount);
 
     // Get category to check is unique
     if (cats.indexOf(split.category) < 0) {
       cats.push(split.category);
     }
 
-    ncats++;
+    ncats += 1;
 
-  }, this);
+  });
 
   const delta = Math.abs(total - parseFloat(transaction.amount));
   if (delta > 0.005) {
@@ -76,8 +76,8 @@ function splitsAreValid(transaction, splits) {
   }
 }
 
-const categories = (state = null, action) => {
-  if (state ===  null) {
+function categories(state = null, action) {
+  if (state === null) {
     state = getInitialState();
   }
   let new_state = null;
@@ -101,11 +101,13 @@ const categories = (state = null, action) => {
         }
       });
     case TrackActionTypes.CATEGORISOR_SET_SPLIT:
-      const new_split = Object.assign({}, state.splits.get(action.idx), {
-        [action.name]: action.value,
-      });
       new_state = Object.assign({}, state, {
-        splits: state.splits.set(action.idx, new_split),
+        splits: state.splits.set(
+          action.idx, 
+          Object.assign({}, state.splits.get(action.idx), {
+            [action.name]: action.value,
+          })
+        ),
       });
       new_state.is_valid = splitsAreValid(new_state.transaction, new_state.splits);
       return new_state;    
@@ -117,16 +119,17 @@ const categories = (state = null, action) => {
       return new_state;
     case TrackActionTypes.CATEGORISOR_CATEGORIES_RECEIVED:
       return Object.assign({}, state, {
-        categories: Immutable.List(action.categories),
+        categories: new Immutable.List(action.categories),
       });
     case TrackActionTypes.CATEGORISOR_CATEGORIES_ERROR:
       return state;
     case TrackActionTypes.CATEGORISOR_SUGGESTIONS_RECEIVED:
-      const new_suggestions = Immutable.List(action.categories);
-      return Object.assign({}, state, {
-        suggestions: new_suggestions,
-        splits: initialSplits(state.transaction, new_suggestions),
-      });
+      new_state = Object.assign({}, state, {
+        suggestions: new Immutable.List(action.categories)
+      })
+      new_state.splits = initialSplits(state.transaction, 
+                                       new_state.suggestions);
+      return new_state;
     case TrackActionTypes.CATEGORISOR_SUGGESTIONS_ERROR:
       return state;
     case TrackActionTypes.CATEGORISOR_SHOW:
