@@ -1,12 +1,12 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import TrackActions from '../actions/TrackActions'
 import Categorisor from '../views/Categorisor'
 
-const mapStateToProps = state => {
+export function mapStateToProps(state) {
   return {...state.categories};
 }
 
-const mapDispatchToProps = dispatch => {
+export function mapDispatchToProps(dispatch) {
   return {
     hideCategorisor: () => {
       dispatch(TrackActions.categorisorHide());
