@@ -1,17 +1,17 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import {shallow} from 'enzyme'
 import Immutable from 'immutable'
 import Categorisor from '../Categorisor'
 
 function setup(transaction, suggestions) {
   const props = {
     transaction: transaction,
-    suggestions: suggestions ? suggestions : Immutable.List(),
-    splits: Immutable.List([
+    suggestions: suggestions ? suggestions : new Immutable.List(),
+    splits: new Immutable.List([
       'split',
       'split2'
     ]),
-    categories: Immutable.List(),
+    categories: new Immutable.List(),
     is_valid: {message: null, valid: null},
     showCategorisor: jest.fn(),
     saveCategorisor: jest.fn(),
@@ -33,7 +33,7 @@ function setup(transaction, suggestions) {
 describe('components', () => {
   describe('Categorisor', () => {
     it('should not render if transaction is null or undefined', () => {
-      let { enzymeWrapper } = setup(null)
+      let {enzymeWrapper} = setup(null)
       expect(enzymeWrapper.find('Modal').exists()).toBe(false)
 
       enzymeWrapper = setup().enzymeWrapper
@@ -41,7 +41,7 @@ describe('components', () => {
     })
 
     it('should render if transaction is defined', () => {
-      let { enzymeWrapper } = setup({
+      let {enzymeWrapper} = setup({
         description: "test",
         when: "2012-01-01",
         amount: -34.4,
@@ -50,46 +50,53 @@ describe('components', () => {
     })
 
     it('should render suggestions if defined', () => {
-      let { enzymeWrapper } = setup({
+      let {enzymeWrapper} = setup({
         description: "test",
         when: "2012-01-01",
         amount: -34.4,
-      }, Immutable.List([
+      }, new Immutable.List([
         {name: 'suggest1'},
         {name: 'suggest2'}
       ]))
       expect(enzymeWrapper.find('Modal').exists()).toBe(true)
-      expect(enzymeWrapper.find('li').at(0).text()).toEqual('suggest1')
-      expect(enzymeWrapper.find('li').at(1).text()).toEqual('suggest2')
+      expect(enzymeWrapper.find('li').at(0)
+             .text()).toEqual('suggest1')
+      expect(enzymeWrapper.find('li').at(1)
+             .text()).toEqual('suggest2')
     })
 
     it('should call save on button click', () => {
-      let { enzymeWrapper, props } = setup({
+      let {enzymeWrapper, props} = setup({
         description: "test",
         when: "2012-01-01",
         amount: -34.4,
       })
       expect(props.saveCategorisor.mock.calls.length).toBe(0)
-      enzymeWrapper.find('Button').at(3).simulate('click')
+      enzymeWrapper.find('Button').at(3)
+        .simulate('click')
       expect(props.saveCategorisor.mock.calls.length).toBe(1)
     })
 
     it('should call split on change', () => {
-      let { enzymeWrapper, props } = setup({
+      let {enzymeWrapper, props} = setup({
         description: "test",
         when: "2012-01-01",
         amount: -34.4,
       })
       expect(props.setSplit.mock.calls.length).toBe(0)
-      enzymeWrapper.find('SplitFieldset').at(0).props().setSplitCategory({})
+      enzymeWrapper.find('SplitFieldset').at(0)
+        .props()
+        .setSplitCategory({})
       expect(props.setSplit.mock.calls.length).toBe(1)
 
-      enzymeWrapper.find('SplitFieldset').at(0).props().setSplitAmount({})
+      enzymeWrapper.find('SplitFieldset').at(0)
+        .props()
+        .setSplitAmount({})
       expect(props.setSplit.mock.calls.length).toBe(2)
     })
 
     it('should show alert if not valid', () => {
-      let { enzymeWrapper, props } = setup({
+      let {enzymeWrapper} = setup({
         description: "test",
         when: "2012-01-01",
         amount: -34.4,
