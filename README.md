@@ -1,8 +1,9 @@
 # cattrack-client-react
 
-Rewite of client using Flux and React.
+[![Build Status](https://travis-ci.org/dmkent/cattrack-client-react.svg?branch=master)](https://travis-ci.org/dmkent/cattrack-client-react)
+[![codecov](https://codecov.io/gh/dmkent/cattrack-client-react/branch/master/graph/badge.svg)](https://codecov.io/gh/dmkent/cattrack-client-react)
 
-Broadly based on flux-shell example.
+Spending categorisation and tracking application designed to help idenify where money is being spent. This is React/Redux based front-end. Back end is [cattrack](https://github.com/dmkent/cattrack).
 
 # Usage
 
