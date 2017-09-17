@@ -1,8 +1,8 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import TransactionFilterPeriods from '../views/TransactionFilterPeriods'
 import TrackActions from '../actions/TrackActions'
 
-const mapStateToProps = state => {
+export function mapStateToProps(state) {
   return {
       categories: state.categories.categories,
       accounts: state.accounts.accounts,
@@ -11,7 +11,7 @@ const mapStateToProps = state => {
   };
 }
 
-const mapDispatchToProps = dispatch => {
+export function mapDispatchToProps(dispatch) {
   return {
     loadAccounts: () => {
       dispatch(TrackActions.loadAccounts())
