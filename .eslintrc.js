@@ -5,7 +5,7 @@ module.exports = {
         "node": true,
         "jest": true,
     },
-    "extends": "eslint:recommended",
+    "extends": ["eslint:recommended", "plugin:react/recommended"],
     "parserOptions": {
         "ecmaFeatures": {
             "experimentalObjectRestSpread": true,
@@ -117,7 +117,10 @@ module.exports = {
         "max-len": "off",
         "max-lines": "off",
         "max-nested-callbacks": "error",
-        "max-params": "error",
+        "max-params": [
+            "error",
+            4
+        ],
         "max-statements": "off",
         "max-statements-per-line": "error",
         "multiline-ternary": "error",
