@@ -6,7 +6,7 @@ jest.mock('../../actions/TrackActions', () => ({default: {
   clearError: jest.fn(),
 }, __esModule: true}))
 
-describe('DashboardContainer', () => {
+describe('ErrorsContainer', () => {
   it('only have correct state in props', () => {
     const initState = {
       app: {

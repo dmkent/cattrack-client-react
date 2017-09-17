@@ -8,7 +8,7 @@ jest.mock('../../actions/TrackActions', () => ({default: {
   updateTransactionFilter: jest.fn(),
 }, __esModule: true}))
 
-describe('DashboardContainer', () => {
+describe('TransactionFilterContainer', () => {
   it('only have correct state in props', () => {
     const initState = {
       app: {

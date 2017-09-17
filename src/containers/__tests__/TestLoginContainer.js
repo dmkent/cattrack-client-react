@@ -6,7 +6,7 @@ jest.mock('../../actions/TrackActions', () => ({default: {
   attemptLogin: jest.fn(),
 }, __esModule: true}))
 
-describe('DashboardContainer', () => {
+describe('LoginContainer', () => {
   it('only have correct state in props', () => {
     const initState = {
       app: {
