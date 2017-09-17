@@ -1,14 +1,14 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import TrackActions from '../actions/TrackActions'
 import Login from '../views/Login'
 
-const mapStateToProps = state => {
+export function mapStateToProps(state) {
   return {
     auth: state.auth,
   }
 }
 
-const mapDispatchToProps = dispatch => {
+export function mapDispatchToProps(dispatch) {
   return {
     onLogin: (username, password) => {
       dispatch(TrackActions.attemptLogin(username, password))
