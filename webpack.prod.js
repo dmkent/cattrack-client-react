@@ -11,7 +11,6 @@ if (process.env.TRAVIS_BRANCH === "master") {
 }
 
 module.exports = merge(common, {
-  //devtool: 'source-map',
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
@@ -19,11 +18,11 @@ module.exports = merge(common, {
         BASENAME: JSON.stringify(BASENAME)
       }
     }),
-    new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({
-      compress: { warnings: false },
+      compress: {warnings: false},
       comments: false,
-      minimize: false
+      minimize: false,
+      sourceMap: true
     }),
     new webpack.optimize.AggressiveMergingPlugin(),
     new ArchivePlugin({

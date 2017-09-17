@@ -6,13 +6,15 @@ const BASENAME = '';
 
 module.exports = merge(common, {
   devtool: "source-map",
-  rules: [
+  /*rules: [
     {
       test: /\.js$/,
       use: ["source-map-loader"],
-      enforce: "pre"
+      options: {
+        enforce: "pre"
+      }
     }
-  ],
+  ],*/
   devServer: {
     historyApiFallback: {
       index: BASENAME + '/index.html',
