@@ -1,7 +1,5 @@
 import React from 'react';
-import { Form, FormGroup, ControlLabel, FormControl, ProgressBar, Button } from 'react-bootstrap';
-
-import TrackActions from '../actions/TrackActions';
+import {Form, FormGroup, ControlLabel, FormControl, ProgressBar, Button} from 'react-bootstrap';
 
 class AccountDetail extends React.Component {
   constructor(props) {
@@ -28,7 +26,7 @@ class AccountDetail extends React.Component {
   }
 
   render() {  
-    const account_obj = this.props.accounts.accounts.get(parseInt(this.props.account));        
+    const account_obj = this.props.accounts.accounts.get(parseInt(this.props.account, 10));        
     return (
       <div>
         <h2>{account_obj.name}</h2>
@@ -40,9 +38,8 @@ class AccountDetail extends React.Component {
                 (<div>
                   <span className="spinner">Loading...</span>
                   <div className="progress">
-                  <ProgressBar now={this.props.accounts.upload_progress} style="width: 60%;">
-                    <span className="sr-only">{this.props.accounts.upload_progress}% Complete</span>
-                  </ProgressBar>
+                  <ProgressBar now={this.props.accounts.upload_progress} style="width: 60%;"/>
+                  <span className="sr-only">{this.props.accounts.upload_progress}% Complete</span>
                   </div>
                 </div>) : null
               }
