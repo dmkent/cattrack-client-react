@@ -48,7 +48,7 @@ describe('transactions reducer', () => {
       transactions: new Immutable.OrderedMap([
         [
           0, 
-          {id: 0, when: "2001-01-01", amount: "-43", category: "3", description: "test"}
+          {id: 0, when: "2001-01-01", amount: "-43", category: "5", description: "test"}
         ]
       ]),
       filters: {
