@@ -1,15 +1,15 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import TrackActions from '../actions/TrackActions'
 import Transactions from '../views/Transactions'
 
-const mapStateToProps = state => {
+export function mapStateToProps(state) {
   return {
     auth: state.auth,
     ...state.transactions
   }
 }
 
-const mapDispatchToProps = dispatch => {
+export function mapDispatchToProps(dispatch) {
   return {
     onSelectTransactions: (page_num, page_size, filters) => {
       dispatch(TrackActions.selectTransactions(page_num, page_size, filters))
