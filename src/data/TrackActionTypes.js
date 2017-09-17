@@ -1,10 +1,11 @@
 const ActionTypes = {
+  CLEAR_ERROR: 'CLEAR_ERROR',
+  
   AUTH_RESPONSE_RECEIVED: 'auth/response',
   AUTH_ERROR: 'auth/failure',
   AUTH_REQUEST: 'auth/request',
   AUTH_LOGOUT: 'auth/logout',
 
-  ADD_TRANSACTION: 'ADD_TRANSACTION',
   SELECT_TRANSACTION_PAGE: 'SELECT_TRANSACTION_PAGE',
 
   TRANSACTION_PAGE_LOADED: 'transactions/loaded',
@@ -18,7 +19,8 @@ const ActionTypes = {
   
   ACCOUNTS_LOADED: 'accounts/loaded',
   ACCOUNTS_LOAD_ERROR: 'accounts/load-error',
-  ACCOUNT_UPLOAD_SUCESS: 'accounts/upload-success',
+  ACCOUNT_UPLOAD_SUCESS: 'accounts/upload-started',
+  ACCOUNT_UPLOAD_STARTED: 'accounts/upload-success',
   ACCOUNT_UPLOAD_PROGRESS_UPDATE: 'accounts/upload-progress-update',
   ACCOUNT_UPLOAD_ERROR: 'accounts/upload-failed',
 

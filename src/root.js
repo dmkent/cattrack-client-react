@@ -19,7 +19,14 @@ import { routerMiddleware } from 'react-router-redux'
 import AppContainer from './containers/AppContainer';
 import catTrackApp from './reducers';
 
+import './styles/local.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import 'react-dates/lib/css/_datepicker.css';
+
+import {addLocaleData} from 'react-intl';
+import en from 'react-intl/locale-data/en';
+
+addLocaleData([...en]);
 
 const router_middleware = routerMiddleware(browserHistory);
 

@@ -1,5 +1,8 @@
+const webpack = require('webpack');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
+
+const BASENAME = '';
 
 module.exports = merge(common, {
   devtool: "source-map",
@@ -11,6 +14,16 @@ module.exports = merge(common, {
     }
   ],
   devServer: {
-    historyApiFallback: true,
+    historyApiFallback: {
+      index: BASENAME + '/index.html',
+    },
+    publicPath: BASENAME,
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        BASENAME: JSON.stringify(BASENAME)
+      }
+    }),
+  ]
 });

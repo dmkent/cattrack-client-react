@@ -8,14 +8,9 @@ class TransactionFilter extends React.Component {
     if (this.props.accounts.size == 0) {
       this.props.loadAccounts();
     }
-    if (this.props.periods.size == 0) {
-      this.props.loadPeriods();
-    }
   }
 
   render() {
-    let all_periods = ((this.props.filters.from_date === null) &&
-                       (this.props.filters.to_date === null));
     return (
         <div className="col-md-2">
             <TransactionFilterPeriodsContainer/>

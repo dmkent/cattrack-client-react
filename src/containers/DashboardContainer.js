@@ -1,8 +1,8 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import TrackActions from '../actions/TrackActions'
 import Dashboard from '../views/Dashboard'
 
-const mapStateToProps = state => {
+export function mapStateToProps(state) {
   return {
     auth: state.auth,
     summary: state.transactions.summary,
@@ -10,7 +10,7 @@ const mapStateToProps = state => {
   }
 }
 
-const mapDispatchToProps = dispatch => {
+export function mapDispatchToProps(dispatch) {
   return {
     loadSummary: (filters) => {
         dispatch(TrackActions.loadTransactionSummary(filters));

@@ -1,15 +1,15 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import TrackActions from '../actions/TrackActions'
 import Accounts from '../views/Accounts'
 
-const mapStateToProps = state => {
+export function mapStateToProps(state) {
   return {
     auth: state.auth,
     accounts: state.accounts,
   }
 }
 
-const mapDispatchToProps = dispatch => {
+export function mapDispatchToProps(dispatch) {
   return {
     loadAccounts: () => {
       dispatch(TrackActions.loadAccounts());

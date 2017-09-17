@@ -3,8 +3,12 @@
 if [ "master" = "${TRAVIS_BRANCH}" ] ;
 then
     DEST=""
-else
+elif [ "stage" = "${TRAVIS_BRANCH}" ] ;
+then
     DEST="stage/"
+else
+    echo "Skipping deploy of branch ${TRAVIS_BRANCH}."
+    exit 0
 fi
 
 if [ -z "${DEPLOY_USER}" ] ;

@@ -21,13 +21,13 @@ module.exports = {
       'react-dom',
       'react-bootstrap',
       'react-router-bootstrap',
+      'react-dates',
       'react-router-dom',
       'react-router-redux',
       'react-router',
       'react-intl',
       'react-redux',
       'babel-preset-react',
-      'bootstrap',
       'redux',
       'redux-thunk',
       'immutable',
@@ -55,5 +55,10 @@ module.exports = {
       filename: '[file].map',
     }),
     new ExtractTextPlugin("[name].css")
-  ]
+  ],
+  resolve: {
+    alias: {
+      request$: "xhr"
+    }
+  }
 };

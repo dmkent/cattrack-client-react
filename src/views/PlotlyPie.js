@@ -1,7 +1,7 @@
 import React from 'react';
 import Plotly from '../client/PlotlyWrapper';
 
-function plotlyDataFromSummary(summary) {
+export function plotlyDataFromSummary(summary) {
   let values = [];
   let labels = [];
   

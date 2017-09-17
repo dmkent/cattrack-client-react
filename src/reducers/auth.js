@@ -1,8 +1,8 @@
 import TrackActionTypes from '../data/TrackActionTypes';
 
-function parseJwt (token: string) {
+function parseJwt (token) {
   let base64Url = token.split('.')[1];
-  var base64 = base64Url.replace('-', '+').replace('_', '/');
+  let base64 = base64Url.replace('-', '+').replace('_', '/');
   return JSON.parse(window.atob(base64));
 }
 
@@ -17,19 +17,21 @@ function getInitialState() {
   }
 }
 
-const auth = (state = null, action) => {
+function auth(state = null, action) {
   if (state === null) {
     return getInitialState();
   }
+
+  let payload = null
+  let authExpires = null;
+
   switch (action.type) {
-    case TrackActionTypes.AUTH_UPDATE:
-      return state;
     case TrackActionTypes.AUTH_RESPONSE_RECEIVED:
-      let payload = parseJwt(action.token);
-      let authExpires = new Date(payload.exp * 1000);
+      payload = parseJwt(action.token);
+      authExpires = new Date(payload.exp * 1000);
       if (authExpires <= new Date()) {
         console.log("Auth expired. Expiry: " + authExpires);
-        // do more to ensure logout?;
+        // Do more to ensure logout?;
         return getInitialState();
       }
       return {

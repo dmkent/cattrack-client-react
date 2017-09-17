@@ -6,6 +6,8 @@ import DashboardContainer from '../containers/DashboardContainer';
 import AccountsContainer from '../containers/AccountsContainer';
 import TransactionList from '../containers/TransactionList';
 import LoginContainer from '../containers/LoginContainer';
+import ErrorsContainer from '../containers/ErrorsContainer';
+import NavComponent from './NavComponent';
 import TrackActions from '../actions/TrackActions'
 import {IntlProvider} from 'react-intl';
 import {
@@ -15,7 +17,7 @@ import {
   NavLink,
   Redirect,
 } from 'react-router-dom';
- 
+
 class AppView extends React.Component {
   componentDidMount() {
     this.props.restoreLogin();
@@ -23,11 +25,12 @@ class AppView extends React.Component {
 
   render() {
     return (
-      <IntlProvider locale="en">
-        <Router>
+      <IntlProvider locale="en-AU">
+        <Router basename={process.env.BASENAME}>
           <div>
             <NavComponent auth={this.props.auth}/>
             <div className="container-fluid">
+              <ErrorsContainer/>
               <h1>{this.props.title}</h1>
               <ContentView {...this.props}/>
             </div>
@@ -41,48 +44,7 @@ class AppView extends React.Component {
   }
 }
 
-class NavComponent extends React.Component {
-  render() {
-    let auth_link = null;
-    if (this.props.auth.is_logged_in) {
-      auth_link = (
-        <Nav pullRight>
-          <LinkContainer to="/logout"><NavItem>Logout</NavItem></LinkContainer>
-        </Nav>
-      );
-    } else {
-      auth_link = (
-        <Nav pullRight>
-          <LinkContainer to="/login"><NavItem>Login</NavItem></LinkContainer>
-        </Nav>
-      );
-    }
-
-    return (
-      <Navbar inverse collapseOnSelect>
-        <Navbar.Header>
-          <Navbar.Brand>
-            <Link to="/">CatTrack</Link>
-          </Navbar.Brand>
-          <Navbar.Toggle/>
-        </Navbar.Header>
-        <Navbar.Collapse>
-          <Nav>
-            <LinkContainer exact to="/"><NavItem>Dashboard</NavItem></LinkContainer>
-            <LinkContainer to="/accounts"><NavItem>Accounts</NavItem></LinkContainer>
-            <LinkContainer to="/transactions"><NavItem>Transactions</NavItem></LinkContainer>
-          </Nav>
-          {this.props.auth.is_logged_in ? 
-           <Navbar.Text pullRight>{this.props.auth.username}</Navbar.Text> :
-           null}
-          {auth_link}
-        </Navbar.Collapse>
-      </Navbar>                  
-    )
-  }
-}
-
-class Logout extends React.Component {
+export class Logout extends React.Component {
   componentWillMount() {
     this.props.logout();
   }
@@ -98,12 +60,12 @@ const logoutMapDispatchToProps = dispatch => {
     }
   }
 }
-const LogoutContainer = connect(
+export const LogoutContainer = connect(
   (state) => {return {}},
   logoutMapDispatchToProps
 )(Logout)
 
-const PrivateRoute = ({ component: Component, auth, render, ...rest }) => {
+export const PrivateRoute = ({ component: Component, auth, render, ...rest }) => {
   return (
     <Route {...rest} render={props => {
       if (auth.is_logged_in) {
@@ -124,7 +86,7 @@ const PrivateRoute = ({ component: Component, auth, render, ...rest }) => {
   )
 };
 
-class ContentView extends React.Component {
+export class ContentView extends React.Component {
   render() {
     return (
       <div>
