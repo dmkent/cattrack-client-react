@@ -1,14 +1,14 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import TrackActions from '../actions/TrackActions'
 import Errors from '../views/Errors'
 
-const mapStateToProps = state => {
+export function mapStateToProps(state) {
   return {
     errors: state.errors,
   }
 }
 
-const mapDispatchToProps = dispatch => {
+export function mapDispatchToProps(dispatch) {
   return {
     handleAlertDismiss: (idx) => {
         dispatch(TrackActions.clearError(idx));
