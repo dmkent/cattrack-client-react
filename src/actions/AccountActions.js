@@ -1,6 +1,7 @@
 import TrackActionTypes from '../data/TrackActionTypes';
 
-import {parseErrors, fetch_from_api, checkStatus} from '../client/CatTrackAPI';
+import {fetch_from_api, checkStatus} from '../client/CatTrackAPI';
+import {parseErrors} from '../client/ErrorParser'
 
 import Account from '../data/Account';
 
