@@ -154,8 +154,10 @@ export function filters_to_params(filters) {
     if (val !== null) {
       return `${key}=${val}`;
     }
-    return '';
-  }).join('&');
+    return null;
+  })
+    .filter((val) => {return (val !== null)})
+    .join('&');
   if (query_params.length > 0) {
     query_params = '?' + query_params;
   }
