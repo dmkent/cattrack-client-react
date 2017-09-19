@@ -79,6 +79,10 @@
     "setupTestFrameworkScriptFile": "./utils/test_utils.js",
     "moduleNameMapper": {
       "^config": "<rootDir>/src/config/config.jest.js"
-    }
+    },
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/src/config",
+      "<rootDir>/src/root.js"
+    ]
   }
 }
