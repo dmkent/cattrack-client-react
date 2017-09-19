@@ -16,8 +16,8 @@ module.exports = merge(common, {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production'),
-        BASENAME: JSON.stringify(BASENAME)
-      }
+      },
+      BASENAME: JSON.stringify(BASENAME),
     }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {warnings: false},

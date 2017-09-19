@@ -7,6 +7,7 @@ import AccountsContainer from '../containers/AccountsContainer';
 import TransactionList from '../containers/TransactionList';
 import LoginContainer from '../containers/LoginContainer';
 import ErrorsContainer from '../containers/ErrorsContainer';
+import CONFIG from 'config';
 import NavComponent from './NavComponent';
 import TrackActions from '../actions/TrackActions'
 import {IntlProvider} from 'react-intl';
@@ -26,7 +27,7 @@ class AppView extends React.Component {
   render() {
     return (
       <IntlProvider locale="en-AU">
-        <Router basename={process.env.BASENAME}>
+        <Router basename={CONFIG.BASENAME}>
           <div>
             <NavComponent auth={this.props.auth}/>
             <div className="container-fluid">

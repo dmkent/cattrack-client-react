@@ -1,6 +1,9 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const GitRevisionPlugin = require('git-revision-webpack-plugin')
+
+const gitRev = new GitRevisionPlugin();
 
 module.exports = {
   module: {
@@ -67,6 +70,10 @@ module.exports = {
       exclude: "vendor.js",
       filename: '[file].map',
     }),
-    new ExtractTextPlugin("[name].css")
+    new ExtractTextPlugin("[name].css"),
+    new webpack.DefinePlugin({
+      VERSION: JSON.stringify(gitRev.version())
+    }),
+    gitRev,
   ]
 };

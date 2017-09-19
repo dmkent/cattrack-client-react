@@ -24,9 +24,7 @@ module.exports = merge(common, {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': {
-        BASENAME: JSON.stringify(BASENAME)
-      }
+      BASENAME: JSON.stringify(BASENAME)
     }),
   ],
   resolve: {
