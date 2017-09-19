@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 const ArchivePlugin = require('webpack-archive-plugin');
+const path = require('path')
 
 let BASENAME = "";
 if (process.env.TRAVIS_BRANCH === "master") {
@@ -28,5 +29,10 @@ module.exports = merge(common, {
     new ArchivePlugin({
       output: 'cattrack-client-react'
     }),
-  ]
+  ],
+  resolve: {
+    alias: {
+      config: path.join(__dirname, 'src/config/config.prod.js')
+    }
+  }
 });

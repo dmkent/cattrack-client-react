@@ -15,7 +15,8 @@ import fetch from 'isomorphic-fetch';
 import TrackActionTypes from '../data/TrackActionTypes';
 import {parseErrors} from './ErrorParser'
 
-export const API_URI = (process.env.NODE_ENV === 'production') ? '/be' : "http://localhost:8000";
+import CONFIG from 'config'
+const API_URI = CONFIG.API_URI;
 
 export function refreshLogin(dispatch, getState) {
   const auth = getState().auth;

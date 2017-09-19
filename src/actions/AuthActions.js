@@ -1,11 +1,11 @@
 import TrackActionTypes from '../data/TrackActionTypes';
-
-import {API_URI, checkStatus} from '../client/CatTrackAPI';
+import {checkStatus} from '../client/CatTrackAPI';
+import CONFIG from 'config'
 
 const AuthActions = {
   attemptLogin(username, password) {
     return (dispatch) => {
-      return fetch(API_URI + '/api-token-auth/', {
+      return fetch(CONFIG.API_URI + '/api-token-auth/', {
           method: 'POST',
           body: JSON.stringify({username: username, password: password}),
           headers: {'Content-Type': 'application/json'}

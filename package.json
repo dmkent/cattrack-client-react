@@ -76,6 +76,9 @@
     "collectCoverageFrom": [
       "src/**/*js"
     ],
-    "setupTestFrameworkScriptFile": "./utils/test_utils.js"
+    "setupTestFrameworkScriptFile": "./utils/test_utils.js",
+    "moduleNameMapper": {
+      "^config": "<rootDir>/src/config/config.jest.js"
+    }
   }
 }
