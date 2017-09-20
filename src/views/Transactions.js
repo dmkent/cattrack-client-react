@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import Immutable from 'immutable';
 import {FormattedDate} from 'react-intl';
 import {Button, Pagination, Tooltip, OverlayTrigger} from 'react-bootstrap';
 
@@ -31,7 +33,7 @@ class Transactions extends React.Component {
         }
 
         const tooltips = this.props.transactions.map((trans) => {
-            return <Tooltip id={"tooltip-" + trans.id}>{trans.description}</Tooltip>;
+            return <Tooltip key={"tooltip-" + trans.id} id={"tooltip-" + trans.id}>{trans.description}</Tooltip>;
         });
         return (
           <div>
@@ -41,12 +43,16 @@ class Transactions extends React.Component {
               <table className="table table-condensed">
                 <tbody>
                 {[...this.props.transactions.values()].map(trans => {
+                  let description = trans.description;
+                  if (description.length > 50) {
+                    description = description.substr(0, 50) + '...';
+                   }
                   return (
                     <tr key={trans.id}>
                       <td><FormattedDate value={trans.when}/></td>
                       <td>
                         <OverlayTrigger placement="bottom" overlay={tooltips.get(trans.id)}>
-                            <span>{(trans.description.length > 50) ? trans.description.substr(0, 50) + '...' : trans.description}</span>
+                            <span>{description}</span>
                         </OverlayTrigger>
                       </td>
                       <td className="text-right">{trans.amount}</td>
@@ -93,4 +99,14 @@ class Transactions extends React.Component {
     }
 }
 
+Transactions.propTypes = {
+  active_page: PropTypes.number.isRequired,
+  filters: PropTypes.object.isRequired,
+  num_pages: PropTypes.number.isRequired,
+  page_size: PropTypes.number.isRequired,
+  transactions: PropTypes.instanceOf(Immutable.OrderedMap),
+  onSelectTransactions: PropTypes.func.isRequired,
+  setCategorisorTransaction: PropTypes.func.isRequired,
+  showCategorisor: PropTypes.func.isRequired,
+}
 export default Transactions;

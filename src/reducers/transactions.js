@@ -8,6 +8,7 @@ function resetFilter() {
     from_date: null,
     to_date: null,
     category: null,
+    has_category: 'True'
   };
 }
 

@@ -1,17 +1,36 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const GitRevisionPlugin = require('git-revision-webpack-plugin')
+
+const gitRev = new GitRevisionPlugin();
 
 module.exports = {
   module: {
-    loaders: [
-      { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader"},
-      { test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader")},
-      { test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/, loader: 'url-loader',
-        options: {
-          limit: 10000
-        }
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: [{loader: "babel-loader"}]
       },
+      {
+        test: /\.css$/,
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: "css-loader"
+        })
+      },
+      {
+        test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 10000
+            }
+          },
+        ]
+      }
     ]
   },
   entry: {
@@ -31,7 +50,6 @@ module.exports = {
       'redux',
       'redux-thunk',
       'immutable',
-      'xhr',
       './src/client/PlotlyWrapper.js'
     ]
   },
@@ -41,9 +59,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      //title: "CatTrack",
       template: 'src/index.html.tmpl',
-      //inject: 'body',
       filename: 'index.html'
     }),
     new webpack.optimize.CommonsChunkPlugin({
@@ -54,11 +70,10 @@ module.exports = {
       exclude: "vendor.js",
       filename: '[file].map',
     }),
-    new ExtractTextPlugin("[name].css")
-  ],
-  resolve: {
-    alias: {
-      request$: "xhr"
-    }
-  }
+    new ExtractTextPlugin("[name].css"),
+    new webpack.DefinePlugin({
+      VERSION: JSON.stringify(gitRev.version())
+    }),
+    gitRev,
+  ]
 };

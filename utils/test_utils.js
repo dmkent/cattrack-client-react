@@ -57,3 +57,16 @@ class LocalStorageMock {
 }
 
 global.localStorage = new LocalStorageMock();
+
+function dummyLoggedInState() {
+    const auth_expires = new Date()
+    auth_expires.setHours(auth_expires.getHours() + 1)
+    return {
+      auth: {
+        token: '', 
+        is_logged_in: true, 
+        expires: auth_expires
+      }
+    }
+}
+global.dummyLoggedInState = dummyLoggedInState;

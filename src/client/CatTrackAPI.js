@@ -1,10 +1,8 @@
 /**
  * API to go and fetch from server.
  * 
- * Based of flux TODO example.
  * 
  * Copyright (c) 2017, David M Kent.
- * Copyright (c) 2014-present, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -15,64 +13,10 @@ import * as Cookies from "js-cookie"
 import fetch from 'isomorphic-fetch';
 
 import TrackActionTypes from '../data/TrackActionTypes';
+import {parseErrors} from './ErrorParser'
 
-export const API_URI = (process.env.NODE_ENV === 'production') ? '/be' : "http://localhost:8000";
-
-export function parseErrors(data) {
-    /**
-     * Based on https://gist.github.com/kottenator/433f677e5fdddf78d195
-     */
-
-    function isString(val) {
-      return (typeof val === 'string' || val instanceof String);
-    }
-
-    function _camelCaseToVerbose(text) {
-        return text.replace(/(?=[A-Z])/g, ' ');
-    }
-    
-    function _underscoredToVerbose(text) {
-        return text.replace(/[\d_]/g, ' ');
-    }
-    
-    function _capitalize(text) {
-        text = text.toLowerCase();
-        text = text.charAt(0).toUpperCase() + text.slice(1);
-        return text;
-    }
-
-    function _parseErrorItem(item, listPos) {
-        var output = [];
-
-        Object.entries(item).map(function([key, value]) {
-            var content;
-
-            if (isString(value)) {
-                content = value;
-            } else if (Array.isArray(value)) {
-                if (isString(value[0])) {
-                    content = value.join(' ');
-                } else {
-                    content = JSON.stringify(value, {}, 2);
-                }
-            }
-
-            if (content) {
-                if (key.search(/[A-Z]/) != -1)
-                    key = _camelCaseToVerbose(key);
-                
-                if (key.search(/[\d_]/) != -1)
-                    key = _underscoredToVerbose(key);
-                
-                key = _capitalize(key);
-                
-                output.push([key, content]);
-            }
-        });
-        return output;
-    }
-    return _parseErrorItem(data);
-};
+import CONFIG from 'config'
+const API_URI = CONFIG.API_URI;
 
 export function refreshLogin(dispatch, getState) {
   const auth = getState().auth;
@@ -150,12 +94,17 @@ export function fetch_from_api(dispatch, getState, uri, options = {}) {
 }
 
 export function filters_to_params(filters) {
-  let query_params = Object.entries(filters).map(([key, val]) => {
+  let query_params = Object.entries(filters).map(([
+      key, 
+      val
+    ]) => {
     if (val !== null) {
       return `${key}=${val}`;
     }
-    return '';
-  }).join('&');
+    return null;
+  })
+    .filter((val) => {return (val !== null)})
+    .join('&');
   if (query_params.length > 0) {
     query_params = '?' + query_params;
   }

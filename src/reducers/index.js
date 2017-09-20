@@ -5,11 +5,12 @@ import accounts from './accounts';
 import categories from './categories';
 import periods from './periods';
 import errors from './errors';
+import CONFIG from 'config';
 
-const app = (state, action) => {
+function app(state, action) {
   console.log(action);
   return {
-    version: "2.0",
+    version: CONFIG.VERSION,
     title: "CatTrack",
   };
 }

@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 const ArchivePlugin = require('webpack-archive-plugin');
+const path = require('path')
 
 let BASENAME = "";
 if (process.env.TRAVIS_BRANCH === "master") {
@@ -11,23 +12,27 @@ if (process.env.TRAVIS_BRANCH === "master") {
 }
 
 module.exports = merge(common, {
-  //devtool: 'source-map',
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production'),
-        BASENAME: JSON.stringify(BASENAME)
-      }
+      },
+      BASENAME: JSON.stringify(BASENAME),
     }),
-    new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({
-      compress: { warnings: false },
+      compress: {warnings: false},
       comments: false,
-      minimize: false
+      minimize: false,
+      sourceMap: true
     }),
     new webpack.optimize.AggressiveMergingPlugin(),
     new ArchivePlugin({
       output: 'cattrack-client-react'
     }),
-  ]
+  ],
+  resolve: {
+    alias: {
+      config: path.join(__dirname, 'src/config/config.prod.js')
+    }
+  }
 });

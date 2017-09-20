@@ -17,11 +17,14 @@ class TransactionFilter extends React.Component {
             <h3>Category</h3>
             <div className="btn-group-vertical" role="group">
                 <Button className="btn btn-default btn-xs"
-                        onClick={() => {this.props.onFilter({category: null})}}
-                        active={this.props.filters.category === null}>All</Button>
+                        onClick={() => {this.props.onFilter({category: null, has_category: 'True'})}}
+                        active={this.props.filters.category === null && this.props.filters.has_category !== 'False'}>All</Button>
+                <Button className="btn btn-default btn-xs"
+                        onClick={() => {this.props.onFilter({has_category: 'False', category: null})}}
+                        active={this.props.filters.has_category === 'False'}>None</Button>
                 {[...this.props.categories].map((category) => {
                     return <Button className="btn btn-default btn-xs" key={"cat-" + category.id}
-                            onClick={() => {this.props.onFilter({category: category.id})}}
+                            onClick={() => {this.props.onFilter({category: category.id, has_category: 'True'})}}
                             active={this.props.filters.category == category.id}>{category.name}</Button>
                 })}
             </div>

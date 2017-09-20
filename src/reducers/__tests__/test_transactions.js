@@ -14,7 +14,8 @@ describe('transactions reducer', () => {
         account: null,
         category: null,
         from_date: null,
-        to_date: null
+        to_date: null,
+        has_category: 'True',
       },
       summary: new Immutable.OrderedMap(),
     }
