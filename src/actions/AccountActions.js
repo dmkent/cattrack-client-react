@@ -35,6 +35,9 @@ const AccountActions = {
       return fetch_from_api(dispatch, getState, '/api/accounts/' + account + '/load/', {
         method: 'POST',
         body: data,
+        headers: {
+          'Content-Type': undefined
+        }
       }).then((resp) => {
         if (resp.status == 200) {
           dispatch({

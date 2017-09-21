@@ -77,6 +77,13 @@ export function fetch_from_api(dispatch, getState, uri, options = {}) {
     let headers = Object.assign({
       'Content-Type': 'application/json',
     }, options.headers);
+
+    /* Force content type to undefined, allows browser to deal with content
+       type for multipart form-data. Needs to set boundary as part of content
+       type. */
+    if (headers['Content-Type'] === undefined) {
+      Reflect.deleteProperty(headers, 'Content-Type');
+    }
     const token = getState().auth.token;
     if (token !== undefined) {
       headers.Authorization = 'JWT ' + token;
