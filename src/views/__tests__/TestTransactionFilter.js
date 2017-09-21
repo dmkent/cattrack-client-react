@@ -88,7 +88,7 @@ describe('components', () => {
       expect(props.onFilter.mock.calls.length).toBe(1)
       expect(props.onFilter.mock.calls[0][0]).toEqual({
         category: null,
-        has_category: 'True'
+        has_category: null
       })
 
       // Reset account to "All"
