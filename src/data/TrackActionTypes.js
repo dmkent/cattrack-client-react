@@ -27,6 +27,9 @@ const ActionTypes = {
   PERIODS_LOADED: 'periods/loaded',
   PERIODS_LOAD_ERROR: 'periods/load-error',
 
+  CATEGORY_SERIES_LOADED: 'category/series-loaded',
+  CATEGORY_SERIES_LOAD_ERROR: 'category/series-load-error',
+  
   CATEGORISOR_SET_TRANSACTION: 'categorisor/set-transaction',
   CATEGORISOR_SUGGESTIONS_RECEIVED: 'categorisor/suggestions-received',
   CATEGORISOR_SUGGESTIONS_ERROR: 'categorisor/suggestions-error',

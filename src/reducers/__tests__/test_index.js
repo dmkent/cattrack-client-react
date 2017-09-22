@@ -11,6 +11,7 @@ describe('combined reducer', () => {
       'categories',
       'periods',
       'errors',
+      'category',
     ])
 
     expect(reducer(undefined, {}).app).toEqual({
