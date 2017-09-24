@@ -34,7 +34,7 @@ describe('components', () => {
       const enzymeWrapper = shallow(<ContentView/>)
 
       expect(enzymeWrapper.find('Route').length).toBe(2)
-      expect(enzymeWrapper.find('PrivateRoute').length).toBe(3)
+      expect(enzymeWrapper.find('PrivateRoute').length).toBe(4)
     })
   })
 

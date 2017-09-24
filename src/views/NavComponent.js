@@ -32,6 +32,7 @@ class NavComponent extends React.Component {
           <Nav>
             <LinkContainer exact to="/"><NavItem>Dashboard</NavItem></LinkContainer>
             <LinkContainer to="/accounts"><NavItem>Accounts</NavItem></LinkContainer>
+            <LinkContainer to="/tracking"><NavItem>Tracking</NavItem></LinkContainer>
             <LinkContainer to="/transactions"><NavItem>Transactions</NavItem></LinkContainer>
           </Nav>
           {this.props.auth.is_logged_in ? 
