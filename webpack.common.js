@@ -50,8 +50,8 @@ module.exports = {
       'redux',
       'redux-thunk',
       'immutable',
-      './src/client/PlotlyWrapper.js'
-    ]
+    ],
+    plotly: './src/client/PlotlyWrapper.js'
   },
   output: {
     path: __dirname + '/dist/',
@@ -67,7 +67,10 @@ module.exports = {
       minChunks: Infinity
     }),
     new webpack.SourceMapDevToolPlugin({
-      exclude: "vendor.js",
+      exclude: [
+        "vendor.js",
+        "plotly.js",
+      ],
       filename: '[file].map',
     }),
     new ExtractTextPlugin("[name].css"),
