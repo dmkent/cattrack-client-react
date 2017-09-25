@@ -142,7 +142,7 @@ describe('Transaction actions', () => {
 
   it('should create category suggestion received actions', () => {
     nock('http://localhost:8000')
-      .get('/api/transactions/1/suggest/')
+      .get('/api/transactions/1/suggest')
       .reply(200, [
         {id: 4, name: "c1"},
         {id: 2, name: "c4"},
@@ -172,7 +172,7 @@ describe('Transaction actions', () => {
 
   it('should create category suggestion error action', () => {
     nock('http://localhost:8000')
-      .get('/api/transactions/1/suggest/')
+      .get('/api/transactions/1/suggest')
       .reply(404, {error: "not found"})
         
     const expectedActions = [

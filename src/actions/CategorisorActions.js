@@ -15,7 +15,7 @@ const CategorisorActions = {
 
       return fetch_from_api(
         dispatch, getState, 
-        '/api/transactions/' + transaction.id + '/suggest/')
+        '/api/transactions/' + transaction.id + '/suggest')
         .then(checkStatus)
         .then(resp => {
           dispatch({
