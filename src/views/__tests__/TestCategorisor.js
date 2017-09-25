@@ -60,9 +60,9 @@ describe('components', () => {
       ]))
       expect(enzymeWrapper.find('Modal').exists()).toBe(true)
       expect(enzymeWrapper.find('li').at(0)
-             .text()).toEqual('suggest1')
+             .text()).toEqual('suggest1 <Badge />')
       expect(enzymeWrapper.find('li').at(1)
-             .text()).toEqual('suggest2')
+             .text()).toEqual('suggest2 <Badge />')
     })
 
     it('should call save on button click', () => {

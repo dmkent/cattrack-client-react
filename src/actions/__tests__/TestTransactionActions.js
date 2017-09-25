@@ -144,8 +144,8 @@ describe('Transaction actions', () => {
     nock('http://localhost:8000')
       .get('/api/transactions/1/suggest')
       .reply(200, [
-        {id: 4, name: "c1"},
-        {id: 2, name: "c4"},
+        {id: 4, name: "c1", score: 8},
+        {id: 2, name: "c4", score: 2},
       ]
     )
         
@@ -157,8 +157,8 @@ describe('Transaction actions', () => {
       { 
         type: TrackActionTypes.CATEGORISOR_SUGGESTIONS_RECEIVED, 
         categories: [
-          {id: 4, name: "c1"},
-          {id: 2, name: "c4"},
+          {id: 4, name: "c1", score: 8},
+          {id: 2, name: "c4", score: 2},
         ]
       }
     ]
