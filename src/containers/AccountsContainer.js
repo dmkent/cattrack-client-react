@@ -13,6 +13,9 @@ export function mapDispatchToProps(dispatch) {
   return {
     loadAccounts: () => {
       dispatch(TrackActions.loadAccounts());
+    },
+    createAccount: (name) => {
+      dispatch(TrackActions.createAccount(name))
     }
   }
 }

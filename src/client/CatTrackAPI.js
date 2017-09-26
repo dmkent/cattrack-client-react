@@ -121,7 +121,7 @@ export function filters_to_params(filters) {
 export function checkStatus(resp) {
   if (resp === undefined) {
     return Promise.reject(new Error("No response received"));
-  } else if (resp.status == 200) {
+  } else if (resp.status >= 200 && resp.status <= 299) {
     return resp.json()
   }
   return Promise.resolve(resp.json())
