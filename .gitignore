@@ -6,5 +6,5 @@ lib
 npm-debug.log
 dist
 cattrack-client-react.*
-.travis/deploy_key
+.travis/deploy_key*
 coverage
