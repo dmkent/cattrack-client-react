@@ -16,7 +16,7 @@ describe('DashboardContainer', () => {
         is_logged_in: true
       },
       transactions: {
-        transactions: new Immutable.OrderedMap(),
+        transactions: Immutable.OrderedMap(),
         summary: [2],
         filters: {
           category: null
@@ -28,7 +28,7 @@ describe('DashboardContainer', () => {
           message: ""
         },
         show_categorisor: false,
-        categories: new Immutable.List(),
+        categories: Immutable.List(),
       },
       accounts: {
         accounts: [1],

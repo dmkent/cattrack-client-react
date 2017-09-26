@@ -12,14 +12,14 @@ import TrackActionTypes from '../data/TrackActionTypes';
 function category(state = null, action) {
   if (state === null) {
     state = {
-      series: new Immutable.List(),
+      series: Immutable.List(),
     }
   }
   switch (action.type) {
     case TrackActionTypes.CATEGORY_SERIES_LOADED:
       return Object.assign({}, state, {
-        series: new Immutable.List(action.series.map(raw => {
-          return new Immutable.Map(raw)
+        series: Immutable.List(action.series.map(raw => {
+          return Immutable.Map(raw)
         })),
       });
     default:

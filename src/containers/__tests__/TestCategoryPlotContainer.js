@@ -11,7 +11,7 @@ describe('CategoryPlotContainer', () => {
         is_logged_in: true
       },
       transactions: {
-        transactions: new Immutable.OrderedMap(),
+        transactions: Immutable.OrderedMap(),
         summary: [2],
         filters: {
           category: null
@@ -23,18 +23,18 @@ describe('CategoryPlotContainer', () => {
           message: ""
         },
         show_categorisor: false,
-        categories: new Immutable.List(),
+        categories: Immutable.List(),
       },
       accounts: {
         accounts: [1],
         upload_in_progress: false
       },
       category: {
-        series: new Immutable.List(['b'])
+        series: Immutable.List(['b'])
       }
     }
     expect(mapStateToProps(initState)).toEqual({
-      series: new Immutable.List(['b'])
+      series: Immutable.List(['b'])
     })
   })
 })

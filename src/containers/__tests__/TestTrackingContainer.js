@@ -12,22 +12,22 @@ jest.mock('../../actions/TrackActions', () => ({default: {
 describe('TrackingContainer', () => {
   it('only have categorisor and series in props', () => {
     const initState = {
-      transactions: new Immutable.OrderedMap(),
+      transactions: Immutable.OrderedMap(),
       categories: {
         is_valid: {
           valid: null,
           message: ""
         },
         show_categorisor: false,
-        categories: new Immutable.List(),
+        categories: Immutable.List(),
       },
       category: {
-        series: new Immutable.List()
+        series: Immutable.List()
       }
     }
     expect(mapStateToProps(initState)).toEqual({
-      categories: new Immutable.List(),
-      series: new Immutable.List()
+      categories: Immutable.List(),
+      series: Immutable.List()
     })
   })
 
@@ -48,12 +48,12 @@ describe('TrackingContainer', () => {
 describe('Tracking', () => {
   it('should render self and subcomponents', () => {
     const props = {
-      series: new Immutable.List([
-          new Immutable.Map({value: '-43', label: '2013-01-01'}),
-          new Immutable.Map({value: '-33', label: '2013-02-01'}),
-          new Immutable.Map({value: '-5', label: '2013-03-01'}),
+      series: Immutable.List([
+          Immutable.Map({value: '-43', label: '2013-01-01'}),
+          Immutable.Map({value: '-33', label: '2013-02-01'}),
+          Immutable.Map({value: '-5', label: '2013-03-01'}),
         ]),
-      categories: new Immutable.List([
+      categories: Immutable.List([
         {id: 3, name: 'cat1'},
         {id: 2, name: 'cat2'},
         {id: 1, name: 'cat3'},

@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 
-const Category = new Immutable.Record({
+const Category = Immutable.Record({
     id: '',
     name: '',
     score: 0,

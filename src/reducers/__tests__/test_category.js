@@ -5,16 +5,16 @@ import TrackActionTypes from '../../data/TrackActionTypes'
 describe('category reducer', () => {
   
   it('should return the initial state', () => {
-    expect(reducer(undefined, {})).toEqual({series: new Immutable.List()})
+    expect(reducer(undefined, {})).toEqual({series: Immutable.List()})
   })
 
   it('should handle CATEGORY_SERIES_LOADED', () => {
-    const initState = {series: new Immutable.List()}
+    const initState = {series: Immutable.List()}
 
     const expectedState = {
-      series: new Immutable.List([ 
-        new Immutable.Map({value: -32, label: "2013-02-01"}),
-        new Immutable.Map({value: -45, label: "2002-01-01"}),
+      series: Immutable.List([ 
+        Immutable.Map({value: -32, label: "2013-02-01"}),
+        Immutable.Map({value: -45, label: "2002-01-01"}),
       ])
     }
 

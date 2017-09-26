@@ -157,7 +157,7 @@ describe('Categorisor actions', () => {
 
     return store.dispatch(TrackActions.categorisorSave(
       new Transaction({id: 4, when: "2011-01-01", description: "a", amount: -2}),
-      new Immutable.List([
+      Immutable.List([
         {category: 2, amount: -0.5}, 
         {category: 4, amount: -1.5}
       ]),
@@ -191,7 +191,7 @@ describe('Categorisor actions', () => {
 
     return store.dispatch(TrackActions.categorisorSave(
       new Transaction({id: 4, when: "2011-01-01", description: "a", amount: -2}),
-      new Immutable.List([
+      Immutable.List([
         {category: 2, amount: -0.5}, 
         {category: 4, amount: -1.5}
       ]),
@@ -231,7 +231,7 @@ describe('Categorisor actions', () => {
 
     return store.dispatch(TrackActions.categorisorSave(
       new Transaction({id: 4, when: "2011-01-01", description: "a", amount: -2}),
-      new Immutable.List([
+      Immutable.List([
         {category: 2, amount: -0.5}, 
         {category: 4, amount: -1.5}
       ]),

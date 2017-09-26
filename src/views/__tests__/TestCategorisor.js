@@ -6,12 +6,12 @@ import Categorisor from '../Categorisor'
 function setup(transaction, suggestions) {
   const props = {
     transaction: transaction,
-    suggestions: suggestions ? suggestions : new Immutable.List(),
-    splits: new Immutable.List([
+    suggestions: suggestions ? suggestions : Immutable.List(),
+    splits: Immutable.List([
       'split',
       'split2'
     ]),
-    categories: new Immutable.List(),
+    categories: Immutable.List(),
     is_valid: {message: null, valid: null},
     showCategorisor: jest.fn(),
     saveCategorisor: jest.fn(),
@@ -54,7 +54,7 @@ describe('components', () => {
         description: "test",
         when: "2012-01-01",
         amount: -34.4,
-      }, new Immutable.List([
+      }, Immutable.List([
         {name: 'suggest1'},
         {name: 'suggest2'}
       ]))

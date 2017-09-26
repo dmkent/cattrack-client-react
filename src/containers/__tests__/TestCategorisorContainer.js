@@ -16,14 +16,14 @@ jest.mock('../../actions/TrackActions', () => ({default: {
 describe('CategorisorContainer', () => {
   it('only have categorisor in props', () => {
     const initState = {
-      transactions: new Immutable.OrderedMap(),
+      transactions: Immutable.OrderedMap(),
       categories: {
         is_valid: {
           valid: null,
           message: ""
         },
         show_categorisor: false,
-        categories: new Immutable.List(),
+        categories: Immutable.List(),
       }
     }
     expect(mapStateToProps(initState)).toEqual({
@@ -32,7 +32,7 @@ describe('CategorisorContainer', () => {
         message: ""
       },
       show_categorisor: false,
-      categories: new Immutable.List()
+      categories: Immutable.List()
     })
   })
 

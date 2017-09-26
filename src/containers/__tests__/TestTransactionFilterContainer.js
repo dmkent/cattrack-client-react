@@ -18,7 +18,7 @@ describe('TransactionFilterContainer', () => {
         is_logged_in: true
       },
       transactions: {
-        transactions: new Immutable.OrderedMap(),
+        transactions: Immutable.OrderedMap(),
         summary: [2],
         filters: {
           category: null
@@ -30,7 +30,7 @@ describe('TransactionFilterContainer', () => {
           message: ""
         },
         show_categorisor: false,
-        categories: new Immutable.List(),
+        categories: Immutable.List(),
       },
       accounts: {
         accounts: [1],
@@ -43,7 +43,7 @@ describe('TransactionFilterContainer', () => {
       periods: [2]
     }
     expect(mapStateToProps(initState)).toEqual({
-      categories: new Immutable.List(),
+      categories: Immutable.List(),
       accounts: [1],
       periods: [2],
       filters: {

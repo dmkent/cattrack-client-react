@@ -3,14 +3,14 @@ import reducer from '../categories'
 import TrackActionTypes from '../../data/TrackActionTypes'
 
 const initState = {
-  categories: new Immutable.List(),
+  categories: Immutable.List(),
   is_valid: {
     valid: null,
     message: ""
   },
   show_categorisor: false,
-  splits: new Immutable.List(),
-  suggestions: new Immutable.List(),
+  splits: Immutable.List(),
+  suggestions: Immutable.List(),
   transaction: null
 }
   
@@ -28,7 +28,7 @@ describe('categories reducer', () => {
       })
     ).toEqual(Object.assign({}, initState, {
       transaction: {id: 1, category: 4, amount: -56},
-      splits: new Immutable.List([{category: "4", amount: -56}]),
+      splits: Immutable.List([{category: "4", amount: -56}]),
       is_valid: {
         valid: true,
       }
@@ -42,7 +42,7 @@ describe('categories reducer', () => {
       })
     ).toEqual(Object.assign({}, initState, {
       transaction: {id: 1, category: null, amount: -56},
-      splits: new Immutable.List([{category: "", amount: -56}]),
+      splits: Immutable.List([{category: "", amount: -56}]),
       is_valid: {
         valid: true,
       }
@@ -52,29 +52,29 @@ describe('categories reducer', () => {
   it('should handle CATEGORISOR_ADD_SPLIT', () => {
     expect(
       reducer({
-        categories: new Immutable.List([{id: 1, name: "cat1"}]),
+        categories: Immutable.List([{id: 1, name: "cat1"}]),
         is_valid: {
           valid: null,
           message: ""
         },
         show_categorisor: false,
-        splits: new Immutable.List([{category: 4, amount: "-45"}]),
-        suggestions: new Immutable.List(),
+        splits: Immutable.List([{category: 4, amount: "-45"}]),
+        suggestions: Immutable.List(),
         transaction: null
       }, {
         type: TrackActionTypes.CATEGORISOR_ADD_SPLIT,
       })
     ).toEqual({
-      categories: new Immutable.List([{id: 1, name: "cat1"}]),
+      categories: Immutable.List([{id: 1, name: "cat1"}]),
       is_valid: {
         valid: null,
       },
       show_categorisor: false,
-      splits: new Immutable.List([
+      splits: Immutable.List([
         {category: 4, amount: "-45"}, 
         {category: 1, amount: "0"}
       ]),
-      suggestions: new Immutable.List(),
+      suggestions: Immutable.List(),
       transaction: null
     })
   })
@@ -82,51 +82,51 @@ describe('categories reducer', () => {
   it('should handle CATEGORISOR_SET_SPLIT', () => {
     // Initial state - two splits, valid.
     const state1 = {
-      categories: new Immutable.List([{id: 1, name: "cat1"}]),
+      categories: Immutable.List([{id: 1, name: "cat1"}]),
       is_valid: {
         valid: null,
         message: ""
       },
       show_categorisor: false,
-      splits: new Immutable.List([
+      splits: Immutable.List([
         {category: 4, amount: "-45"},
         {category: 1, amount: "0"},
       ]),
-      suggestions: new Immutable.List(),
+      suggestions: Immutable.List(),
       transaction: {id: 2, amount: "-45", category: null}
     };
 
     // Intermediate state after set new amount on second split.
     // Invalid as amounts do not sum to transaction ammount.
     const state2 = {
-      categories: new Immutable.List([{id: 1, name: "cat1"}]),
+      categories: Immutable.List([{id: 1, name: "cat1"}]),
       is_valid: {
         valid: false,
         message: "Split amount must sum to transaction amount."
       },
       show_categorisor: false,
-      splits: new Immutable.List([
+      splits: Immutable.List([
         {category: 4, amount: "-45"}, 
         {category: 1, amount: "-32"}
       ]),
-      suggestions: new Immutable.List(),
+      suggestions: Immutable.List(),
       transaction: {id: 2, amount: "-45", category: null}
     }
 
     /* Final state, after setting second amount. Valid as now sum to 
        transaction amount.*/
     const state3 = {
-      categories: new Immutable.List([{id: 1, name: "cat1"}]),
+      categories: Immutable.List([{id: 1, name: "cat1"}]),
       is_valid: {
         valid: true,
         message: ""
       },
       show_categorisor: false,
-      splits: new Immutable.List([
+      splits: Immutable.List([
         {category: 4, amount: "-13"}, 
         {category: 1, amount: "-32"}
       ]),
-      suggestions: new Immutable.List(),
+      suggestions: Immutable.List(),
       transaction: {id: 2, amount: "-45", category: null}
     }
 
@@ -149,30 +149,30 @@ describe('categories reducer', () => {
   it('should handle CATEGORISOR_REMOVE_SPLIT', () => {
     // Initial state - two splits, valid.
     const state1 = {
-      categories: new Immutable.List([{id: 1, name: "cat1"}]),
+      categories: Immutable.List([{id: 1, name: "cat1"}]),
       is_valid: {
         valid: null,
         message: ""
       },
       show_categorisor: false,
-      splits: new Immutable.List([
+      splits: Immutable.List([
         {category: 4, amount: "-45"},
         {category: 1, amount: "0"},
       ]),
-      suggestions: new Immutable.List(),
+      suggestions: Immutable.List(),
       transaction: {id: 2, amount: "-45"}
     };
 
     // Final state after removing split.
     const state2 = {
-      categories: new Immutable.List([{id: 1, name: "cat1"}]),
+      categories: Immutable.List([{id: 1, name: "cat1"}]),
       is_valid: {
         valid: true,
         message: ""
       },
       show_categorisor: false,
-      splits: new Immutable.List([{category: 4, amount: "-45"}]),
-      suggestions: new Immutable.List(),
+      splits: Immutable.List([{category: 4, amount: "-45"}]),
+      suggestions: Immutable.List(),
       transaction: {id: 2, amount: "-45"}
     }
 
@@ -186,20 +186,20 @@ describe('categories reducer', () => {
   it('should handle CATEGORISOR_CATEGORIES_RECEIVED', () => {
     // Initial state - no categories
     const state1 = {
-      categories: new Immutable.List(),
+      categories: Immutable.List(),
       is_valid: {
         valid: null,
         message: ""
       },
       show_categorisor: false,
-      splits: new Immutable.List([{category: 4, amount: "-45"}]),
-      suggestions: new Immutable.List(),
+      splits: Immutable.List([{category: 4, amount: "-45"}]),
+      suggestions: Immutable.List(),
       transaction: {id: 2, amount: "-45", category: null}
     };
 
     // Final state after add categories.
     const state2 = {
-      categories: new Immutable.List([
+      categories: Immutable.List([
         {id: 1, name: "cat1"},
         {id: 3, name: "cat2"}
       ]),
@@ -208,8 +208,8 @@ describe('categories reducer', () => {
         message: ""
       },
       show_categorisor: false,
-      splits: new Immutable.List([{category: 4, amount: "-45"}]),
-      suggestions: new Immutable.List(),
+      splits: Immutable.List([{category: 4, amount: "-45"}]),
+      suggestions: Immutable.List(),
       transaction: {id: 2, amount: "-45", category: null}
     }
 
@@ -226,7 +226,7 @@ describe('categories reducer', () => {
   it('should handle CATEGORISOR_SUGGESTIONS_RECEIVED', () => {
     // Initial state - no suggestions
     const state1 = {
-      categories: new Immutable.List([
+      categories: Immutable.List([
         {id: 1, name: "cat1"},
         {id: 3, name: "cat5"},
         {id: 4, name: "cat2"}
@@ -236,14 +236,14 @@ describe('categories reducer', () => {
         message: ""
       },
       show_categorisor: false,
-      splits: new Immutable.List([{category: "3", amount: "-45"}]),
-      suggestions: new Immutable.List(),
+      splits: Immutable.List([{category: "3", amount: "-45"}]),
+      suggestions: Immutable.List(),
       transaction: {id: 2, amount: "-45", category: "3"}
     };
 
     // Final state after add suggestins, splits unchanged.
     const state2 = {
-      categories: new Immutable.List([
+      categories: Immutable.List([
         {id: 1, name: "cat1"},
         {id: 3, name: "cat5"},
         {id: 4, name: "cat2"}
@@ -253,8 +253,8 @@ describe('categories reducer', () => {
         message: ""
       },
       show_categorisor: false,
-      splits: new Immutable.List([{category: "3", amount: "-45"}]),
-      suggestions: new Immutable.List([
+      splits: Immutable.List([{category: "3", amount: "-45"}]),
+      suggestions: Immutable.List([
         {id: 4, name: "cat2"},
         {id: 3, name: "cat5"}
       ]),
@@ -274,7 +274,7 @@ describe('categories reducer', () => {
   it('should handle CATEGORISOR_SUGGESTIONS_RECEIVED when no current category', () => {
     // Initial state - no suggestions
     const state1 = {
-      categories: new Immutable.List([
+      categories: Immutable.List([
         {id: 1, name: "cat1"},
         {id: 3, name: "cat5"},
         {id: 4, name: "cat2"}
@@ -284,14 +284,14 @@ describe('categories reducer', () => {
         message: ""
       },
       show_categorisor: false,
-      splits: new Immutable.List([{category: "3", amount: "-45"}]),
-      suggestions: new Immutable.List(),
+      splits: Immutable.List([{category: "3", amount: "-45"}]),
+      suggestions: Immutable.List(),
       transaction: {id: 2, amount: "-45", category: null}
     };
 
     // Final state after add suggestions, split updated to match suggested.
     const state2 = {
-      categories: new Immutable.List([
+      categories: Immutable.List([
         {id: 1, name: "cat1"},
         {id: 3, name: "cat5"},
         {id: 4, name: "cat2"}
@@ -301,8 +301,8 @@ describe('categories reducer', () => {
         message: ""
       },
       show_categorisor: false,
-      splits: new Immutable.List([{category: "4", amount: "-45"}]),
-      suggestions: new Immutable.List([{id: 4, name: "cat2"}]),
+      splits: Immutable.List([{category: "4", amount: "-45"}]),
+      suggestions: Immutable.List([{id: 4, name: "cat2"}]),
       transaction: {id: 2, amount: "-45", category: null}
     }
 
@@ -316,7 +316,7 @@ describe('categories reducer', () => {
   it('should handle CATEGORISOR_SUGGESTIONS_RECEIVED when no current category multiple suggestions', () => {
     // Initial state - no suggestions
     const state1 = {
-      categories: new Immutable.List([
+      categories: Immutable.List([
         {id: 1, name: "cat1"},
         {id: 3, name: "cat5"},
         {id: 4, name: "cat2"}
@@ -326,14 +326,14 @@ describe('categories reducer', () => {
         message: ""
       },
       show_categorisor: false,
-      splits: new Immutable.List([{category: "3", amount: "-45"}]),
-      suggestions: new Immutable.List(),
+      splits: Immutable.List([{category: "3", amount: "-45"}]),
+      suggestions: Immutable.List(),
       transaction: {id: 2, amount: "-45", category: null}
     };
 
     // Final state after add suggestions, split updated to match suggested.
     const state2 = {
-      categories: new Immutable.List([
+      categories: Immutable.List([
         {id: 1, name: "cat1"},
         {id: 3, name: "cat5"},
         {id: 4, name: "cat2"}
@@ -343,8 +343,8 @@ describe('categories reducer', () => {
         message: ""
       },
       show_categorisor: false,
-      splits: new Immutable.List([{category: "4", amount: "-45"}]),
-      suggestions: new Immutable.List([
+      splits: Immutable.List([{category: "4", amount: "-45"}]),
+      suggestions: Immutable.List([
         {id: 4, name: "cat2"},
         {id: 3, name: "cat5"}
       ]),

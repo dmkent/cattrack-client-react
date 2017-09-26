@@ -12,7 +12,7 @@ function setup(transactions) {
     onSelectTransactions: jest.fn(),
     setCategorisorTransaction: jest.fn(),
     showCategorisor: jest.fn(),
-    transactions: new Immutable.List(transactions),
+    transactions: Immutable.List(transactions),
   }
 
   const enzymeWrapper = shallow(<Transactions {...props} />)

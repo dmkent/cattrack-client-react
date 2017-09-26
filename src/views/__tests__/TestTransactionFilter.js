@@ -10,7 +10,7 @@ function setup(accounts, categories, filters) {
     loadAccounts: jest.fn(),
     onFilter: jest.fn(),
     filters: filters,
-    accounts: new Immutable.List(accounts),
+    accounts: Immutable.List(accounts),
     categories: new 
     Immutable.List(categories),
   }

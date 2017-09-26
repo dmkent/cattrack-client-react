@@ -6,7 +6,7 @@ import Accounts from '../Accounts'
 function setup(accounts, account_id, uploading) {
   const props = {
     accounts: {
-      accounts: new Immutable.OrderedMap(accounts),
+      accounts: Immutable.OrderedMap(accounts),
       upload_in_progress: uploading
     },
     uploadToAccount: jest.fn(),

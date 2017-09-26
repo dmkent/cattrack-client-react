@@ -6,7 +6,7 @@ import AccountDetail from '../AccountDetail'
 function setup(accounts, account_id, uploading) {
   const props = {
     accounts: {
-      accounts: new Immutable.OrderedMap(accounts),
+      accounts: Immutable.OrderedMap(accounts),
       upload_in_progress: uploading
     },
     account: account_id,

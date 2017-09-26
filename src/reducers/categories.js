@@ -6,9 +6,9 @@ function getInitialState() {
   return {
     show_categorisor: false,
     transaction: null,
-    suggestions: new Immutable.List(),
-    categories: new Immutable.List(),
-    splits: new Immutable.List(),
+    suggestions: Immutable.List(),
+    categories: Immutable.List(),
+    splits: Immutable.List(),
     is_valid: {
       valid: null,
       message: "",
@@ -25,7 +25,7 @@ function initialSplits(transaction, suggestions) {
       category = "";
     }
   }
-  return new Immutable.List([
+  return Immutable.List([
     {
       category: String(category),
       amount: transaction.amount,
@@ -119,13 +119,13 @@ function categories(state = null, action) {
       return new_state;
     case TrackActionTypes.CATEGORISOR_CATEGORIES_RECEIVED:
       return Object.assign({}, state, {
-        categories: new Immutable.List(action.categories),
+        categories: Immutable.List(action.categories),
       });
     case TrackActionTypes.CATEGORISOR_CATEGORIES_ERROR:
       return state;
     case TrackActionTypes.CATEGORISOR_SUGGESTIONS_RECEIVED:
       new_state = Object.assign({}, state, {
-        suggestions: new Immutable.List(action.categories)
+        suggestions: Immutable.List(action.categories)
       })
       new_state.splits = initialSplits(state.transaction, 
                                        new_state.suggestions);

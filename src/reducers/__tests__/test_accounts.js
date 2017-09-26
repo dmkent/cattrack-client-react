@@ -6,7 +6,7 @@ describe('accounts reducer', () => {
   
   it('should return the initial state', () => {
     const initState = {
-      accounts: new Immutable.OrderedMap(),
+      accounts: Immutable.OrderedMap(),
       upload_in_progress: false,
       upload_progress: 0,
       upload_result: null,
@@ -16,14 +16,14 @@ describe('accounts reducer', () => {
 
   it('should handle ACCOUNTS_LOADED', () => {
     const initState = {
-      accounts: new Immutable.OrderedMap(),
+      accounts: Immutable.OrderedMap(),
       upload_in_progress: false,
       upload_progress: 0,
       upload_result: null,
     }
 
     const expectedState = {
-      accounts: new Immutable.OrderedMap([
+      accounts: Immutable.OrderedMap([
         [
           0, 
           {id: 0, name: "acct1"}
@@ -56,13 +56,13 @@ describe('accounts reducer', () => {
   
   it('should handle ACCOUNT_UPLOAD_STARTED', () => {
     const initState = {
-      accounts: new Immutable.OrderedMap(),
+      accounts: Immutable.OrderedMap(),
       upload_in_progress: false,
       upload_progress: 0,
       upload_result: null,
     }
     const expectedState = {
-      accounts: new Immutable.OrderedMap(),
+      accounts: Immutable.OrderedMap(),
       upload_in_progress: true,
       upload_progress: 0,
       upload_result: null,
@@ -74,13 +74,13 @@ describe('accounts reducer', () => {
 
   it('should handle ACCOUNT_UPLOAD_PROGRESS_UPDATE', () => {
     const initState = {
-      accounts: new Immutable.OrderedMap(),
+      accounts: Immutable.OrderedMap(),
       upload_in_progress: true,
       upload_progress: 0,
       upload_result: null,
     }
     const expectedState = {
-      accounts: new Immutable.OrderedMap(),
+      accounts: Immutable.OrderedMap(),
       upload_in_progress: true,
       upload_progress: 5,
       upload_result: null,
@@ -93,13 +93,13 @@ describe('accounts reducer', () => {
 
   it('should handle ACCOUNT_UPLOAD_SUCESS', () => {
     const initState = {
-      accounts: new Immutable.OrderedMap(),
+      accounts: Immutable.OrderedMap(),
       upload_in_progress: true,
       upload_progress: 86,
       upload_result: null,
     }
     const expectedState = {
-      accounts: new Immutable.OrderedMap(),
+      accounts: Immutable.OrderedMap(),
       upload_in_progress: false,
       upload_progress: 100,
       upload_result: "Success",
@@ -111,13 +111,13 @@ describe('accounts reducer', () => {
 
   it('should handle ACCOUNT_UPLOAD_PROGRESS_UPDATE', () => {
     const initState = {
-      accounts: new Immutable.OrderedMap(),
+      accounts: Immutable.OrderedMap(),
       upload_in_progress: true,
       upload_progress: 86,
       upload_result: null,
     }
     const expectedState = {
-      accounts: new Immutable.OrderedMap(),
+      accounts: Immutable.OrderedMap(),
       upload_in_progress: false,
       upload_progress: 0,
       upload_result: "failed to upload",
@@ -132,7 +132,7 @@ describe('accounts reducer', () => {
 
   it('should handle ACCOUNT_CREATE_SUCESS', () => {
     const initState = {
-      accounts: new Immutable.OrderedMap([
+      accounts: Immutable.OrderedMap([
         [
           1, 
           {id: 1, name: "acct"}
@@ -147,7 +147,7 @@ describe('accounts reducer', () => {
       upload_result: null,
     }
     const expectedState = {
-      accounts: new Immutable.OrderedMap([
+      accounts: Immutable.OrderedMap([
         [
           1, 
           {id: 1, name: "acct"}
