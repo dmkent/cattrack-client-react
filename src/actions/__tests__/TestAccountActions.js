@@ -111,4 +111,51 @@ describe('Account actions', () => {
       expect(store.getActions()).toEqual(expectedActions)
     })
   })
+
+  it('should create new account actions', () => {
+    nock('http://localhost:8000')
+      .post('/api/accounts/')
+      .reply(200, {id: 4, name: "newacct"})
+        
+    const expectedActions = [
+      {
+        type: TrackActionTypes.ACCOUNT_CREATE_SUCCESS,
+        account: new Account({id: 4, name: "newacct"})
+      }
+    ]
+    const store = mockStore({...dummyLoggedInState()})
+
+    return store.dispatch(TrackActions.createAccount("newacct"))
+      .then(() => {
+        // Return of async actions
+        expect(store.getActions()).toEqualImmutable(expectedActions)
+      })
+  })
+
+  it('should create account create error actions', () => {
+    nock('http://localhost:8000')
+      .post('/api/accounts/')
+      .reply(404, {error: 'not found'})
+        
+    const expectedActions = [
+      {
+        type: TrackActionTypes.ACCOUNT_CREATE_ERROR,
+        name: "newacct",
+        error: {
+          code: 404,
+          message: [[
+            'Error',
+            'not found'
+          ]]
+        }
+      }
+    ]
+    const store = mockStore({...dummyLoggedInState()})
+
+    return store.dispatch(TrackActions.createAccount("newacct"))
+      .then(() => {
+        // Return of async actions
+        expect(store.getActions()).toEqualImmutable(expectedActions)
+      })
+  })
 })

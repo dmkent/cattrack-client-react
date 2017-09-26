@@ -48,6 +48,10 @@ function accounts(state = null, action) {
         upload_progress: 0,
         upload_result: action.error.message,
       });
+    case TrackActionTypes.ACCOUNT_CREATE_SUCCESS:
+      return Object.assign({}, state, {
+        accounts: state.accounts.set(action.account.id, action.account)
+      })
     default:
       return state;
   }

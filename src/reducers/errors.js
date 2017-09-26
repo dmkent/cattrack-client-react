@@ -35,6 +35,9 @@ const errors = (state = null, action) => {
     case TrackActionTypes.ACCOUNTS_LOAD_ERROR:
       title += "Error loading accounts: ";
       break;
+    case TrackActionTypes.ACCOUNT_CREATE_ERROR:
+      title += "Error creating account: ";
+      break;
     case TrackActionTypes.ACCOUNTS_UPLOAD_ERROR:
       title += "Error uploading to account: ";
 

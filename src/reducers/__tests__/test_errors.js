@@ -138,12 +138,13 @@ describe('errors reducer', () => {
   it('should handle transaction errors', () => {
     const init_state = reducer(null, {});
     const expected = {
-      next_error: 4,
+      next_error: 5,
       errors: Immutable.OrderedMap([
         [0, {title: "Error loading transactions: ", messages: "Page error."}],
         [1, {title: "Error loading transaction summary: ", messages: "Summary error."}],
         [2, {title: "Error splitting transaction: ", messages: "Split error."}],
-        [3, {title: "Error updating transaction: ", messages: "Add error."}]
+        [3, {title: "Error updating transaction: ", messages: "Add error."}],
+        [4, {title: "Error creating account: ", messages: "Account create error."}],
       ])
     };
     const result1 = reducer(init_state, {
@@ -170,11 +171,17 @@ describe('errors reducer', () => {
         message: "Add error."
       }
     });
-    // should ignore...
     const result5 = reducer(result4, {
+      type: TrackActionTypes.ACCOUNT_CREATE_ERROR,
+      error: {
+        message: "Account create error."
+      }
+    });
+    // should ignore...
+    const result6 = reducer(result5, {
       type: TrackActionTypes.AUTH_REQUEST,
     });
-    expect(result5.next_error).toBe(expected.next_error);
-    expect(result5.errors).toEqualImmutable(expected.errors);
+    expect(result6.next_error).toBe(expected.next_error);
+    expect(result6.errors).toEqualImmutable(expected.errors);
   })
 })

@@ -62,6 +62,28 @@ const AccountActions = {
         });
     };
   },
+  createAccount(name) {
+    return (dispatch, getState) => {
+      return fetch_from_api(dispatch, getState, '/api/accounts/', {
+        method: 'POST',
+        body: JSON.stringify({name: name}),
+      })
+      .then(checkStatus)
+      .then((newAccount) => {
+        dispatch({
+          type: TrackActionTypes.ACCOUNT_CREATE_SUCCESS,
+          account: new Account(newAccount)
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: TrackActionTypes.ACCOUNT_CREATE_ERROR,
+          name: name,
+          error: error,
+        })
+        });
+    };
+  },
 };
 
 export default AccountActions;

@@ -129,4 +129,45 @@ describe('accounts reducer', () => {
       }
     })).toEqual(expectedState)
   })
+
+  it('should handle ACCOUNT_CREATE_SUCESS', () => {
+    const initState = {
+      accounts: new Immutable.OrderedMap([
+        [
+          1, 
+          {id: 1, name: "acct"}
+        ],
+        [
+          2, 
+          {id: 2, name: "acct2"}
+        ]
+      ]),
+      upload_in_progress: false,
+      upload_progress: 0,
+      upload_result: null,
+    }
+    const expectedState = {
+      accounts: new Immutable.OrderedMap([
+        [
+          1, 
+          {id: 1, name: "acct"}
+        ],
+        [
+          2, 
+          {id: 2, name: "acct2"}
+        ],
+        [
+          3,
+          {id: 3, name: "new"}
+        ]
+      ]),
+      upload_in_progress: false,
+      upload_progress: 0,
+      upload_result: null,
+    }
+    expect(reducer(initState, {
+      type: TrackActionTypes.ACCOUNT_CREATE_SUCCESS,
+      account: {id: 3, name: "new"}
+    })).toEqual(expectedState)
+  })
 })

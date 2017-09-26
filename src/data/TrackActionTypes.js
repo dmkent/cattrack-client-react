@@ -23,6 +23,8 @@ const ActionTypes = {
   ACCOUNT_UPLOAD_STARTED: 'accounts/upload-success',
   ACCOUNT_UPLOAD_PROGRESS_UPDATE: 'accounts/upload-progress-update',
   ACCOUNT_UPLOAD_ERROR: 'accounts/upload-failed',
+  ACCOUNT_CREATE_SUCCESS: 'accounts/created',
+  ACCOUNT_CREATE_ERROR: 'accounts/create-error',
 
   PERIODS_LOADED: 'periods/loaded',
   PERIODS_LOAD_ERROR: 'periods/load-error',
