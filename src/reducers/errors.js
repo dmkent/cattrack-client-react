@@ -49,14 +49,20 @@ function errors(state = null, action){
     case TrackActionTypes.CATEGORISOR_CATEGORIES_ERROR:
       title += "Error loading categories: ";
       break;
+    case TrackActionTypes.CATEGORY_SERIES_LOAD_ERROR:
+      title += "Error loading transaction series: ";
+      break
     default:
       return state;
     }
-
+    let err_messages = action.error.message;
+    if (!(err_messages instanceof Array)) {
+      err_messages = [err_messages];
+    } 
     return {
       errors: state.errors.set(state.next_error, {
         title: title,
-        messages: action.error.message,
+        messages: err_messages,
       }),
       next_error: state.next_error + 1,
     };

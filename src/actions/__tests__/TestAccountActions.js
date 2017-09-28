@@ -48,15 +48,7 @@ describe('Account actions', () => {
     const expectedActions = [
       { 
         type: TrackActionTypes.ACCOUNTS_LOAD_ERROR, 
-        error: {
-          code: 404,
-          message: [
-            [
-              "Error", 
-              "not found"
-            ]
-          ]
-        }
+        error: new Error(["Error: not found"])
       }
     ]
 
@@ -95,12 +87,7 @@ describe('Account actions', () => {
     const expectedActions = [
       {
         type: TrackActionTypes.ACCOUNT_UPLOAD_ERROR,
-        error: [
-          [
-            "Error", 
-            "bad format"
-          ]
-        ],
+        error: new Error(["Error: bad format"]),
         account: 1
       },
     ]
@@ -141,13 +128,7 @@ describe('Account actions', () => {
       {
         type: TrackActionTypes.ACCOUNT_CREATE_ERROR,
         name: "newacct",
-        error: {
-          code: 404,
-          message: [[
-            'Error',
-            'not found'
-          ]]
-        }
+        error: new Error(['Error: not found'])
       }
     ]
     const store = mockStore({...dummyLoggedInState()})
@@ -155,7 +136,7 @@ describe('Account actions', () => {
     return store.dispatch(TrackActions.createAccount("newacct"))
       .then(() => {
         // Return of async actions
-        expect(store.getActions()).toEqualImmutable(expectedActions)
+        expect(store.getActions()).toEqual(expectedActions)
       })
   })
 })

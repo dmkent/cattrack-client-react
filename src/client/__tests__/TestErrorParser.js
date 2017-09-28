@@ -30,24 +30,13 @@ describe('API and helpers', () => {
   })
 
   it('can parse Django REST errors', () => {
-    expect(parseErrors({detail: "This is an error"})).toEqual([
-      [
-        'Detail', 
-        'This is an error'
-      ]
-    ])
+    expect(parseErrors({detail: "This is an error"})).toEqual(['Detail: This is an error'])
     expect(parseErrors({
       AmountKey: ["Amount is required"],
       name: ["Name must be longer than zero"]
     })).toEqual([
-      [
-        'Amount key', 
-        'Amount is required'
-      ],
-      [
-        'Name',
-        'Name must be longer than zero'
-      ]
+      'Amount key: Amount is required',
+      'Name: Name must be longer than zero',
     ])
     expect(parseErrors({
       amount_key: [
@@ -55,17 +44,7 @@ describe('API and helpers', () => {
           something: "nested"
         }
       ],
-    })).toEqual([
-      [
-        'Amount key', 
-        '[\n  {\n    "something": "nested"\n  }\n]'
-      ]
-    ])
-    expect(parseErrors({detail: null})).toEqual([
-      [
-        'detail', 
-        ''
-      ]
-    ])
+    })).toEqual(['Amount key: [\n  {\n    "something": "nested"\n  }\n]'])
+    expect(parseErrors({detail: null})).toEqual(['detail'])
   })
 })

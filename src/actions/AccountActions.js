@@ -50,6 +50,14 @@ const AccountActions = {
         // Non-200 status, parse the content
         return resp.json();
       })
+      .catch(() => {
+        // Parse of JSON failed.
+        dispatch({
+          type: TrackActionTypes.ACCOUNT_UPLOAD_ERROR,
+          account,
+          error: new Error("Unable to upload."),
+        })
+      })
       .then((data) => {
           if (data === null) {
             return;
@@ -57,7 +65,7 @@ const AccountActions = {
           dispatch({
             type: TrackActionTypes.ACCOUNT_UPLOAD_ERROR,
             account,
-            error: parseErrors(data),
+            error: new Error(parseErrors(data)),
           })
         });
     };

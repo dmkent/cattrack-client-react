@@ -60,15 +60,7 @@ describe('Transaction actions', () => {
     const expectedActions = [
       { 
         type: TrackActionTypes.TRANSACTION_PAGE_LOAD_ERROR, 
-        error: {
-          code: 404,
-          message: [
-            [
-              "Error", 
-              "not found"
-            ]
-          ]
-        },
+        error: new Error(["Error: not found"]),
         page_num: 1
       }
     ]
@@ -120,15 +112,7 @@ describe('Transaction actions', () => {
     const expectedActions = [
       { 
         type: TrackActionTypes.TRANSACTION_SUMMARY_LOAD_ERROR, 
-        error: {
-          code: 404,
-          message: [
-            [
-              "Error", 
-              "not found"
-            ]
-          ]
-        }
+        error: new Error(["Error: not found"])
       }
     ]
 
@@ -182,15 +166,7 @@ describe('Transaction actions', () => {
       },
       { 
         type: TrackActionTypes.CATEGORISOR_SUGGESTIONS_ERROR, 
-        error: {
-          code: 404,
-          message: [
-            [
-              "Error", 
-              "not found"
-            ]
-          ]
-        }
+        error: new Error(["Error: not found"])
       }
     ]
 

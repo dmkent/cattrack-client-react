@@ -47,15 +47,7 @@ describe('Category actions', () => {
     const expectedActions = [
       { 
         type: TrackActionTypes.CATEGORY_SERIES_LOAD_ERROR, 
-        error: {
-          code: 404,
-          message: [
-            [
-              "Error", 
-              "not found"
-            ]
-          ]
-        }
+        error: new Error(["Error: not found"])
       }
     ]
 

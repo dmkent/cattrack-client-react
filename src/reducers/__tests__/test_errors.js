@@ -18,8 +18,8 @@ describe('errors reducer', () => {
       reducer({
         next_error: 2,
         errors: Immutable.OrderedMap({
-          0: {title: "Error 1", messages: "This is an error"},
-          1: {title: "Error 2", messages: "And another one"}
+          0: {title: "Error 1", messages: ["This is an error"]},
+          1: {title: "Error 2", messages: ["And another one"]}
         })
       }, {
         type: TrackActionTypes.CLEAR_ERROR,
@@ -28,7 +28,7 @@ describe('errors reducer', () => {
     ).toEqual({
       next_error: 2,
       errors: Immutable.OrderedMap({
-        0: {title: "Error 1", messages: "This is an error"},
+        0: {title: "Error 1", messages: ["This is an error"]},
       })
     })
   })
@@ -46,7 +46,7 @@ describe('errors reducer', () => {
       next_error: 1,
       errors: Immutable.OrderedMap().set(
         0,
-        {title: "Error loading accounts: ", messages: "Error on account load."}
+        {title: "Error loading accounts: ", messages: ["Error on account load."]}
       )
     })
   })
@@ -57,7 +57,7 @@ describe('errors reducer', () => {
         next_error: 1,
         errors: Immutable.OrderedMap().set(
           0,
-          {title: "Error loading accounts: ", messages: "Error on account load."}
+          {title: "Error loading accounts: ", messages: ["Error on account load."]}
         )
       }, {
         type: TrackActionTypes.ACCOUNTS_UPLOAD_ERROR,
@@ -68,8 +68,8 @@ describe('errors reducer', () => {
     ).toEqual({
       next_error: 2,
       errors: Immutable.OrderedMap([
-        [0, {title: "Error loading accounts: ", messages: "Error on account load."}],
-        [1, {title: "Error uploading to account: ", messages: "Error on account upload."}],
+        [0, {title: "Error loading accounts: ", messages: ["Error on account load."]}],
+        [1, {title: "Error uploading to account: ", messages: ["Error on account upload."]}],
       ])
     })
   })
@@ -79,7 +79,7 @@ describe('errors reducer', () => {
     const expected = {
       next_error: 1,
       errors: Immutable.OrderedMap([
-        [0, {title: "Error performing login: ", messages: "Error logging in."}]
+        [0, {title: "Error performing login: ", messages: ["Error logging in."]}]
       ])
     };
     const result = reducer(init_state, {
@@ -97,7 +97,7 @@ describe('errors reducer', () => {
     const expected = {
       next_error: 1,
       errors: Immutable.OrderedMap([
-        [0, {title: "Error loading period filters: ", messages: "Periods error."}]
+        [0, {title: "Error loading period filters: ", messages: ["Periods error."]}]
       ])
     };
     const result = reducer(init_state, {
@@ -115,8 +115,8 @@ describe('errors reducer', () => {
     const expected = {
       next_error: 2,
       errors: Immutable.OrderedMap([
-        [0, {title: "Error loading categories: ", messages: "Cats error."}],
-        [1, {title: "Error fetching category suggestions: ", messages: "Suggestion error."}]
+        [0, {title: "Error loading categories: ", messages: ["Cats error."]}],
+        [1, {title: "Error fetching category suggestions: ", messages: ["Suggestion error."]}]
       ])
     };
     const result1 = reducer(init_state, {
@@ -140,11 +140,11 @@ describe('errors reducer', () => {
     const expected = {
       next_error: 5,
       errors: Immutable.OrderedMap([
-        [0, {title: "Error loading transactions: ", messages: "Page error."}],
-        [1, {title: "Error loading transaction summary: ", messages: "Summary error."}],
-        [2, {title: "Error splitting transaction: ", messages: "Split error."}],
-        [3, {title: "Error updating transaction: ", messages: "Add error."}],
-        [4, {title: "Error creating account: ", messages: "Account create error."}],
+        [0, {title: "Error loading transactions: ", messages: ["Page error."]}],
+        [1, {title: "Error loading transaction summary: ", messages: ["Summary error."]}],
+        [2, {title: "Error splitting transaction: ", messages: ["Split error."]}],
+        [3, {title: "Error updating transaction: ", messages: ["Add error."]}],
+        [4, {title: "Error creating account: ", messages: ["Account create error."]}],
       ])
     };
     const result1 = reducer(init_state, {

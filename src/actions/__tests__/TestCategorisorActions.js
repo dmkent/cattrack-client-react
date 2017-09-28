@@ -52,15 +52,7 @@ describe('Categorisor actions', () => {
     const expectedActions = [
       { 
         type: TrackActionTypes.CATEGORISOR_CATEGORIES_ERROR, 
-        error: {
-          code: 404,
-          message: [
-            [
-              "Error",
-              "not found"
-            ]
-          ]
-        }
+        error: new Error(["Error: not found"])
       }
     ]
     const store = mockStore({...dummyLoggedInState()})
@@ -176,15 +168,8 @@ describe('Categorisor actions', () => {
     const expectedActions = [
       {
         type: TrackActionTypes.TRANSACTION_UPDATE_ERROR,
-        error: {
-          code: 403,
-          message: [
-            [
-              "Error", 
-              "failed"
-            ]
-          ]
-        }
+        error: new Error(["Error: failed"])
+
       }
     ]
     const store = mockStore({...dummyLoggedInState()})
@@ -198,7 +183,7 @@ describe('Categorisor actions', () => {
       () => {}
     )).then(() => {
       // Return of async actions
-      expect(store.getActions()).toEqualImmutable(expectedActions)
+      expect(store.getActions()).toEqual(expectedActions)
     })
   })
 
@@ -216,15 +201,7 @@ describe('Categorisor actions', () => {
       },
       {
         type: TrackActionTypes.TRANSACTION_SPLIT_ERROR,
-        error: {
-          code: 403,
-          message: [
-            [
-              "Error", 
-              "failed"
-            ]
-          ]
-        }
+        error: new Error(["Error: failed"])
       }
     ]
     const store = mockStore({...dummyLoggedInState()})
@@ -238,7 +215,7 @@ describe('Categorisor actions', () => {
       () => {}
     )).then(() => {
       // Return of async actions
-      expect(store.getActions()).toEqualImmutable(expectedActions)
+      expect(store.getActions()).toEqual(expectedActions)
     })
   })
 })
