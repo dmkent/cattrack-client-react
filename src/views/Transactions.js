@@ -58,17 +58,9 @@ class Transactions extends React.Component {
                       <td className="text-right">{trans.amount}</td>
                       <td><span className="label label-default">{trans.category_name}</span></td>
                       <td>
-                        <div className="btn-group">
-                          <Button bsSize="small">
-                              <span className="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                          </Button>
-                          <Button bsSize="small" onClick={() => this.showCategorisor(trans)}>
-                              <span className="glyphicon glyphicon-tags" aria-hidden="true"></span>
-                          </Button>
-                          <Button bsSize="small">
-                              <span className="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                          </Button>
-                        </div>
+                        <Button bsSize="small" onClick={() => this.showCategorisor(trans)}>
+                            <span className="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                        </Button>
                       </td>
                     </tr>
                   );

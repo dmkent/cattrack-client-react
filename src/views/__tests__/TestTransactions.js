@@ -56,7 +56,7 @@ describe('components', () => {
         .text()).toBe("Test this")
       expect(tableRow.children().at(2)
         .text()).toBe("-90.9")
-      tableRow.find('Button').at(1)
+      tableRow.find('Button').at(0)
         .props()
         .onClick()
       expect(props.setCategorisorTransaction.mock.calls.length).toBe(1)
