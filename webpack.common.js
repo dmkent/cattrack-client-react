@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const GitRevisionPlugin = require('git-revision-webpack-plugin')
+const path = require('path');
 
 const gitRev = new GitRevisionPlugin();
 
@@ -54,7 +55,7 @@ module.exports = {
     plotly: './src/client/PlotlyWrapper.js'
   },
   output: {
-    path: __dirname + '/dist/',
+    path: path.join(__dirname, '/dist/'),
     filename: '[name].js',
   },
   plugins: [
@@ -63,7 +64,10 @@ module.exports = {
       filename: 'index.html'
     }),
     new webpack.optimize.CommonsChunkPlugin({
-      name: ['vendor'],
+      name: [
+        'vendor', 
+        'plotly',
+      ],
       minChunks: Infinity
     }),
     new webpack.SourceMapDevToolPlugin({
