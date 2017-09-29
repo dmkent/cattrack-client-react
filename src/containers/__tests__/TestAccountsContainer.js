@@ -2,9 +2,12 @@ import Immutable from 'immutable'
 import TrackActions from '../../actions/TrackActions'
 import {mapStateToProps, mapDispatchToProps} from '../../containers/AccountsContainer'
 
-jest.mock('../../actions/TrackActions', () => ({default: {
-  loadAccounts: jest.fn(),
-}, __esModule: true}))
+jest.mock('../../actions/TrackActions', () => ({
+  default: {
+    loadAccounts: jest.fn(),
+  }, 
+  __esModule: true
+}))
 
 describe('AccountsContainer', () => {
   it('only have accounts and auth in props', () => {

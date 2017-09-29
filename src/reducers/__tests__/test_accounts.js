@@ -24,14 +24,8 @@ describe('accounts reducer', () => {
 
     const expectedState = {
       accounts: Immutable.OrderedMap([
-        [
-          0, 
-          {id: 0, name: "acct1"}
-        ],
-        [
-          1, 
-          {id: 1, name: "acct2"}
-        ]
+        [0, {id: 0, name: "acct1"}],
+        [1, {id: 1, name: "acct2"}]
       ]),
       upload_in_progress: false,
       upload_progress: 0,
@@ -133,14 +127,8 @@ describe('accounts reducer', () => {
   it('should handle ACCOUNT_CREATE_SUCESS', () => {
     const initState = {
       accounts: Immutable.OrderedMap([
-        [
-          1, 
-          {id: 1, name: "acct"}
-        ],
-        [
-          2, 
-          {id: 2, name: "acct2"}
-        ]
+        [1, {id: 1, name: "acct"}],
+        [2, {id: 2, name: "acct2"}]
       ]),
       upload_in_progress: false,
       upload_progress: 0,
@@ -148,18 +136,9 @@ describe('accounts reducer', () => {
     }
     const expectedState = {
       accounts: Immutable.OrderedMap([
-        [
-          1, 
-          {id: 1, name: "acct"}
-        ],
-        [
-          2, 
-          {id: 2, name: "acct2"}
-        ],
-        [
-          3,
-          {id: 3, name: "new"}
-        ]
+        [1,  {id: 1, name: "acct"}],
+        [2,  {id: 2, name: "acct2"}],
+        [3, {id: 3, name: "new"}]
       ]),
       upload_in_progress: false,
       upload_progress: 0,

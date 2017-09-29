@@ -2,10 +2,13 @@ import Immutable from 'immutable'
 import TrackActions from '../../actions/TrackActions'
 import {mapStateToProps, mapDispatchToProps} from '../../containers/AppContainer'
 
-jest.mock('../../actions/TrackActions', () => ({default: {
-  attemptLogin: jest.fn(),
-  restoreLogin: jest.fn(),
-}, __esModule: true}))
+jest.mock('../../actions/TrackActions', () => ({
+  default: {
+    attemptLogin: jest.fn(),
+    restoreLogin: jest.fn(),
+  },
+  __esModule: true
+}))
 
 describe('AppContainer', () => {
   it('only have correct state in props', () => {

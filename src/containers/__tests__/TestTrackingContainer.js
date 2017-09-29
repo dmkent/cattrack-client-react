@@ -4,10 +4,13 @@ import Immutable from 'immutable'
 import TrackActions from '../../actions/TrackActions'
 import {mapStateToProps, mapDispatchToProps, Tracking} from '../../containers/TrackingContainer'
 
-jest.mock('../../actions/TrackActions', () => ({default: {
-  loadCategories: jest.fn(),
-  loadCategorySeries: jest.fn(),
-}, __esModule: true}))
+jest.mock('../../actions/TrackActions', () => ({
+  default: {
+    loadCategories: jest.fn(),
+    loadCategorySeries: jest.fn(),
+  },
+  __esModule: true
+}))
 
 describe('TrackingContainer', () => {
   it('only have categorisor and series in props', () => {

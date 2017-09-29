@@ -2,11 +2,14 @@ import Immutable from 'immutable'
 import TrackActions from '../../actions/TrackActions'
 import {mapStateToProps, mapDispatchToProps} from '../../containers/TransactionFilterPeriodsContainer'
 
-jest.mock('../../actions/TrackActions', () => ({default: {
-  loadAccounts: jest.fn(),
-  loadPeriods: jest.fn(),
-  updateTransactionFilter: jest.fn(),
-}, __esModule: true}))
+jest.mock('../../actions/TrackActions', () => ({
+  default: {
+    loadAccounts: jest.fn(),
+    loadPeriods: jest.fn(),
+    updateTransactionFilter: jest.fn(),
+  },
+  __esModule: true
+}))
 
 describe('TransactionFilterPeriodsContainer', () => {
   it('only have correct state in props', () => {

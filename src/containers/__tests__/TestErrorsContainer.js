@@ -2,9 +2,12 @@ import Immutable from 'immutable'
 import TrackActions from '../../actions/TrackActions'
 import {mapStateToProps, mapDispatchToProps} from '../../containers/ErrorsContainer'
 
-jest.mock('../../actions/TrackActions', () => ({default: {
-  clearError: jest.fn(),
-}, __esModule: true}))
+jest.mock('../../actions/TrackActions', () => ({
+  default: {
+    clearError: jest.fn(),
+  },
+  __esModule: true
+}))
 
 describe('ErrorsContainer', () => {
   it('only have correct state in props', () => {

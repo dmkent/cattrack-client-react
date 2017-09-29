@@ -2,9 +2,12 @@ import Immutable from 'immutable'
 import TrackActions from '../../actions/TrackActions'
 import {mapStateToProps, mapDispatchToProps} from '../../containers/DashboardContainer'
 
-jest.mock('../../actions/TrackActions', () => ({default: {
-  loadTransactionSummary: jest.fn(),
-}, __esModule: true}))
+jest.mock('../../actions/TrackActions', () => ({
+  default: {
+    loadTransactionSummary: jest.fn(),
+  },
+  __esModule: true
+}))
 
 describe('DashboardContainer', () => {
   it('only have correct state in props', () => {
