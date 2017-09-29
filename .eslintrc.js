@@ -16,12 +16,21 @@ module.exports = {
     "plugins": [
         "react"
     ],
+    "globals": {
+        "dummyLoggedInState": true,
+    },
     "rules": {
         "accessor-pairs": "error",
         "array-bracket-newline": "error",
         "array-bracket-spacing": "error",
         "array-callback-return": "error",
-        "array-element-newline": "error",
+        "array-element-newline": [
+            "error",
+            {
+                "minItems": 3,
+                "multiline": true,
+            }
+        ],
         "arrow-body-style": "off",
         "arrow-parens": "off",
         "arrow-spacing": [

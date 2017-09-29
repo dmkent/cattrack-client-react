@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {Button, ControlLabel, FormGroup, FormControl, Table, Popover, OverlayTrigger} from 'react-bootstrap';
 
 import AccountDetailContainer from '../containers/AccountDetailContainer';
@@ -19,7 +20,7 @@ class Accounts extends React.Component {
         this.props.loadAccounts();
     }
 
-    createAccount(event) {
+    createAccount() {
       this.props.createAccount(this.state.newname);
       this.setState({newname: ""})
       if (this.overlayRef !== null) {
@@ -68,14 +69,18 @@ class Accounts extends React.Component {
           </tbody>
           </Table>
           <div>
-          {
-            (this.state.selected_account !== null) ?
-            <AccountDetailContainer account={this.state.selected_account}/> : null
+          {this.state.selected_account === null &&
+            <AccountDetailContainer account={this.state.selected_account}/>
           }
           </div>
           </div>
         );
     }
+}
+Accounts.propTypes = {
+  accounts: PropTypes.object.isRequired,
+  createAccount: PropTypes.func.isRequired,
+  loadAccounts: PropTypes.func.isRequired,
 }
 
 export default Accounts;
