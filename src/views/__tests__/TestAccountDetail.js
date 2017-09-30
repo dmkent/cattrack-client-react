@@ -2,12 +2,14 @@ import React from 'react'
 import {shallow} from 'enzyme'
 import Immutable from 'immutable'
 import AccountDetail from '../AccountDetail'
+import Account from '../../data/Account'
 
 function setup(accounts, account_id, uploading) {
   const props = {
     accounts: {
       accounts: Immutable.OrderedMap(accounts),
-      upload_in_progress: uploading
+      upload_in_progress: uploading,
+      current_account: new Account({name: 'acct1', id: '1'})
     },
     account: account_id,
     uploadToAccount: jest.fn(),
@@ -60,10 +62,7 @@ describe('components', () => {
 
     it('should call handleChange events', () => {
       const {enzymeWrapper} = setup([
-        [
-          0,
-          {id: 0, name: "acct1"}
-        ]
+        [0, {id: 0, name: "acct1"}]
       ], 0, false)
       enzymeWrapper.find('FormControl').props()
         .onChange({

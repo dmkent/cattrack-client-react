@@ -26,6 +26,12 @@ const AccountActions = {
         });
     };
   },
+  selectAccount(account) {
+    return {
+      type: TrackActionTypes.ACCOUNT_SELECTED,
+      account: account,
+    }
+  },
   uploadToAccount(account, upload_file) {
     let data = new FormData();
     data.append('data_file', upload_file);

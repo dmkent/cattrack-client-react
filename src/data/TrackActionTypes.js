@@ -19,6 +19,7 @@ const ActionTypes = {
   
   ACCOUNTS_LOADED: 'accounts/loaded',
   ACCOUNTS_LOAD_ERROR: 'accounts/load-error',
+  ACCOUNT_SELECTED: 'accounts/selected',
   ACCOUNT_UPLOAD_SUCESS: 'accounts/upload-started',
   ACCOUNT_UPLOAD_STARTED: 'accounts/upload-success',
   ACCOUNT_UPLOAD_PROGRESS_UPDATE: 'accounts/upload-progress-update',

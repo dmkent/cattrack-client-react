@@ -179,5 +179,13 @@ describe('Account actions', () => {
         // Return of async actions
         expect(store.getActions()).toEqual(expectedActions)
       })
+  })
+
+  it('should create account select actions', () => {
+    expect(TrackActions.selectAccount({id: 3, name: 'test'})).toEqualImmutable({
+      type: TrackActionTypes.ACCOUNT_SELECTED,
+      account: {id: 3, name: "test"}
     })
+  })
+
 })

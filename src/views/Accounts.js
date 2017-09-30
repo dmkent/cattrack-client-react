@@ -8,11 +8,9 @@ class Accounts extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          selected_account: null,
           newname: ""
         };
         this.createAccount = this.createAccount.bind(this);
-        this.selectAccount = this.selectAccount.bind(this);
         this.overlayRef = null;
     }
     
@@ -26,14 +24,6 @@ class Accounts extends React.Component {
       if (this.overlayRef !== null) {
         this.overlayRef.hide();
       }
-    }
-
-    selectAccount(event) {
-      let target = event.target;
-      if (target.tagName === "TD") {
-        target = target.parentNode;
-      }
-      this.setState({selected_account: target.getAttribute('data-item')});
     }
 
     render() {
@@ -60,7 +50,7 @@ class Accounts extends React.Component {
           <tbody>
             {
               [...this.props.accounts.accounts.values()].map((account) => {
-                return (<tr key={account.id} data-item={account.id} onClick={this.selectAccount}>
+                return (<tr key={account.id} onClick={() => this.props.selectAccount(account)}>
                   <td>{account.name}</td>
                   <td>...</td>
                 </tr>);
@@ -69,9 +59,7 @@ class Accounts extends React.Component {
           </tbody>
           </Table>
           <div>
-          {this.state.selected_account !== null &&
-            <AccountDetailContainer account={this.state.selected_account}/>
-          }
+          <AccountDetailContainer/>
           </div>
           </div>
         );

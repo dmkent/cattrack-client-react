@@ -9,7 +9,7 @@ function getInitialState() {
     upload_in_progress: false,
     upload_progress: 0,
     upload_result: null,
-    current_account_id: null,
+    current_account: null,
     current_balance_series: null,
   }
 }
@@ -50,13 +50,17 @@ function accounts(state = null, action) {
         upload_progress: 0,
         upload_result: action.error.message,
       });
+    case TrackActionTypes.ACCOUNT_SELECTED:
+    return Object.assign({}, state, {
+      current_account: action.account,
+    })
     case TrackActionTypes.ACCOUNT_CREATE_SUCCESS:
       return Object.assign({}, state, {
         accounts: state.accounts.set(action.account.id, action.account)
       })
     case TrackActionTypes.ACCOUNT_BALANCE_SERIES_LOADED:
       return Object.assign({}, state, {
-        current_account_id: action.account.id,
+        current_account: action.account,
         current_balance_series: Immutable.List(action.series.map(raw => {
           return Immutable.Map(raw)
         })),

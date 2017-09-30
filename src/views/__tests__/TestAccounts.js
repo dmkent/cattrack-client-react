@@ -11,7 +11,8 @@ function setup(accounts, account_id, uploading) {
     },
     uploadToAccount: jest.fn(),
     loadAccounts: jest.fn(),
-    createAccount: jest.fn()
+    createAccount: jest.fn(),
+    selectAccount: jest.fn(),
   }
 
   const enzymeWrapper = shallow(<Accounts {...props} />)
@@ -31,7 +32,7 @@ describe('components', () => {
     })
 
     it('should call selectAccount when row clicked', () => {
-      const {enzymeWrapper} = setup([
+      const {enzymeWrapper, props} = setup([
         [0, {id: 0, name: "acct1"}], 
         [1, {id: 1, name: "acct2"}]
       ], 0, false)
@@ -45,22 +46,7 @@ describe('components', () => {
             getAttribute: () => ('1')
           }
         })
-      expect(enzymeWrapper.state('selected_account')).toBe('1')
-
-      // Click a cell
-      enzymeWrapper.find('tr')
-      .at(0)
-      .simulate('click', {
-        target: {
-          tagName: 'TD',
-          getAttribute: () => ('0'),
-          parentNode: {
-            tagName: 'TR',
-            getAttribute: () => ('0')
-          }
-        }
-      })
-      expect(enzymeWrapper.state('selected_account')).toBe('0')
+      expect(props.selectAccount.mock.calls.length).toBe(1)
     })
 
     it('should call show popover with form when add button clicked', () => {

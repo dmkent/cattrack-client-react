@@ -16,6 +16,10 @@ export function mapDispatchToProps(dispatch) {
     },
     createAccount: (name) => {
       dispatch(TrackActions.createAccount(name))
+    },
+    selectAccount: (account) => {
+      dispatch(TrackActions.selectAccount(account))
+      dispatch(TrackActions.loadAccountBalanceSeries(account))
     }
   }
 }

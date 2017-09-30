@@ -3,14 +3,13 @@ import reducer from '../accounts'
 import TrackActionTypes from '../../data/TrackActionTypes'
   
 describe('accounts reducer', () => {
-  
   it('should return the initial state', () => {
     const initState = {
       accounts: Immutable.OrderedMap(),
       upload_in_progress: false,
       upload_progress: 0,
       upload_result: null,
-      current_account_id: null,
+      current_account: null,
       current_balance_series: null,
     }
     expect(reducer(undefined, {})).toEqual(initState)
@@ -165,13 +164,13 @@ describe('accounts reducer', () => {
     }
     const expectedState = {
       accounts: Immutable.OrderedMap([
-        [1,  {id: 1, name: "acct"}],
-        [2,  {id: 2, name: "acct2"}],
+        [1, {id: 1, name: "acct"}],
+        [2, {id: 2, name: "acct2"}],
       ]),
       upload_in_progress: false,
       upload_progress: 0,
       upload_result: null,
-      current_account_id: 3,
+      current_account: {id: 3, name: 'new'},
       current_balance_series: Immutable.List([
         Immutable.Map({label: '2013-01-01', value: 32.9})
       ])
@@ -180,6 +179,33 @@ describe('accounts reducer', () => {
       type: TrackActionTypes.ACCOUNT_BALANCE_SERIES_LOADED,
       account: {id: 3, name: "new"},
       series: [{label: '2013-01-01', value: 32.9}]
+    })).toEqual(expectedState)
+  })
+  it('should handle ACCOUNT_SELECTED', () => {
+    const initState = {
+      accounts: Immutable.OrderedMap([
+        [1, {id: 1, name: "acct"}],
+        [2, {id: 2, name: "acct2"}]
+      ]),
+      upload_in_progress: false,
+      upload_progress: 0,
+      upload_result: null,
+      current_balance_series: null
+    }
+    const expectedState = {
+      accounts: Immutable.OrderedMap([
+        [1, {id: 1, name: "acct"}],
+        [2, {id: 2, name: "acct2"}],
+      ]),
+      upload_in_progress: false,
+      upload_progress: 0,
+      upload_result: null,
+      current_account: {id: 3, name: 'new'},
+      current_balance_series: null
+    }
+    expect(reducer(initState, {
+      type: TrackActionTypes.ACCOUNT_SELECTED,
+      account: {id: 3, name: "new"},
     })).toEqual(expectedState)
   })
 })
