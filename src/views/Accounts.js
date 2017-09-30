@@ -69,7 +69,7 @@ class Accounts extends React.Component {
           </tbody>
           </Table>
           <div>
-          {this.state.selected_account === null &&
+          {this.state.selected_account !== null &&
             <AccountDetailContainer account={this.state.selected_account}/>
           }
           </div>

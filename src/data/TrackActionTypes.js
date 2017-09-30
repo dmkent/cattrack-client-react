@@ -25,6 +25,8 @@ const ActionTypes = {
   ACCOUNT_UPLOAD_ERROR: 'accounts/upload-failed',
   ACCOUNT_CREATE_SUCCESS: 'accounts/created',
   ACCOUNT_CREATE_ERROR: 'accounts/create-error',
+  ACCOUNT_BALANCE_SERIES_LOADED: 'account/balance-series-loaded',
+  ACCOUNT_BALANCE_SERIES_LOAD_ERROR: 'account/balance-series-load-error',
 
   PERIODS_LOADED: 'periods/loaded',
   PERIODS_LOAD_ERROR: 'periods/load-error',

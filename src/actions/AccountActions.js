@@ -92,6 +92,25 @@ const AccountActions = {
         });
     };
   },
+  loadAccountBalanceSeries(account) {
+    return (dispatch, getState) => {
+      return fetch_from_api(dispatch, getState, '/api/accounts/' + account.id + '/series/')
+        .then(checkStatus)
+        .then((series) => {
+          dispatch({
+            type: TrackActionTypes.ACCOUNT_BALANCE_SERIES_LOADED,
+            account: account,
+            series: series
+          })
+        })
+        .catch((error) => {
+          dispatch({
+            type: TrackActionTypes.ACCOUNT_BALANCE_SERIES_LOAD_ERROR,
+            error: error
+          })
+        })
+    }
+  }
 };
 
 export default AccountActions;

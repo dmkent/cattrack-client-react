@@ -8,14 +8,15 @@ export function plotlyDataFromSeries(series) {
   let labels = [];
   
   // Get grand total
-  series.map(function(element) {
-    values.push(-1 * parseFloat(element.get('value')));
-    labels.push(element.get('label'));
-  });
+  if (series !== null) {
+    series.map(function(element) {
+      values.push(-1 * parseFloat(element.get('value')));
+      labels.push(element.get('label'));
+    });
+  }
   return {
     y: values,
     x: labels,
-    type: "bar",
   }
 }
 
@@ -35,6 +36,7 @@ class PlotlyTimeSeries extends React.Component {
 
   componentDidMount() {
     this.plot_data = [plotlyDataFromSeries(this.props.series)];
+    this.plot_data[0].type = this.props.plot_type;
 
     this.plot_layout = {};
 
@@ -58,7 +60,12 @@ class PlotlyTimeSeries extends React.Component {
 }
 
 PlotlyTimeSeries.propTypes = {
-  series: PropTypes.instanceOf(Immutable.List)
+  series: PropTypes.instanceOf(Immutable.List),
+  plot_type: PropTypes.string,
+}
+
+PlotlyTimeSeries.defaultProps = {
+  plot_type: 'bar'
 }
 
 export default PlotlyTimeSeries;

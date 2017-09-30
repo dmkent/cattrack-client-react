@@ -139,4 +139,45 @@ describe('Account actions', () => {
         expect(store.getActions()).toEqual(expectedActions)
       })
   })
+
+  it('should create account balance series load actions', () => {
+    nock('http://localhost:8000')
+    .get('/api/accounts/3/series/')
+    .reply(200, [{label: '2013-02-01', value: -43}])
+      
+    const expectedActions = [
+      {
+        type: TrackActionTypes.ACCOUNT_BALANCE_SERIES_LOADED,
+        account: new Account({id: 3, name: "newacct"}),
+        series: [{label: '2013-02-01', value: -43}]
+      }
+    ]
+    const store = mockStore({...dummyLoggedInState()})
+
+    return store.dispatch(TrackActions.loadAccountBalanceSeries({id: 3, name: "newacct"}))
+      .then(() => {
+        // Return of async actions
+        expect(store.getActions()).toEqualImmutable(expectedActions)
+      })
+  })
+
+  it('should create account balance series load error actions', () => {
+    nock('http://localhost:8000')
+    .get('/api/accounts/3/series/')
+    .reply(404, {error: "not found"})
+      
+    const expectedActions = [
+      {
+        type: TrackActionTypes.ACCOUNT_BALANCE_SERIES_LOAD_ERROR,
+        error: new Error(['Error: not found'])
+      }
+    ]
+    const store = mockStore({...dummyLoggedInState()})
+
+    return store.dispatch(TrackActions.loadAccountBalanceSeries({id: 3, name: "newacct"}))
+      .then(() => {
+        // Return of async actions
+        expect(store.getActions()).toEqual(expectedActions)
+      })
+    })
 })

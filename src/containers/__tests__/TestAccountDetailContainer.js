@@ -5,6 +5,7 @@ import {mapStateToProps, mapDispatchToProps} from '../../containers/AccountDetai
 
 jest.mock('../../actions/TrackActions', () => ({default: {
   uploadToAccount: jest.fn(),
+  loadAccountBalanceSeries: jest.fn(),
 }, __esModule: true}))
 
 describe('AccountDetailContainer', () => {
@@ -38,5 +39,8 @@ describe('AccountDetailContainer', () => {
     props.uploadToAccount()
     expect(dispatch.mock.calls.length).toBe(1)
     expect(TrackActions.uploadToAccount.mock.calls.length).toBe(1)
+    props.loadAccountBalanceSeries()
+    expect(dispatch.mock.calls.length).toBe(2)
+    expect(TrackActions.loadAccountBalanceSeries.mock.calls.length).toBe(1)
   })
 })

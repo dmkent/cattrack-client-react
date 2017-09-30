@@ -1,5 +1,6 @@
 import React from 'react';
 import {Form, FormGroup, ControlLabel, FormControl, ProgressBar, Button} from 'react-bootstrap';
+import AccountBalanceContainer from '../containers/AccountBalanceContainer'
 
 class AccountDetail extends React.Component {
   constructor(props) {
@@ -11,6 +12,9 @@ class AccountDetail extends React.Component {
       this.handleChange = this.handleChange.bind(this);
   }
 
+  componentWillMount() {
+    this.props.loadAccountBalanceSeries(this.props.accounts.accounts.get(parseInt(this.props.account, 10)));
+  }
   handleChange(event) {
     const target = event.target;
     const files = target.files;
@@ -51,6 +55,7 @@ class AccountDetail extends React.Component {
         {this.props.accounts.upload_result}
         </div>) : null
       }
+      <AccountBalanceContainer/>
     </div>
     );
   }

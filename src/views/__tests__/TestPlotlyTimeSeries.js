@@ -32,6 +32,12 @@ describe('components', () => {
          '2013-04-01'
       ])
     })
+
+    it('should handle null series', () => {
+      const res = plotlyDataFromSeries(null)
+      expect(res.y).toEqual([])
+      expect(res.x).toEqual([])
+    })
   })
 
   describe('PlotlyTimeSeries', () => {

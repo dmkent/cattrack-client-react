@@ -12,6 +12,9 @@ export function mapDispatchToProps(dispatch) {
   return {
     uploadToAccount: (account, upload_file) => {
       dispatch(TrackActions.uploadToAccount(account, upload_file))
+    },
+    loadAccountBalanceSeries: (account) => {
+      dispatch(TrackActions.loadAccountBalanceSeries(account))
     }
   }
 }

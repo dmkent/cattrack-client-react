@@ -11,6 +11,7 @@ function setup(accounts, account_id, uploading) {
     },
     account: account_id,
     uploadToAccount: jest.fn(),
+    loadAccountBalanceSeries: jest.fn(),
   }
 
   const enzymeWrapper = shallow(<AccountDetail {...props} />)
