@@ -19,8 +19,8 @@ describe('Account actions', () => {
     nock('http://localhost:8000')
       .get('/api/accounts/')
       .reply(200, [
-        {id: 4, name: "Account1"},
-        {id: 1, name: "Account2"},
+        new Account({id: 4, name: "Account1"}),
+        new Account({id: 1, name: "Account2"}),
       ])
         
     const expectedActions = [
@@ -154,7 +154,7 @@ describe('Account actions', () => {
     ]
     const store = mockStore({...dummyLoggedInState()})
 
-    return store.dispatch(TrackActions.loadAccountBalanceSeries({id: 3, name: "newacct"}))
+    return store.dispatch(TrackActions.loadAccountBalanceSeries(new Account({id: 3, name: "newacct"})))
       .then(() => {
         // Return of async actions
         expect(store.getActions()).toEqualImmutable(expectedActions)

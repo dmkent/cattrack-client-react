@@ -1,4 +1,5 @@
 import React from 'react';
+import {FormattedNumber} from 'react-intl';
 import PropTypes from 'prop-types';
 import {Button, ControlLabel, FormGroup, FormControl, Table, Popover, OverlayTrigger} from 'react-bootstrap';
 
@@ -52,7 +53,11 @@ class Accounts extends React.Component {
               [...this.props.accounts.accounts.values()].map((account) => {
                 return (<tr key={account.id} onClick={() => this.props.selectAccount(account)}>
                   <td>{account.name}</td>
-                  <td>...</td>
+                  <td className="text-right">
+                    <FormattedNumber value={account.balance || 0.0}
+                                     style={'currency'}
+                                     currency={'AUD'}/>
+                  </td>
                 </tr>);
               })
             }

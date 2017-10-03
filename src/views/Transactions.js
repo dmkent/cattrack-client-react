@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Immutable from 'immutable';
-import {FormattedDate} from 'react-intl';
+import {FormattedDate, FormattedNumber} from 'react-intl';
 import {Button, Pagination, Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 import CategorisorContainer from '../containers/CategorisorContainer';
@@ -55,7 +55,13 @@ class Transactions extends React.Component {
                             <span>{description}</span>
                         </OverlayTrigger>
                       </td>
-                      <td className="text-right">{trans.amount}</td>
+                      <td className="text-right">
+                        <span className={(trans.amount < 0) && "text-danger"}>
+                          <FormattedNumber value={trans.amount || 0.0}
+                                          style="currency"
+                                          currency="AUD"/>
+                        </span>
+                      </td>
                       <td><span className="label label-default">{trans.category_name}</span></td>
                       <td>
                         <Button bsSize="small" onClick={() => this.showCategorisor(trans)}>
