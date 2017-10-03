@@ -68,12 +68,12 @@ describe('Account actions', () => {
     const expectedActions = [
       {
         type: TrackActionTypes.ACCOUNT_UPLOAD_SUCESS,
-        account: 1
+        account: {id: 1}
       },
     ]
 
     const store = mockStore({...dummyLoggedInState()})
-    return store.dispatch(TrackActions.uploadToAccount(1, 'dummy file object')).then(() => {
+    return store.dispatch(TrackActions.uploadToAccount({id: 1}, 'dummy file object')).then(() => {
       // Return of async actions
       expect(store.getActions()).toEqual(expectedActions)
     })
@@ -88,12 +88,12 @@ describe('Account actions', () => {
       {
         type: TrackActionTypes.ACCOUNT_UPLOAD_ERROR,
         error: new Error(["Error: bad format"]),
-        account: 1
+        account: {id: 1}
       },
     ]
 
     const store = mockStore({...dummyLoggedInState()})
-    return store.dispatch(TrackActions.uploadToAccount(1, 'dummy file object')).then(() => {
+    return store.dispatch(TrackActions.uploadToAccount({id: 1}, 'dummy file object')).then(() => {
       // Return of async actions
       expect(store.getActions()).toEqual(expectedActions)
     })

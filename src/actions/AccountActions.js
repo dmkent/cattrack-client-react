@@ -38,7 +38,7 @@ const AccountActions = {
     data.append('name', account);
     
     return (dispatch, getState) => {
-      return fetch_from_api(dispatch, getState, '/api/accounts/' + account + '/load/', {
+      return fetch_from_api(dispatch, getState, '/api/accounts/' + account.id + '/load/', {
         method: 'POST',
         body: data,
         headers: {
