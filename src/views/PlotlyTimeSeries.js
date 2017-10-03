@@ -3,14 +3,18 @@ import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 import Plotly from '../client/PlotlyWrapper';
 
-export function plotlyDataFromSeries(series) {
+export function plotlyDataFromSeries(series, plot_invert = false) {
   let values = [];
   let labels = [];
   
   // Get grand total
   if (series !== null) {
     series.map(function(element) {
-      values.push(-1 * parseFloat(element.get('value')));
+      let value = parseFloat(element.get('value'));
+      if (plot_invert) {
+        value *= -1.0;
+      }
+      values.push(value);
       labels.push(element.get('label'));
     });
   }
@@ -35,7 +39,12 @@ class PlotlyTimeSeries extends React.Component {
   }
 
   componentDidMount() {
-    this.plot_data = [plotlyDataFromSeries(this.props.series)];
+    this.plot_data = [
+      plotlyDataFromSeries(
+        this.props.series, 
+        this.props.plot_invert
+      )
+    ];
     this.plot_data[0].type = this.props.plot_type;
 
     this.plot_layout = {};
@@ -47,7 +56,11 @@ class PlotlyTimeSeries extends React.Component {
 
     componentWillReceiveProps(nextProps) {
       if (!Immutable.is(Immutable.fromJS(this.props.series), Immutable.fromJS(nextProps.series))) {
-        this.plot_data[0] = plotlyDataFromSeries(nextProps.series);
+        this.plot_data[0] = Object.assign(
+          {}, 
+          this.plot_data[0],
+          plotlyDataFromSeries(nextProps.series, nextProps.plot_invert)
+        );
         Plotly.redraw(this.plotContainer);
       }
     }
@@ -62,10 +75,12 @@ class PlotlyTimeSeries extends React.Component {
 PlotlyTimeSeries.propTypes = {
   series: PropTypes.instanceOf(Immutable.List),
   plot_type: PropTypes.string,
+  plot_invert: PropTypes.bool,
 }
 
 PlotlyTimeSeries.defaultProps = {
-  plot_type: 'bar'
+  plot_type: 'bar',
+  plot_invert: false,
 }
 
 export default PlotlyTimeSeries;

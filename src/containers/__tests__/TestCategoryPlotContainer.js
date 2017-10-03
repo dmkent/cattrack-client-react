@@ -34,7 +34,9 @@ describe('CategoryPlotContainer', () => {
       }
     }
     expect(mapStateToProps(initState)).toEqual({
-      series: Immutable.List(['b'])
+      series: Immutable.List(['b']),
+      plot_invert: true,
+      plot_type: 'bar',
     })
   })
 })

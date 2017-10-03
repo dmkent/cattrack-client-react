@@ -24,12 +24,12 @@ describe('components', () => {
         Immutable.Map({label: '2013-03-01', value: "-3"}),
         Immutable.Map({label: '2013-04-01', value: "-4"}),
       ]
-      const res = plotlyDataFromSeries(raw)
+      const res = plotlyDataFromSeries(raw, true)
       expect(res.y).toEqual([54, 3, 4])
       expect(res.x).toEqual([
         '2013-02-01', 
         '2013-03-01',
-         '2013-04-01'
+        '2013-04-01'
       ])
     })
 
