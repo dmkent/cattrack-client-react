@@ -35,7 +35,7 @@ const AccountActions = {
   uploadToAccount(account, upload_file) {
     let data = new FormData();
     data.append('data_file', upload_file);
-    data.append('name', account);
+    data.append('name', account.name);
     
     return (dispatch, getState) => {
       return fetch_from_api(dispatch, getState, '/api/accounts/' + account.id + '/load/', {
@@ -65,13 +65,18 @@ const AccountActions = {
         })
       })
       .then((data) => {
+          let message = "";
           if (data === null) {
             return;
+          } else if (data instanceof Object) {
+            message = parseErrors(data);
+          } else {
+            message = data;
           }
           dispatch({
             type: TrackActionTypes.ACCOUNT_UPLOAD_ERROR,
             account,
-            error: new Error(parseErrors(data)),
+            error: new Error(message),
           })
         });
     };
