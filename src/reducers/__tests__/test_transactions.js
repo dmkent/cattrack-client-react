@@ -8,7 +8,7 @@ describe('transactions reducer', () => {
     const initState = {
       active_page: 1,
       num_pages: 1,
-      page_size: 20,
+      page_size: 50,
       transactions: Immutable.OrderedMap(),
       filters: {
         account: null,
