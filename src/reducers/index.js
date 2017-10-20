@@ -6,6 +6,7 @@ import categories from './categories';
 import periods from './periods';
 import errors from './errors';
 import category from './category';
+import bills from './bills';
 import CONFIG from 'config';
 
 function app(state, action) {
@@ -26,6 +27,7 @@ const catTrackApp = combineReducers({
   periods,
   errors,
   category,
+  bills,
 });
 
 export default catTrackApp;

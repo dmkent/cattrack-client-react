@@ -45,6 +45,12 @@ const ActionTypes = {
   CATEGORISOR_SET_SPLIT: 'categorisor/set-split',
   CATEGORISOR_SHOW: 'categorisor/show',
   CATEGORISOR_HIDE: 'categorisor/hide',
+
+  PAYMENT_SERIES_RECEIVED: 'payment-series/received',
+  PAYMENT_SERIES_ERROR: 'payment-series/error',
+  PAYMENT_SERIES_SELECT: 'payment-series/select',
+  PAYMENT_SERIES_ADD_BILL_SUCCESS: 'payment-series/add-bill-success',
+  PAYMENT_SERIES_ADD_BILL_ERROR: 'payment-series/add-bill-error',
 };
 
 export default ActionTypes;
