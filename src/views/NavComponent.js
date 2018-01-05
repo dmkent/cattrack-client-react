@@ -34,7 +34,8 @@ class NavComponent extends React.Component {
             <LinkContainer to="/accounts"><NavItem>Accounts</NavItem></LinkContainer>
             <LinkContainer to="/tracking"><NavItem>Tracking</NavItem></LinkContainer>
             <LinkContainer to="/transactions"><NavItem>Transactions</NavItem></LinkContainer>
-          </Nav>
+            <LinkContainer to="/bills"><NavItem>Bills</NavItem></LinkContainer>
+            </Nav>
           {this.props.auth.is_logged_in ? 
            <Navbar.Text pullRight>{this.props.auth.username}</Navbar.Text> :
            null}

@@ -6,6 +6,7 @@ import CategorisorActions from './CategorisorActions'
 import CategoryActions from './CategoryActions'
 import PeriodActions from './PeriodActions'
 import TransactionActions from './TransactionActions'
+import PaymentSeriesActions from './PaymentSeriesActions'
 
 const TrackActions = {
   ...AccountActions,
@@ -14,6 +15,7 @@ const TrackActions = {
   ...CategoryActions,
   ...PeriodActions,
   ...TransactionActions,
+  ...PaymentSeriesActions,
 
   clearError(idx) {
     return {

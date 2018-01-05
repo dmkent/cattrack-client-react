@@ -8,6 +8,7 @@ import TransactionList from '../containers/TransactionList';
 import LoginContainer from '../containers/LoginContainer';
 import ErrorsContainer from '../containers/ErrorsContainer';
 import TrackingContainer from '../containers/TrackingContainer';
+import PaymentSeriesContainer from '../containers/PaymentSeriesContainer';
 import CONFIG from 'config';
 import NavComponent from './NavComponent';
 import TrackActions from '../actions/TrackActions'
@@ -98,6 +99,7 @@ export class ContentView extends React.Component {
       <PrivateRoute path="/accounts" auth={this.props.auth} component={AccountsContainer}/>
       <PrivateRoute path="/tracking" auth={this.props.auth} component={TrackingContainer}/>
       <PrivateRoute path="/transactions" auth={this.props.auth} component={TransactionList}/>
+      <PrivateRoute path="/bills" auth={this.props.auth} component={PaymentSeriesContainer}/>
       </div>
     );
   }
