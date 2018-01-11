@@ -6,8 +6,8 @@ function *fetchBudgetSummary() {
    try {
       const summary = yield call(Api.fetchBudgetSummary, props.token, props.from_date, props.to_date);
       yield put({type: "BUDGET_SUMMARY_SUCCESS", summary: summary});
-   } catch (e) {
-      yield put({type: "BUDGET_SUMMARY_FAILED", message: e.message});
+   } catch (err) {
+      yield put({type: "BUDGET_SUMMARY_FAILED", message: err.message});
    }
 }
 

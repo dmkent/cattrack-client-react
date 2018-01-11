@@ -6,15 +6,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
 import React from 'react';
-import { render } from 'react-dom';
-import { Provider } from 'react-redux';
+import {render} from 'react-dom';
+import {Provider} from 'react-redux';
 import {createStore, applyMiddleware, compose} from 'redux';
 import thunk from 'redux-thunk'
-import { browserHistory } from 'react-router'
-import { routerMiddleware } from 'react-router-redux'
+import {browserHistory} from 'react-router'
+import {routerMiddleware} from 'react-router-redux'
 import createSagaMiddleware from 'redux-saga'
 
 import AppContainer from './containers/AppContainer';
@@ -38,7 +36,9 @@ const router_middleware = routerMiddleware(browserHistory);
 // Create the saga middleware
 const saga_middleware = createSagaMiddleware()
 
+/* eslint-disable no-underscore-dangle */
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+/* eslint-enable */
 const store = createStore(catTrackApp, composeEnhancers(
     applyMiddleware(thunk, router_middleware, saga_middleware)
 ));
