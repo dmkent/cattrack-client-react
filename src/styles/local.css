@@ -1,3 +1,12 @@
 .btn-group-vertical > .btn.active {
     z-index: 0 !important;
 }
+
+.progress {
+    margin-bottom: 2px;
+    height: 8px;
+}
+
+.progress-bar-grey {
+    background-color: #7a7a7a;
+}

@@ -1,8 +1,9 @@
 import React from 'react';
 import PlotlyPie from './PlotlyPie';
-import {Grid, Col, Row} from 'react-bootstrap';
+import {Grid, Col, Row, Well} from 'react-bootstrap';
 
 import TransactionFilterPeriodsContainer from '../containers/TransactionFilterPeriodsContainer';
+import BudgetSummaryContainer from '../containers/BudgetSummary';
 
 
 class Dashboard extends React.Component {
@@ -13,10 +14,17 @@ class Dashboard extends React.Component {
     render() {
         return (
           <div>
-          <h3>Recent transactions</h3>
           <Grid>
             <Row>
-              <Col md={10}>
+              <Col md={6}>
+                <BudgetSummaryContainer/>
+              </Col>
+              <Col md={6}>
+              <Well>TODO: put upcoming bills here</Well>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={8}>
                 <PlotlyPie summary={this.props.summary}/>
               </Col>
               <Col md={2}>
