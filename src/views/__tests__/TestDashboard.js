@@ -26,7 +26,7 @@ describe('components', () => {
     it('should render self and subcomponents', () => {
       const {enzymeWrapper} = setup()
 
-      expect(enzymeWrapper.find('Col').length).toBe(2)
+      expect(enzymeWrapper.find('Col').length).toBe(4)
     })
   })
 })

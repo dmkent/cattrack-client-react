@@ -13,6 +13,7 @@ describe('combined reducer', () => {
       'errors',
       'category',
       'bills',
+      'budget',
     ])
 
     expect(reducer(undefined, {}).app).toEqual({
