@@ -7,24 +7,32 @@ import PropTypes from 'prop-types';
 class BudgetLine extends React.Component {
   render() {
     let style = "success";
-    const actualPerc = this.props.actual * this.props.scale;
-    const budgetPerc = this.props.budget * this.props.scale;
-    if (this.props.actual > this.props.budget) {
+    // 80% should be budget 100% spent.
+    const value = this.props.actual / this.props.budget * 80.0;
+    if (value >= 80) {
       style = "danger";
+    } else if (value >= 70) {
+      style = "warning";
     }
+
+    const marker = (
+      <div className="bar-step" style={{left: "80%"}}>
+        <div className="label-line"></div>
+      </div>
+    );
+
     return (
       <Row>
-        <Col md={3}>
-          <p>{this.props.name}</p>
+        <Col md={4}>
+          <span className="text pull-right budget-label">{this.props.name}</span>
         </Col>
         <Col md={5}>
-          <ProgressBar bsStyle={style} now={actualPerc} />
-          <ProgressBar bsStyle="grey" now={budgetPerc} />
+          <ProgressBar bsStyle={style} now={value} label={marker}/>
         </Col>
-        <Col md={2}>
-        <FormattedNumber value={this.props.actual} style="currency" currency="AUD" maximumSignificantDigits={3}/>
-        /
-        <FormattedNumber value={this.props.budget} style="currency" currency="AUD" maximumSignificantDigits={3}/>
+        <Col md={3}>
+        <span className={"text pull-left text-" + style}><FormattedNumber value={this.props.actual} style="currency" currency="AUD" maximumSignificantDigits={3}/></span>
+        <span className="text pull-right"><FormattedNumber value={this.props.budget} maximumSignificantDigits={3}/></span>
+        <span className="text text-center center-block"> / </span>
         </Col>
       </Row>
     );
