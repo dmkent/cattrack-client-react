@@ -6,13 +6,15 @@ import PropTypes from 'prop-types';
 
 class BudgetLine extends React.Component {
   render() {
-    let style = "success";
+    let style = null;
     // 80% should be budget 100% spent.
     const value = this.props.actual / this.props.budget * 80.0;
-    if (value >= 80) {
+    if (value >= 84) {
       style = "danger";
-    } else if (value >= 70) {
+    } else if (value > 76) {
       style = "warning";
+    } else {
+      style = "success";
     }
 
     const marker = (
