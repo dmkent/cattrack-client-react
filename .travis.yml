@@ -11,10 +11,6 @@ notifications:
   email: true
 cache:
   directories: node_modules
-before_deploy:
-- openssl aes-256-cbc -K $encrypted_c3859ad72456_key -iv $encrypted_c3859ad72456_iv
-  -in ./.travis/deploy_key.enc -out ./.travis/deploy_key -d
-- chmod 0600 ./.travis/deploy_key
 script:
 - ./.travis/run.sh
 deploy:
@@ -26,9 +22,3 @@ deploy:
     on:
       tags: true
       repo: dmkent/cattrack-client-react
-  - provider: script
-    script: .travis/deploy.sh
-    skip_cleanup: true
-    on:
-      repo: dmkent/cattrack-client-react
-      all_branches: true
