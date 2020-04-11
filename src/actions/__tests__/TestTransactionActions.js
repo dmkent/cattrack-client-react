@@ -1,6 +1,7 @@
 import TrackActions from '../TrackActions'
 import TrackActionTypes from '../../data/TrackActionTypes'
 import Transaction from '../../data/Transaction'
+import Category from '../../data/Category'
 
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
@@ -141,8 +142,8 @@ describe('Transaction actions', () => {
       { 
         type: TrackActionTypes.CATEGORISOR_SUGGESTIONS_RECEIVED, 
         categories: [
-          {id: 4, name: "c1", score: 8},
-          {id: 2, name: "c4", score: 2},
+          new Category({id: 4, name: "c1", score: 8}),
+          new Category({id: 2, name: "c4", score: 2}),
         ]
       }
     ]

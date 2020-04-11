@@ -6,6 +6,7 @@ const path = require('path')
 const BASENAME = '';
 
 module.exports = merge(common, {
+  mode: 'development',
   devServer: {
     historyApiFallback: {
       index: BASENAME + '/index.html',

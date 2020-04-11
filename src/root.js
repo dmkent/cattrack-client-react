@@ -15,23 +15,17 @@ import {browserHistory} from 'react-router'
 import {routerMiddleware} from 'react-router-redux'
 import createSagaMiddleware from 'redux-saga'
 
-import AppContainer from './containers/AppContainer';
+import 'react-dates/initialize'
+
+import AppContainer from './containers/AppContainer'
 import catTrackApp from './reducers';
 import rootSaga from './sagas'
 
-import 'bootstrap/dist/css/bootstrap.css';
-import './styles/local.css';
-import 'react-dates/lib/css/_datepicker.css';
-import {ProgressBar} from 'react-bootstrap';
-import {bootstrapUtils} from 'react-bootstrap/lib/utils';
-bootstrapUtils.addStyle(ProgressBar, 'grey');
+import 'bootstrap/dist/css/bootstrap.css'
+import './styles/local.css'
+import 'react-dates/lib/css/_datepicker.css'
 
-import {addLocaleData} from 'react-intl';
-import en from 'react-intl/locale-data/en';
-
-addLocaleData([...en]);
-
-const router_middleware = routerMiddleware(browserHistory);
+const router_middleware = routerMiddleware(browserHistory)
 
 // Create the saga middleware
 const saga_middleware = createSagaMiddleware()

@@ -10,7 +10,8 @@ function setup() {
     filters: {
       category: null
     },
-    summary: [2]
+    summary: [2],
+    loadSummary: jest.fn(),
   }
 
   const enzymeWrapper = shallow(<Dashboard {...props} />)

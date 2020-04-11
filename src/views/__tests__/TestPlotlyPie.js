@@ -44,12 +44,12 @@ describe('components', () => {
       const { enzymeWrapper, props } = setup(Immutable.List())
 
       expect(enzymeWrapper.find('div').exists()).toBe(true)
-      expect(enzymeWrapper.getNode().plot_data[0].values.length).toBe(0)
+      expect(enzymeWrapper.instance().plot_data[0].values.length).toBe(0)
       enzymeWrapper.setProps({summary: Immutable.List([
         {category_name: 'A', total: '-3.5'},
         {category_name: 'B', total: '-2.1'},
       ])})
-      expect(enzymeWrapper.getNode().plot_data[0].values.length).toBe(2)
+      expect(enzymeWrapper.instance().plot_data[0].values.length).toBe(2)
     })
   })
 })

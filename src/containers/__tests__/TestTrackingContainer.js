@@ -67,14 +67,13 @@ describe('Tracking', () => {
     const enzymeWrapper = shallow(<Tracking {...props} />)
 
     expect(enzymeWrapper.find('option').length).toBe(3)
-    expect(enzymeWrapper.find('Connect').exists()).toBeTruthy()
     
-    expect(props.loadCategorySeries.mock.calls.length).toBe(0)
+    expect(props.loadCategorySeries.mock.calls.length).toBe(1)
     enzymeWrapper.find('select').simulate('change', {
       target: {
         value: 1
       }
     })
-    expect(props.loadCategorySeries.mock.calls.length).toBe(1)
+    expect(props.loadCategorySeries.mock.calls.length).toBe(2)
   })
 })

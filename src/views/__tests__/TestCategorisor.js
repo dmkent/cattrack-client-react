@@ -20,6 +20,7 @@ function setup(transaction, suggestions) {
     addPotentialSplit: jest.fn(),
     setSplit: jest.fn(),
     reloadPage: jest.fn(),
+    loadCategories: jest.fn(),
   }
 
   const enzymeWrapper = shallow(<Categorisor {...props} />)
