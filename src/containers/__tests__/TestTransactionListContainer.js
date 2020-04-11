@@ -2,12 +2,15 @@ import Immutable from 'immutable'
 import TrackActions from '../../actions/TrackActions'
 import {mapStateToProps, mapDispatchToProps} from '../../containers/TransactionList'
 
-jest.mock('../../actions/TrackActions', () => ({default: {
-  selectTransactions: jest.fn(),
-  updateTransaction: jest.fn(),
-  categorisorSetTransaction: jest.fn(),
-  categorisorShow: jest.fn(),
-}, __esModule: true}))
+jest.mock('../../actions/TrackActions', () => ({
+  default: {
+    selectTransactions: jest.fn(),
+    updateTransaction: jest.fn(),
+    categorisorSetTransaction: jest.fn(),
+    categorisorShow: jest.fn(),
+  },
+  __esModule: true
+}))
 
 describe('TransactionFilterPeriodsContainer', () => {
   it('only have correct state in props', () => {
@@ -19,7 +22,7 @@ describe('TransactionFilterPeriodsContainer', () => {
         is_logged_in: true
       },
       transactions: {
-        transactions: new Immutable.OrderedMap(),
+        transactions: Immutable.OrderedMap(),
         summary: [2],
         filters: {
           category: null
@@ -31,7 +34,7 @@ describe('TransactionFilterPeriodsContainer', () => {
           message: ""
         },
         show_categorisor: false,
-        categories: new Immutable.List(),
+        categories: Immutable.List(),
       },
       accounts: {
         accounts: [1],
@@ -47,7 +50,7 @@ describe('TransactionFilterPeriodsContainer', () => {
       auth: {
         is_logged_in: true
       },
-      transactions: new Immutable.OrderedMap(),
+      transactions: Immutable.OrderedMap(),
       summary: [2],
       filters: {
         category: null

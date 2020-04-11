@@ -12,7 +12,7 @@ function setup(transactions) {
     onSelectTransactions: jest.fn(),
     setCategorisorTransaction: jest.fn(),
     showCategorisor: jest.fn(),
-    transactions: new Immutable.List(transactions),
+    transactions: Immutable.List(transactions),
   }
 
   const enzymeWrapper = shallow(<Transactions {...props} />)
@@ -54,9 +54,8 @@ describe('components', () => {
       expect(tableRow.children().at(1)
         .find('span')
         .text()).toBe("Test this")
-      expect(tableRow.children().at(2)
-        .text()).toBe("-90.9")
-      tableRow.find('Button').at(1)
+      expect(tableRow.find('FormattedNumber').length).toBe(1)
+      tableRow.find('Button').at(0)
         .props()
         .onClick()
       expect(props.setCategorisorTransaction.mock.calls.length).toBe(1)

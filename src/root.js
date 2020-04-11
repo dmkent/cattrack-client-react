@@ -6,34 +6,39 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
 import React from 'react';
-import { render } from 'react-dom';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import {render} from 'react-dom';
+import {Provider} from 'react-redux';
+import {createStore, applyMiddleware, compose} from 'redux';
 import thunk from 'redux-thunk'
-import { browserHistory } from 'react-router'
-import { routerMiddleware } from 'react-router-redux'
+import {browserHistory} from 'react-router'
+import {routerMiddleware} from 'react-router-redux'
+import createSagaMiddleware from 'redux-saga'
 
-import AppContainer from './containers/AppContainer';
+import 'react-dates/initialize'
+
+import AppContainer from './containers/AppContainer'
 import catTrackApp from './reducers';
+import rootSaga from './sagas'
 
-import './styles/local.css';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'react-dates/lib/css/_datepicker.css';
+import 'bootstrap/dist/css/bootstrap.css'
+import './styles/local.css'
+import 'react-dates/lib/css/_datepicker.css'
 
-import {addLocaleData} from 'react-intl';
-import en from 'react-intl/locale-data/en';
+const router_middleware = routerMiddleware(browserHistory)
 
-addLocaleData([...en]);
+// Create the saga middleware
+const saga_middleware = createSagaMiddleware()
 
-const router_middleware = routerMiddleware(browserHistory);
+/* eslint-disable no-underscore-dangle */
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+/* eslint-enable */
+const store = createStore(catTrackApp, composeEnhancers(
+    applyMiddleware(thunk, router_middleware, saga_middleware)
+));
 
-let store = createStore(
-    catTrackApp,
-    applyMiddleware(thunk, router_middleware)
-);
+// Then run the saga
+saga_middleware.run(rootSaga)
 
 render(
   <Provider store={store}>

@@ -8,16 +8,16 @@ describe('transactions reducer', () => {
     const initState = {
       active_page: 1,
       num_pages: 1,
-      page_size: 20,
-      transactions: new Immutable.OrderedMap(),
+      page_size: 50,
+      transactions: Immutable.OrderedMap(),
       filters: {
         account: null,
         category: null,
         from_date: null,
         to_date: null,
-        has_category: 'True',
+        has_category: null,
       },
-      summary: new Immutable.OrderedMap(),
+      summary: Immutable.OrderedMap(),
     }
     expect(reducer(undefined, {})).toEqual(initState)
   })
@@ -27,7 +27,7 @@ describe('transactions reducer', () => {
       active_page: 1,
       num_pages: 1,
       page_size: 20,
-      transactions: new Immutable.OrderedMap([
+      transactions: Immutable.OrderedMap([
         [
           0, 
           {id: 0, when: "2001-01-01", amount: "-43", category: "3", description: "test"}
@@ -39,14 +39,14 @@ describe('transactions reducer', () => {
         from_date: null,
         to_date: null
       },
-      summary: new Immutable.OrderedMap(),
+      summary: Immutable.OrderedMap(),
     }
 
     const expectedState = {
       active_page: 1,
       num_pages: 1,
       page_size: 20,
-      transactions: new Immutable.OrderedMap([
+      transactions: Immutable.OrderedMap([
         [
           0, 
           {id: 0, when: "2001-01-01", amount: "-43", category: "5", description: "test"}
@@ -58,7 +58,7 @@ describe('transactions reducer', () => {
         from_date: null,
         to_date: null
       },
-      summary: new Immutable.OrderedMap(),
+      summary: Immutable.OrderedMap(),
     }
     expect(
       reducer(initState, {
@@ -73,21 +73,21 @@ describe('transactions reducer', () => {
       active_page: 1,
       num_pages: 1,
       page_size: 20,
-      transactions: new Immutable.OrderedMap(),
+      transactions: Immutable.OrderedMap(),
       filters: {
         account: null,
         category: null,
         from_date: null,
         to_date: null
       },
-      summary: new Immutable.OrderedMap(),
+      summary: Immutable.OrderedMap(),
     }
 
     const expectedState = {
       active_page: 2,
       num_pages: 2,
       page_size: 20,
-      transactions: new Immutable.OrderedMap([
+      transactions: Immutable.OrderedMap([
         [
           0, 
           {id: 0, when: "2001-01-01", amount: "-43", category: "3", description: "test"}
@@ -103,7 +103,7 @@ describe('transactions reducer', () => {
         from_date: null,
         to_date: null
       },
-      summary: new Immutable.OrderedMap(),
+      summary: Immutable.OrderedMap(),
     }
     expect(
       reducer(initState, {
@@ -129,7 +129,7 @@ describe('transactions reducer', () => {
       active_page: 2,
       num_pages: 2,
       page_size: 20,
-      transactions: new Immutable.OrderedMap([
+      transactions: Immutable.OrderedMap([
         [
           0, 
           {id: 0, when: "2001-01-01", amount: "-43", category: "3", description: "test"}
@@ -145,14 +145,14 @@ describe('transactions reducer', () => {
         from_date: null,
         to_date: null
       },
-      summary: new Immutable.OrderedMap(),
+      summary: Immutable.OrderedMap(),
     }
 
     const expectedState = {
       active_page: 2,
       num_pages: 2,
       page_size: 20,
-      transactions: new Immutable.OrderedMap([
+      transactions: Immutable.OrderedMap([
         [
           0, 
           {id: 0, when: "2001-01-01", amount: "-43", category: "3", description: "test"}
@@ -168,7 +168,7 @@ describe('transactions reducer', () => {
         from_date: null,
         to_date: null
       },
-      summary: new Immutable.OrderedMap([
+      summary: Immutable.OrderedMap([
         [
           0,
           {category: 0, total: "-34", category_name: "cat1"}

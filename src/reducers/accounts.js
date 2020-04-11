@@ -5,10 +5,12 @@ import TrackActionTypes from '../data/TrackActionTypes';
 
 function getInitialState() {
   return {
-    accounts: new Immutable.OrderedMap(),
+    accounts: Immutable.OrderedMap(),
     upload_in_progress: false,
     upload_progress: 0,
     upload_result: null,
+    current_account: null,
+    current_balance_series: null,
   }
 }
 
@@ -21,7 +23,7 @@ function accounts(state = null, action) {
   switch (action.type) {
     case TrackActionTypes.ACCOUNTS_LOADED:
       return Object.assign({}, state, {
-        accounts: new Immutable.OrderedMap(action.accounts.map(account => [
+        accounts: Immutable.OrderedMap(action.accounts.map(account => [
           account.id,
           account,
         ])),
@@ -47,6 +49,21 @@ function accounts(state = null, action) {
         upload_in_progress: false,
         upload_progress: 0,
         upload_result: action.error.message,
+      });
+    case TrackActionTypes.ACCOUNT_SELECTED:
+    return Object.assign({}, state, {
+      current_account: action.account,
+    })
+    case TrackActionTypes.ACCOUNT_CREATE_SUCCESS:
+      return Object.assign({}, state, {
+        accounts: state.accounts.set(action.account.id, action.account)
+      })
+    case TrackActionTypes.ACCOUNT_BALANCE_SERIES_LOADED:
+      return Object.assign({}, state, {
+        current_account: action.account,
+        current_balance_series: Immutable.List(action.series.map(raw => {
+          return Immutable.Map(raw)
+        })),
       });
     default:
       return state;

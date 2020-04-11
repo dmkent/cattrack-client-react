@@ -1,6 +1,7 @@
 import TrackActions from '../TrackActions'
 import TrackActionTypes from '../../data/TrackActionTypes'
 import Transaction from '../../data/Transaction'
+import Category from '../../data/Category'
 
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
@@ -60,15 +61,7 @@ describe('Transaction actions', () => {
     const expectedActions = [
       { 
         type: TrackActionTypes.TRANSACTION_PAGE_LOAD_ERROR, 
-        error: {
-          code: 404,
-          message: [
-            [
-              "Error", 
-              "not found"
-            ]
-          ]
-        },
+        error: new Error(["Error: not found"]),
         page_num: 1
       }
     ]
@@ -120,15 +113,7 @@ describe('Transaction actions', () => {
     const expectedActions = [
       { 
         type: TrackActionTypes.TRANSACTION_SUMMARY_LOAD_ERROR, 
-        error: {
-          code: 404,
-          message: [
-            [
-              "Error", 
-              "not found"
-            ]
-          ]
-        }
+        error: new Error(["Error: not found"])
       }
     ]
 
@@ -144,8 +129,8 @@ describe('Transaction actions', () => {
     nock('http://localhost:8000')
       .get('/api/transactions/1/suggest')
       .reply(200, [
-        {id: 4, name: "c1"},
-        {id: 2, name: "c4"},
+        {id: 4, name: "c1", score: 8},
+        {id: 2, name: "c4", score: 2},
       ]
     )
         
@@ -157,8 +142,8 @@ describe('Transaction actions', () => {
       { 
         type: TrackActionTypes.CATEGORISOR_SUGGESTIONS_RECEIVED, 
         categories: [
-          {id: 4, name: "c1"},
-          {id: 2, name: "c4"},
+          new Category({id: 4, name: "c1", score: 8}),
+          new Category({id: 2, name: "c4", score: 2}),
         ]
       }
     ]
@@ -182,15 +167,7 @@ describe('Transaction actions', () => {
       },
       { 
         type: TrackActionTypes.CATEGORISOR_SUGGESTIONS_ERROR, 
-        error: {
-          code: 404,
-          message: [
-            [
-              "Error", 
-              "not found"
-            ]
-          ]
-        }
+        error: new Error(["Error: not found"])
       }
     ]
 

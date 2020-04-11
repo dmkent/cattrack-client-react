@@ -2,9 +2,12 @@ import Immutable from 'immutable'
 import TrackActions from '../../actions/TrackActions'
 import {mapStateToProps, mapDispatchToProps} from '../../containers/DashboardContainer'
 
-jest.mock('../../actions/TrackActions', () => ({default: {
-  loadTransactionSummary: jest.fn(),
-}, __esModule: true}))
+jest.mock('../../actions/TrackActions', () => ({
+  default: {
+    loadTransactionSummary: jest.fn(),
+  },
+  __esModule: true
+}))
 
 describe('DashboardContainer', () => {
   it('only have correct state in props', () => {
@@ -16,7 +19,7 @@ describe('DashboardContainer', () => {
         is_logged_in: true
       },
       transactions: {
-        transactions: new Immutable.OrderedMap(),
+        transactions: Immutable.OrderedMap(),
         summary: [2],
         filters: {
           category: null
@@ -28,7 +31,7 @@ describe('DashboardContainer', () => {
           message: ""
         },
         show_categorisor: false,
-        categories: new Immutable.List(),
+        categories: Immutable.List(),
       },
       accounts: {
         accounts: [1],

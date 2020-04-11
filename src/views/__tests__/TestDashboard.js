@@ -10,7 +10,8 @@ function setup() {
     filters: {
       category: null
     },
-    summary: [2]
+    summary: [2],
+    loadSummary: jest.fn(),
   }
 
   const enzymeWrapper = shallow(<Dashboard {...props} />)
@@ -26,7 +27,7 @@ describe('components', () => {
     it('should render self and subcomponents', () => {
       const {enzymeWrapper} = setup()
 
-      expect(enzymeWrapper.find('Col').length).toBe(2)
+      expect(enzymeWrapper.find('Col').length).toBe(4)
     })
   })
 })

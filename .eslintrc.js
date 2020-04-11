@@ -16,12 +16,21 @@ module.exports = {
     "plugins": [
         "react"
     ],
+    "globals": {
+        "dummyLoggedInState": true,
+    },
     "rules": {
         "accessor-pairs": "error",
         "array-bracket-newline": "error",
         "array-bracket-spacing": "error",
         "array-callback-return": "error",
-        "array-element-newline": "error",
+        "array-element-newline": [
+            "error",
+            {
+                "minItems": 3,
+                "multiline": true,
+            }
+        ],
         "arrow-body-style": "off",
         "arrow-parens": "off",
         "arrow-spacing": [
@@ -124,7 +133,10 @@ module.exports = {
         "max-statements": "off",
         "max-statements-per-line": "error",
         "multiline-ternary": "error",
-        "new-cap": "error",
+        // See https://github.com/eslint/eslint/issues/2023#issuecomment-80255655
+        // new-cap really isn't very helpful.
+        // Particularly for Immutable "classes" which are actually factory functions...
+        "new-cap": "off",
         "new-parens": "error",
         "newline-after-var": "off",
         "newline-before-return": "off",
@@ -182,7 +194,7 @@ module.exports = {
         "no-new-require": "error",
         "no-new-wrappers": "error",
         "no-octal-escape": "error",
-        "no-param-reassign": "error",
+        "no-param-reassign": "warn",
         "no-path-concat": "error",
         "no-plusplus": "error",
         "no-process-env": "error",

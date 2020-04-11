@@ -2,16 +2,15 @@ import {OrderedMap} from 'immutable';
 
 import TrackActionTypes from '../data/TrackActionTypes';
 
-const errors = (state = null, action) => {
+function errors(state = null, action){
   if (state === null || state === undefined) {
     return {
-      errors: OrderedMap(),
+      errors: new OrderedMap(),
       next_error: 0,
     }
   }
 
   let title = "";
-  let is_error = false;
   switch (action.type) {
     case TrackActionTypes.CLEAR_ERROR:
       return Object.assign({}, state, {
@@ -35,9 +34,11 @@ const errors = (state = null, action) => {
     case TrackActionTypes.ACCOUNTS_LOAD_ERROR:
       title += "Error loading accounts: ";
       break;
+    case TrackActionTypes.ACCOUNT_CREATE_ERROR:
+      title += "Error creating account: ";
+      break;
     case TrackActionTypes.ACCOUNTS_UPLOAD_ERROR:
       title += "Error uploading to account: ";
-
       break;
     case TrackActionTypes.PERIODS_LOAD_ERROR:
       title += "Error loading period filters: ";
@@ -48,15 +49,20 @@ const errors = (state = null, action) => {
     case TrackActionTypes.CATEGORISOR_CATEGORIES_ERROR:
       title += "Error loading categories: ";
       break;
+    case TrackActionTypes.CATEGORY_SERIES_LOAD_ERROR:
+      title += "Error loading transaction series: ";
+      break
     default:
       return state;
-  }
- 
-
+    }
+    let err_messages = action.error.message;
+    if (!(err_messages instanceof Array)) {
+      err_messages = [err_messages];
+    } 
     return {
       errors: state.errors.set(state.next_error, {
         title: title,
-        messages: action.error.message,
+        messages: err_messages,
       }),
       next_error: state.next_error + 1,
     };

@@ -23,9 +23,7 @@ export function refreshLogin(dispatch, getState) {
   if (!auth.is_logged_in) {
     dispatch({
       type: TrackActionTypes.AUTH_ERROR,
-      error: {
-        message: "Not logged in."
-      }
+      error: new Error("Not logged in.")
     })
     return Promise.reject(new Error("Not logged in."));
   }
@@ -37,7 +35,7 @@ export function refreshLogin(dispatch, getState) {
       dispatch({
         type: TrackActionTypes.AUTH_LOGOUT,
       });
-      return Promise.reject("Auth has expired.");
+      return Promise.reject(new Error("Auth has expired."));
   }
 
   // 2. check if more than 5 mins until expire - don't refresh
@@ -70,6 +68,18 @@ export function refreshLogin(dispatch, getState) {
   });
 }
 
+/**
+ * Convenience wrapper around fetch.
+ * 
+ * Performs an authentication check/refresh then performs a fetch with correct
+ * authentication headers.
+ * 
+ * @param {func} dispatch - Store's dispatch function.
+ * @param {func} getState - Store's get state function.
+ * @param {string} uri - URI to fetch, sub-url only, base is set in config.
+ * @param {Object} options - options passed through to fetch.
+ * @returns {Promise} Promise result from fetch.
+ */
 export function fetch_from_api(dispatch, getState, uri, options = {}) {
   return refreshLogin(dispatch, getState)
   .then(() => {
@@ -97,9 +107,16 @@ export function fetch_from_api(dispatch, getState, uri, options = {}) {
       ...options,
     })
   })
-  .catch(err => {console.log(err)})
 }
 
+/**
+ * Converts an object to a URL encoded string of GET paramters.
+ * 
+ * Values that are null are ignored.
+ * 
+ * @param {Object} filters - The filters to be converted.
+ * @returns {string} A string that can be appended to URL.
+ */
 export function filters_to_params(filters) {
   let query_params = Object.entries(filters).map(([
       key, 
@@ -118,24 +135,33 @@ export function filters_to_params(filters) {
   return query_params;
 }
 
+/**
+ * Check the status of a response from fetch.
+ * 
+ * This in turn returns a Promise. Best used directly after the call to fetch.
+ * Will check HTTP status and cause a promise rejection if the response was
+ * not a success code. If it is successful will resolve to the JSON data of the
+ * response.
+ * 
+ * @param {Object} resp - The fetch response object.
+ * @returns {Promise} A promise that will be rejected if fetch was not succesful.
+ */
 export function checkStatus(resp) {
   if (resp === undefined) {
     return Promise.reject(new Error("No response received"));
-  } else if (resp.status == 200) {
+  } else if (resp.status >= 200 && resp.status <= 299) {
     return resp.json()
   }
+
+  /* At this point we have an error. Try and decode the JSON response
+     for an error message.*/
   return Promise.resolve(resp.json())
   .catch(() => {
-    return Promise.reject({
-      code: resp.status,
-      message: [["Unable to decode response as JSON."]]
-    })
+    // Decode of JSON error message failed so just reject with generic message.
+    return Promise.reject(new Error("Unable to decode response as JSON."));
   })
   .then((error) => {
-    return Promise.reject({
-      code: resp.status,
-      message: parseErrors(error),
-    });
+    // Decoded JSON, parse and then reject with result.
+    return Promise.reject(new Error(parseErrors(error)));
   })
-
 }

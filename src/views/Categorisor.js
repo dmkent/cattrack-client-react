@@ -1,5 +1,5 @@
 import React from 'react';
-import {Alert, Modal, Form, FormGroup, Col, FormControl, Button, ControlLabel} from 'react-bootstrap';
+import {Alert, Modal, Form, Button, Badge} from 'react-bootstrap';
 import SplitFieldset from './SplitFieldset';
 
 class Categorisor extends React.Component {
@@ -28,7 +28,7 @@ class Categorisor extends React.Component {
             {[...this.props.suggestions].map((suggestion) => {
               return (
                 <li key={suggestion.name}>
-                  {suggestion.name}
+                  {suggestion.name} <Badge>{suggestion.score}%</Badge>
                 </li>
               );
             })}

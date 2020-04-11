@@ -48,15 +48,7 @@ describe('Auth actions', () => {
     let expectedActions = [
       {
         type: TrackActionTypes.AUTH_ERROR,
-        error: {
-          code: 403,
-          message: [
-            [
-              "Error",
-              "naughty naughty"
-            ]
-          ]
-        },
+        error: new Error(["Error: naughty naughty"]),
         username: "me"
       }
     ];
@@ -130,15 +122,7 @@ describe('Auth actions', () => {
 
     let expectedAction = {
       type: TrackActionTypes.AUTH_ERROR,
-      error: {
-        code: 403,
-        message: [
-          [
-            "Error",
-            "expired"
-          ]
-        ]
-      }
+      error: new Error(["Error: expired"])
     };
     const auth_expires = new Date()
     auth_expires.setMinutes(auth_expires.getMinutes() + 1)
@@ -152,7 +136,7 @@ describe('Auth actions', () => {
     const store = mockStore(auth)
     return store.dispatch(TrackActions.loadCategories()).then(() => {
       // Return of async actions
-      expect(store.getActions()[0]).toEqualImmutable(expectedAction)
+      expect(store.getActions()[0]).toEqual(expectedAction)
     })
   })
 
@@ -166,13 +150,11 @@ describe('Auth actions', () => {
     let expectedActions = [
       {
         type: TrackActionTypes.AUTH_ERROR,
-        error: {
-          message: "Not logged in."
-        }
+        error: new Error("Not logged in.")
       },
       {
         type: TrackActionTypes.CATEGORISOR_CATEGORIES_ERROR,
-        error: new Error("No response received")
+        error: new Error("Not logged in.")
       }
     ];
     const auth_expires = new Date()
@@ -204,7 +186,7 @@ describe('Auth actions', () => {
       },
       {
         type: TrackActionTypes.CATEGORISOR_CATEGORIES_ERROR,
-        error: new Error("No response received")
+        error: new Error("Auth has expired.")
       }
     ];
     const auth_expires = new Date()

@@ -26,13 +26,19 @@ const AccountActions = {
         });
     };
   },
+  selectAccount(account) {
+    return {
+      type: TrackActionTypes.ACCOUNT_SELECTED,
+      account: account,
+    }
+  },
   uploadToAccount(account, upload_file) {
     let data = new FormData();
     data.append('data_file', upload_file);
-    data.append('name', account);
+    data.append('name', account.name);
     
     return (dispatch, getState) => {
-      return fetch_from_api(dispatch, getState, '/api/accounts/' + account + '/load/', {
+      return fetch_from_api(dispatch, getState, '/api/accounts/' + account.id + '/load/', {
         method: 'POST',
         body: data,
         headers: {
@@ -50,18 +56,72 @@ const AccountActions = {
         // Non-200 status, parse the content
         return resp.json();
       })
+      .catch(() => {
+        // Parse of JSON failed.
+        dispatch({
+          type: TrackActionTypes.ACCOUNT_UPLOAD_ERROR,
+          account,
+          error: new Error("Unable to upload."),
+        })
+      })
       .then((data) => {
+          let message = "";
           if (data === null) {
             return;
+          } else if (data instanceof Object) {
+            message = parseErrors(data);
+          } else {
+            message = data;
           }
           dispatch({
             type: TrackActionTypes.ACCOUNT_UPLOAD_ERROR,
             account,
-            error: parseErrors(data),
+            error: new Error(message),
           })
         });
     };
   },
+  createAccount(name) {
+    return (dispatch, getState) => {
+      return fetch_from_api(dispatch, getState, '/api/accounts/', {
+        method: 'POST',
+        body: JSON.stringify({name: name}),
+      })
+      .then(checkStatus)
+      .then((newAccount) => {
+        dispatch({
+          type: TrackActionTypes.ACCOUNT_CREATE_SUCCESS,
+          account: new Account(newAccount)
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: TrackActionTypes.ACCOUNT_CREATE_ERROR,
+          name: name,
+          error: error,
+        })
+        });
+    };
+  },
+  loadAccountBalanceSeries(account) {
+    return (dispatch, getState) => {
+      return fetch_from_api(dispatch, getState, '/api/accounts/' + account.id + '/series/')
+        .then(checkStatus)
+        .then((series) => {
+          dispatch({
+            type: TrackActionTypes.ACCOUNT_BALANCE_SERIES_LOADED,
+            account: account,
+            series: series
+          })
+        })
+        .catch((error) => {
+          dispatch({
+            type: TrackActionTypes.ACCOUNT_BALANCE_SERIES_LOAD_ERROR,
+            error: error
+          })
+        })
+    }
+  }
 };
 
 export default AccountActions;

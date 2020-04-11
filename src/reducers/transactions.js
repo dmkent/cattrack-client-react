@@ -8,7 +8,7 @@ function resetFilter() {
     from_date: null,
     to_date: null,
     category: null,
-    has_category: 'True'
+    has_category: null,
   };
 }
 
@@ -16,10 +16,10 @@ function getInitialState() {
   return {
     active_page: 1,
     num_pages: 1,
-    page_size: 20,
-    transactions: new Immutable.OrderedMap(),
+    page_size: 50,
+    transactions: Immutable.OrderedMap(),
     filters: resetFilter(),
-    summary: new Immutable.OrderedMap(),
+    summary: Immutable.OrderedMap(),
   }
 }
 
@@ -39,7 +39,7 @@ function transactions(state = null, action) {
       return Object.assign({}, state, {
         active_page: action.page_num,
         num_pages: num_pages,
-        transactions: new Immutable.OrderedMap(action.transactions.map(transaction => [
+        transactions: Immutable.OrderedMap(action.transactions.map(transaction => [
           transaction.id,
           transaction,
         ])),
@@ -47,7 +47,7 @@ function transactions(state = null, action) {
       });
    case TrackActionTypes.TRANSACTION_SUMMARY_LOADED:
       return Object.assign({}, state, {
-        summary: new Immutable.OrderedMap(action.summary.map(item => [
+        summary: Immutable.OrderedMap(action.summary.map(item => [
           item.category,
           item,
         ])),

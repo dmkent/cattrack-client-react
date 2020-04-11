@@ -64,10 +64,8 @@ export function parseErrors(item) {
         
         formatted_key = capitalise(formatted_key);
         
-      }
-      return [
-        formatted_key, 
-        content
-      ];
+        return formatted_key + ": " + content;
+      } 
+      return formatted_key;
     });
 }

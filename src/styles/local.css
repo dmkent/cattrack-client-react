@@ -1,3 +1,40 @@
 .btn-group-vertical > .btn.active {
     z-index: 0 !important;
 }
+
+.progress {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    height: 9px;
+    position: relative;
+}
+
+.progress-bar-grey {
+    background-color: #7a7a7a;
+}
+
+.budget-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 100%;
+}
+
+.bar-step {
+    position:absolute;
+    margin-top:-8px;
+	z-index:1;
+    font-size:12px;
+}
+
+.label-txt {
+    float: left;
+}
+
+.label-line {
+    float: right;
+    background: #000;
+    height:25px;
+	width:1px;
+}

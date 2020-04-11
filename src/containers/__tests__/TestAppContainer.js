@@ -2,10 +2,13 @@ import Immutable from 'immutable'
 import TrackActions from '../../actions/TrackActions'
 import {mapStateToProps, mapDispatchToProps} from '../../containers/AppContainer'
 
-jest.mock('../../actions/TrackActions', () => ({default: {
-  attemptLogin: jest.fn(),
-  restoreLogin: jest.fn(),
-}, __esModule: true}))
+jest.mock('../../actions/TrackActions', () => ({
+  default: {
+    attemptLogin: jest.fn(),
+    restoreLogin: jest.fn(),
+  },
+  __esModule: true
+}))
 
 describe('AppContainer', () => {
   it('only have correct state in props', () => {
@@ -16,14 +19,14 @@ describe('AppContainer', () => {
       auth: {
         is_logged_in: true
       },
-      transactions: new Immutable.OrderedMap(),
+      transactions: Immutable.OrderedMap(),
       categories: {
         is_valid: {
           valid: null,
           message: ""
         },
         show_categorisor: false,
-        categories: new Immutable.List(),
+        categories: Immutable.List(),
       },
       accounts: {
         accounts: [1],

@@ -6,12 +6,12 @@ import Categorisor from '../Categorisor'
 function setup(transaction, suggestions) {
   const props = {
     transaction: transaction,
-    suggestions: suggestions ? suggestions : new Immutable.List(),
-    splits: new Immutable.List([
+    suggestions: suggestions ? suggestions : Immutable.List(),
+    splits: Immutable.List([
       'split',
       'split2'
     ]),
-    categories: new Immutable.List(),
+    categories: Immutable.List(),
     is_valid: {message: null, valid: null},
     showCategorisor: jest.fn(),
     saveCategorisor: jest.fn(),
@@ -20,6 +20,7 @@ function setup(transaction, suggestions) {
     addPotentialSplit: jest.fn(),
     setSplit: jest.fn(),
     reloadPage: jest.fn(),
+    loadCategories: jest.fn(),
   }
 
   const enzymeWrapper = shallow(<Categorisor {...props} />)
@@ -54,15 +55,15 @@ describe('components', () => {
         description: "test",
         when: "2012-01-01",
         amount: -34.4,
-      }, new Immutable.List([
+      }, Immutable.List([
         {name: 'suggest1'},
         {name: 'suggest2'}
       ]))
       expect(enzymeWrapper.find('Modal').exists()).toBe(true)
       expect(enzymeWrapper.find('li').at(0)
-             .text()).toEqual('suggest1')
+             .text()).toEqual('suggest1 <Badge />')
       expect(enzymeWrapper.find('li').at(1)
-             .text()).toEqual('suggest2')
+             .text()).toEqual('suggest2 <Badge />')
     })
 
     it('should call save on button click', () => {

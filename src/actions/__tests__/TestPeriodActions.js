@@ -48,15 +48,7 @@ describe('Period actions', () => {
     const expectedActions = [
       { 
         type: TrackActionTypes.PERIODS_LOAD_ERROR, 
-        error: {
-          code: 404,
-          message: [
-            [
-              "Error", 
-              "not found"
-            ]
-          ]
-        }
+        error: new Error(["Error: not found"])
       }
     ]
 

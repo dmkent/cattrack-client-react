@@ -1,7 +1,8 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const GitRevisionPlugin = require('git-revision-webpack-plugin')
+const path = require('path');
 
 const gitRev = new GitRevisionPlugin();
 
@@ -15,10 +16,15 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ExtractTextPlugin.extract({
-          fallback: "style-loader",
-          use: "css-loader"
-        })
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              hmr: process.env.NODE_ENV === 'development',
+            },
+          },
+          'css-loader',
+        ],
       },
       {
         test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
@@ -50,30 +56,29 @@ module.exports = {
       'redux',
       'redux-thunk',
       'immutable',
-      './src/client/PlotlyWrapper.js'
-    ]
+    ],
+    plotly: './src/client/PlotlyWrapper.js'
   },
   output: {
-    path: __dirname + '/dist/',
+    path: path.join(__dirname, '/dist/'),
     filename: '[name].js',
+  },
+  optimization: {
+    splitChunks: {},
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: 'src/index.html.tmpl',
       filename: 'index.html'
     }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: ['vendor'],
-      minChunks: Infinity
-    }),
     new webpack.SourceMapDevToolPlugin({
-      exclude: "vendor.js",
+      exclude: ["vendor.js", "plotly.js"],
       filename: '[file].map',
     }),
-    new ExtractTextPlugin("[name].css"),
+    new MiniCssExtractPlugin({filename: "[name].css"}),
     new webpack.DefinePlugin({
-      VERSION: JSON.stringify(gitRev.version())
+      VERSION: '"now"' // JSON.stringify(gitRev.version())
     }),
-    gitRev,
+    // gitRev,
   ]
 };

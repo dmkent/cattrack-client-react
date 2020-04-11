@@ -1,29 +1,31 @@
-import React from 'react'
 import Immutable from 'immutable'
 import TrackActions from '../../actions/TrackActions'
 import {mapStateToProps, mapDispatchToProps} from '../../containers/CategorisorContainer'
 
-jest.mock('../../actions/TrackActions', () => ({default: {
-  categorisorHide: jest.fn(),
-  categorisorSave: jest.fn(),
-  loadCategories: jest.fn(),
-  updateTransaction: jest.fn(),
-  categorisorAddSplit: jest.fn(),
-  categorisorRemoveSplit: jest.fn(),
-  categorisorSetSplit: jest.fn()
-}, __esModule: true}))
+jest.mock('../../actions/TrackActions', () => ({
+  default: {
+    categorisorHide: jest.fn(),
+    categorisorSave: jest.fn(),
+    loadCategories: jest.fn(),
+    updateTransaction: jest.fn(),
+    categorisorAddSplit: jest.fn(),
+    categorisorRemoveSplit: jest.fn(),
+    categorisorSetSplit: jest.fn()
+  },
+  __esModule: true
+}))
 
 describe('CategorisorContainer', () => {
   it('only have categorisor in props', () => {
     const initState = {
-      transactions: new Immutable.OrderedMap(),
+      transactions: Immutable.OrderedMap(),
       categories: {
         is_valid: {
           valid: null,
           message: ""
         },
         show_categorisor: false,
-        categories: new Immutable.List(),
+        categories: Immutable.List(),
       }
     }
     expect(mapStateToProps(initState)).toEqual({
@@ -32,7 +34,7 @@ describe('CategorisorContainer', () => {
         message: ""
       },
       show_categorisor: false,
-      categories: new Immutable.List()
+      categories: Immutable.List()
     })
   })
 

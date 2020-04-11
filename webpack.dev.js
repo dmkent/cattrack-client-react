@@ -6,16 +6,7 @@ const path = require('path')
 const BASENAME = '';
 
 module.exports = merge(common, {
-  devtool: "source-map",
-  /*rules: [
-    {
-      test: /\.js$/,
-      use: ["source-map-loader"],
-      options: {
-        enforce: "pre"
-      }
-    }
-  ],*/
+  mode: 'development',
   devServer: {
     historyApiFallback: {
       index: BASENAME + '/index.html',
