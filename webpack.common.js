@@ -79,7 +79,7 @@ module.exports = {
     }),
     new ExtractTextPlugin("[name].css"),
     new webpack.DefinePlugin({
-      VERSION: 'now' // JSON.stringify(gitRev.version())
+      VERSION: '"now"' // JSON.stringify(gitRev.version())
     }),
     // gitRev,
   ]
