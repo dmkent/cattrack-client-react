@@ -1,5 +1,5 @@
 const CONFIG = {
-  API_URI: '/be',
+  API_URI: 'https://api.cats.dmkent.net/be',
   VERSION: VERSION,
   BASENAME: BASENAME,
 };
