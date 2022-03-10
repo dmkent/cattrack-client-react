@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 import {FormattedDate, FormattedNumber} from 'react-intl';
-import {Button, Pagination, Tooltip, OverlayTrigger} from 'react-bootstrap';
+import {Button, Tooltip, OverlayTrigger} from 'react-bootstrap';
+import {Pagination} from '@react-bootstrap/pagination';
 
 import CategorisorContainer from '../containers/CategorisorContainer';
 import TransactionFilterContainer from '../containers/TransactionFilterContainer';
@@ -56,7 +57,7 @@ class Transactions extends React.Component {
                         </OverlayTrigger>
                       </td>
                       <td className="text-right">
-                        <span className={(trans.amount < 0) && "text-danger"}>
+                        <span className={(trans.amount < 0) ? "text-danger" : undefined}>
                           <FormattedNumber value={trans.amount || 0.0}
                                           style="currency"
                                           currency="AUD"/>
@@ -77,7 +78,7 @@ class Transactions extends React.Component {
             </div>
             <TransactionFilterContainer/>
           </div>
-          <Pagination 
+          <Pagination
             prev
             next
             first
