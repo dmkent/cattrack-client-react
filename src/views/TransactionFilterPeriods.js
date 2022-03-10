@@ -24,7 +24,9 @@ class TransactionFilterPeriods extends React.Component {
             <h3>Time</h3>
             <DateRangePicker
               startDate={toMomentObject(this.props.filters.from_date)}
+              startDateId="drp_start_transaction_filter_periods"
               endDate={toMomentObject(this.props.filters.to_date)}
+              endDateId="drp_end_transaction_filter_periods"
               onDatesChange={({ startDate, endDate }) => this.props.onFilter({
                 from_date: (startDate === null) ? null : startDate.format('YYYY-MM-DD'),
                 to_date: (endDate === null) ? null : endDate.format('YYYY-MM-DD'),

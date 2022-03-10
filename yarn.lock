@@ -708,6 +708,14 @@
     parse-rect "^1.2.0"
     pick-by-alias "^1.2.0"
 
+"@react-bootstrap/pagination@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@react-bootstrap/pagination/-/pagination-1.0.0.tgz#7ebab5b23519e030e0f9f98f1d73c8178d58356b"
+  integrity sha1-frq1sjUZ4DDg+fmPHXPIF41YNWs=
+  dependencies:
+    prop-types "^15.5.8"
+    react-prop-types "^0.4.0"
+
 "@redux-saga/core@^1.1.3":
   version "1.1.3"
   resolved "https://registry.npmjs.org/@redux-saga/core/-/core-1.1.3.tgz"
