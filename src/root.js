@@ -9,9 +9,10 @@
 import React from 'react';
 import {render} from 'react-dom';
 import {Provider} from 'react-redux';
+import {QueryClient, QueryClientProvider} from 'react-query';
 import {createStore, applyMiddleware, compose} from 'redux';
 import thunk from 'redux-thunk'
-import {browserHistory} from 'react-router'
+import {createBrowserHistory} from 'history';
 import {routerMiddleware} from 'react-router-redux'
 import createSagaMiddleware from 'redux-saga'
 
@@ -25,6 +26,10 @@ import 'bootstrap/dist/css/bootstrap.css'
 import './styles/local.css'
 import 'react-dates/lib/css/_datepicker.css'
 
+// React query client
+const queryClient = new QueryClient()
+
+const browserHistory = createBrowserHistory()
 const router_middleware = routerMiddleware(browserHistory)
 
 // Create the saga middleware
@@ -41,8 +46,10 @@ const store = createStore(catTrackApp, composeEnhancers(
 saga_middleware.run(rootSaga)
 
 render(
-  <Provider store={store}>
-    <AppContainer />
-  </Provider>,
+  <QueryClientProvider client={queryClient}>
+    <Provider store={store}>
+      <AppContainer />
+    </Provider>
+  </QueryClientProvider>,
   document.getElementById('root')
 )

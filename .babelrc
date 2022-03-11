@@ -1,15 +1,15 @@
 {
-  "presets": ["env"],
+  "presets": ["@babel/preset-env"],
   "plugins": [
     "syntax-async-functions",
-    "syntax-flow",
-    "syntax-jsx",
-    "syntax-object-rest-spread",
+    "@babel/plugin-syntax-flow",
+    "@babel/plugin-syntax-jsx",
+    "@babel/plugin-syntax-object-rest-spread",
     "syntax-trailing-function-commas",
     "transform-flow-strip-types",
-    "transform-object-rest-spread",
+    "@babel/plugin-proposal-object-rest-spread",
     "transform-react-jsx",
-    "transform-regenerator",
-    "transform-runtime"
+    "@babel/plugin-transform-regenerator",
+    "@babel/plugin-transform-runtime"
   ]
 }
