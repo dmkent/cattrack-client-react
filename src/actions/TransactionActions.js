@@ -9,8 +9,8 @@ const TransactionActions = {
       page_size: page_size,
       ...filters
     })
-    return (dispatch, getState) => {
-      return fetch_from_api(dispatch, getState, '/api/transactions/' + params)
+    return (dispatch) => {
+      return fetch_from_api(dispatch, '/api/transactions/' + params)
         .then(checkStatus)
         .then(rawTransactions => {
           dispatch({
@@ -49,8 +49,8 @@ const TransactionActions = {
   },
   loadTransactionSummary(filters) {
     const query_params = filters_to_params(filters);
-    return (dispatch, getState) => {
-      return fetch_from_api(dispatch, getState, '/api/transactions/summary/' + query_params)
+    return (dispatch,) => {
+      return fetch_from_api(dispatch, '/api/transactions/summary/' + query_params)
         .then(checkStatus)
         .then(rawSummary => {
           dispatch({

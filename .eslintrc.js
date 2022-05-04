@@ -16,9 +16,6 @@ module.exports = {
     "plugins": [
         "react"
     ],
-    "globals": {
-        "dummyLoggedInState": true,
-    },
     "rules": {
         "accessor-pairs": "error",
         "array-bracket-newline": "error",
@@ -96,10 +93,7 @@ module.exports = {
             "error",
             "never"
         ],
-        "func-style": [
-            "error",
-            "declaration"
-        ],
+        "func-style": "off",
         "function-paren-newline": "off",
         "generator-star-spacing": "error",
         "getter-return": "error",

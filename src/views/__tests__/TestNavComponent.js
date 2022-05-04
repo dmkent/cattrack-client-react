@@ -1,19 +1,19 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import Immutable from 'immutable'
 import NavComponent from '../NavComponent'
+import AuthService from '../../services/auth.service'
 
 function setup(logged_in) {
-  const props = {
-    auth: {
-      is_logged_in: logged_in,
-    }
+  if (logged_in) {
+    AuthService.dummyLogin()
+  } else {
+    AuthService.logout()
   }
 
-  const enzymeWrapper = shallow(<NavComponent {...props} />)
+  const enzymeWrapper = shallow(<NavComponent />)
 
   return {
-    props,
+    props: {},
     enzymeWrapper
   }
 }

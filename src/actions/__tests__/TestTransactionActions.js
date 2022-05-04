@@ -2,6 +2,7 @@ import TrackActions from '../TrackActions'
 import TrackActionTypes from '../../data/TrackActionTypes'
 import Transaction from '../../data/Transaction'
 import Category from '../../data/Category'
+import AuthService from '../../services/auth.service'
 
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
@@ -12,6 +13,9 @@ const mockStore = configureMockStore(middlewares)
 
 
 describe('Transaction actions', () => {
+  beforeEach(() => {
+    AuthService.dummyLogin()
+  })
   afterEach(() => {
     nock.cleanAll()
     localStorage.clear()
@@ -45,7 +49,7 @@ describe('Transaction actions', () => {
         }
       }
     ]
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.selectTransactions(1, 20, {category: 1, account: null})).then(() => {
       // Return of async actions
@@ -66,7 +70,7 @@ describe('Transaction actions', () => {
       }
     ]
 
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.selectTransactions(1, 20, {})).then(() => {
       // Return of async actions
@@ -97,7 +101,7 @@ describe('Transaction actions', () => {
         }
       }
     ]
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.loadTransactionSummary({category: 1, account: null, from_date: "2011-02-03"})).then(() => {
       // Return of async actions
@@ -117,7 +121,7 @@ describe('Transaction actions', () => {
       }
     ]
 
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.loadTransactionSummary({})).then(() => {
       // Return of async actions
@@ -147,7 +151,7 @@ describe('Transaction actions', () => {
         ]
       }
     ]
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.categorisorSetTransaction({id: 1})).then(() => {
       // Return of async actions
@@ -171,7 +175,7 @@ describe('Transaction actions', () => {
       }
     ]
 
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.categorisorSetTransaction({id: 1})).then(() => {
       // Return of async actions
@@ -228,7 +232,6 @@ describe('Transaction actions', () => {
       }
     ]
     const store = mockStore({
-      ...dummyLoggedInState(), 
       transactions: {
         page_size: 20,
         filters: {

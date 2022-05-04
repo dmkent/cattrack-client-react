@@ -5,8 +5,8 @@ import {parseErrors} from '../client/ErrorParser'
 
 const PaymentSeriesActions = {
   loadPaymentSeries() {
-    return (dispatch, getState) => {
-      return fetch_from_api(dispatch, getState, '/api/payments/')
+    return (dispatch) => {
+      return fetch_from_api(dispatch, '/api/payments/')
         .then(checkStatus)
         .then(raw_series => {
           dispatch({
@@ -35,8 +35,8 @@ const PaymentSeriesActions = {
     data.append('data_file', upload_file);
     data.append('name', idx);
     
-    return (dispatch, getState) => {
-      return fetch_from_api(dispatch, getState, '/api/payments/' + idx + '/loadpdf/', {
+    return (dispatch) => {
+      return fetch_from_api(dispatch, '/api/payments/' + idx + '/loadpdf/', {
         method: 'POST',
         body: data,
         headers: {

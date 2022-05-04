@@ -4,7 +4,6 @@ import Accounts from '../views/Accounts'
 
 export function mapStateToProps(state) {
   return {
-    auth: state.auth,
     accounts: state.accounts,
   }
 }

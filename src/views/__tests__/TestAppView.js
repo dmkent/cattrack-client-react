@@ -6,7 +6,6 @@ import configureStore from 'redux-mock-store'
 
 function setup() {
   const props = {
-    auth: {},
     version: 'test',
     restoreLogin: jest.fn(),
     title: 'testtitle',

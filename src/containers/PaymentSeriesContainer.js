@@ -4,7 +4,6 @@ import PaymentSeriesView from '../views/PaymentSeriesView'
 
 export function mapStateToProps(state) {
   return {
-    auth: state.auth,
     ...state.bills
   }
 }

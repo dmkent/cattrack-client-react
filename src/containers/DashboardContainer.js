@@ -4,7 +4,6 @@ import Dashboard from '../views/Dashboard'
 
 export function mapStateToProps(state) {
   return {
-    auth: state.auth,
     summary: state.transactions.summary,
     filters: state.transactions.filters,
   }

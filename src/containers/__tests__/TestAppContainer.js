@@ -16,9 +16,6 @@ describe('AppContainer', () => {
       app: {
         title: "test"
       },
-      auth: {
-        is_logged_in: true
-      },
       transactions: Immutable.OrderedMap(),
       categories: {
         is_valid: {
@@ -34,9 +31,6 @@ describe('AppContainer', () => {
       }
     }
     expect(mapStateToProps(initState)).toEqual({
-      auth: {
-        is_logged_in: true,
-      },
       title: "test"
     })
   })

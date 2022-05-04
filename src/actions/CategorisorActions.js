@@ -7,14 +7,14 @@ import Category from '../data/Category';
 
 const CategorisorActions = {
   categorisorSetTransaction(transaction) {
-    return (dispatch, getState) => {
+    return (dispatch) => {
       dispatch({
         type: TrackActionTypes.CATEGORISOR_SET_TRANSACTION,
         transaction: transaction,
       });
 
       return fetch_from_api(
-        dispatch, getState, 
+        dispatch, 
         '/api/transactions/' + transaction.id + '/suggest')
         .then(checkStatus)
         .then(resp => {
@@ -35,8 +35,8 @@ const CategorisorActions = {
   },
 
   loadCategories() {
-    return (dispatch, getState) => {
-      return fetch_from_api(dispatch, getState, '/api/categories/')
+    return (dispatch) => {
+      return fetch_from_api(dispatch, '/api/categories/')
         .then(checkStatus)
         .then(resp => {
           dispatch({
@@ -90,13 +90,13 @@ const CategorisorActions = {
   },
 
   categorisorSave(transaction, splits, onDone) {
-    return (dispatch, getState) => {
+    return (dispatch) => {
       let updated = transaction;
       if (splits !== null && splits.size === 1) {
           let new_category = splits.get(0).category;
           updated = updated.set("category", new_category);
       }
-      return fetch_from_api(dispatch, getState, '/api/transactions/' + updated.id + '/', {
+      return fetch_from_api(dispatch, '/api/transactions/' + updated.id + '/', {
         method: 'PUT',
         body: JSON.stringify(updated),
         headers: {'Content-Type': 'application/json'}
@@ -109,7 +109,7 @@ const CategorisorActions = {
           });
 
           if (splits !== null && splits.size > 1) {
-            return fetch_from_api(dispatch, getState, '/api/transactions/' + updated.id + '/split/', {
+            return fetch_from_api(dispatch, '/api/transactions/' + updated.id + '/split/', {
               method: 'POST',
               body: JSON.stringify(splits),
               headers: {'Content-Type': 'application/json'}

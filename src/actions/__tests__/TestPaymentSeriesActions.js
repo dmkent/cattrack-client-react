@@ -1,6 +1,6 @@
 import TrackActions from '../TrackActions'
 import TrackActionTypes from '../../data/TrackActionTypes'
-import PaymentSeries from '../../data/PaymentSeries'
+import AuthService from '../../services/auth.service'
 
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
@@ -10,6 +10,9 @@ const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
 describe('Payment series actions', () => {
+  beforeEach(() => {
+    AuthService.dummyLogin()
+  })
   afterEach(() => {
     nock.cleanAll()
     localStorage.clear()
@@ -72,7 +75,7 @@ describe('Payment series actions', () => {
         ]
       }
     ]
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.loadPaymentSeries()).then(() => {
       // Return of async actions
@@ -92,7 +95,7 @@ describe('Payment series actions', () => {
       }
     ]
 
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.loadPaymentSeries()).then(() => {
       // Return of async actions
@@ -119,7 +122,7 @@ describe('Payment series actions', () => {
       },
     ]
 
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
     return store.dispatch(TrackActions.paymentSeriesAddBillFromFile(1, 'dummy file object')).then(() => {
       // Return of async actions
       expect(store.getActions()).toEqual(expectedActions)
@@ -139,7 +142,7 @@ describe('Payment series actions', () => {
       },
     ]
 
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
     return store.dispatch(TrackActions.paymentSeriesAddBillFromFile(1, 'dummy file object')).then(() => {
       // Return of async actions
       expect(store.getActions()).toEqual(expectedActions)

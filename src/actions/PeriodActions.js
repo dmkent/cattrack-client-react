@@ -6,8 +6,8 @@ import Period from '../data/Period';
 
 const PeriodActions = {
   loadPeriods() {
-    return (dispatch, getState) => {
-      return fetch_from_api(dispatch, getState, '/api/periods/')
+    return (dispatch) => {
+      return fetch_from_api(dispatch, '/api/periods/')
         .then(checkStatus)
         .then(rawPeriods => {
           dispatch({

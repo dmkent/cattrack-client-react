@@ -4,7 +4,6 @@ import AppView from '../views/AppView'
 
 export function mapStateToProps(state) {
   return {
-    auth: state.auth,
     ...state.app
   }
 }

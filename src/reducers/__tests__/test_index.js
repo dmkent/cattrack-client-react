@@ -5,7 +5,6 @@ describe('combined reducer', () => {
   it('should return the initial state', () => {
     expect(Object.keys(reducer(undefined, {}))).toEqual([
       'app',
-      'auth',
       'transactions',
       'accounts',
       'categories',

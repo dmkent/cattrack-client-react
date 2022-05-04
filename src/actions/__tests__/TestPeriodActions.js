@@ -1,5 +1,6 @@
 import TrackActions from '../TrackActions'
 import TrackActionTypes from '../../data/TrackActionTypes'
+import AuthService from '../../services/auth.service'
 import Period from '../../data/Period'
 
 import configureMockStore from 'redux-mock-store'
@@ -10,6 +11,10 @@ const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
 describe('Period actions', () => {
+  beforeEach(() => {
+    AuthService.dummyLogin()
+  })
+
   afterEach(() => {
     nock.cleanAll()
     localStorage.clear()
@@ -32,7 +37,7 @@ describe('Period actions', () => {
         ]
       }
     ]
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.loadPeriods()).then(() => {
       // Return of async actions
@@ -52,7 +57,7 @@ describe('Period actions', () => {
       }
     ]
 
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.loadPeriods()).then(() => {
       // Return of async actions

@@ -1,11 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, Modal, Nav, Navbar, NavItem } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
 import DashboardContainer from '../containers/DashboardContainer';
 import AccountsContainer from '../containers/AccountsContainer';
 import TransactionList from '../containers/TransactionList';
-import LoginContainer from '../containers/LoginContainer';
 import ErrorsContainer from '../containers/ErrorsContainer';
 import TrackingContainer from '../containers/TrackingContainer';
 import PaymentSeriesContainer from '../containers/PaymentSeriesContainer';
@@ -16,10 +13,10 @@ import {IntlProvider} from 'react-intl';
 import {
   BrowserRouter as Router,
   Route,
-  Link,
-  NavLink,
   Redirect,
 } from 'react-router-dom';
+import Login from '../components/Login';
+import { useAuthToken } from '../hooks/useAuthToken';
 
 class AppView extends React.Component {
   componentDidMount() {
@@ -31,7 +28,7 @@ class AppView extends React.Component {
       <IntlProvider locale="en-AU">
         <Router basename={CONFIG.BASENAME}>
           <div>
-            <NavComponent auth={this.props.auth}/>
+            <NavComponent/>
             <div className="container-fluid">
               <ErrorsContainer/>
               <h1>{this.props.title}</h1>
@@ -89,20 +86,20 @@ export const PrivateRoute = ({ component: Component, auth, render, ...rest }) =>
   )
 };
 
-export class ContentView extends React.Component {
-  render() {
-    return (
-      <div>
-      <Route path="/login" component={LoginContainer}/>
-      <Route path="/logout" component={LogoutContainer}/>
-      <PrivateRoute exact path="/" auth={this.props.auth} component={DashboardContainer}/>
-      <PrivateRoute path="/accounts" auth={this.props.auth} component={AccountsContainer}/>
-      <PrivateRoute path="/tracking" auth={this.props.auth} component={TrackingContainer}/>
-      <PrivateRoute path="/transactions" auth={this.props.auth} component={TransactionList}/>
-      <PrivateRoute path="/bills" auth={this.props.auth} component={PaymentSeriesContainer}/>
-      </div>
-    );
-  }
+export function ContentView() {
+  const auth = useAuthToken()
+
+  return (
+    <div>
+    <Route path="/login" component={Login}/>
+    <Route path="/logout" component={LogoutContainer}/>
+    <PrivateRoute exact path="/" auth={auth} component={DashboardContainer}/>
+    <PrivateRoute path="/accounts" auth={auth} component={AccountsContainer}/>
+    <PrivateRoute path="/tracking" auth={auth} component={TrackingContainer}/>
+    <PrivateRoute path="/transactions" auth={auth} component={TransactionList}/>
+    <PrivateRoute path="/bills" auth={auth} component={PaymentSeriesContainer}/>
+    </div>
+  )
 }
 
 export default AppView;

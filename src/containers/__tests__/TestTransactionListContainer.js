@@ -18,9 +18,6 @@ describe('TransactionFilterPeriodsContainer', () => {
       app: {
         title: "test"
       },
-      auth: {
-        is_logged_in: true
-      },
       transactions: {
         transactions: Immutable.OrderedMap(),
         summary: [2],
@@ -47,9 +44,6 @@ describe('TransactionFilterPeriodsContainer', () => {
       periods: [2]
     }
     expect(mapStateToProps(initState)).toEqual({
-      auth: {
-        is_logged_in: true
-      },
       transactions: Immutable.OrderedMap(),
       summary: [2],
       filters: {
