@@ -1,5 +1,5 @@
 import React from "react";
-import { shallow, mount } from "enzyme";
+import { shallow } from "enzyme";
 import AppView, {
   PrivateRoute,
   ContentView,
@@ -12,7 +12,6 @@ import configureStore from "redux-mock-store";
 function setup() {
   const props = {
     version: "test",
-    restoreLogin: jest.fn(),
     title: "testtitle",
   };
 
@@ -27,7 +26,7 @@ function setup() {
 describe("components", () => {
   describe("AppView", () => {
     it("should render self and subcomponents", () => {
-      const { enzymeWrapper, props } = setup();
+      const { enzymeWrapper } = setup();
 
       expect(enzymeWrapper.find("div").children().exists()).toBe(true);
     });
