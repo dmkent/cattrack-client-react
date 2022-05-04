@@ -7,8 +7,8 @@ import Account from '../data/Account';
 
 const AccountActions = {
   loadAccounts() {
-    return (dispatch, getState) => {
-      return fetch_from_api(dispatch, getState, '/api/accounts/')
+    return (dispatch) => {
+      return fetch_from_api(dispatch, '/api/accounts/')
         .then(checkStatus)
         .then(rawAccounts => {
           dispatch({
@@ -37,8 +37,8 @@ const AccountActions = {
     data.append('data_file', upload_file);
     data.append('name', account.name);
     
-    return (dispatch, getState) => {
-      return fetch_from_api(dispatch, getState, '/api/accounts/' + account.id + '/load/', {
+    return (dispatch) => {
+      return fetch_from_api(dispatch, '/api/accounts/' + account.id + '/load/', {
         method: 'POST',
         body: data,
         headers: {
@@ -82,8 +82,8 @@ const AccountActions = {
     };
   },
   createAccount(name) {
-    return (dispatch, getState) => {
-      return fetch_from_api(dispatch, getState, '/api/accounts/', {
+    return (dispatch) => {
+      return fetch_from_api(dispatch, '/api/accounts/', {
         method: 'POST',
         body: JSON.stringify({name: name}),
       })
@@ -104,8 +104,8 @@ const AccountActions = {
     };
   },
   loadAccountBalanceSeries(account) {
-    return (dispatch, getState) => {
-      return fetch_from_api(dispatch, getState, '/api/accounts/' + account.id + '/series/')
+    return (dispatch) => {
+      return fetch_from_api(dispatch, '/api/accounts/' + account.id + '/series/')
         .then(checkStatus)
         .then((series) => {
           dispatch({

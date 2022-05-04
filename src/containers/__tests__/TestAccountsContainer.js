@@ -15,9 +15,6 @@ jest.mock('../../actions/TrackActions', () => ({
 describe('AccountsContainer', () => {
   it('only have accounts and auth in props', () => {
     const initState = {
-      auth: {
-        is_logged_in: true
-      },
       transactions: Immutable.OrderedMap(),
       categories: {
         is_valid: {
@@ -33,9 +30,6 @@ describe('AccountsContainer', () => {
       }
     }
     expect(mapStateToProps(initState)).toEqual({
-      auth: {
-        is_logged_in: true,
-      },
       accounts: {
         accounts: [1],
         upload_in_progress: false,

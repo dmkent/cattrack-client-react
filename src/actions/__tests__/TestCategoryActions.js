@@ -1,5 +1,6 @@
 import TrackActions from '../TrackActions'
 import TrackActionTypes from '../../data/TrackActionTypes'
+import AuthService from '../../services/auth.service'
 
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
@@ -9,6 +10,9 @@ const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
 describe('Category actions', () => {
+  beforeEach(() => {
+    AuthService.dummyLogin()
+  })
   afterEach(() => {
     nock.cleanAll()
     localStorage.clear()
@@ -17,21 +21,15 @@ describe('Category actions', () => {
   it('should create load category series actions', () => {
     nock('http://localhost:8000')
       .get('/api/categories/2/series/')
-      .reply(200, [
-        {label: "2010-01-01", value: -34},
-        {label: "2010-02-01", value: -54},
-      ])
+      .reply(200, [{label: "2010-01-01", value: -34}, {label: "2010-02-01", value: -54}])
         
     const expectedActions = [
       { 
         type: TrackActionTypes.CATEGORY_SERIES_LOADED, 
-        series: [
-          {label: "2010-01-01", value: -34},
-          {label: "2010-02-01", value: -54},
-        ]
+        series: [{label: "2010-01-01", value: -34}, {label: "2010-02-01", value: -54}]
       }
     ]
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.loadCategorySeries(2, {})).then(() => {
       // Return of async actions
@@ -51,7 +49,7 @@ describe('Category actions', () => {
       }
     ]
 
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.loadCategorySeries(3, {})).then(() => {
       // Return of async actions

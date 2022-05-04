@@ -7,11 +7,15 @@ import Immutable from 'immutable'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import nock from 'nock'
+import AuthService from '../../services/auth.service'
 
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
 describe('Categorisor actions', () => {
+  beforeEach(() => {
+    AuthService.dummyLogin()
+  })
   afterEach(() => {
     nock.cleanAll()
     localStorage.clear()
@@ -36,7 +40,7 @@ describe('Categorisor actions', () => {
         ]
       }
     ]
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.loadCategories()).then(() => {
       // Return of async actions
@@ -55,7 +59,7 @@ describe('Categorisor actions', () => {
         error: new Error(["Error: not found"])
       }
     ]
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.loadCategories()).then(() => {
       // Return of async actions
@@ -114,7 +118,7 @@ describe('Categorisor actions', () => {
         type: TrackActionTypes.CATEGORISOR_HIDE
       }
     ]
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.categorisorSave(
       new Transaction({id: 4, when: "2011-01-01", description: "a", amount: -2}),
@@ -145,7 +149,7 @@ describe('Categorisor actions', () => {
         type: TrackActionTypes.CATEGORISOR_HIDE
       }
     ]
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.categorisorSave(
       new Transaction({id: 4, when: "2011-01-01", description: "a", amount: -2}),
@@ -172,7 +176,7 @@ describe('Categorisor actions', () => {
 
       }
     ]
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.categorisorSave(
       new Transaction({id: 4, when: "2011-01-01", description: "a", amount: -2}),
@@ -204,7 +208,7 @@ describe('Categorisor actions', () => {
         error: new Error(["Error: failed"])
       }
     ]
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.categorisorSave(
       new Transaction({id: 4, when: "2011-01-01", description: "a", amount: -2}),

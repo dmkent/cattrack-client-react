@@ -4,8 +4,8 @@ import {fetch_from_api, checkStatus} from '../client/CatTrackAPI';
 
 const CategoryActions = {
   loadCategorySeries(category_id, filters) {
-    return (dispatch, getState) => {
-      return fetch_from_api(dispatch, getState, '/api/categories/' + category_id + '/series/')
+    return (dispatch) => {
+      return fetch_from_api(dispatch, '/api/categories/' + category_id + '/series/')
         .then(checkStatus)
         .then(series => {
           dispatch({

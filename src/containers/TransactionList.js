@@ -4,7 +4,6 @@ import Transactions from '../views/Transactions'
 
 export function mapStateToProps(state) {
   return {
-    auth: state.auth,
     ...state.transactions
   }
 }

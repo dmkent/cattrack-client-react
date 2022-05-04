@@ -15,9 +15,6 @@ describe('DashboardContainer', () => {
       app: {
         title: "test"
       },
-      auth: {
-        is_logged_in: true
-      },
       transactions: {
         transactions: Immutable.OrderedMap(),
         summary: [2],
@@ -39,9 +36,6 @@ describe('DashboardContainer', () => {
       }
     }
     expect(mapStateToProps(initState)).toEqual({
-      auth: {
-        is_logged_in: true,
-      },
       filters: {
         category: null
       },

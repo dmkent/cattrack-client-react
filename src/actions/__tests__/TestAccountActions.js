@@ -1,7 +1,7 @@
 import TrackActions from '../TrackActions'
 import TrackActionTypes from '../../data/TrackActionTypes'
 import Account from '../../data/Account'
-
+import AuthService from '../../services/auth.service'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import nock from 'nock'
@@ -10,6 +10,10 @@ const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
 describe('Account actions', () => {
+  beforeEach(() => {
+    AuthService.dummyLogin()
+  })
+
   afterEach(() => {
     nock.cleanAll()
     localStorage.clear()
@@ -32,7 +36,7 @@ describe('Account actions', () => {
         ]
       }
     ]
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.loadAccounts()).then(() => {
       // Return of async actions
@@ -52,7 +56,7 @@ describe('Account actions', () => {
       }
     ]
 
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.loadAccounts()).then(() => {
       // Return of async actions
@@ -72,7 +76,7 @@ describe('Account actions', () => {
       },
     ]
 
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
     return store.dispatch(TrackActions.uploadToAccount({id: 1}, 'dummy file object')).then(() => {
       // Return of async actions
       expect(store.getActions()).toEqual(expectedActions)
@@ -92,7 +96,8 @@ describe('Account actions', () => {
       },
     ]
 
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
+
     return store.dispatch(TrackActions.uploadToAccount({id: 1}, 'dummy file object')).then(() => {
       // Return of async actions
       expect(store.getActions()).toEqual(expectedActions)
@@ -110,7 +115,7 @@ describe('Account actions', () => {
         account: new Account({id: 4, name: "newacct"})
       }
     ]
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.createAccount("newacct"))
       .then(() => {
@@ -131,7 +136,7 @@ describe('Account actions', () => {
         error: new Error(['Error: not found'])
       }
     ]
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.createAccount("newacct"))
       .then(() => {
@@ -152,7 +157,7 @@ describe('Account actions', () => {
         series: [{label: '2013-02-01', value: -43}]
       }
     ]
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.loadAccountBalanceSeries(new Account({id: 3, name: "newacct"})))
       .then(() => {
@@ -172,7 +177,7 @@ describe('Account actions', () => {
         error: new Error(['Error: not found'])
       }
     ]
-    const store = mockStore({...dummyLoggedInState()})
+    const store = mockStore()
 
     return store.dispatch(TrackActions.loadAccountBalanceSeries({id: 3, name: "newacct"}))
       .then(() => {

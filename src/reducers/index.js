@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import auth from './auth';
 import transactions from './transactions';
 import accounts from './accounts';
 import categories from './categories';
@@ -21,7 +20,6 @@ function app(state, action) {
 
 const catTrackApp = combineReducers({
   app,
-  auth,
   transactions,
   accounts,
   categories,

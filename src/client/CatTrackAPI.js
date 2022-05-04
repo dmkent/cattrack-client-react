@@ -16,26 +16,30 @@ import TrackActionTypes from '../data/TrackActionTypes';
 import {parseErrors} from './ErrorParser'
 
 import CONFIG from 'config'
+import { useAuthToken } from "../hooks/useAuthToken";
 const API_URI = CONFIG.API_URI;
 
-export function refreshLogin(dispatch, getState) {
-  const auth = getState().auth;
-  if (!auth.is_logged_in) {
-    dispatch({
-      type: TrackActionTypes.AUTH_ERROR,
-      error: new Error("Not logged in.")
-    })
-    return Promise.reject(new Error("Not logged in."));
-  }
+export function refreshLogin(dispatch) {
   let now = new Date();
+  const auth = useAuthToken()
+  
   // 1. check if we are expired - clear auth
-  if (now > auth.expires) {
+  if (auth.expires && now > auth.expires) {
       console.log("Auth expired. Expiry: " + auth);
       localStorage.removeItem('jwt');
       dispatch({
         type: TrackActionTypes.AUTH_LOGOUT,
       });
       return Promise.reject(new Error("Auth has expired."));
+  }
+  
+  // 1a. Otherwise failed.
+  if (!auth.is_logged_in) {
+    dispatch({
+      type: TrackActionTypes.AUTH_ERROR,
+      error: new Error("Not logged in.")
+    })
+    return Promise.reject(new Error("Not logged in."));
   }
 
   // 2. check if more than 5 mins until expire - don't refresh
@@ -75,13 +79,12 @@ export function refreshLogin(dispatch, getState) {
  * authentication headers.
  * 
  * @param {func} dispatch - Store's dispatch function.
- * @param {func} getState - Store's get state function.
  * @param {string} uri - URI to fetch, sub-url only, base is set in config.
  * @param {Object} options - options passed through to fetch.
  * @returns {Promise} Promise result from fetch.
  */
-export function fetch_from_api(dispatch, getState, uri, options = {}) {
-  return refreshLogin(dispatch, getState)
+export function fetch_from_api(dispatch, uri, options = {}) {
+  return refreshLogin(dispatch)
   .then(() => {
     // Set up authentication and security headers.
     let headers = Object.assign({
@@ -94,7 +97,7 @@ export function fetch_from_api(dispatch, getState, uri, options = {}) {
     if (headers['Content-Type'] === undefined) {
       Reflect.deleteProperty(headers, 'Content-Type');
     }
-    const token = getState().auth.token;
+    const token = useAuthToken().token;
     if (token !== undefined) {
       headers.Authorization = 'JWT ' + token;
     }

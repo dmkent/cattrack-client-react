@@ -79,7 +79,6 @@ BudgetSummary.propTypes = {
 
 export function mapStateToProps(state) {
   return {
-    token: state.auth.token,
     summaries: state.budget.summaries,
     from_date: state.transactions.filters.from_date,
     to_date: state.transactions.filters.to_date,

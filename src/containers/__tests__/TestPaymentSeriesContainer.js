@@ -16,9 +16,6 @@ describe('PaymentSeriesContainer', () => {
       app: {
         title: "test"
       },
-      auth: {
-        is_logged_in: true
-      },
       transactions: {
         transactions: Immutable.OrderedMap(),
         summary: [2],
@@ -48,9 +45,6 @@ describe('PaymentSeriesContainer', () => {
       }
     }
     expect(mapStateToProps(initState)).toEqual({
-      auth: {
-        is_logged_in: true
-      },
       payment_series: [5]
     })
   })
