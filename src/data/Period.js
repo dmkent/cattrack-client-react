@@ -1,12 +1,12 @@
-import Immutable from 'immutable';
+import Immutable from "immutable";
 
 const Period = Immutable.Record({
-    id: '',
-    offset: '',
+  id: "",
+  offset: "",
 
-    label: '',
-    from_date: '',
-    to_date: '',
+  label: "",
+  from_date: "",
+  to_date: "",
 });
 
 export default Period;

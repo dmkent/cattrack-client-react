@@ -1,7 +1,7 @@
 /**
  * API to go and fetch from server.
- * 
- * 
+ *
+ *
  * Copyright (c) 2017, David M Kent.
  * All rights reserved.
  *
@@ -10,16 +10,16 @@
  *
  */
 
- export function isString(val) {
-  return (typeof val === 'string' || val instanceof String);
+export function isString(val) {
+  return typeof val === "string" || val instanceof String;
 }
 
 export function camelCaseToVerbose(text) {
-  return text.replace(/(\w)([A-Z])/g, '$1 $2');
+  return text.replace(/(\w)([A-Z])/g, "$1 $2");
 }
 
 export function underscoredToVerbose(text) {
-  return text.replace(/[\d_]/g, ' ');
+  return text.replace(/[\d_]/g, " ");
 }
 
 export function capitalise(text) {
@@ -36,36 +36,33 @@ export function capitalise(text) {
  * @returns {Array} - array of key, value pairs that should be rendered as error message.x
  */
 export function parseErrors(item) {
-    return Object.entries(item).map(function([
-        key,
-        value
-      ]) {
-      let formatted_key = key;
-      let content = '';
+  return Object.entries(item).map(function ([key, value]) {
+    let formatted_key = key;
+    let content = "";
 
-      if (isString(value)) {
-        content = value;
-      } else if (Array.isArray(value)) {
-        if (isString(value[0])) {
-          content = value.join(' ');
-        } else {
-          content = JSON.stringify(value, {}, 2);
-        }
+    if (isString(value)) {
+      content = value;
+    } else if (Array.isArray(value)) {
+      if (isString(value[0])) {
+        content = value.join(" ");
+      } else {
+        content = JSON.stringify(value, {}, 2);
+      }
+    }
+
+    if (content) {
+      if (formatted_key.search(/[A-Z]/) != -1) {
+        formatted_key = camelCaseToVerbose(formatted_key);
       }
 
-      if (content) {
-        if (formatted_key.search(/[A-Z]/) != -1) {
-          formatted_key = camelCaseToVerbose(formatted_key);
-        }
-        
-        if (formatted_key.search(/[\d_]/) != -1) {
-          formatted_key = underscoredToVerbose(formatted_key);
-        }
-        
-        formatted_key = capitalise(formatted_key);
-        
-        return formatted_key + ": " + content;
-      } 
-      return formatted_key;
-    });
+      if (formatted_key.search(/[\d_]/) != -1) {
+        formatted_key = underscoredToVerbose(formatted_key);
+      }
+
+      formatted_key = capitalise(formatted_key);
+
+      return formatted_key + ": " + content;
+    }
+    return formatted_key;
+  });
 }

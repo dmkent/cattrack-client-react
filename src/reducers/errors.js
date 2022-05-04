@@ -1,13 +1,13 @@
-import {OrderedMap} from 'immutable';
+import { OrderedMap } from "immutable";
 
-import TrackActionTypes from '../data/TrackActionTypes';
+import TrackActionTypes from "../data/TrackActionTypes";
 
-function errors(state = null, action){
+function errors(state = null, action) {
   if (state === null || state === undefined) {
     return {
       errors: new OrderedMap(),
       next_error: 0,
-    }
+    };
   }
 
   let title = "";
@@ -51,22 +51,21 @@ function errors(state = null, action){
       break;
     case TrackActionTypes.CATEGORY_SERIES_LOAD_ERROR:
       title += "Error loading transaction series: ";
-      break
+      break;
     default:
       return state;
-    }
-    let err_messages = action.error.message;
-    if (!(err_messages instanceof Array)) {
-      err_messages = [err_messages];
-    } 
-    return {
-      errors: state.errors.set(state.next_error, {
-        title: title,
-        messages: err_messages,
-      }),
-      next_error: state.next_error + 1,
-    };
+  }
+  let err_messages = action.error.message;
+  if (!(err_messages instanceof Array)) {
+    err_messages = [err_messages];
+  }
+  return {
+    errors: state.errors.set(state.next_error, {
+      title: title,
+      messages: err_messages,
+    }),
+    next_error: state.next_error + 1,
+  };
 }
-
 
 export default errors;

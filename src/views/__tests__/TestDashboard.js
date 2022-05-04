@@ -1,6 +1,6 @@
-import React from 'react'
-import {shallow} from 'enzyme'
-import Dashboard from '../Dashboard'
+import React from "react";
+import { shallow } from "enzyme";
+import Dashboard from "../Dashboard";
 
 function setup() {
   const props = {
@@ -8,26 +8,26 @@ function setup() {
       is_logged_in: true,
     },
     filters: {
-      category: null
+      category: null,
     },
     summary: [2],
     loadSummary: jest.fn(),
-  }
+  };
 
-  const enzymeWrapper = shallow(<Dashboard {...props} />)
+  const enzymeWrapper = shallow(<Dashboard {...props} />);
 
   return {
     props,
-    enzymeWrapper
-  }
+    enzymeWrapper,
+  };
 }
 
-describe('components', () => {
-  describe('Dashboard', () => {
-    it('should render self and subcomponents', () => {
-      const {enzymeWrapper} = setup()
+describe("components", () => {
+  describe("Dashboard", () => {
+    it("should render self and subcomponents", () => {
+      const { enzymeWrapper } = setup();
 
-      expect(enzymeWrapper.find('Col').length).toBe(4)
-    })
-  })
-})
+      expect(enzymeWrapper.find("Col").length).toBe(4);
+    });
+  });
+});

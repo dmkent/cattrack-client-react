@@ -1,22 +1,18 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import DashboardContainer from '../containers/DashboardContainer';
-import AccountsContainer from '../containers/AccountsContainer';
-import TransactionList from '../containers/TransactionList';
-import ErrorsContainer from '../containers/ErrorsContainer';
-import TrackingContainer from '../containers/TrackingContainer';
-import PaymentSeriesContainer from '../containers/PaymentSeriesContainer';
-import CONFIG from 'config';
-import NavComponent from './NavComponent';
-import TrackActions from '../actions/TrackActions'
-import {IntlProvider} from 'react-intl';
-import {
-  BrowserRouter as Router,
-  Route,
-  Redirect,
-} from 'react-router-dom';
-import Login from '../components/Login';
-import { useAuthToken } from '../hooks/useAuthToken';
+import React from "react";
+import { connect } from "react-redux";
+import DashboardContainer from "../containers/DashboardContainer";
+import AccountsContainer from "../containers/AccountsContainer";
+import TransactionList from "../containers/TransactionList";
+import ErrorsContainer from "../containers/ErrorsContainer";
+import TrackingContainer from "../containers/TrackingContainer";
+import PaymentSeriesContainer from "../containers/PaymentSeriesContainer";
+import CONFIG from "config";
+import NavComponent from "./NavComponent";
+import TrackActions from "../actions/TrackActions";
+import { IntlProvider } from "react-intl";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import Login from "../components/Login";
+import { useAuthToken } from "../hooks/useAuthToken";
 
 class AppView extends React.Component {
   componentDidMount() {
@@ -28,14 +24,16 @@ class AppView extends React.Component {
       <IntlProvider locale="en-AU">
         <Router basename={CONFIG.BASENAME}>
           <div>
-            <NavComponent/>
+            <NavComponent />
             <div className="container-fluid">
-              <ErrorsContainer/>
+              <ErrorsContainer />
               <h1>{this.props.title}</h1>
-              <ContentView {...this.props}/>
+              <ContentView {...this.props} />
             </div>
             <div>
-              <p className="pull-right text-muted"><small>Client version: { this.props.version }</small></p>
+              <p className="pull-right text-muted">
+                <small>Client version: {this.props.version}</small>
+              </p>
             </div>
           </div>
         </Router>
@@ -50,56 +48,81 @@ export class Logout extends React.Component {
   }
 
   render() {
-    return <Redirect to="/login"/>;
+    return <Redirect to="/login" />;
   }
 }
-const logoutMapDispatchToProps = dispatch => {
+const logoutMapDispatchToProps = (dispatch) => {
   return {
     logout: () => {
-      dispatch(TrackActions.logout())
-    }
-  }
-}
-export const LogoutContainer = connect(
-  (state) => {return {}},
-  logoutMapDispatchToProps
-)(Logout)
+      dispatch(TrackActions.logout());
+    },
+  };
+};
+export const LogoutContainer = connect((state) => {
+  return {};
+}, logoutMapDispatchToProps)(Logout);
 
-export const PrivateRoute = ({ component: Component, auth, render, ...rest }) => {
+export const PrivateRoute = ({
+  component: Component,
+  auth,
+  render,
+  ...rest
+}) => {
   return (
-    <Route {...rest} render={props => {
-      if (auth.is_logged_in) {
-        if (render !== undefined) {
-          return render(props);
+    <Route
+      {...rest}
+      render={(props) => {
+        if (auth.is_logged_in) {
+          if (render !== undefined) {
+            return render(props);
+          } else {
+            return <Component {...props} />;
+          }
         } else {
-          return <Component {...props}/>;
+          return (
+            <Redirect
+              to={{
+                pathname: "/login",
+                state: { from: props.location.pathname },
+              }}
+            />
+          );
         }
-      } else {
-        return (
-          <Redirect to={{
-            pathname: '/login',
-            state: { from: props.location.pathname }
-          }}/>
-        );
-      }
-    }}/>
-  )
+      }}
+    />
+  );
 };
 
 export function ContentView() {
-  const auth = useAuthToken()
+  const auth = useAuthToken();
 
   return (
     <div>
-    <Route path="/login" component={Login}/>
-    <Route path="/logout" component={LogoutContainer}/>
-    <PrivateRoute exact path="/" auth={auth} component={DashboardContainer}/>
-    <PrivateRoute path="/accounts" auth={auth} component={AccountsContainer}/>
-    <PrivateRoute path="/tracking" auth={auth} component={TrackingContainer}/>
-    <PrivateRoute path="/transactions" auth={auth} component={TransactionList}/>
-    <PrivateRoute path="/bills" auth={auth} component={PaymentSeriesContainer}/>
+      <Route path="/login" component={Login} />
+      <Route path="/logout" component={LogoutContainer} />
+      <PrivateRoute exact path="/" auth={auth} component={DashboardContainer} />
+      <PrivateRoute
+        path="/accounts"
+        auth={auth}
+        component={AccountsContainer}
+      />
+      <PrivateRoute
+        path="/tracking"
+        auth={auth}
+        component={TrackingContainer}
+      />
+      <PrivateRoute
+        path="/transactions"
+        auth={auth}
+        component={TransactionList}
+      />
+      <PrivateRoute
+        path="/bills"
+        auth={auth}
+        component={PaymentSeriesContainer}
+      />
     </div>
-  )
+  );
 }
 
 export default AppView;

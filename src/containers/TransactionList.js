@@ -1,17 +1,17 @@
-import {connect} from 'react-redux';
-import TrackActions from '../actions/TrackActions'
-import Transactions from '../views/Transactions'
+import { connect } from "react-redux";
+import TrackActions from "../actions/TrackActions";
+import Transactions from "../views/Transactions";
 
 export function mapStateToProps(state) {
   return {
-    ...state.transactions
-  }
+    ...state.transactions,
+  };
 }
 
 export function mapDispatchToProps(dispatch) {
   return {
     onSelectTransactions: (page_num, page_size, filters) => {
-      dispatch(TrackActions.selectTransactions(page_num, page_size, filters))
+      dispatch(TrackActions.selectTransactions(page_num, page_size, filters));
     },
     updateTransaction: (transaction) => {
       dispatch(TrackActions.updateTransaction(transaction));
@@ -22,12 +22,12 @@ export function mapDispatchToProps(dispatch) {
     showCategorisor: () => {
       dispatch(TrackActions.categorisorShow());
     },
-  }
+  };
 }
 
 const TransactionList = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Transactions)
+)(Transactions);
 
-export default TransactionList
+export default TransactionList;

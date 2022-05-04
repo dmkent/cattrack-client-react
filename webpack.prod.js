@@ -1,9 +1,9 @@
-const webpack = require('webpack');
-const merge = require('webpack-merge');
-const common = require('./webpack.common.js');
-const ArchivePlugin = require('webpack-archive-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const path = require('path')
+const webpack = require("webpack");
+const merge = require("webpack-merge");
+const common = require("./webpack.common.js");
+const ArchivePlugin = require("webpack-archive-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+const path = require("path");
 
 let BASENAME = "";
 if (process.env.TRAVIS_BRANCH === "master") {
@@ -13,26 +13,26 @@ if (process.env.TRAVIS_BRANCH === "master") {
 }
 
 module.exports = merge(common, {
-  mode: 'production',
+  mode: "production",
   optimization: {
     minimize: true,
     minimizer: [new TerserPlugin()],
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production'),
+      "process.env": {
+        NODE_ENV: JSON.stringify("production"),
       },
       BASENAME: JSON.stringify(BASENAME),
     }),
     new webpack.optimize.AggressiveMergingPlugin(),
     new ArchivePlugin({
-      output: 'cattrack-client-react'
+      output: "cattrack-client-react",
     }),
   ],
   resolve: {
     alias: {
-      config: path.join(__dirname, 'src/config/config.prod.js')
-    }
-  }
+      config: path.join(__dirname, "src/config/config.prod.js"),
+    },
+  },
 });
