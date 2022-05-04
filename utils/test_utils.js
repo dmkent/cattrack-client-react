@@ -1,22 +1,24 @@
-import Immutable from 'immutable'
-import diff from 'jest-diff'
-import { configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import Immutable from "immutable";
+import diff from "jest-diff";
+import { configure } from "enzyme";
+import Adapter from "enzyme-adapter-react-16";
 
-import 'react-dates/initialize';
+import "react-dates/initialize";
 
 configure({ adapter: new Adapter() });
 
 expect.extend({
   toEqualImmutable(received, argument) {
-    const recvImmut = Immutable.fromJS((Immutable.Map.isMap(received)) ? received.toJS(): received);
-    const argImmut = Immutable.fromJS((Immutable.Map.isMap(argument)) ? argument.toJS(): argument);
-    const pass = Immutable.is(recvImmut, argImmut)
+    const recvImmut = Immutable.fromJS(
+      Immutable.Map.isMap(received) ? received.toJS() : received
+    );
+    const argImmut = Immutable.fromJS(
+      Immutable.Map.isMap(argument) ? argument.toJS() : argument
+    );
+    const pass = Immutable.is(recvImmut, argImmut);
     if (pass) {
       return {
-        message: () => (
-          `Immutables are equal`
-        ),
+        message: () => `Immutables are equal`,
         pass: true,
       };
     } else {
@@ -26,16 +28,17 @@ expect.extend({
             expand: this.expand,
           });
           return (
-            this.utils.matcherHint('.toEqualImmutable') + '\n\n' +
+            this.utils.matcherHint(".toEqualImmutable") +
+            "\n\n" +
             `Expected value to be (using Immutable.is)\n` +
             `  ${this.utils.printExpected(argument)}\n` +
             `Received:\n` +
             `  ${this.utils.printReceived(received)}` +
-            (diffString ? `\n\nDifference:\n\n${diffString}` : '')
+            (diffString ? `\n\nDifference:\n\n${diffString}` : "")
           );
         },
-      pass: false,
-      }
+        pass: false,
+      };
     }
   },
 });

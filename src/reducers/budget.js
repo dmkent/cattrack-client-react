@@ -1,11 +1,11 @@
-import Immutable from 'immutable';
+import Immutable from "immutable";
 
-import TrackActionTypes from '../data/TrackActionTypes';
+import TrackActionTypes from "../data/TrackActionTypes";
 
 function getInitialState() {
   return {
     summaries: [],
-  }
+  };
 }
 
 function budget(state = null, action) {

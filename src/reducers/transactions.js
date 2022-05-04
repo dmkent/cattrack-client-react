@@ -1,6 +1,6 @@
-import Immutable from 'immutable';
+import Immutable from "immutable";
 
-import TrackActionTypes from '../data/TrackActionTypes';
+import TrackActionTypes from "../data/TrackActionTypes";
 
 function resetFilter() {
   return {
@@ -20,7 +20,7 @@ function getInitialState() {
     transactions: Immutable.OrderedMap(),
     filters: resetFilter(),
     summary: Immutable.OrderedMap(),
-  }
+  };
 }
 
 function transactions(state = null, action) {
@@ -32,25 +32,29 @@ function transactions(state = null, action) {
   switch (action.type) {
     case TrackActionTypes.TRANSACTION_UPDATED:
       return Object.assign({}, state, {
-        transactions: state.transactions.set(action.transaction.id, action.transaction),
+        transactions: state.transactions.set(
+          action.transaction.id,
+          action.transaction
+        ),
       });
     case TrackActionTypes.TRANSACTION_PAGE_LOADED:
       num_pages = Math.ceil(action.num_records / state.page_size);
       return Object.assign({}, state, {
         active_page: action.page_num,
         num_pages: num_pages,
-        transactions: Immutable.OrderedMap(action.transactions.map(transaction => [
-          transaction.id,
-          transaction,
-        ])),
+        transactions: Immutable.OrderedMap(
+          action.transactions.map((transaction) => [
+            transaction.id,
+            transaction,
+          ])
+        ),
         filters: action.filters,
       });
-   case TrackActionTypes.TRANSACTION_SUMMARY_LOADED:
+    case TrackActionTypes.TRANSACTION_SUMMARY_LOADED:
       return Object.assign({}, state, {
-        summary: Immutable.OrderedMap(action.summary.map(item => [
-          item.category,
-          item,
-        ])),
+        summary: Immutable.OrderedMap(
+          action.summary.map((item) => [item.category, item])
+        ),
         filters: action.filters,
       });
     case TrackActionTypes.TRANSACTION_SUMMARY_LOAD_ERROR:

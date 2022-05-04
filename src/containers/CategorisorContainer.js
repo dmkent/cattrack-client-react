@@ -1,9 +1,9 @@
-import {connect} from 'react-redux';
-import TrackActions from '../actions/TrackActions'
-import Categorisor from '../views/Categorisor'
+import { connect } from "react-redux";
+import TrackActions from "../actions/TrackActions";
+import Categorisor from "../views/Categorisor";
 
 export function mapStateToProps(state) {
-  return {...state.categories};
+  return { ...state.categories };
 }
 
 export function mapDispatchToProps(dispatch) {
@@ -29,14 +29,14 @@ export function mapDispatchToProps(dispatch) {
     setSplit: (name, idx, event) => {
       const target = event.target;
       const value = target.value;
-      dispatch(TrackActions.categorisorSetSplit(idx, name, value))
-    }
-  }
+      dispatch(TrackActions.categorisorSetSplit(idx, name, value));
+    },
+  };
 }
 
 const CategorisorContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Categorisor)
+)(Categorisor);
 
 export default CategorisorContainer;

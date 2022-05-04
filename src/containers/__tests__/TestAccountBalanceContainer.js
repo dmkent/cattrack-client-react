@@ -1,26 +1,26 @@
-import Immutable from 'immutable'
-import {mapStateToProps} from '../../containers/AccountBalanceContainer'
+import Immutable from "immutable";
+import { mapStateToProps } from "../../containers/AccountBalanceContainer";
 
-describe('CategoryPlotContainer', () => {
-  it('only have correct state in props', () => {
+describe("CategoryPlotContainer", () => {
+  it("only have correct state in props", () => {
     const initState = {
       app: {
-        title: "test"
+        title: "test",
       },
       auth: {
-        is_logged_in: true
+        is_logged_in: true,
       },
       transactions: {
         transactions: Immutable.OrderedMap(),
         summary: [2],
         filters: {
-          category: null
-        }
+          category: null,
+        },
       },
       categories: {
         is_valid: {
           valid: null,
-          message: ""
+          message: "",
         },
         show_categorisor: false,
         categories: Immutable.List(),
@@ -28,15 +28,15 @@ describe('CategoryPlotContainer', () => {
       accounts: {
         accounts: [1],
         upload_in_progress: false,
-        current_balance_series: Immutable.List(['c'])
+        current_balance_series: Immutable.List(["c"]),
       },
       category: {
-        series: Immutable.List(['b'])
-      }
-    }
+        series: Immutable.List(["b"]),
+      },
+    };
     expect(mapStateToProps(initState)).toEqual({
-      series: Immutable.List(['c']),
-      plot_type: 'line'
-    })
-  })
-})
+      series: Immutable.List(["c"]),
+      plot_type: "line",
+    });
+  });
+});

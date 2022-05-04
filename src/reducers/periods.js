@@ -1,7 +1,6 @@
-import Immutable from 'immutable';
+import Immutable from "immutable";
 
-import TrackActionTypes from '../data/TrackActionTypes';
-
+import TrackActionTypes from "../data/TrackActionTypes";
 
 function periods(state = null, action) {
   if (state === null) {

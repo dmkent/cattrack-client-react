@@ -1,13 +1,13 @@
-import { combineReducers } from 'redux';
-import transactions from './transactions';
-import accounts from './accounts';
-import categories from './categories';
-import periods from './periods';
-import errors from './errors';
-import category from './category';
-import bills from './bills';
-import budget from './budget';
-import CONFIG from 'config';
+import { combineReducers } from "redux";
+import transactions from "./transactions";
+import accounts from "./accounts";
+import categories from "./categories";
+import periods from "./periods";
+import errors from "./errors";
+import category from "./category";
+import bills from "./bills";
+import budget from "./budget";
+import CONFIG from "config";
 
 function app(state, action) {
   console.log(action);
@@ -16,7 +16,6 @@ function app(state, action) {
     title: "CatTrack",
   };
 }
-
 
 const catTrackApp = combineReducers({
   app,
@@ -27,7 +26,7 @@ const catTrackApp = combineReducers({
   errors,
   category,
   bills,
-  budget
+  budget,
 });
 
 export default catTrackApp;

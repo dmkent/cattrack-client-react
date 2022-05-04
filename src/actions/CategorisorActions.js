@@ -1,9 +1,9 @@
-import TrackActionTypes from '../data/TrackActionTypes';
+import TrackActionTypes from "../data/TrackActionTypes";
 
-import {fetch_from_api, checkStatus} from '../client/CatTrackAPI';
+import { fetch_from_api, checkStatus } from "../client/CatTrackAPI";
 
-import Transaction from '../data/Transaction';
-import Category from '../data/Category';
+import Transaction from "../data/Transaction";
+import Category from "../data/Category";
 
 const CategorisorActions = {
   categorisorSetTransaction(transaction) {
@@ -14,58 +14,59 @@ const CategorisorActions = {
       });
 
       return fetch_from_api(
-        dispatch, 
-        '/api/transactions/' + transaction.id + '/suggest')
+        dispatch,
+        "/api/transactions/" + transaction.id + "/suggest"
+      )
         .then(checkStatus)
-        .then(resp => {
+        .then((resp) => {
           dispatch({
             type: TrackActionTypes.CATEGORISOR_SUGGESTIONS_RECEIVED,
-            categories: resp.map(cat => {
-                return new Category(cat);
+            categories: resp.map((cat) => {
+              return new Category(cat);
             }),
           });
         })
-        .catch(error => {
+        .catch((error) => {
           dispatch({
             type: TrackActionTypes.CATEGORISOR_SUGGESTIONS_ERROR,
             error,
           });
         });
-    }
+    };
   },
 
   loadCategories() {
     return (dispatch) => {
-      return fetch_from_api(dispatch, '/api/categories/')
+      return fetch_from_api(dispatch, "/api/categories/")
         .then(checkStatus)
-        .then(resp => {
+        .then((resp) => {
           dispatch({
             type: TrackActionTypes.CATEGORISOR_CATEGORIES_RECEIVED,
-            categories: resp.map(cat => {
-                return new Category(cat);
+            categories: resp.map((cat) => {
+              return new Category(cat);
             }),
           });
         })
-        .catch(error => {
+        .catch((error) => {
           dispatch({
             type: TrackActionTypes.CATEGORISOR_CATEGORIES_ERROR,
             error,
           });
-        })
+        });
     };
   },
 
   categorisorAddSplit() {
     return {
       type: TrackActionTypes.CATEGORISOR_ADD_SPLIT,
-    }
+    };
   },
 
   categorisorRemoveSplit(idx) {
     return {
       type: TrackActionTypes.CATEGORISOR_REMOVE_SPLIT,
-      idx
-    }
+      idx,
+    };
   },
 
   categorisorSetSplit(idx, name, value) {
@@ -74,7 +75,7 @@ const CategorisorActions = {
       idx,
       name,
       value,
-    }
+    };
   },
 
   categorisorShow() {
@@ -93,52 +94,56 @@ const CategorisorActions = {
     return (dispatch) => {
       let updated = transaction;
       if (splits !== null && splits.size === 1) {
-          let new_category = splits.get(0).category;
-          updated = updated.set("category", new_category);
+        let new_category = splits.get(0).category;
+        updated = updated.set("category", new_category);
       }
-      return fetch_from_api(dispatch, '/api/transactions/' + updated.id + '/', {
-        method: 'PUT',
+      return fetch_from_api(dispatch, "/api/transactions/" + updated.id + "/", {
+        method: "PUT",
         body: JSON.stringify(updated),
-        headers: {'Content-Type': 'application/json'}
+        headers: { "Content-Type": "application/json" },
       })
-      .then(checkStatus)
-      .then(resp => {
+        .then(checkStatus)
+        .then((resp) => {
           dispatch({
             type: TrackActionTypes.TRANSACTION_UPDATED,
             transaction: new Transaction(resp),
           });
 
           if (splits !== null && splits.size > 1) {
-            return fetch_from_api(dispatch, '/api/transactions/' + updated.id + '/split/', {
-              method: 'POST',
-              body: JSON.stringify(splits),
-              headers: {'Content-Type': 'application/json'}
-            })
-            .then(checkStatus)
-            .then(() => {
-              dispatch({
-                type: TrackActionTypes.TRANSACTION_SPLIT_SUCCESS,
+            return fetch_from_api(
+              dispatch,
+              "/api/transactions/" + updated.id + "/split/",
+              {
+                method: "POST",
+                body: JSON.stringify(splits),
+                headers: { "Content-Type": "application/json" },
+              }
+            )
+              .then(checkStatus)
+              .then(() => {
+                dispatch({
+                  type: TrackActionTypes.TRANSACTION_SPLIT_SUCCESS,
+                });
+                onDone();
+                dispatch(this.categorisorHide());
+              })
+              .catch((error) => {
+                dispatch({
+                  type: TrackActionTypes.TRANSACTION_SPLIT_ERROR,
+                  error,
+                });
               });
-              onDone();
-              dispatch(this.categorisorHide())
-            })
-            .catch(error => {
-              dispatch({
-                type: TrackActionTypes.TRANSACTION_SPLIT_ERROR,
-                error,
-              });
-            });
           }
-          dispatch(this.categorisorHide())
+          dispatch(this.categorisorHide());
         })
-        .catch(error => {
+        .catch((error) => {
           dispatch({
             type: TrackActionTypes.TRANSACTION_UPDATE_ERROR,
             error,
           });
         });
     };
-  }
+  },
 };
 
 export default CategorisorActions;
