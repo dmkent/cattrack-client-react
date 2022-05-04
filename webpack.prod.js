@@ -1,7 +1,6 @@
 const webpack = require("webpack");
-const merge = require("webpack-merge");
+const {merge} = require("webpack-merge");
 const common = require("./webpack.common.js");
-const ArchivePlugin = require("webpack-archive-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const path = require("path");
 
@@ -26,9 +25,6 @@ module.exports = merge(common, {
       BASENAME: JSON.stringify(BASENAME),
     }),
     new webpack.optimize.AggressiveMergingPlugin(),
-    new ArchivePlugin({
-      output: "cattrack-client-react",
-    }),
   ],
   resolve: {
     alias: {

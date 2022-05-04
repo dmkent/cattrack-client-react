@@ -16,15 +16,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              hmr: process.env.NODE_ENV === "development",
-            },
-          },
-          "css-loader",
-        ],
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
       {
         test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
@@ -81,4 +73,9 @@ module.exports = {
     }),
     // gitRev,
   ],
+  resolve: {
+    fallback: {
+      "path": require.resolve("path-browserify")
+    }
+  }
 };
