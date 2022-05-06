@@ -1,9 +1,8 @@
 import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import nock from "nock";
-import Immutable from "immutable";
-import { FormattedDate, IntlProvider } from "react-intl";
+import { IntlProvider } from "react-intl";
 import Transactions from "../Transactions";
 import authService from "../../services/auth.service";
 

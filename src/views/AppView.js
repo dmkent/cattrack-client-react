@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import DashboardContainer from "../containers/DashboardContainer";
+import Dashboard from "../components/Dashboard";
 import AccountsContainer from "../containers/AccountsContainer";
 import Transactions from "../components/Transactions";
 import ErrorsContainer from "../containers/ErrorsContainer";
@@ -96,7 +96,7 @@ export function ContentView() {
     <div>
       <Route path="/login" component={Login} />
       <Route path="/logout" component={LogoutContainer} />
-      <PrivateRoute exact path="/" auth={auth} component={DashboardContainer} />
+      <PrivateRoute exact path="/" auth={auth} component={Dashboard} />
       <PrivateRoute
         path="/accounts"
         auth={auth}
