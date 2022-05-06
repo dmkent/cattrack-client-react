@@ -1,5 +1,6 @@
 import { call, put, select, takeLatest } from "redux-saga/effects";
 import Api from "../client";
+import authService from "../services/auth.service";
 
 function* fetchBudgetSummary() {
   let props = yield select(getBudgetAction);
@@ -18,7 +19,7 @@ function* fetchBudgetSummary() {
 
 function getBudgetAction(state) {
   return {
-    token: state.auth.token,
+    token: authService.restoreLogin().token,
     from_date: state.transactions.filters.from_date,
     to_date: state.transactions.filters.to_date,
   };

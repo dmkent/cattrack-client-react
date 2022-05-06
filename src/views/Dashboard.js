@@ -28,7 +28,11 @@ class Dashboard extends React.Component {
             </Col>
             <Col md={2}>
               <div className="btn-group-vertical" role="group">
-                <TransactionFilterPeriods />
+                <TransactionFilterPeriods
+                  filters={this.props.filters}
+                  periods={this.props.periods}
+                  setFilters={this.props.onFilter}
+                />
               </div>
             </Col>
           </Row>

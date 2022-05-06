@@ -107,7 +107,7 @@ export function ContentView() {
         auth={auth}
         component={TrackingContainer}
       />
-      <PrivateRoute path="/transactions" auth={auth} component={Transactions} />
+      <PrivateRoute path="/transactions" auth={auth} render={() => <Transactions page_size={50}/>}/>
       <PrivateRoute
         path="/bills"
         auth={auth}
