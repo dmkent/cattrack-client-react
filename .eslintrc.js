@@ -226,7 +226,7 @@ module.exports = {
     "prefer-promise-reject-errors": "error",
     "prefer-reflect": "error",
     "prefer-rest-params": "error",
-    "prefer-spread": "error",
+    "prefer-spread": ["error", "always"],
     "prefer-template": "off",
     "quote-props": "off",
     quotes: "off",

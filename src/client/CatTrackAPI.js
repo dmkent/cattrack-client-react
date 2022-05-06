@@ -27,18 +27,20 @@ export function refreshLogin(dispatch) {
   if (auth.expires && now > auth.expires) {
     console.log("Auth expired. Expiry: " + auth);
     localStorage.removeItem("jwt");
-    dispatch({
-      type: TrackActionTypes.AUTH_LOGOUT,
-    });
+    dispatch &&
+      dispatch({
+        type: TrackActionTypes.AUTH_LOGOUT,
+      });
     return Promise.reject(new Error("Auth has expired."));
   }
 
   // 1a. Otherwise failed.
   if (!auth.is_logged_in) {
-    dispatch({
-      type: TrackActionTypes.AUTH_ERROR,
-      error: new Error("Not logged in."),
-    });
+    dispatch &&
+      dispatch({
+        type: TrackActionTypes.AUTH_ERROR,
+        error: new Error("Not logged in."),
+      });
     return Promise.reject(new Error("Not logged in."));
   }
 
@@ -57,17 +59,19 @@ export function refreshLogin(dispatch) {
     .then(checkStatus)
     .then((resp) => {
       localStorage.setItem("jwt", resp.token);
-      dispatch({
-        type: TrackActionTypes.AUTH_RESPONSE_RECEIVED,
-        token: resp.token,
-      });
+      dispatch &&
+        dispatch({
+          type: TrackActionTypes.AUTH_RESPONSE_RECEIVED,
+          token: resp.token,
+        });
       return Promise.resolve();
     })
     .catch((error) => {
-      dispatch({
-        type: TrackActionTypes.AUTH_ERROR,
-        error,
-      });
+      dispatch &&
+        dispatch({
+          type: TrackActionTypes.AUTH_ERROR,
+          error,
+        });
       return Promise.reject(new Error("Auth failed."));
     });
 }

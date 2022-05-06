@@ -18,7 +18,7 @@ import createSagaMiddleware from "redux-saga";
 
 import "react-dates/initialize";
 
-import AppContainer from "./containers/AppContainer";
+import AppView from "./views/AppView";
 import catTrackApp from "./reducers";
 import rootSaga from "./sagas";
 
@@ -49,7 +49,7 @@ saga_middleware.run(rootSaga);
 render(
   <QueryClientProvider client={queryClient}>
     <Provider store={store}>
-      <AppContainer />
+      <AppView />
     </Provider>
   </QueryClientProvider>,
   document.getElementById("root")

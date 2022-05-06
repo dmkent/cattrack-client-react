@@ -2,44 +2,38 @@ import React from "react";
 import { connect } from "react-redux";
 import DashboardContainer from "../containers/DashboardContainer";
 import AccountsContainer from "../containers/AccountsContainer";
-import TransactionList from "../containers/TransactionList";
+import Transactions from "../components/Transactions";
 import ErrorsContainer from "../containers/ErrorsContainer";
 import TrackingContainer from "../containers/TrackingContainer";
 import PaymentSeriesContainer from "../containers/PaymentSeriesContainer";
 import CONFIG from "config";
 import NavComponent from "./NavComponent";
-import TrackActions from "../actions/TrackActions";
 import { IntlProvider } from "react-intl";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Login from "../components/Login";
 import { useAuthToken } from "../hooks/useAuthToken";
+import AuthService from "../services/auth.service";
 
-class AppView extends React.Component {
-  componentDidMount() {
-    this.props.restoreLogin();
-  }
-
-  render() {
-    return (
-      <IntlProvider locale="en-AU">
-        <Router basename={CONFIG.BASENAME}>
-          <div>
-            <NavComponent />
-            <div className="container-fluid">
-              <ErrorsContainer />
-              <h1>{this.props.title}</h1>
-              <ContentView {...this.props} />
-            </div>
-            <div>
-              <p className="pull-right text-muted">
-                <small>Client version: {this.props.version}</small>
-              </p>
-            </div>
+function AppView() {
+  return (
+    <IntlProvider locale="en-AU">
+      <Router basename={CONFIG.BASENAME}>
+        <div>
+          <NavComponent />
+          <div className="container-fluid">
+            <ErrorsContainer />
+            <h1>CatTrack</h1>
+            <ContentView />
           </div>
-        </Router>
-      </IntlProvider>
-    );
-  }
+          <div>
+            <p className="pull-right text-muted">
+              <small>Client version: {CONFIG.VERSION}</small>
+            </p>
+          </div>
+        </div>
+      </Router>
+    </IntlProvider>
+  );
 }
 
 export class Logout extends React.Component {
@@ -51,13 +45,15 @@ export class Logout extends React.Component {
     return <Redirect to="/login" />;
   }
 }
+
 const logoutMapDispatchToProps = (dispatch) => {
   return {
     logout: () => {
-      dispatch(TrackActions.logout());
+      dispatch(AuthService.logout());
     },
   };
 };
+
 export const LogoutContainer = connect((state) => {
   return {};
 }, logoutMapDispatchToProps)(Logout);
@@ -111,11 +107,7 @@ export function ContentView() {
         auth={auth}
         component={TrackingContainer}
       />
-      <PrivateRoute
-        path="/transactions"
-        auth={auth}
-        component={TransactionList}
-      />
+      <PrivateRoute path="/transactions" auth={auth} render={() => <Transactions page_size={50}/>}/>
       <PrivateRoute
         path="/bills"
         auth={auth}
