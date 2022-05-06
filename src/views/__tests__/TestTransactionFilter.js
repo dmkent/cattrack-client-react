@@ -1,101 +1,131 @@
 import React from "react";
-import { mount } from "enzyme";
-import Immutable from "immutable";
-import { Provider } from "react-redux";
-import configureStore from "redux-mock-store";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import nock from "nock";
+
 import TransactionFilter from "../TransactionFilter";
+import authService from "../../services/auth.service";
 
-function setup(accounts, categories, filters) {
-  const props = {
-    loadAccounts: jest.fn(),
-    onFilter: jest.fn(),
-    filters: filters,
-    accounts: Immutable.List(accounts),
-    categories: new Immutable.List(categories),
-  };
+const periods = [
+  {
+    id: 4,
+    label: "Last month",
+    from_date: "2011-01-02",
+    to_date: "2011-02-02",
+    offset: "1",
+  },
+  {
+    id: 1,
+    label: "Last week",
+    from_date: "2011-01-24",
+    to_date: "2011-02-02",
+    offset: "1",
+  },
+];
+const accounts = [
+  { id: 0, name: "account 1" },
+  { id: 1, name: "account 2" },
+];
+const categories = [
+  { id: 0, name: "Cat1" },
+  { id: 3, name: "Cat2" },
+];
+const filters = { to_date: null, from_date: null, category: 3, account: 0 };
 
-  const store = configureStore([]);
-  const enzymeWrapper = mount(
-    <Provider
-      store={store({
-        categories: props.categories,
-        accounts: props.accounts,
-        transactions: {
-          filters: props.filters,
-        },
-        periods: [],
-      })}
-    >
-      <TransactionFilter {...props} />
-    </Provider>
-  );
-
-  return {
-    props,
-    enzymeWrapper,
-  };
+function setup() {
+  authService.dummyLogin();
+  nock("http://localhost:8000").get("/api/periods/").reply(200, periods);
+  nock("http://localhost:8000").get("/api/accounts/").reply(200, accounts);
+  nock("http://localhost:8000").get("/api/categories/").reply(200, categories);
 }
 
-describe("components", () => {
-  describe("TransactionFilter", () => {
-    it("should render self and subcomponents", () => {
-      const { enzymeWrapper, props } = setup([], [], {});
+test("TestTransactionFilter should render self and subcomponents", async () => {
+  const props = {
+    setFilters: jest.fn(),
+    filters: filters,
+  };
 
-      expect(enzymeWrapper.find("DateRangePicker").exists()).toBe(true);
-      expect(props.loadAccounts.mock.calls.length).toBe(1);
-    });
+  setup();
+  const queryClient = new QueryClient();
+  render(
+    <QueryClientProvider client={queryClient}>
+      <TransactionFilter {...props} />
+    </QueryClientProvider>
+  );
 
-    it("should display some categories and accounts", () => {
-      const { enzymeWrapper, props } = setup(
-        [
-          { id: 0, name: "account 1" },
-          { id: 1, name: "account 2" },
-        ],
-        [
-          { id: 0, name: "Cat1" },
-          { id: 3, name: "Cat2" },
-        ],
-        { to_date: null, from_date: null, category: null, account: null }
-      );
-      expect(enzymeWrapper.find("Button").at(3).text()).toBe("Cat1");
-      expect(enzymeWrapper.find("Button").at(3).props().active).toBe(false);
-      expect(enzymeWrapper.find("Button").at(4).text()).toBe("Cat2");
-      expect(enzymeWrapper.find("Button").at(4).props().active).toBe(false);
-      enzymeWrapper.find("Button").at(3).props().onClick();
-      expect(props.onFilter.mock.calls.length).toBe(1);
+  await waitFor(() => screen.getByText("Time"));
 
-      // Click on account
-      enzymeWrapper.find("Button").at(5).props().onClick();
-      expect(props.onFilter.mock.calls.length).toBe(2);
-    });
+  expect(screen.getByText("Time")).toBeTruthy();
+});
 
-    it("should display some periods and set active", () => {
-      const { enzymeWrapper, props } = setup(
-        [
-          { id: 0, name: "account 1" },
-          { id: 1, name: "account 2" },
-        ],
-        [
-          { id: 0, name: "Cat1" },
-          { id: 3, name: "Cat2" },
-        ],
-        { to_date: null, from_date: null, category: 3, account: 0 }
-      );
-      expect(enzymeWrapper.find("Button").at(4).text()).toBe("Cat2");
-      expect(enzymeWrapper.find("Button").at(4).props().active).toBe(true);
+test("should display some categories and accounts", async () => {
+  const props = {
+    setFilters: jest.fn(),
+    filters: filters,
+  };
 
-      // Reset to "All"
-      enzymeWrapper.find("Button").at(1).props().onClick();
-      expect(props.onFilter.mock.calls.length).toBe(1);
-      expect(props.onFilter.mock.calls[0][0]).toEqual({
-        category: null,
-        has_category: null,
-      });
+  setup();
+  const queryClient = new QueryClient();
+  render(
+    <QueryClientProvider client={queryClient}>
+      <TransactionFilter {...props} />
+    </QueryClientProvider>
+  );
 
-      // Reset account to "All"
-      enzymeWrapper.find("Button").at(5).props().onClick();
-      expect(props.onFilter.mock.calls.length).toBe(2);
-      expect(props.onFilter.mock.calls[1][0]).toEqual({ account: null });
-    });
+  await waitFor(() => screen.getByText("Time"));
+
+  expect(screen.getByRole("button", { name: "Cat1" })).not.toHaveClass(
+    "active"
+  );
+  expect(screen.getByRole("button", { name: "Cat2" })).toHaveClass("active");
+
+  fireEvent.click(screen.getByRole("button", { name: "Cat1" }));
+  expect(props.setFilters.mock.calls.length).toBe(1);
+
+  // Click on account
+  fireEvent.click(screen.getByRole("button", { name: "account 1" }));
+  expect(props.setFilters.mock.calls.length).toBe(2);
+});
+
+test("should display some periods and set active", async () => {
+  const props = {
+    setFilters: jest.fn(),
+    filters: filters,
+  };
+
+  setup();
+  const queryClient = new QueryClient();
+  render(
+    <QueryClientProvider client={queryClient}>
+      <TransactionFilter {...props} />
+    </QueryClientProvider>
+  );
+
+  await waitFor(() => screen.getByText("Time"));
+
+  expect(screen.getByRole("button", { name: "Cat1" })).not.toHaveClass(
+    "active"
+  );
+  expect(screen.getByRole("button", { name: "Cat2" })).toHaveClass("active");
+
+  // Reset to "All"
+  fireEvent.click(screen.getByTestId("cat-all"));
+  expect(props.setFilters.mock.calls.length).toBe(1);
+  expect(props.setFilters.mock.calls[0][0]).toEqual({
+    account: 0,
+    category: null,
+    has_category: null,
+    from_date: null,
+    to_date: null,
+  });
+
+  // Reset account to "All"
+  fireEvent.click(screen.getByTestId("acct-all"));
+  expect(props.setFilters.mock.calls.length).toBe(2);
+  expect(props.setFilters.mock.calls[1][0]).toEqual({
+    account: null,
+    category: 3,
+    from_date: null,
+    to_date: null,
   });
 });

@@ -1,106 +1,124 @@
 import React from "react";
-import { shallow } from "enzyme";
-import Immutable from "immutable";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import nock from "nock";
 import Categorisor from "../Categorisor";
+import authService from "../../services/auth.service";
+
+const categories = [
+  { id: 0, name: "Cat1" },
+  { id: 3, name: "Cat2" },
+];
 
 function setup(transaction, suggestions) {
   const props = {
-    transaction: transaction,
-    suggestions: suggestions ? suggestions : Immutable.List(),
-    splits: Immutable.List(["split", "split2"]),
-    categories: Immutable.List(),
-    is_valid: { message: null, valid: null },
-    showCategorisor: jest.fn(),
-    saveCategorisor: jest.fn(),
-    hideCategorisor: jest.fn(),
-    removePotentialSplit: jest.fn(),
-    addPotentialSplit: jest.fn(),
-    setSplit: jest.fn(),
-    reloadPage: jest.fn(),
-    loadCategories: jest.fn(),
+    transaction,
+    showModal: true,
+    setModalShown: jest.fn(),
+    save: jest.fn(() => Promise.resolve()),
   };
 
-  const enzymeWrapper = shallow(<Categorisor {...props} />);
+  authService.dummyLogin();
+  nock("http://localhost:8000").get("/api/categories/").reply(200, categories);
+  nock("http://localhost:8000")
+    .get("/api/transactions/" + transaction.id + "/suggest")
+    .reply(200, suggestions);
 
-  return {
-    props,
-    enzymeWrapper,
-  };
+  return props;
 }
 
-describe("components", () => {
-  describe("Categorisor", () => {
-    it("should not render if transaction is null or undefined", () => {
-      let { enzymeWrapper } = setup(null);
-      expect(enzymeWrapper.find("Modal").exists()).toBe(false);
+test("Categorisor: should render if transaction is defined", async () => {
+  let props = setup(
+    {
+      id: "1",
+      description: "test",
+      when: "2012-01-01",
+      amount: -34.4,
+    },
+    []
+  );
+  const queryClient = new QueryClient();
+  render(
+    <QueryClientProvider client={queryClient}>
+      <Categorisor {...props} />
+    </QueryClientProvider>
+  );
+  await waitFor(() => screen.getByText("Categorise transaction"));
 
-      enzymeWrapper = setup().enzymeWrapper;
-      expect(enzymeWrapper.find("Modal").exists()).toBe(false);
-    });
+  expect(screen.getAllByRole("dialog")).toBeTruthy();
+});
 
-    it("should render if transaction is defined", () => {
-      let { enzymeWrapper } = setup({
-        description: "test",
-        when: "2012-01-01",
-        amount: -34.4,
-      });
-      expect(enzymeWrapper.find("Modal").exists()).toBe(true);
-    });
+test("Categorisor: should render suggestions if defined", async () => {
+  let props = setup(
+    {
+      id: "1",
+      description: "test",
+      when: "2012-01-01",
+      amount: -34.4,
+    },
+    [{ name: "suggest1" }, { name: "suggest2" }]
+  );
+  const queryClient = new QueryClient();
+  render(
+    <QueryClientProvider client={queryClient}>
+      <Categorisor {...props} />
+    </QueryClientProvider>
+  );
+  await waitFor(() => screen.getByText("Categorise transaction"));
 
-    it("should render suggestions if defined", () => {
-      let { enzymeWrapper } = setup(
-        {
-          description: "test",
-          when: "2012-01-01",
-          amount: -34.4,
-        },
-        Immutable.List([{ name: "suggest1" }, { name: "suggest2" }])
-      );
-      expect(enzymeWrapper.find("Modal").exists()).toBe(true);
-      expect(enzymeWrapper.find("li").at(0).text()).toEqual(
-        "suggest1 <Badge />"
-      );
-      expect(enzymeWrapper.find("li").at(1).text()).toEqual(
-        "suggest2 <Badge />"
-      );
-    });
+  expect(screen.getAllByRole("dialog")).toBeTruthy();
+  expect(screen.getByText("suggest1")).toBeTruthy();
+  expect(screen.getByText("suggest2")).toBeTruthy();
+});
 
-    it("should call save on button click", () => {
-      let { enzymeWrapper, props } = setup({
-        description: "test",
-        when: "2012-01-01",
-        amount: -34.4,
-      });
-      expect(props.saveCategorisor.mock.calls.length).toBe(0);
-      enzymeWrapper.find("Button").at(3).simulate("click");
-      expect(props.saveCategorisor.mock.calls.length).toBe(1);
-    });
+test("Categorisor: should call save on button click", async () => {
+  let props = setup(
+    {
+      id: "1",
+      description: "test",
+      when: "2012-01-01",
+      amount: -34.4,
+    },
+    []
+  );
 
-    it("should call split on change", () => {
-      let { enzymeWrapper, props } = setup({
-        description: "test",
-        when: "2012-01-01",
-        amount: -34.4,
-      });
-      expect(props.setSplit.mock.calls.length).toBe(0);
-      enzymeWrapper.find("SplitFieldset").at(0).props().setSplitCategory({});
-      expect(props.setSplit.mock.calls.length).toBe(1);
+  const queryClient = new QueryClient();
+  render(
+    <QueryClientProvider client={queryClient}>
+      <Categorisor {...props} />
+    </QueryClientProvider>
+  );
+  await waitFor(() => screen.getByText("Categorise transaction"));
 
-      enzymeWrapper.find("SplitFieldset").at(0).props().setSplitAmount({});
-      expect(props.setSplit.mock.calls.length).toBe(2);
-    });
+  expect(props.save.mock.calls.length).toBe(0);
+  fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
+  expect(props.save.mock.calls.length).toBe(1);
+});
 
-    it("should show alert if not valid", () => {
-      let { enzymeWrapper } = setup({
-        description: "test",
-        when: "2012-01-01",
-        amount: -34.4,
-      });
-      expect(enzymeWrapper.find("Alert").exists()).toBe(false);
-      enzymeWrapper.setProps({
-        is_valid: { message: "invalid", valid: false },
-      });
-      expect(enzymeWrapper.find("Alert").exists()).toBe(true);
-    });
+test("Categorisor: should show alert if not valid", async () => {
+  let props = setup(
+    {
+      id: "1",
+      description: "test",
+      when: "2012-01-01",
+      amount: -34.4,
+    },
+    []
+  );
+
+  const queryClient = new QueryClient();
+  render(
+    <QueryClientProvider client={queryClient}>
+      <Categorisor {...props} />
+    </QueryClientProvider>
+  );
+  await waitFor(() => screen.getByText("Categorise transaction"));
+
+  expect(screen.getByRole("button", { name: "Save changes" })).toBeEnabled();
+  fireEvent.click(screen.getByRole("button", { name: "Add split" }));
+  fireEvent.change(screen.getByTestId("splitamount-1"), {
+    target: { value: "-10" },
   });
+  expect(screen.getByRole("button", { name: "Save changes" })).toBeDisabled();
+  expect(screen.getByRole("alert")).toBeTruthy();
 });

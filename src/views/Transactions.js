@@ -1,142 +1,144 @@
-import React from "react";
+import React, { useState } from "react";
+import { useQueryClient } from "react-query";
 import PropTypes from "prop-types";
 import Immutable from "immutable";
 import { FormattedDate, FormattedNumber } from "react-intl";
 import { Button, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { Pagination } from "@react-bootstrap/pagination";
+import updateTransactionSplits from "../client/transactions";
 
-import CategorisorContainer from "../containers/CategorisorContainer";
-import TransactionFilterContainer from "../containers/TransactionFilterContainer";
+import Categorisor from "../views/Categorisor";
+import TransactionFilter from "../views/TransactionFilter";
+import useTransactions from "../hooks/useTransactions";
 
-class Transactions extends React.Component {
-  constructor(props) {
-    super(props);
+function Transactions(props) {
+  const { page_size } = props;
+  const [active_page, setPage] = useState(1);
+  const [filters, setFilters] = useState([]);
+  const [selected_transaction, setSelectedTransaction] = useState(null);
+  const [modal_shown, setModalShown] = useState(false);
 
-    props.onSelectTransactions(1, this.props.page_size, this.props.filters);
-    this.showCategorisor = this.showCategorisor.bind(this);
-    this.reloadPage = this.reloadPage.bind(this);
+  const { isLoading, isError, data } = useTransactions(
+    active_page,
+    page_size,
+    filters
+  );
+  const queryClient = useQueryClient();
+
+  if (isLoading || isError || !data.transactions) {
+    return null;
   }
 
-  showCategorisor(trans) {
-    this.props.setCategorisorTransaction(trans);
-    this.props.showCategorisor();
+  function reloadPage() {
+    queryClient.invalidateQueries("transactions");
   }
 
-  reloadPage() {
-    this.props.onSelectTransactions(
-      this.props.active_page,
-      this.props.page_size,
-      this.props.filters
+  const { num_records, transactions } = data;
+  const num_pages = num_records / page_size;
+
+  const tooltips = {};
+  transactions.forEach((trans) => {
+    tooltips[trans.id] = (
+      <Tooltip key={"tooltip-" + trans.id} id={"tooltip-" + trans.id}>
+        {trans.description}
+      </Tooltip>
     );
-  }
+  });
 
-  render() {
-    if (this.props.transactions === undefined) {
-      return null;
-    }
-
-    const tooltips = this.props.transactions.map((trans) => {
-      return (
-        <Tooltip key={"tooltip-" + trans.id} id={"tooltip-" + trans.id}>
-          {trans.description}
-        </Tooltip>
-      );
-    });
-    return (
-      <div>
-        <h3>Transactions</h3>
-        <div className="row">
-          <div className="col-md-10">
-            <table className="table table-condensed">
-              <tbody>
-                {[...this.props.transactions.values()].map((trans) => {
-                  let description = trans.description;
-                  if (description.length > 50) {
-                    description = description.substr(0, 50) + "...";
-                  }
-                  return (
-                    <tr key={trans.id}>
-                      <td>
-                        <FormattedDate value={trans.when} />
-                      </td>
-                      <td>
+  return (
+    <div>
+      <h3>Transactions</h3>
+      <div className="row">
+        <div className="col-md-10">
+          <table className="table table-condensed">
+            <tbody>
+              {[...transactions.values()].map((trans) => {
+                let description = trans.description;
+                if (description.length > 50) {
+                  description = description.substr(0, 50) + "...";
+                }
+                return (
+                  <tr key={trans.id}>
+                    <td>
+                      <FormattedDate value={trans.when} />
+                    </td>
+                    <td>
+                      {tooltips && (
                         <OverlayTrigger
                           placement="bottom"
-                          overlay={tooltips.get(trans.id)}
+                          overlay={tooltips[trans.id]}
                         >
                           <span>{description}</span>
                         </OverlayTrigger>
-                      </td>
-                      <td className="text-right">
+                      )}
+                    </td>
+                    <td className="text-right">
+                      <span
+                        className={trans.amount < 0 ? "text-danger" : undefined}
+                      >
+                        <FormattedNumber
+                          value={trans.amount || 0.0}
+                          style="currency"
+                          currency="AUD"
+                        />
+                      </span>
+                    </td>
+                    <td>
+                      <span className="label label-default">
+                        {trans.category_name}
+                      </span>
+                    </td>
+                    <td>
+                      <Button
+                        bsSize="small"
+                        onClick={(e) => {
+                          setSelectedTransaction(trans);
+                          setModalShown(true);
+                        }}
+                        data-testid={"catbutton-" + trans.id}
+                      >
                         <span
-                          className={
-                            trans.amount < 0 ? "text-danger" : undefined
-                          }
-                        >
-                          <FormattedNumber
-                            value={trans.amount || 0.0}
-                            style="currency"
-                            currency="AUD"
-                          />
-                        </span>
-                      </td>
-                      <td>
-                        <span className="label label-default">
-                          {trans.category_name}
-                        </span>
-                      </td>
-                      <td>
-                        <Button
-                          bsSize="small"
-                          onClick={() => this.showCategorisor(trans)}
-                        >
-                          <span
-                            className="glyphicon glyphicon-tags"
-                            aria-hidden="true"
-                          ></span>
-                        </Button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-            <CategorisorContainer reloadPage={this.reloadPage} />
-          </div>
-          <TransactionFilterContainer />
+                          className="glyphicon glyphicon-tags"
+                          aria-hidden="true"
+                        ></span>
+                      </Button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          {selected_transaction && (
+            <Categorisor
+              transaction={selected_transaction}
+              showModal={modal_shown}
+              setModalShown={setModalShown}
+              save={(transaction, splits) =>
+                updateTransactionSplits(transaction, splits, reloadPage)
+              }
+            />
+          )}
         </div>
-        <Pagination
-          prev
-          next
-          first
-          last
-          ellipsis
-          boundaryLinks
-          items={this.props.num_pages}
-          maxButtons={5}
-          bsSize="medium"
-          activePage={this.props.active_page}
-          onSelect={(page_num) => {
-            this.props.onSelectTransactions(
-              page_num,
-              this.props.page_size,
-              this.props.filters
-            );
-          }}
-        />
+        <TransactionFilter filters={filters} setFilters={setFilters} />
       </div>
-    );
-  }
+      <Pagination
+        prev
+        next
+        first
+        last
+        ellipsis
+        boundaryLinks
+        items={num_pages}
+        maxButtons={5}
+        bsSize="medium"
+        activePage={active_page}
+        onSelect={setPage}
+      />
+    </div>
+  );
 }
 
 Transactions.propTypes = {
-  active_page: PropTypes.number.isRequired,
-  filters: PropTypes.object.isRequired,
-  num_pages: PropTypes.number.isRequired,
   page_size: PropTypes.number.isRequired,
-  transactions: PropTypes.instanceOf(Immutable.OrderedMap),
-  onSelectTransactions: PropTypes.func.isRequired,
-  setCategorisorTransaction: PropTypes.func.isRequired,
-  showCategorisor: PropTypes.func.isRequired,
 };
 export default Transactions;

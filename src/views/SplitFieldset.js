@@ -52,6 +52,7 @@ function SplitFieldset(props) {
             type="number"
             onChange={props.setSplitAmount}
             value={props.split.amount}
+            data-testid={"splitamount-" + props.splitIdx}
           />
           {/*<!--display error message if street is not valid-->
           <small [class.hidden]="catForm.controls.splits.controls[i].controls.amount.valid"

@@ -1,86 +1,105 @@
 import React from "react";
-import { shallow } from "enzyme";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import nock from "nock";
 import Immutable from "immutable";
-import { FormattedDate } from "react-intl";
+import { FormattedDate, IntlProvider } from "react-intl";
 import Transactions from "../Transactions";
+import authService from "../../services/auth.service";
+
+const periods = [
+  {
+    id: 4,
+    label: "Last month",
+    from_date: "2011-01-02",
+    to_date: "2011-02-02",
+    offset: "1",
+  },
+  {
+    id: 1,
+    label: "Last week",
+    from_date: "2011-01-24",
+    to_date: "2011-02-02",
+    offset: "1",
+  },
+];
+
+const accounts = [
+  { id: 0, name: "account 1" },
+  { id: 1, name: "account 2" },
+];
+
+const categories = [
+  { id: 0, name: "Cat1" },
+  { id: 3, name: "Cat2" },
+];
 
 function setup(transactions) {
   const props = {
     page_size: 20,
-    filters: {},
-    active_page: 1,
-    onSelectTransactions: jest.fn(),
-    setCategorisorTransaction: jest.fn(),
-    showCategorisor: jest.fn(),
-    transactions: Immutable.List(transactions),
   };
 
-  const enzymeWrapper = shallow(<Transactions {...props} />);
+  authService.dummyLogin();
+  nock("http://localhost:8000").get("/api/periods/").reply(200, periods);
+  nock("http://localhost:8000").get("/api/accounts/").reply(200, accounts);
+  nock("http://localhost:8000").get("/api/categories/").reply(200, categories);
+  nock("http://localhost:8000")
+    .get("/api/transactions/?page=1&page_size=20")
+    .reply(200, {
+      results: transactions,
+      count: 40,
+    });
 
-  return {
-    props,
-    enzymeWrapper,
-  };
+  return props;
 }
 
-describe("components", () => {
-  describe("Transactions", () => {
-    it("should render self and subcomponents", () => {
-      const { enzymeWrapper, props } = setup([]);
+test("should render self and subcomponents", async () => {
+  const props = setup([]);
+  const queryClient = new QueryClient();
+  render(
+    <IntlProvider locale="en-AU">
+      <QueryClientProvider client={queryClient}>
+        <Transactions {...props} />
+      </QueryClientProvider>
+    </IntlProvider>
+  );
+  await waitFor(() => screen.getByText("Transactions"));
 
-      expect(enzymeWrapper.find("tbody").children().exists()).toBe(false);
-      expect(props.onSelectTransactions.mock.calls.length).toBe(1);
-    });
+  expect(screen.getByRole("table")).toBeTruthy();
+});
 
-    it("should display some transactions", () => {
-      const { enzymeWrapper, props } = setup([
-        {
-          id: 0,
-          when: new Date("2017-01-01"),
-          description: "Test this",
-          amount: -90.9,
-        },
-        {
-          id: 1,
-          when: new Date("2017-01-02"),
-          description:
-            "Test this really,  really,  really,  really,  really,  really long description",
-          amount: -90.9,
-        },
-      ]);
+test("should display some transactions", async () => {
+  const props = setup([
+    {
+      id: 0,
+      when: new Date("2017-01-01"),
+      description: "Test this",
+      amount: -90.9,
+    },
+    {
+      id: 1,
+      when: new Date("2017-01-02"),
+      description:
+        "Test this really,  really,  really,  really,  really,  really long description",
+      amount: -90.9,
+    },
+  ]);
+  const queryClient = new QueryClient();
+  render(
+    <IntlProvider locale="en-AU">
+      <QueryClientProvider client={queryClient}>
+        <Transactions {...props} />
+      </QueryClientProvider>
+    </IntlProvider>
+  );
+  await waitFor(() => screen.getByText("Transactions"));
 
-      expect(enzymeWrapper.find("tbody").children().length).toBe(2);
-      let tableRow = enzymeWrapper.find("tbody").children().at(0);
-      expect(tableRow.children().at(0).children().first().type()).toBe(
-        FormattedDate
-      );
-      expect(tableRow.children().at(1).find("span").text()).toBe("Test this");
-      expect(tableRow.find("FormattedNumber").length).toBe(1);
-      tableRow.find("Button").at(0).props().onClick();
-      expect(props.setCategorisorTransaction.mock.calls.length).toBe(1);
-      expect(props.showCategorisor.mock.calls.length).toBe(1);
+  expect(screen.getByRole("table").children.length).toBeTruthy();
 
-      tableRow = enzymeWrapper.find("tbody").children().at(1);
-      expect(tableRow.children().at(1).find("span").text()).toBe(
-        "Test this really,  really,  really,  really,  real..."
-      );
+  expect(screen.getByText("01/01/2017")).toBeTruthy();
+  expect(screen.getByText("Test this")).toBeTruthy();
 
-      enzymeWrapper.find("Pagination").props().onSelect();
-      expect(props.onSelectTransactions.mock.calls.length).toBe(2);
-
-      enzymeWrapper.instance().reloadPage();
-      expect(props.onSelectTransactions.mock.calls.length).toBe(3);
-    });
-  });
-
-  it("should render as null if transactions are undefined", () => {
-    const props = {
-      onSelectTransactions: jest.fn(),
-      setCategorisorTransaction: jest.fn(),
-      showCategorisor: jest.fn(),
-    };
-    const enzymeWrapper = shallow(<Transactions {...props} />);
-
-    expect(enzymeWrapper.children().exists()).toBeFalsy();
-  });
+  expect(screen.getByText(/Test this really, +really/)).toHaveTextContent(
+    "Test this really, really, really, really, real..."
+  );
 });

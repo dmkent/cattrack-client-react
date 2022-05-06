@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import DashboardContainer from "../containers/DashboardContainer";
 import AccountsContainer from "../containers/AccountsContainer";
-import TransactionList from "../containers/TransactionList";
+import Transactions from "../views/Transactions";
 import ErrorsContainer from "../containers/ErrorsContainer";
 import TrackingContainer from "../containers/TrackingContainer";
 import PaymentSeriesContainer from "../containers/PaymentSeriesContainer";
@@ -107,11 +107,7 @@ export function ContentView() {
         auth={auth}
         component={TrackingContainer}
       />
-      <PrivateRoute
-        path="/transactions"
-        auth={auth}
-        component={TransactionList}
-      />
+      <PrivateRoute path="/transactions" auth={auth} component={Transactions} />
       <PrivateRoute
         path="/bills"
         auth={auth}
