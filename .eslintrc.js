@@ -64,7 +64,7 @@ module.exports = {
         allowKeywords: true,
       },
     ],
-    "eol-last": ["error", "never"],
+    "eol-last": ["error"],
     eqeqeq: "off",
     "for-direction": "error",
     "func-call-spacing": "error",
@@ -205,7 +205,7 @@ module.exports = {
     "no-with": "error",
     "nonblock-statement-body-position": "error",
     "object-curly-newline": "off",
-    "object-curly-spacing": ["error", "never"],
+    "object-curly-spacing": ["error", "always"],
     "object-property-newline": [
       "error",
       {
