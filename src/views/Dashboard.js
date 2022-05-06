@@ -2,7 +2,7 @@ import React from "react";
 import PlotlyPie from "./PlotlyPie";
 import { Grid, Col, Row, Well } from "react-bootstrap";
 
-import TransactionFilterPeriods from "../views/TransactionFilterPeriods";
+import TransactionFilterPeriods from "../components/TransactionFilterPeriods";
 import BudgetSummaryContainer from "../containers/BudgetSummary";
 
 class Dashboard extends React.Component {

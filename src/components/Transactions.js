@@ -7,8 +7,8 @@ import { Button, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { Pagination } from "@react-bootstrap/pagination";
 import updateTransactionSplits from "../client/transactions";
 
-import Categorisor from "../views/Categorisor";
-import TransactionFilter from "../views/TransactionFilter";
+import Categorisor from "./Categorisor";
+import TransactionFilter from "./TransactionFilter";
 import useTransactions from "../hooks/useTransactions";
 
 function Transactions(props) {

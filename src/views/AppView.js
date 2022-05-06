@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import DashboardContainer from "../containers/DashboardContainer";
 import AccountsContainer from "../containers/AccountsContainer";
-import Transactions from "../views/Transactions";
+import Transactions from "../components/Transactions";
 import ErrorsContainer from "../containers/ErrorsContainer";
 import TrackingContainer from "../containers/TrackingContainer";
 import PaymentSeriesContainer from "../containers/PaymentSeriesContainer";

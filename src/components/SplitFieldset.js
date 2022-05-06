@@ -1,5 +1,5 @@
 import React from "react";
-import { FormGroup, FormControl, Button, ControlLabel } from "react-bootstrap";
+import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 
 function SplitFieldset(props) {
   let vstate = null;
