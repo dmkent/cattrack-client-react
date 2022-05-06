@@ -10,6 +10,8 @@ import {
   Popover,
   OverlayTrigger,
 } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 import AccountDetailContainer from "../containers/AccountDetailContainer";
 
@@ -66,10 +68,7 @@ class Accounts extends React.Component {
             }}
           >
             <Button bsSize="small">
-              <span
-                className="glyphicon glyphicon-plus"
-                aria-hidden="true"
-              ></span>
+              <FontAwesomeIcon icon={faPlus} />
             </Button>
           </OverlayTrigger>
         </h3>

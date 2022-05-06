@@ -11,7 +11,6 @@ module.exports = merge(common, {
     historyApiFallback: {
       index: BASENAME + "/index.html",
     },
-    liveReload: true,
   },
   plugins: [
     new webpack.DefinePlugin({
