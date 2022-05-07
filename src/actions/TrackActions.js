@@ -1,11 +1,9 @@
 import TrackActionTypes from "../data/TrackActionTypes";
 
 import AccountActions from "./AccountActions";
-import PaymentSeriesActions from "./PaymentSeriesActions";
 
 const TrackActions = {
   ...AccountActions,
-  ...PaymentSeriesActions,
 
   clearError(idx) {
     return {

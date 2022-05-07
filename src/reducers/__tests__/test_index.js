@@ -5,7 +5,6 @@ describe("combined reducer", () => {
     expect(Object.keys(reducer(undefined, {}))).toEqual([
       "accounts",
       "errors",
-      "bills",
       "budget",
     ]);
   });

@@ -5,7 +5,7 @@ import AccountsContainer from "../containers/AccountsContainer";
 import Transactions from "../components/Transactions";
 import ErrorsContainer from "../containers/ErrorsContainer";
 import Tracking from "../components/Tracking";
-import PaymentSeriesContainer from "../containers/PaymentSeriesContainer";
+import PaymentSeries from "../components/PaymentSeries";
 import CONFIG from "config";
 import NavComponent from "./NavComponent";
 import { IntlProvider } from "react-intl";
@@ -111,7 +111,7 @@ export function ContentView() {
       <PrivateRoute
         path="/bills"
         auth={auth}
-        component={PaymentSeriesContainer}
+        component={PaymentSeries}
       />
     </div>
   );
