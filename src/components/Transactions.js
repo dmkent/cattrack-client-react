@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useQueryClient } from "react-query";
 import PropTypes from "prop-types";
-import Immutable from "immutable";
 import { FormattedDate, FormattedNumber } from "react-intl";
 import { Button, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { Pagination } from "@react-bootstrap/pagination";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faTags } from '@fortawesome/free-solid-svg-icons'
 import updateTransactionSplits from "../client/transactions";
 
 import Categorisor from "./Categorisor";
@@ -97,10 +98,7 @@ function Transactions(props) {
                         }}
                         data-testid={"catbutton-" + trans.id}
                       >
-                        <span
-                          className="glyphicon glyphicon-tags"
-                          aria-hidden="true"
-                        ></span>
+                        <FontAwesomeIcon icon={faTags} />
                       </Button>
                     </td>
                   </tr>

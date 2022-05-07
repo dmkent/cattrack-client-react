@@ -14,13 +14,11 @@ import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 import { createBrowserHistory } from "history";
 import { routerMiddleware } from "react-router-redux";
-import createSagaMiddleware from "redux-saga";
 
 import "react-dates/initialize";
 
 import AppView from "./views/AppView";
 import catTrackApp from "./reducers";
-import rootSaga from "./sagas";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "./styles/local.css";
@@ -32,19 +30,13 @@ const queryClient = new QueryClient();
 const browserHistory = createBrowserHistory();
 const router_middleware = routerMiddleware(browserHistory);
 
-// Create the saga middleware
-const saga_middleware = createSagaMiddleware();
-
 /* eslint-disable no-underscore-dangle */
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 /* eslint-enable */
 const store = createStore(
   catTrackApp,
-  composeEnhancers(applyMiddleware(thunk, router_middleware, saga_middleware))
+  composeEnhancers(applyMiddleware(thunk, router_middleware))
 );
-
-// Then run the saga
-saga_middleware.run(rootSaga);
 
 render(
   <QueryClientProvider client={queryClient}>
