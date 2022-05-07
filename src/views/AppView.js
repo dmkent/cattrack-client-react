@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import Dashboard from "../components/Dashboard";
-import AccountsContainer from "../containers/AccountsContainer";
+import Accounts from "../components/Accounts";
 import Transactions from "../components/Transactions";
 import ErrorsContainer from "../containers/ErrorsContainer";
 import Tracking from "../components/Tracking";
@@ -100,7 +100,7 @@ export function ContentView() {
       <PrivateRoute
         path="/accounts"
         auth={auth}
-        component={AccountsContainer}
+        component={Accounts}
       />
       <PrivateRoute
         path="/tracking"
