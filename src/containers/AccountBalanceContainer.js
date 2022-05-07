@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import PlotlyTimeSeries from "../views/PlotlyTimeSeries";
+import PlotlyTimeSeries from "../components/PlotlyTimeSeries";
 
 export function mapStateToProps(state) {
   return {

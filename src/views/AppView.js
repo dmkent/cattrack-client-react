@@ -4,7 +4,7 @@ import Dashboard from "../components/Dashboard";
 import AccountsContainer from "../containers/AccountsContainer";
 import Transactions from "../components/Transactions";
 import ErrorsContainer from "../containers/ErrorsContainer";
-import TrackingContainer from "../containers/TrackingContainer";
+import Tracking from "../components/Tracking";
 import PaymentSeriesContainer from "../containers/PaymentSeriesContainer";
 import CONFIG from "config";
 import NavComponent from "./NavComponent";
@@ -105,7 +105,7 @@ export function ContentView() {
       <PrivateRoute
         path="/tracking"
         auth={auth}
-        component={TrackingContainer}
+        component={Tracking}
       />
       <PrivateRoute path="/transactions" auth={auth} render={() => <Transactions page_size={50}/>}/>
       <PrivateRoute

@@ -1,5 +1,5 @@
 import React from "react";
-import { shallow } from "enzyme";
+import { render, screen } from "@testing-library/react";
 import Immutable from "immutable";
 import SplitFieldset from "../SplitFieldset";
 
@@ -24,27 +24,23 @@ function setup(valid, message) {
     ],
   };
 
-  const enzymeWrapper = shallow(<SplitFieldset {...props} />);
+  render(<SplitFieldset {...props} />);
 
-  return {
-    props,
-    enzymeWrapper,
-  };
+  return props
 }
 
-describe("components", () => {
-  describe("SplitFieldSet", () => {
-    it("should render self and subcomponents", () => {
-      const { enzymeWrapper } = setup(null, "");
-      expect(enzymeWrapper.find("FormControl").length).toBe(2);
-    });
-    it("should render self and subcomponents if valid state", () => {
-      const { enzymeWrapper } = setup(true, "");
-      expect(enzymeWrapper.find("FormControl").length).toBe(2);
-    });
-    it("should render self and subcomponents if invalid state", () => {
-      const { enzymeWrapper } = setup(false, "error");
-      expect(enzymeWrapper.find("FormControl").length).toBe(2);
-    });
-  });
+test("should render self and subcomponents", () => {
+  setup(null, "");
+  expect(screen.getByLabelText("Category")).toHaveValue("1");
+  expect(screen.getByLabelText("Amount")).toHaveValue(-23);
+});
+test("should render self and subcomponents if valid state", () => {
+  setup(true, "");
+  expect(screen.getByLabelText("Category")).toHaveValue("1");
+  expect(screen.getByLabelText("Amount")).toHaveValue(-23);
+});
+test("should render self and subcomponents if invalid state", () => {
+  setup(false, "error");
+  expect(screen.getByLabelText("Category")).toHaveValue("1");
+  expect(screen.getByLabelText("Amount")).toHaveValue(-23);
 });

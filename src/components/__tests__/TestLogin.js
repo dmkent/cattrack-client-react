@@ -1,24 +1,11 @@
 import React from "react";
-import { shallow } from "enzyme";
+import { render, screen } from "@testing-library/react";
 import Login from "../Login";
 
-function setup() {
-  const props = {};
+test("should render self and subcomponents", () => {
+  render(<Login />)
 
-  const enzymeWrapper = shallow(<Login {...props} />);
+  expect(screen.findByLabelText("Username")).toBeTruthy();
 
-  return {
-    props,
-    enzymeWrapper,
-  };
-}
-
-describe("components", () => {
-  describe("Login", () => {
-    it("should render self and subcomponents", () => {
-      const { enzymeWrapper } = setup();
-
-      expect(enzymeWrapper.find("label").length).toBe(2);
-    });
-  });
+  expect(screen.findByLabelText("Password")).toBeTruthy();
 });
