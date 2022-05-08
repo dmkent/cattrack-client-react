@@ -1,6 +1,6 @@
 import React from "react";
 import Immutable from "immutable";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 
 import PlotlyTimeSeries, { plotlyDataFromSeries } from "../PlotlyTimeSeries";
 

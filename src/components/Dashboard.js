@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import PlotlyPie from "../views/PlotlyPie";
+import PlotlyPie from "./PlotlyPie";
 import { Grid, Col, Row, Well } from "react-bootstrap";
 
 import TransactionFilterPeriods from "./TransactionFilterPeriods";
@@ -15,7 +15,7 @@ function Dashboard(props) {
   if (isPeriodsLoading || isSummaryLoading) {
     return null
   }
-
+  
   return (
     <div>
       <Grid>
