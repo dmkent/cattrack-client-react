@@ -17,13 +17,16 @@ function TransactionFilterPeriods(props) {
       <h3 data-testid="dateRangePicker">Time</h3>
       <DateRangePicker
         value={[fromDateVal, toDateVal]}
-        onChange={([startDate, endDate]) =>
+        onChange={(data) => {
+          if (!data) return
+
+          const [startDate, endDate] = data
           updateFilters({
             from_date:
               startDate === null ? null : format(startDate, fmtStr),
             to_date: endDate === null ? null : format(endDate, fmtStr),
           })
-        }
+        }}
       />
 
       <p>-- OR --</p>
