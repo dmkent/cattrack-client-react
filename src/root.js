@@ -10,13 +10,10 @@ import React from "react";
 import { render } from "react-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-import "react-dates/initialize";
-
 import App from "./components/App";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "./styles/local.css";
-import "react-dates/lib/css/_datepicker.css";
 
 // React query client
 const queryClient = new QueryClient();

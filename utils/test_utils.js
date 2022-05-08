@@ -1,7 +1,6 @@
 import Immutable from "immutable";
 import diff from "jest-diff";
 import "@testing-library/jest-dom";
-import "react-dates/initialize";
 
 expect.extend({
   toEqualImmutable(received, argument) {

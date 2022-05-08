@@ -1,32 +1,29 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
-import { DateRangePicker, toMomentObject } from "react-dates";
+import DateRangePicker from "@wojtekmaj/react-daterange-picker";
+import ParseDate from "date-fns/parse";
+import { format } from "date-fns"
+
+const fmtStr = "yyyy-MM-dd";
 
 function TransactionFilterPeriods(props) {
   const { filters, updateFilters, periods } = props;
-  const [focusedInput, setFocusedInput] = useState(null);
-
+  
   let all_periods = filters.from_date === null && filters.to_date === null;
+  const fromDateVal = filters.from_date ? ParseDate(filters.from_date, fmtStr, new Date(2022, 1, 1)) : null
+  const toDateVal = filters.to_date ? ParseDate(filters.to_date, fmtStr, new Date(2022, 1, 1)) : null
   return (
     <div>
       <h3 data-testid="dateRangePicker">Time</h3>
       <DateRangePicker
-        startDate={toMomentObject(filters.from_date)}
-        startDateId="drp_start_transaction_filter_periods"
-        endDate={toMomentObject(filters.to_date)}
-        endDateId="drp_end_transaction_filter_periods"
-        onDatesChange={({ startDate, endDate }) =>
+        value={[fromDateVal, toDateVal]}
+        onChange={([startDate, endDate]) =>
           updateFilters({
             from_date:
-              startDate === null ? null : startDate.format("YYYY-MM-DD"),
-            to_date: endDate === null ? null : endDate.format("YYYY-MM-DD"),
+              startDate === null ? null : format(startDate, fmtStr),
+            to_date: endDate === null ? null : format(endDate, fmtStr),
           })
         }
-        focusedInput={focusedInput}
-        onFocusChange={(focusedInput) => setFocusedInput(focusedInput)}
-        isOutsideRange={() => {
-          return false;
-        }}
       />
 
       <p>-- OR --</p>
