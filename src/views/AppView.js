@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import Dashboard from "../components/Dashboard";
 import Accounts from "../components/Accounts";
 import Transactions from "../components/Transactions";
-import ErrorsContainer from "../containers/ErrorsContainer";
 import Tracking from "../components/Tracking";
 import PaymentSeries from "../components/PaymentSeries";
 import CONFIG from "config";
@@ -21,7 +20,6 @@ function AppView() {
         <div>
           <NavComponent />
           <div className="container-fluid">
-            <ErrorsContainer />
             <h1>CatTrack</h1>
             <ContentView />
           </div>
