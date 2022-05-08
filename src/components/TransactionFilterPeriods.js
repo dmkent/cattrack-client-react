@@ -9,7 +9,7 @@ function TransactionFilterPeriods(props) {
   let all_periods = filters.from_date === null && filters.to_date === null;
   return (
     <div>
-      <h3>Time</h3>
+      <h3 data-testid="dateRangePicker">Time</h3>
       <DateRangePicker
         startDate={toMomentObject(filters.from_date)}
         startDateId="drp_start_transaction_filter_periods"

@@ -1,19 +1,18 @@
-import React from "react";
-import { connect } from "react-redux";
-import Dashboard from "../components/Dashboard";
-import Accounts from "../components/Accounts";
-import Transactions from "../components/Transactions";
-import Tracking from "../components/Tracking";
-import PaymentSeries from "../components/PaymentSeries";
+import React, { useEffect } from "react";
+import Dashboard from "./Dashboard";
+import Accounts from "./Accounts";
+import Transactions from "./Transactions";
+import Tracking from "./Tracking";
+import PaymentSeries from "./PaymentSeries";
 import CONFIG from "config";
-import NavComponent from "../components/NavComponent";
+import NavComponent from "./NavComponent";
 import { IntlProvider } from "react-intl";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
-import Login from "../components/Login";
+import Login from "./Login";
 import { useAuthToken } from "../hooks/useAuthToken";
 import AuthService from "../services/auth.service";
 
-function AppView() {
+function App() {
   return (
     <IntlProvider locale="en-AU">
       <Router basename={CONFIG.BASENAME}>
@@ -34,27 +33,13 @@ function AppView() {
   );
 }
 
-export class Logout extends React.Component {
-  componentWillMount() {
-    this.props.logout();
-  }
+export function Logout(props) {
+  useEffect(() => {
+    AuthService.logout()
+  }, [])
 
-  render() {
-    return <Redirect to="/login" />;
-  }
+  return <Redirect to="/login" />;
 }
-
-const logoutMapDispatchToProps = (dispatch) => {
-  return {
-    logout: () => {
-      dispatch(AuthService.logout());
-    },
-  };
-};
-
-export const LogoutContainer = connect((state) => {
-  return {};
-}, logoutMapDispatchToProps)(Logout);
 
 export const PrivateRoute = ({
   component: Component,
@@ -93,7 +78,7 @@ export function ContentView() {
   return (
     <div>
       <Route path="/login" component={Login} />
-      <Route path="/logout" component={LogoutContainer} />
+      <Route path="/logout" component={Logout} />
       <PrivateRoute exact path="/" auth={auth} component={Dashboard} />
       <PrivateRoute
         path="/accounts"
@@ -115,4 +100,4 @@ export function ContentView() {
   );
 }
 
-export default AppView;
+export default App;

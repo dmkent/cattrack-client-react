@@ -12,7 +12,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 
 import "react-dates/initialize";
 
-import AppView from "./views/AppView";
+import App from "./components/App";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "./styles/local.css";
@@ -21,13 +21,9 @@ import "react-dates/lib/css/_datepicker.css";
 // React query client
 const queryClient = new QueryClient();
 
-/* eslint-disable no-underscore-dangle */
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-/* eslint-enable */
-
 render(
   <QueryClientProvider client={queryClient}>
-    <AppView />
+    <App/>
   </QueryClientProvider>,
   document.getElementById("root")
 );
