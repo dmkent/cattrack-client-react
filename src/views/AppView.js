@@ -7,7 +7,7 @@ import ErrorsContainer from "../containers/ErrorsContainer";
 import Tracking from "../components/Tracking";
 import PaymentSeries from "../components/PaymentSeries";
 import CONFIG from "config";
-import NavComponent from "./NavComponent";
+import NavComponent from "../components/NavComponent";
 import { IntlProvider } from "react-intl";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Login from "../components/Login";
