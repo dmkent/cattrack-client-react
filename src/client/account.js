@@ -5,7 +5,7 @@ import { parseErrors } from "./ErrorParser";
 import Account from "../data/Account";
 
 export function loadAccounts() {
-  return fetch_from_api(null, "/api/accounts/")
+  return fetch_from_api("/api/accounts/")
     .then(checkStatus)
     .then((rawAccounts) => 
       rawAccounts.map((rawAccount) => {
@@ -20,7 +20,6 @@ export function uploadToAccount(account, upload_file) {
   data.append("name", account.name);
 
   return fetch_from_api(
-    null,
     "/api/accounts/" + account.id + "/load/",
     {
       method: "POST",
@@ -55,7 +54,7 @@ export function uploadToAccount(account, upload_file) {
 };
 
 export function createAccount(name) {
-  return fetch_from_api(null, "/api/accounts/", {
+  return fetch_from_api("/api/accounts/", {
     method: "POST",
     body: JSON.stringify({ name: name }),
   })
@@ -65,7 +64,6 @@ export function createAccount(name) {
 
 export function loadAccountBalanceSeries(account) {
   return fetch_from_api(
-    null,
     "/api/accounts/" + account.id + "/series/"
   )
     .then(checkStatus)

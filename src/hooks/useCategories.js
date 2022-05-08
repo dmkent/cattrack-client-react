@@ -6,7 +6,7 @@ import Category from "../data/Category";
 
 export default function useCategories() {
   const fetchCategories = () =>
-    fetch_from_api(null, "/api/categories/")
+    fetch_from_api("/api/categories/")
       .then(checkStatus)
       .then((resp) => {
         return resp.map((cat) => {

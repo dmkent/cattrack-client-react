@@ -7,7 +7,7 @@ export default function updateTransactionSplits(transaction, splits, onDone) {
     updated = updated.set("category", new_category);
   }
 
-  return fetch_from_api(null, "/api/transactions/" + updated.id + "/", {
+  return fetch_from_api("/api/transactions/" + updated.id + "/", {
     method: "PUT",
     body: JSON.stringify(updated),
     headers: { "Content-Type": "application/json" },
@@ -16,7 +16,6 @@ export default function updateTransactionSplits(transaction, splits, onDone) {
     .then((resp) => {
       if (splits !== null && splits.size > 1) {
         return fetch_from_api(
-          null,
           "/api/transactions/" + updated.id + "/split/",
           {
             method: "POST",

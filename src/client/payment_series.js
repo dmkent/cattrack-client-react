@@ -6,7 +6,7 @@ export default function paymentSeriesAddBillFromFile(idx, upload_file) {
   data.append("data_file", upload_file);
   data.append("name", idx);
 
-  return fetch_from_api(null, "/api/payments/" + idx + "/loadpdf/", {
+  return fetch_from_api("/api/payments/" + idx + "/loadpdf/", {
     method: "POST",
     body: data,
     headers: {

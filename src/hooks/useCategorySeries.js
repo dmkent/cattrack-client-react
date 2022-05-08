@@ -5,7 +5,7 @@ import { fetch_from_api, checkStatus } from "../client/CatTrackAPI";
 
 export default function useCategorySeries(category_id) {
   const fetchCategories = () =>
-    fetch_from_api(null, "/api/categories/" + category_id + "/series/")
+    fetch_from_api("/api/categories/" + category_id + "/series/")
       .then(checkStatus)
       .then((series) => Immutable.List(
           series.map((raw) => {

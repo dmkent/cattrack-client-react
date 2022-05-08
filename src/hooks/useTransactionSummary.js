@@ -6,7 +6,7 @@ import { fetch_from_api, filters_to_params, checkStatus } from "../client/CatTra
 export default function useTransactionSuggestions(filters) {
   const query_params = filters_to_params(filters);
   const fetchSummary = () =>
-    fetch_from_api(null, "/api/transactions/summary/" + query_params)
+    fetch_from_api("/api/transactions/summary/" + query_params)
       .then(checkStatus)
       .then((resp) => Immutable.OrderedMap(
         resp.map((item) => [item.category, item])

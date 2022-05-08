@@ -16,7 +16,7 @@ export default function useTransactions(page, pageSize, filters) {
   });
 
   const fetchTransactions = () =>
-    fetch_from_api(null, "/api/transactions/" + params)
+    fetch_from_api("/api/transactions/" + params)
       .then(checkStatus)
       .then((rawTransactions) => {
         return {

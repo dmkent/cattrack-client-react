@@ -7,7 +7,7 @@ export default function useBudgetSummaries(from_date, to_date) {
   const toStr = to_date ? to_date.replace('-', '') : moment().format("YYYYMMDD")
   const fromStr = from_date ? from_date.replace('-', '') : moment().subtract(1, "month").format("YYYYMMDD")
   const fetchSummaries = () =>
-    fetch_from_api(null, `/api/categories/summary/${fromStr}/${toStr}/`)
+    fetch_from_api(`/api/categories/summary/${fromStr}/${toStr}/`)
       .then(checkStatus)
       .then((raw) => {
         return raw;
