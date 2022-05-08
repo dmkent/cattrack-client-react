@@ -19,14 +19,11 @@ function setup(account_id, uploading) {
 
   render(<AccountDetail {...props} />);
 
-  return props
+  return props;
 }
 
 test("should render self and subcomponents", () => {
-  setup(
-    0,
-    false
-  );
+  setup(0, false);
 
   expect(screen.getByLabelText("Load data:")).toBeTruthy();
 });

@@ -3,7 +3,11 @@ import PropTypes from "prop-types";
 import Immutable from "immutable";
 import Plotly from "../client/PlotlyWrapper";
 
-export function plotlyDataFromSeries(series, plot_invert = false, plot_type = 'bar') {
+export function plotlyDataFromSeries(
+  series,
+  plot_invert = false,
+  plot_type = "bar"
+) {
   let values = [];
   let labels = [];
 
@@ -26,10 +30,12 @@ export function plotlyDataFromSeries(series, plot_invert = false, plot_type = 'b
 }
 
 function PlotlyTimeSeries(props) {
-  const plotContainer = useRef(null)
-  const plotData = useRef([{}])
-  
-  const updateDimensions = useCallback(() => Plotly.Plots.resize(plotContainer.current))
+  const plotContainer = useRef(null);
+  const plotData = useRef([{}]);
+
+  const updateDimensions = useCallback(() =>
+    Plotly.Plots.resize(plotContainer.current)
+  );
   useEffect(() => {
     window.addEventListener("resize", updateDimensions);
     return () => {
@@ -38,22 +44,24 @@ function PlotlyTimeSeries(props) {
     };
   });
 
-  const [hasRendered, setHasRendered] = useState(false)
-  plotData.current[0] = plotlyDataFromSeries(props.series, props.plot_invert, props.plot_type)
-  const plotLayout = {}
-  
+  const [hasRendered, setHasRendered] = useState(false);
+  plotData.current[0] = plotlyDataFromSeries(
+    props.series,
+    props.plot_invert,
+    props.plot_type
+  );
+  const plotLayout = {};
+
   useEffect(() => {
     if (hasRendered) {
       Plotly.redraw(plotContainer.current);
     } else {
       Plotly.plot(plotContainer.current, plotData.current, plotLayout);
-      setHasRendered(true)
+      setHasRendered(true);
     }
-  }, [plotContainer, props.series, props.plot_invert, props.plot_type])
+  }, [plotContainer, props.series, props.plot_invert, props.plot_type]);
 
-  return (
-    <div data-testid="plotly" ref={plotContainer}></div>
-  );
+  return <div data-testid="plotly" ref={plotContainer}></div>;
 }
 
 PlotlyTimeSeries.propTypes = {

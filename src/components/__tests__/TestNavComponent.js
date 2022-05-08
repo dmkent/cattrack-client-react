@@ -23,17 +23,17 @@ describe("components", () => {
     it("should render self and subcomponents when logged out", () => {
       setup(false);
       expect(screen.getAllByRole("link").length).toBe(7);
-      expect(screen.getByRole("link", {name: "Dashboard"})).toBeTruthy()
-      expect(screen.getByRole("link", {name: "Accounts"})).toBeTruthy();
-      expect(screen.getByRole("link", {name: "Login"})).toBeTruthy();
+      expect(screen.getByRole("link", { name: "Dashboard" })).toBeTruthy();
+      expect(screen.getByRole("link", { name: "Accounts" })).toBeTruthy();
+      expect(screen.getByRole("link", { name: "Login" })).toBeTruthy();
     });
 
     it("should render self and subcomponents when logged in", () => {
       setup(true);
       expect(screen.getAllByRole("link").length).toBe(7);
-      expect(screen.getByRole("link", {name: "Dashboard"})).toBeTruthy()
-      expect(screen.getByRole("link", {name: "Accounts"})).toBeTruthy();
-      expect(screen.getByRole("link", {name: "Logout"})).toBeTruthy();
+      expect(screen.getByRole("link", { name: "Dashboard" })).toBeTruthy();
+      expect(screen.getByRole("link", { name: "Accounts" })).toBeTruthy();
+      expect(screen.getByRole("link", { name: "Logout" })).toBeTruthy();
     });
   });
 });

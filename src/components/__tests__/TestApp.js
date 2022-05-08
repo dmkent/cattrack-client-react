@@ -1,9 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import App, {
-  PrivateRoute,
-  ContentView,
-} from "../App";
+import App, { PrivateRoute, ContentView } from "../App";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 
 function setup() {
@@ -50,9 +47,7 @@ test("PrivateRoute should render component if logged in", () => {
     auth: { is_logged_in: true },
   });
   expect(res.type).toBe(Route);
-  expect(res.props.render({ location: "/" })).toEqual(
-    <div location={"/"} />
-  );
+  expect(res.props.render({ location: "/" })).toEqual(<div location={"/"} />);
 });
 
 test("PrivateRoute should render with render func if logged in", () => {

@@ -46,7 +46,7 @@ module.exports = {
       "@wojtekmaj/react-daterange-picker",
       "react-router-dom",
       "react-router",
-      "react-intl",      
+      "react-intl",
       "babel-preset-react",
       "immutable",
     ],

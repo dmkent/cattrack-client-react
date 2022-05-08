@@ -26,7 +26,7 @@ function setup(valid, message) {
 
   render(<SplitFieldset {...props} />);
 
-  return props
+  return props;
 }
 
 test("should render self and subcomponents", () => {

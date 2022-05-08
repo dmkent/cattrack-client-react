@@ -15,14 +15,11 @@ export default function updateTransactionSplits(transaction, splits, onDone) {
     .then(checkStatus)
     .then((resp) => {
       if (splits !== null && splits.size > 1) {
-        return fetch_from_api(
-          "/api/transactions/" + updated.id + "/split/",
-          {
-            method: "POST",
-            body: JSON.stringify(splits),
-            headers: { "Content-Type": "application/json" },
-          }
-        )
+        return fetch_from_api("/api/transactions/" + updated.id + "/split/", {
+          method: "POST",
+          body: JSON.stringify(splits),
+          headers: { "Content-Type": "application/json" },
+        })
           .then(checkStatus)
           .then(() => {
             onDone();

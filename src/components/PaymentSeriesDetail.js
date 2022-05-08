@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Immutable from "immutable";
 import { FormattedDate, FormattedNumber } from "react-intl";
@@ -23,10 +23,7 @@ function PaymentSeriesDetail(props) {
         <UploadForm
           submit_label="Add"
           uploadFile={(data) =>
-            props.paymentSeriesAddBillFromFile(
-              props.series.id,
-              data
-            )
+            props.paymentSeriesAddBillFromFile(props.series.id, data)
           }
         />
         <p>
@@ -60,30 +57,24 @@ PaymentSeriesDetail.propTypes = {
 };
 
 function UploadForm(props) {
-  const [uploadFile, setUploadFile] = useState("")
+  const [uploadFile, setUploadFile] = useState("");
   const handleChange = (event) => {
     const target = event.target;
     const files = target.files;
 
     setUploadFile(files[0]);
-  }
+  };
 
   const handleSubmit = (event) => {
     props.uploadFile(uploadFile);
     event.preventDefault();
-  }
+  };
 
   return (
     <Form onSubmit={handleSubmit}>
       <FormGroup controlId="form-upload">
-        {props.label && (
-          <ControlLabel>{props.label}: </ControlLabel>
-        )}
-        <FormControl
-          type="file"
-          name="upload_file"
-          onChange={handleChange}
-        />
+        {props.label && <ControlLabel>{props.label}: </ControlLabel>}
+        <FormControl type="file" name="upload_file" onChange={handleChange} />
       </FormGroup>
       <Button type="submit">{props.submit_label || "Submit"}</Button>
     </Form>

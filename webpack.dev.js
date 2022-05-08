@@ -7,7 +7,7 @@ const BASENAME = "";
 
 module.exports = merge(common, {
   mode: "development",
-  devtool: 'inline-source-map',
+  devtool: "inline-source-map",
   devServer: {
     historyApiFallback: {
       index: BASENAME + "/index.html",

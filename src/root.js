@@ -20,7 +20,7 @@ const queryClient = new QueryClient();
 
 render(
   <QueryClientProvider client={queryClient}>
-    <App/>
+    <App />
   </QueryClientProvider>,
   document.getElementById("root")
 );

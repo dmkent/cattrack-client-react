@@ -20,25 +20,25 @@ const payments = [
         is_paid: false,
         description: "Test",
       },
-    ]
-  }
-]
+    ],
+  },
+];
 
 test("PaymentSeries should render self and subcomponents", async () => {
   authService.dummyLogin();
   nock("http://localhost:8000").get("/api/payments/").reply(200, payments);
-  
+
   const queryClient = new QueryClient();
   render(
-    <IntlProvider locale="en-AU">  
+    <IntlProvider locale="en-AU">
       <QueryClientProvider client={queryClient}>
-        <PaymentSeries/>
+        <PaymentSeries />
       </QueryClientProvider>
     </IntlProvider>
   );
   await waitFor(() => screen.getByText("Elec"));
- 
-  fireEvent.click(screen.getByText("Elec"))
 
-  expect(screen.getByText("$100.00")).toBeTruthy()
+  fireEvent.click(screen.getByText("Elec"));
+
+  expect(screen.getByText("$100.00")).toBeTruthy();
 });

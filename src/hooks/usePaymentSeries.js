@@ -9,7 +9,9 @@ export default function usePaymentSeries() {
     fetch_from_api("/api/payments/")
       .then(checkStatus)
       .then((series) =>
-         Immutable.Map(series.map((series) => [series.id, series_from_json(series)]))
+        Immutable.Map(
+          series.map((series) => [series.id, series_from_json(series)])
+        )
       );
 
   return useQuery("payments", fetchPayments);

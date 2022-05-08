@@ -2,30 +2,33 @@ import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import DateRangePicker from "@wojtekmaj/react-daterange-picker";
 import ParseDate from "date-fns/parse";
-import { format } from "date-fns"
+import { format } from "date-fns";
 
 const fmtStr = "yyyy-MM-dd";
 
 function TransactionFilterPeriods(props) {
   const { filters, updateFilters, periods } = props;
-  
+
   let all_periods = filters.from_date === null && filters.to_date === null;
-  const fromDateVal = filters.from_date ? ParseDate(filters.from_date, fmtStr, new Date(2022, 1, 1)) : null
-  const toDateVal = filters.to_date ? ParseDate(filters.to_date, fmtStr, new Date(2022, 1, 1)) : null
+  const fromDateVal = filters.from_date
+    ? ParseDate(filters.from_date, fmtStr, new Date(2022, 1, 1))
+    : null;
+  const toDateVal = filters.to_date
+    ? ParseDate(filters.to_date, fmtStr, new Date(2022, 1, 1))
+    : null;
   return (
     <div>
       <h3 data-testid="dateRangePicker">Time</h3>
       <DateRangePicker
         value={[fromDateVal, toDateVal]}
         onChange={(data) => {
-          if (!data) return
+          if (!data) return;
 
-          const [startDate, endDate] = data
+          const [startDate, endDate] = data;
           updateFilters({
-            from_date:
-              startDate === null ? null : format(startDate, fmtStr),
+            from_date: startDate === null ? null : format(startDate, fmtStr),
             to_date: endDate === null ? null : format(endDate, fmtStr),
-          })
+          });
         }}
       />
 

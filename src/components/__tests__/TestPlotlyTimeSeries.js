@@ -28,7 +28,7 @@ test("PlotlyTimeSeries should render empty", () => {
   render(<PlotlyTimeSeries {...props} />);
 
   expect(screen.getByTestId("plotly")).toBeTruthy();
-})
+});
 
 test("PlotlyTimeSeries should render content", () => {
   const props = {
@@ -41,4 +41,4 @@ test("PlotlyTimeSeries should render content", () => {
   render(<PlotlyTimeSeries {...props} />);
 
   expect(screen.getByTestId("plotly")).toBeTruthy();
-})
+});

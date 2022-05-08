@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 import { FormattedDate, FormattedNumber } from "react-intl";
 import { Button, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { Pagination } from "@react-bootstrap/pagination";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faTags } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTags } from "@fortawesome/free-solid-svg-icons";
 import updateTransactionSplits from "../client/transactions";
 
 import Categorisor from "./Categorisor";

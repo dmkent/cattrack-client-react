@@ -1,4 +1,4 @@
-import React, {useRef, useState, useEffect} from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Plotly from "../client/PlotlyWrapper";
 
 export function plotlyDataFromSummary(summary) {
@@ -47,24 +47,24 @@ export function plotlyDataFromSummary(summary) {
 }
 
 function PlotlyPie(props) {
-  const plotContainer = useRef(null)
-  const plotData = useRef([{}])
-  const [hasRendered, setHasRendered] = useState(false)
-  
+  const plotContainer = useRef(null);
+  const plotData = useRef([{}]);
+  const [hasRendered, setHasRendered] = useState(false);
+
   const plotLayout = {
     //height: 800,
     //width: 1000
-  }
-  plotData.current[0] = plotlyDataFromSummary(props.summary)
+  };
+  plotData.current[0] = plotlyDataFromSummary(props.summary);
 
   useEffect(() => {
     if (hasRendered) {
       Plotly.redraw(plotContainer.current);
     } else {
       Plotly.plot(plotContainer.current, plotData.current, plotLayout);
-      setHasRendered(true)
+      setHasRendered(true);
     }
-  }, [plotContainer, props.summary])
+  }, [plotContainer, props.summary]);
 
   return <div data-testid="plotly" ref={plotContainer}></div>;
 }
