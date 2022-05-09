@@ -4,7 +4,7 @@ import Accounts from "./Accounts";
 import Transactions from "./Transactions";
 import Tracking from "./Tracking";
 import PaymentSeries from "./PaymentSeries";
-import CONFIG from "config";
+import CONFIG from "ctrack_config";
 import NavComponent from "./NavComponent";
 import { IntlProvider } from "react-intl";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";

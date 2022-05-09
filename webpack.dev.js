@@ -23,7 +23,7 @@ module.exports = merge(common, {
   ],
   resolve: {
     alias: {
-      config: path.join(__dirname, "src/config/config.dev.js"),
+      ctrack_config: path.join(__dirname, "src/config/config.dev.js"),
     },
   },
 });

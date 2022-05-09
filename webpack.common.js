@@ -15,9 +15,9 @@ module.exports = {
         use: ["source-map-loader"],
       },
       {
-        test: /\.js$/,
+        test: /\.(js|ts|tsx)$/,
         exclude: /node_modules/,
-        use: [{ loader: "babel-loader" }],
+        use: ["babel-loader" ],
       },
       {
         test: /\.css$/,
@@ -78,5 +78,6 @@ module.exports = {
     fallback: {
       path: require.resolve("path-browserify"),
     },
+    extensions: ['.ts', '.tsx', '.js', '.json'],
   },
 };

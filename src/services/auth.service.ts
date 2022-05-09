@@ -1,7 +1,14 @@
 import { checkStatus } from "../client/CatTrackAPI";
-import CONFIG from "config";
+import CONFIG from "ctrack_config";
 
-function parseJwt(token) {
+type JwtData = {
+  exp: number;
+  username: string;
+  user_id: string;
+  email: string;
+}
+
+function parseJwt(token: string) {
   if (!token) {
     return {};
   }
@@ -11,7 +18,7 @@ function parseJwt(token) {
   return JSON.parse(window.atob(base64));
 }
 
-function dummyLogin(dataOverride) {
+function dummyLogin(dataOverride: JwtData) {
   let expiry = new Date();
   expiry.setDate(expiry.getDate() + 2);
   let data = dataOverride;
@@ -29,7 +36,7 @@ function dummyLogin(dataOverride) {
   localStorage.setItem("jwt", `a.${encoded}.c`);
 }
 
-function login(username, password) {
+function login(username: string, password: string) {
   return fetch(CONFIG.API_URI + "/api-token-auth/", {
     method: "POST",
     body: JSON.stringify({ username: username, password: password }),
