@@ -1,7 +1,7 @@
 import React from "react";
-import { mount } from "enzyme";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import Immutable from "immutable";
-import { toMomentObject } from "react-dates";
+import { format, sub } from "date-fns";
 import TransactionFilterPeriods from "../TransactionFilterPeriods";
 
 function setup(periods, filters) {
@@ -11,100 +11,88 @@ function setup(periods, filters) {
     periods: Immutable.List(periods),
   };
 
-  const enzymeWrapper = mount(<TransactionFilterPeriods {...props} />);
+  const { container } = render(<TransactionFilterPeriods {...props} />);
 
   return {
     props,
-    enzymeWrapper,
+    container,
   };
 }
 
-describe("components", () => {
-  describe("TransactionFilterPeriods", () => {
-    it("should render self and subcomponents", () => {
-      const { enzymeWrapper, props } = setup([], {});
-      expect(enzymeWrapper.find("DateRangePicker").exists()).toBe(true);
-    });
+test("TransactionFilterPeriods should render self and subcomponents", () => {
+  setup([], {});
+  expect(screen.getByTestId("dateRangePicker")).toBeTruthy();
+});
 
-    it("changing dates should change filter", () => {
-      const { enzymeWrapper, props } = setup([], {});
+test("TransactionFilterPeriods changing dates should change filter", async () => {
+  const testFromDate = sub(new Date(), { days: 10 });
+  const testFromDateName = format(testFromDate, "MMMM d, yyyy", new Date());
+  const testFromDateEvt = format(testFromDate, "yyyy-MM-dd", new Date());
+  const testToDate = sub(new Date(), { days: 8 });
+  const testToDateName = format(testToDate, "MMMM d, yyyy", new Date());
+  const testToDateEvt = format(testToDate, "yyyy-MM-dd", new Date());
 
-      enzymeWrapper
-        .find("DateRangePicker")
-        .props()
-        .onDatesChange({
-          startDate: toMomentObject(new Date("2017-01-01")),
-          endDate: toMomentObject(new Date("2017-02-01")),
-        });
-      expect(props.updateFilters.mock.calls[0][0]).toEqual({
+  const { props, container } = setup([], {});
+
+  // Open calendar
+  fireEvent.click(
+    container.querySelector(".react-daterange-picker__inputGroup")
+  );
+  await waitFor(() => screen.getByRole("button", { name: testFromDateName }));
+
+  // Click from date
+  fireEvent.click(screen.getByRole("button", { name: testFromDateName }));
+
+  // Click to date
+  fireEvent.click(screen.getByRole("button", { name: testToDateName }));
+
+  expect(props.updateFilters.mock.calls[0][0]).toEqual({
+    from_date: testFromDateEvt,
+    to_date: testToDateEvt,
+  });
+  expect(props.updateFilters.mock.calls.length).toBe(1);
+});
+
+test("TransactionFilterPeriods should display some periods", () => {
+  const { props } = setup(
+    [
+      {
+        id: 0,
+        offset: 0,
         from_date: "2017-01-01",
         to_date: "2017-02-01",
-      });
-      expect(props.updateFilters.mock.calls.length).toBe(1);
-    });
+        label: "Month",
+      },
+    ],
+    { to_date: null, from_date: null }
+  );
+  expect(screen.getByRole("button", { name: "Month" })).not.toBeDisabled();
+  fireEvent.click(screen.getByRole("button", { name: "Month" }));
+  expect(props.updateFilters.mock.calls.length).toBe(1);
+});
 
-    it("should display some periods", () => {
-      const { enzymeWrapper, props } = setup(
-        [
-          {
-            id: 0,
-            offset: 0,
-            from_date: "2017-01-01",
-            to_date: "2017-02-01",
-            label: "Month",
-          },
-        ],
-        { to_date: null, from_date: null }
-      );
-      expect(enzymeWrapper.find("Button").at(1).text()).toBe("Month");
-      expect(enzymeWrapper.find("Button").at(1).props().active).toBe(false);
-      enzymeWrapper.find("Button").at(1).props().onClick();
-      expect(props.updateFilters.mock.calls.length).toBe(1);
-    });
+test("TransactionFilterPeriods should detect null current filter", () => {
+  const { props } = setup(
+    [
+      {
+        id: 0,
+        offset: 0,
+        from_date: "2017-01-01",
+        to_date: "2017-02-01",
+        label: "Month",
+      },
+    ],
+    { from_date: null, to_date: null }
+  );
+  expect(screen.getByRole("button", { name: "Month" })).not.toBeDisabled();
+  fireEvent.click(screen.getByRole("button", { name: "Month" }));
+  expect(props.updateFilters.mock.calls.length).toBe(1);
 
-    it("should display some periods and set active", () => {
-      const { enzymeWrapper, props } = setup(
-        [
-          {
-            id: 0,
-            offset: 0,
-            from_date: "2017-01-01",
-            to_date: "2017-02-01",
-            label: "Month",
-          },
-        ],
-        { to_date: "2017-02-01", from_date: "2017-01-01" }
-      );
-      expect(enzymeWrapper.find("Button").at(1).text()).toBe("Month");
-      expect(enzymeWrapper.find("Button").at(1).props().active).toBe(true);
-      enzymeWrapper.find("Button").at(1).props().onClick();
-      expect(props.updateFilters.mock.calls.length).toBe(1);
-    });
-
-    it("should detect null current filter", () => {
-      const { enzymeWrapper, props } = setup(
-        [
-          {
-            id: 0,
-            offset: 0,
-            from_date: "2017-01-01",
-            to_date: "2017-02-01",
-            label: "Month",
-          },
-        ],
-        { from_date: null, to_date: null }
-      );
-      expect(enzymeWrapper.find("Button").at(0).props().active).toBe(true);
-      enzymeWrapper.find("Button").at(1).props().onClick();
-      expect(props.updateFilters.mock.calls.length).toBe(1);
-
-      // reset to "All"
-      enzymeWrapper.find("Button").at(0).props().onClick();
-      expect(props.updateFilters.mock.calls.length).toBe(2);
-      expect(props.updateFilters.mock.calls[1][0]).toEqual({
-        from_date: null,
-        to_date: null,
-      });
-    });
+  // reset to "All"
+  fireEvent.click(screen.getByRole("button", { name: "All" }));
+  expect(props.updateFilters.mock.calls.length).toBe(2);
+  expect(props.updateFilters.mock.calls[1][0]).toEqual({
+    from_date: null,
+    to_date: null,
   });
 });

@@ -1,11 +1,6 @@
 import Immutable from "immutable";
 import diff from "jest-diff";
-import { configure } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
 import "@testing-library/jest-dom";
-import "react-dates/initialize";
-
-configure({ adapter: new Adapter() });
 
 expect.extend({
   toEqualImmutable(received, argument) {

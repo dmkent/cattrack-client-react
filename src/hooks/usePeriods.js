@@ -6,7 +6,7 @@ import Period from "../data/Period";
 
 export default function usePeriods() {
   const fetchPeriods = () =>
-    fetch_from_api(null, "/api/periods/")
+    fetch_from_api("/api/periods/")
       .then(checkStatus)
       .then((rawPeriods) => {
         return rawPeriods.map((rawPeriod) => {

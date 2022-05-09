@@ -26,8 +26,10 @@ const periods = [
 test("should render self and subcomponents", async () => {
   authService.dummyLogin();
   nock("http://localhost:8000").get("/api/periods/").reply(200, periods);
-  nock("http://localhost:8000").get("/api/transactions/summary/").reply(200, []);
-  
+  nock("http://localhost:8000")
+    .get("/api/transactions/summary/")
+    .reply(200, []);
+
   const queryClient = new QueryClient();
   render(
     <QueryClientProvider client={queryClient}>
@@ -36,5 +38,5 @@ test("should render self and subcomponents", async () => {
   );
   await waitFor(() => screen.getByText("Time"));
 
-  expect(screen.getByRole("button", {name: "Last month"})).toBeTruthy()
+  expect(screen.getByRole("button", { name: "Last month" })).toBeTruthy();
 });

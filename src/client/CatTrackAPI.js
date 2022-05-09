@@ -12,14 +12,13 @@
 import * as Cookies from "js-cookie";
 import fetch from "isomorphic-fetch";
 
-import TrackActionTypes from "../data/TrackActionTypes";
 import { parseErrors } from "./ErrorParser";
 
 import CONFIG from "config";
 import { useAuthToken } from "../hooks/useAuthToken";
 const API_URI = CONFIG.API_URI;
 
-export function refreshLogin(dispatch) {
+export function refreshLogin() {
   let now = new Date();
   const auth = useAuthToken();
 
@@ -27,20 +26,11 @@ export function refreshLogin(dispatch) {
   if (auth.expires && now > auth.expires) {
     console.log("Auth expired. Expiry: " + auth);
     localStorage.removeItem("jwt");
-    dispatch &&
-      dispatch({
-        type: TrackActionTypes.AUTH_LOGOUT,
-      });
     return Promise.reject(new Error("Auth has expired."));
   }
 
   // 1a. Otherwise failed.
   if (!auth.is_logged_in) {
-    dispatch &&
-      dispatch({
-        type: TrackActionTypes.AUTH_ERROR,
-        error: new Error("Not logged in."),
-      });
     return Promise.reject(new Error("Not logged in."));
   }
 
@@ -59,19 +49,9 @@ export function refreshLogin(dispatch) {
     .then(checkStatus)
     .then((resp) => {
       localStorage.setItem("jwt", resp.token);
-      dispatch &&
-        dispatch({
-          type: TrackActionTypes.AUTH_RESPONSE_RECEIVED,
-          token: resp.token,
-        });
       return Promise.resolve();
     })
     .catch((error) => {
-      dispatch &&
-        dispatch({
-          type: TrackActionTypes.AUTH_ERROR,
-          error,
-        });
       return Promise.reject(new Error("Auth failed."));
     });
 }
@@ -87,8 +67,8 @@ export function refreshLogin(dispatch) {
  * @param {Object} options - options passed through to fetch.
  * @returns {Promise} Promise result from fetch.
  */
-export function fetch_from_api(dispatch, uri, options = {}) {
-  return refreshLogin(dispatch).then(() => {
+export function fetch_from_api(uri, options = {}) {
+  return refreshLogin().then(() => {
     // Set up authentication and security headers.
     let headers = Object.assign(
       {

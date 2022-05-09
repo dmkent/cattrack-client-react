@@ -8,41 +8,19 @@
 
 import React from "react";
 import { render } from "react-dom";
-import { Provider } from "react-redux";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { createStore, applyMiddleware, compose } from "redux";
-import thunk from "redux-thunk";
-import { createBrowserHistory } from "history";
-import { routerMiddleware } from "react-router-redux";
 
-import "react-dates/initialize";
-
-import AppView from "./views/AppView";
-import catTrackApp from "./reducers";
+import App from "./components/App";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "./styles/local.css";
-import "react-dates/lib/css/_datepicker.css";
 
 // React query client
 const queryClient = new QueryClient();
 
-const browserHistory = createBrowserHistory();
-const router_middleware = routerMiddleware(browserHistory);
-
-/* eslint-disable no-underscore-dangle */
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-/* eslint-enable */
-const store = createStore(
-  catTrackApp,
-  composeEnhancers(applyMiddleware(thunk, router_middleware))
-);
-
 render(
   <QueryClientProvider client={queryClient}>
-    <Provider store={store}>
-      <AppView />
-    </Provider>
+    <App />
   </QueryClientProvider>,
   document.getElementById("root")
 );

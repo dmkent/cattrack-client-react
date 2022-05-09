@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import PlotlyPie from "../views/PlotlyPie";
+import React, { useState } from "react";
+import PlotlyPie from "./PlotlyPie";
 import { Grid, Col, Row, Well } from "react-bootstrap";
 
 import TransactionFilterPeriods from "./TransactionFilterPeriods";
@@ -8,19 +8,20 @@ import usePeriods from "../hooks/usePeriods";
 import useTransactionSummary from "../hooks/useTransactionSummary";
 
 function Dashboard(props) {
-  const {isLoading: isPeriodsLoading, data: periods} = usePeriods()
-  const [filters, setFilters] = useState({to_date: null, from_date: null});
-  const {isLoading: isSummaryLoading, data: summary} = useTransactionSummary(filters)
+  const { isLoading: isPeriodsLoading, data: periods } = usePeriods();
+  const [filters, setFilters] = useState({ to_date: null, from_date: null });
+  const { isLoading: isSummaryLoading, data: summary } =
+    useTransactionSummary(filters);
 
   if (isPeriodsLoading || isSummaryLoading) {
-    return null
+    return null;
   }
 
   return (
     <div>
       <Grid>
         <Row>
-        {/*
+          {/*
           <Col md={6}>
             <BudgetSummary from_date={filters.from_date} to_date={filters.to_date}/>
           </Col>

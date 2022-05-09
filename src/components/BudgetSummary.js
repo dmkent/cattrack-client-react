@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 import useBudgetSummaries from "../hooks/useBudgetSummaries";
 
 function BudgetLine(props) {
-
   let style = null;
   // 80% should be budget 100% spent.
   const value = (props.actual / props.budget) * 80.0;
@@ -26,9 +25,7 @@ function BudgetLine(props) {
   return (
     <Row>
       <Col md={4}>
-        <span className="text pull-right budget-label">
-          {props.name}
-        </span>
+        <span className="text pull-right budget-label">{props.name}</span>
       </Col>
       <Col md={5}>
         <ProgressBar bsStyle={style} now={value} label={marker} />
@@ -43,10 +40,7 @@ function BudgetLine(props) {
           />
         </span>
         <span className="text pull-right">
-          <FormattedNumber
-            value={props.budget}
-            maximumSignificantDigits={3}
-          />
+          <FormattedNumber value={props.budget} maximumSignificantDigits={3} />
         </span>
         <span className="text text-center center-block"> / </span>
       </Col>
@@ -62,7 +56,10 @@ BudgetLine.propTypes = {
 };
 
 function BudgetSummary(props) {
-  const {isLoading, data: summaries} = useBudgetSummaries(props.from_date, props.to_date)
+  const { isLoading, data: summaries } = useBudgetSummaries(
+    props.from_date,
+    props.to_date
+  );
 
   if (isLoading || summaries === null) {
     return null;

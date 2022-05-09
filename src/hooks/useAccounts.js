@@ -6,7 +6,7 @@ import Account from "../data/Account";
 
 export default function useAccounts() {
   const fetchAccounts = () =>
-    fetch_from_api(null, "/api/accounts/")
+    fetch_from_api("/api/accounts/")
       .then(checkStatus)
       .then((rawAccounts) => {
         return rawAccounts.map((rawAccount) => {
