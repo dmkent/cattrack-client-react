@@ -28,7 +28,7 @@ module.exports = merge(common, {
   ],
   resolve: {
     alias: {
-      config: path.join(__dirname, "src/config/config.prod.js"),
+      ctrack_config: path.join(__dirname, "src/config/config.prod.js"),
     },
   },
 });

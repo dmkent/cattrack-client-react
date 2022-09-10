@@ -14,7 +14,7 @@ import fetch from "isomorphic-fetch";
 
 import { parseErrors } from "./ErrorParser";
 
-import CONFIG from "config";
+import CONFIG from "ctrack_config";
 import { useAuthToken } from "../hooks/useAuthToken";
 const API_URI = CONFIG.API_URI;
 
@@ -35,7 +35,7 @@ export function refreshLogin() {
   }
 
   // 2. check if more than 5 mins until expire - don't refresh
-  if (auth.expires.getTime() - now.getTime() > 300000) {
+  if (auth.expires && auth.expires.getTime() - now.getTime() > 300000) {
     // Hasn't expired and won't in next five minutes so bail.
     return Promise.resolve(null);
   }
@@ -67,35 +67,42 @@ export function refreshLogin() {
  * @param {Object} options - options passed through to fetch.
  * @returns {Promise} Promise result from fetch.
  */
-export function fetch_from_api(uri, options = {}) {
+export function fetch_from_api(uri: string, options: RequestInit | undefined = {}) {
   return refreshLogin().then(() => {
     // Set up authentication and security headers.
-    let headers = Object.assign(
-      {
-        "Content-Type": "application/json",
-      },
-      options.headers
-    );
+    const headers = options?.headers ? new Headers(options.headers) : new Headers();
+    if (!headers.has("Content-Type"))
+    {
+      headers.set("Content-Type", "application/json");
+    }
 
     /* Force content type to undefined, allows browser to deal with content
        type for multipart form-data. Needs to set boundary as part of content
        type. */
-    if (headers["Content-Type"] === undefined) {
-      Reflect.deleteProperty(headers, "Content-Type");
+    if (headers.get("Content-Type") === undefined) {
+      headers.delete("Content-Type");
     }
     const token = useAuthToken().token;
     if (token !== undefined) {
-      headers.Authorization = "JWT " + token;
+      headers.set("Authorization", "JWT " + token);
     }
     const csrf_token = Cookies.get("csrftoken");
-    if (csrf_token !== null) {
-      headers["X-CSRFToken"] = csrf_token;
+    if (csrf_token) {
+      headers.set("X-CSRFToken", csrf_token);
     }
     options.headers = headers;
     return fetch(API_URI + uri, {
       ...options,
     });
   });
+}
+
+type TransactionFilters = {
+  from_date?: string;
+  to_date?: string;
+  category?: string;
+  has_category?: "True" | "False";
+  account: string;
 }
 
 /**
@@ -106,7 +113,7 @@ export function fetch_from_api(uri, options = {}) {
  * @param {Object} filters - The filters to be converted.
  * @returns {string} A string that can be appended to URL.
  */
-export function filters_to_params(filters) {
+export function filters_to_params(filters : TransactionFilters) {
   let query_params = Object.entries(filters)
     .map(([key, val]) => {
       if (val !== null) {
@@ -135,7 +142,7 @@ export function filters_to_params(filters) {
  * @param {Object} resp - The fetch response object.
  * @returns {Promise} A promise that will be rejected if fetch was not succesful.
  */
-export function checkStatus(resp) {
+export function checkStatus(resp: Response) {
   if (resp === undefined) {
     return Promise.reject(new Error("No response received"));
   } else if (resp.status >= 200 && resp.status <= 299) {
@@ -151,6 +158,6 @@ export function checkStatus(resp) {
     })
     .then((error) => {
       // Decoded JSON, parse and then reject with result.
-      return Promise.reject(new Error(parseErrors(error)));
+      return Promise.reject(new Error(parseErrors(error).join(", ")));
     });
 }

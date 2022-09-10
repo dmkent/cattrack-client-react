@@ -10,19 +10,19 @@
  *
  */
 
-export function isString(val) {
+export function isString(val: any) {
   return typeof val === "string" || val instanceof String;
 }
 
-export function camelCaseToVerbose(text) {
+export function camelCaseToVerbose(text: string) {
   return text.replace(/(\w)([A-Z])/g, "$1 $2");
 }
 
-export function underscoredToVerbose(text) {
+export function underscoredToVerbose(text: string) {
   return text.replace(/[\d_]/g, " ");
 }
 
-export function capitalise(text) {
+export function capitalise(text: string) {
   let cap_text = text.toLowerCase();
   cap_text = cap_text.charAt(0).toUpperCase() + cap_text.slice(1);
   return cap_text;
@@ -35,7 +35,7 @@ export function capitalise(text) {
  * @param {Object} item - decoded JSON data to parse errors out of.
  * @returns {Array} - array of key, value pairs that should be rendered as error message.x
  */
-export function parseErrors(item) {
+export function parseErrors(item: object) {
   return Object.entries(item).map(function ([key, value]) {
     let formatted_key = key;
     let content = "";
@@ -46,7 +46,7 @@ export function parseErrors(item) {
       if (isString(value[0])) {
         content = value.join(" ");
       } else {
-        content = JSON.stringify(value, {}, 2);
+        content = JSON.stringify(value, undefined, 2);
       }
     }
 
