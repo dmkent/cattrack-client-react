@@ -35,8 +35,8 @@ function Accounts(props) {
     }
   };
 
-  const handleUploadToAccount = (file) => {
-    uploadToAccount(currentAccount, file);
+  const handleUploadToAccount = (account, file) => {
+    uploadToAccount(account, file);
   };
 
   if (isLoading) {

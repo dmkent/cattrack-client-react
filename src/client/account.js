@@ -23,7 +23,7 @@ export function uploadToAccount(account, upload_file) {
     method: "POST",
     body: data,
     headers: {
-      "Content-Type": undefined,
+      "Content-Type": null, // allow override to make forms work
     },
   })
     .then((resp) => {

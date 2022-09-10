@@ -79,9 +79,10 @@ export function fetch_from_api(uri: string, options: RequestInit | undefined = {
     /* Force content type to undefined, allows browser to deal with content
        type for multipart form-data. Needs to set boundary as part of content
        type. */
-    if (headers.get("Content-Type") === undefined) {
+    if (headers.get("Content-Type") === 'null') {
       headers.delete("Content-Type");
     }
+
     const token = useAuthToken().token;
     if (token !== undefined) {
       headers.set("Authorization", "JWT " + token);

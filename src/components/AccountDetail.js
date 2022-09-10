@@ -28,6 +28,7 @@ function AccountDetail(props) {
 
   const handleSubmit = (event) => {
     props.uploadToAccount(account, uploadFile);
+    event.preventDefault();
   };
 
   if (account === null) {
