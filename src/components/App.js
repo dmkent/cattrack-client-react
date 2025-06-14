@@ -7,7 +7,7 @@ import PaymentSeries from "./PaymentSeries";
 import CONFIG from "ctrack_config";
 import NavComponent from "./NavComponent";
 import { IntlProvider } from "react-intl";
-import { BrowserRouter as Router, Route, Redirect, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Navigate, Routes } from "react-router-dom";
 import Login from "./Login";
 import { useAuthToken } from "../hooks/useAuthToken";
 import AuthService from "../services/auth.service";
@@ -22,48 +22,44 @@ function App() {
           <NavComponent />
           <div className="container-fluid">
             <h1>CatTrack</h1>
-            <Switch>
-              <Route path="/login">
-                <Login />
-              </Route>
-              <Route path="/logout">
-                <Logout />
-              </Route>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/logout" element={<Logout />} />
               <Route
                 exact
                 path="/"
-                render={() => (
+                element={
                   <RequireAuth auth={auth} redirectTo="/login">
                     <Dashboard />
                   </RequireAuth>
-                )}
+                }
               />
-              <Route path="/accounts" render={() => (
+              <Route path="/accounts" element={
                 <RequireAuth auth={auth} redirectTo="/login">
                   <Accounts />
                 </RequireAuth>
-              )}
+              }
               />
-              <Route path="/tracking" render={() => (
+              <Route path="/tracking" element={
                 <RequireAuth auth={auth} redirectTo="/login">
                   <Tracking />
                 </RequireAuth>
-              )}
+              }
               />
               <Route
-                path="/transactions" render={() => (
+                path="/transactions" element={
                   <RequireAuth auth={auth} redirectTo="/login">
                     <Transactions page_size={50} />
                   </RequireAuth>
-                )}
+                }
               />
-              <Route path="/bills" render={() => (
+              <Route path="/bills" element={
                 <RequireAuth auth={auth} redirectTo="/login">
                   <PaymentSeries />
                 </RequireAuth>
-              )}
+              }
               />
-            </Switch>
+            </Routes>
           </div>
           <div>
             <p className="pull-right text-muted">
@@ -81,12 +77,12 @@ export function Logout(props) {
     AuthService.logout();
   }, []);
 
-  return <Redirect to="/login" />;
+  return <Navigate to="/login" />;
 }
 
 function RequireAuth({ children, redirectTo, auth }) {
   let isAuthenticated = auth.is_logged_in
-  return isAuthenticated ? children : <Redirect to={redirectTo}/>;
+  return isAuthenticated ? children : <Navigate to={redirectTo} />;
 }
 
 export default App;
