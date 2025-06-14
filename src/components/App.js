@@ -7,12 +7,14 @@ import PaymentSeries from "./PaymentSeries";
 import CONFIG from "ctrack_config";
 import NavComponent from "./NavComponent";
 import { IntlProvider } from "react-intl";
-import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect, Switch } from "react-router-dom";
 import Login from "./Login";
 import { useAuthToken } from "../hooks/useAuthToken";
 import AuthService from "../services/auth.service";
 
 function App() {
+  const auth = useAuthToken();
+
   return (
     <IntlProvider locale="en-AU">
       <Router basename={CONFIG.BASENAME}>
@@ -20,7 +22,48 @@ function App() {
           <NavComponent />
           <div className="container-fluid">
             <h1>CatTrack</h1>
-            <ContentView />
+            <Switch>
+              <Route path="/login">
+                <Login />
+              </Route>
+              <Route path="/logout">
+                <Logout />
+              </Route>
+              <Route
+                exact
+                path="/"
+                render={() => (
+                  <RequireAuth auth={auth} redirectTo="/login">
+                    <Dashboard />
+                  </RequireAuth>
+                )}
+              />
+              <Route path="/accounts" render={() => (
+                <RequireAuth auth={auth} redirectTo="/login">
+                  <Accounts />
+                </RequireAuth>
+              )}
+              />
+              <Route path="/tracking" render={() => (
+                <RequireAuth auth={auth} redirectTo="/login">
+                  <Tracking />
+                </RequireAuth>
+              )}
+              />
+              <Route
+                path="/transactions" render={() => (
+                  <RequireAuth auth={auth} redirectTo="/login">
+                    <Transactions page_size={50} />
+                  </RequireAuth>
+                )}
+              />
+              <Route path="/bills" render={() => (
+                <RequireAuth auth={auth} redirectTo="/login">
+                  <PaymentSeries />
+                </RequireAuth>
+              )}
+              />
+            </Switch>
           </div>
           <div>
             <p className="pull-right text-muted">
@@ -41,55 +84,9 @@ export function Logout(props) {
   return <Redirect to="/login" />;
 }
 
-export const PrivateRoute = ({
-  component: Component,
-  auth,
-  render,
-  ...rest
-}) => {
-  return (
-    <Route
-      {...rest}
-      render={(props) => {
-        if (auth.is_logged_in) {
-          if (render !== undefined) {
-            return render(props);
-          } else {
-            return <Component {...props} />;
-          }
-        } else {
-          return (
-            <Redirect
-              to={{
-                pathname: "/login",
-                state: { from: props.location.pathname },
-              }}
-            />
-          );
-        }
-      }}
-    />
-  );
-};
-
-export function ContentView() {
-  const auth = useAuthToken();
-
-  return (
-    <div>
-      <Route path="/login" component={Login} />
-      <Route path="/logout" component={Logout} />
-      <PrivateRoute exact path="/" auth={auth} component={Dashboard} />
-      <PrivateRoute path="/accounts" auth={auth} component={Accounts} />
-      <PrivateRoute path="/tracking" auth={auth} component={Tracking} />
-      <PrivateRoute
-        path="/transactions"
-        auth={auth}
-        render={() => <Transactions page_size={50} />}
-      />
-      <PrivateRoute path="/bills" auth={auth} component={PaymentSeries} />
-    </div>
-  );
+function RequireAuth({ children, redirectTo, auth }) {
+  let isAuthenticated = auth.is_logged_in
+  return isAuthenticated ? children : <Redirect to={redirectTo}/>;
 }
 
 export default App;
