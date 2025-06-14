@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import App, { PrivateRoute, ContentView } from "../App";
+import App, { PrivateRoute } from "../App";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 
 function setup() {
@@ -20,15 +20,6 @@ test("App should render self and subcomponents", () => {
   setup();
 
   expect(screen.getByRole("heading")).toBeTruthy();
-});
-
-test("ContentView should render self and subcomponents", () => {
-  render(
-    <Router>
-      <ContentView />
-    </Router>
-  );
-
   expect(screen.getAllByRole("button").length).toBe(1);
 });
 
