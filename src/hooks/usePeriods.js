@@ -1,14 +1,14 @@
 import { useQuery } from "react-query";
-import { useAuth } from "./AuthContext";
-import { fetch_from_api, checkStatus } from "../client/CatTrackAPI";
+import { checkStatusAxios } from "../client/CatTrackAPI";
 
 import Period from "../data/Period";
+import { useAxios } from "./AxiosContext";
 
 export default function usePeriods() {
-  const auth = useAuth();
+  const axios = useAxios();
   const fetchPeriods = () =>
-    fetch_from_api("/api/periods/", {}, auth.user?.token)
-      .then(checkStatus)
+    axios.get("/api/periods/")
+      .then(checkStatusAxios)
       .then((rawPeriods) => {
         return rawPeriods.map((rawPeriod) => {
           return new Period(rawPeriod);

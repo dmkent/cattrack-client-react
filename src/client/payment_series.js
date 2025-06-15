@@ -1,4 +1,4 @@
-import { fetch_from_api, checkStatus } from "./CatTrackAPI";
+import { fetch_from_api } from "./CatTrackAPI";
 import { parseErrors } from "./ErrorParser";
 
 export default function paymentSeriesAddBillFromFile(idx, upload_file, token) {

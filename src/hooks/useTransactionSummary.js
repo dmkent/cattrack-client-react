@@ -1,19 +1,18 @@
 import { useQuery } from "react-query";
-import { useAuth } from "./AuthContext";
+import { useAxios } from "./AxiosContext";
 import Immutable from "immutable";
 
 import {
-  fetch_from_api,
   filters_to_params,
-  checkStatus,
+  checkStatusAxios,
 } from "../client/CatTrackAPI";
 
-export default function useTransactionSuggestions(filters) {
+export default function useTransactionSummaries(filters) {
+  const axios = useAxios();
   const query_params = filters_to_params(filters);
-  const auth = useAuth();
   const fetchSummary = () =>
-    fetch_from_api("/api/transactions/summary/" + query_params, {}, auth.user?.token)
-      .then(checkStatus)
+    axios.get("/api/transactions/summary/" + query_params)
+      .then(checkStatusAxios)
       .then((resp) =>
         Immutable.OrderedMap(resp.map((item) => [item.category, item]))
       );

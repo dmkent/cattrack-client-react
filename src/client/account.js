@@ -1,18 +1,7 @@
-import Immutable from "immutable";
 import { fetch_from_api, checkStatus } from "./CatTrackAPI";
 import { parseErrors } from "./ErrorParser";
 
 import Account from "../data/Account";
-
-export function loadAccounts(token) {
-  return fetch_from_api("/api/accounts/", {}, token)
-    .then(checkStatus)
-    .then((rawAccounts) =>
-      rawAccounts.map((rawAccount) => {
-        return new Account(rawAccount);
-      })
-    );
-}
 
 export function uploadToAccount(account, upload_file, token) {
   let data = new FormData();
@@ -57,16 +46,4 @@ export function createAccount(name, token) {
   }, token)
     .then(checkStatus)
     .then((newAccount) => new Account(newAccount));
-}
-
-export function loadAccountBalanceSeries(account, token) {
-  return fetch_from_api("/api/accounts/" + account.id + "/series/", {}, token)
-    .then(checkStatus)
-    .then((series) =>
-      Immutable.List(
-        series.map((raw) => {
-          return Immutable.Map(raw);
-        })
-      )
-    );
 }

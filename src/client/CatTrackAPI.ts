@@ -11,6 +11,7 @@
  */
 import * as Cookies from "js-cookie";
 import fetch from "isomorphic-fetch";
+import { AxiosResponse } from "axios";
 
 import { parseErrors } from "./ErrorParser";
 
@@ -150,6 +151,37 @@ export function checkStatus(resp: Response) {
   /* At this point we have an error. Try and decode the JSON response
      for an error message.*/
   return Promise.resolve(resp.json())
+    .catch(() => {
+      // Decode of JSON error message failed so just reject with generic message.
+      return Promise.reject(new Error("Unable to decode response as JSON."));
+    })
+    .then((error) => {
+      // Decoded JSON, parse and then reject with result.
+      return Promise.reject(new Error(parseErrors(error).join(", ")));
+    });
+}
+
+/**
+ * Check the status of a response from fetch.
+ *
+ * This in turn returns a Promise. Best used directly after the call to fetch.
+ * Will check HTTP status and cause a promise rejection if the response was
+ * not a success code. If it is successful will resolve to the JSON data of the
+ * response.
+ *
+ * @param {Object} resp - The fetch response object.
+ * @returns {Promise} A promise that will be rejected if fetch was not succesful.
+ */
+export function checkStatusAxios(resp: AxiosResponse) {
+  if (resp === undefined) {
+    return Promise.reject(new Error("No response received"));
+  } else if (resp.status >= 200 && resp.status <= 299) {
+    return resp.data;
+  }
+
+  /* At this point we have an error. Try and decode the JSON response
+     for an error message.*/
+  return Promise.resolve(resp.data)
     .catch(() => {
       // Decode of JSON error message failed so just reject with generic message.
       return Promise.reject(new Error("Unable to decode response as JSON."));
