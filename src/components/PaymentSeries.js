@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Grid, Col, Row } from "react-bootstrap";
-
+import { useAuth } from "../hooks/AuthContext";
 import PaymentSeriesDetail from "./PaymentSeriesDetail";
 import usePaymentSeries from "../hooks/usePaymentSeries";
 import paymentSeriesAddBillFromFile from "../client/payment_series";
 
 function PaymentSeries(props) {
+  const auth = useAuth();
   const { isLoading, data: paymentSeries } = usePaymentSeries();
   const [currentSeries, setCurrentSeries] = useState(null);
 
@@ -32,7 +33,7 @@ function PaymentSeries(props) {
           <PaymentSeriesDetail
             series={paymentSeries.get(currentSeries)}
             paymentSeriesAddBillFromFile={(file) =>
-              paymentSeriesAddBillFromFile(currentSeries, file)
+              paymentSeriesAddBillFromFile(currentSeries, file, auth.user?.token)
             }
           />
         </Col>

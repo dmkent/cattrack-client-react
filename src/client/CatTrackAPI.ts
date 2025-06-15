@@ -67,34 +67,31 @@ export function refreshLogin() {
  * @param {Object} options - options passed through to fetch.
  * @returns {Promise} Promise result from fetch.
  */
-export function fetch_from_api(uri: string, options: RequestInit | undefined = {}) {
-  return refreshLogin().then(() => {
-    // Set up authentication and security headers.
-    const headers = options?.headers ? new Headers(options.headers) : new Headers();
-    if (!headers.has("Content-Type"))
-    {
-      headers.set("Content-Type", "application/json");
-    }
+export function fetch_from_api(uri: string, options: RequestInit | undefined = {}, token?: string) {
+  // Set up authentication and security headers.
+  const headers = options?.headers ? new Headers(options.headers) : new Headers();
+  if (!headers.has("Content-Type"))
+  {
+    headers.set("Content-Type", "application/json");
+  }
 
-    /* Force content type to undefined, allows browser to deal with content
-       type for multipart form-data. Needs to set boundary as part of content
-       type. */
-    if (headers.get("Content-Type") === 'null') {
-      headers.delete("Content-Type");
-    }
+  /* Force content type to undefined, allows browser to deal with content
+      type for multipart form-data. Needs to set boundary as part of content
+      type. */
+  if (headers.get("Content-Type") === 'null') {
+    headers.delete("Content-Type");
+  }
 
-    const token = useAuthToken().token;
-    if (token !== undefined) {
-      headers.set("Authorization", "JWT " + token);
-    }
-    const csrf_token = Cookies.get("csrftoken");
-    if (csrf_token) {
-      headers.set("X-CSRFToken", csrf_token);
-    }
-    options.headers = headers;
-    return fetch(API_URI + uri, {
-      ...options,
-    });
+  if (token !== undefined) {
+    headers.set("Authorization", "Bearer " + token);
+  }
+  const csrf_token = Cookies.get("csrftoken");
+  if (csrf_token) {
+    headers.set("X-CSRFToken", csrf_token);
+  }
+  options.headers = headers;
+  return fetch(API_URI + uri, {
+    ...options,
   });
 }
 

@@ -4,8 +4,8 @@ import { parseErrors } from "./ErrorParser";
 
 import Account from "../data/Account";
 
-export function loadAccounts() {
-  return fetch_from_api("/api/accounts/")
+export function loadAccounts(token) {
+  return fetch_from_api("/api/accounts/", {}, token)
     .then(checkStatus)
     .then((rawAccounts) =>
       rawAccounts.map((rawAccount) => {
@@ -14,7 +14,7 @@ export function loadAccounts() {
     );
 }
 
-export function uploadToAccount(account, upload_file) {
+export function uploadToAccount(account, upload_file, token) {
   let data = new FormData();
   data.append("data_file", upload_file);
   data.append("name", account.name);
@@ -25,7 +25,7 @@ export function uploadToAccount(account, upload_file) {
     headers: {
       "Content-Type": null, // allow override to make forms work
     },
-  })
+  }, token)
     .then((resp) => {
       if (resp.status == 200) {
         // All done. Resolve to null.
@@ -50,17 +50,17 @@ export function uploadToAccount(account, upload_file) {
     });
 }
 
-export function createAccount(name) {
+export function createAccount(name, token) {
   return fetch_from_api("/api/accounts/", {
     method: "POST",
     body: JSON.stringify({ name: name }),
-  })
+  }, token)
     .then(checkStatus)
     .then((newAccount) => new Account(newAccount));
 }
 
-export function loadAccountBalanceSeries(account) {
-  return fetch_from_api("/api/accounts/" + account.id + "/series/")
+export function loadAccountBalanceSeries(account, token) {
+  return fetch_from_api("/api/accounts/" + account.id + "/series/", {}, token)
     .then(checkStatus)
     .then((series) =>
       Immutable.List(
