@@ -6,16 +6,14 @@ import { Button, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { Pagination } from "@react-bootstrap/pagination";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTags } from "@fortawesome/free-solid-svg-icons";
-import updateTransactionSplits from "../client/transactions";
 
 import Categorisor from "./Categorisor";
 import TransactionFilter from "./TransactionFilter";
 import useTransactions from "../hooks/useTransactions";
-import { useAuth } from "../hooks/AuthContext";
-
+import { useUpdateTransactions } from "../hooks/useUpdateTransactions";
 function Transactions(props) {
   const { page_size } = props;
-  const auth = useAuth();
+  const { updateTransactionSplits } = useUpdateTransactions();
   const [active_page, setPage] = useState(1);
   const [filters, setFilters] = useState([]);
   const [selected_transaction, setSelectedTransaction] = useState(null);
@@ -114,7 +112,7 @@ function Transactions(props) {
               showModal={modal_shown}
               setModalShown={setModalShown}
               save={(transaction, splits) =>
-                updateTransactionSplits(transaction, splits, reloadPage, auth.user?.token)
+                updateTransactionSplits(transaction, splits, reloadPage)
               }
             />
           )}

@@ -13,12 +13,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import useAccounts from "../hooks/useAccounts";
 import useAccountSeries from "../hooks/useAccountSeries";
-import { createAccount, uploadToAccount } from "../client/account";
 import AccountDetail from "../components/AccountDetail";
-import { useAuth } from "../hooks/AuthContext";
+import { useUpdateAccounts } from "../hooks/useUpdateAccounts";
 
 function Accounts(props) {
-  const auth = useAuth();
+  const { uploadFileToAccount, createAccount } = useUpdateAccounts();
   const [newName, setNewName] = useState("");
   const [currentAccount, setCurrentAccount] = useState(null);
   const overlayRef = useRef(null);
@@ -30,7 +29,7 @@ function Accounts(props) {
     uploadResult = null;
 
   const handleCreateAccount = () => {
-    createAccount(newName, auth.user?.token);
+    createAccount(newName);
     setNewName("");
     if (overlayRef.current !== null) {
       overlayRef.current.hide();
@@ -38,7 +37,7 @@ function Accounts(props) {
   };
 
   const handleUploadToAccount = (account, file) => {
-    uploadToAccount(account, file, auth.user?.token);
+    uploadFileToAccount(account, file);
   };
 
   if (isLoading) {

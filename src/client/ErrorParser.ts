@@ -41,7 +41,7 @@ export function parseErrors(item: object) {
     let content = "";
 
     if (isString(value)) {
-      content = value;
+      content = "" + value;
     } else if (Array.isArray(value)) {
       if (isString(value[0])) {
         content = value.join(" ");
