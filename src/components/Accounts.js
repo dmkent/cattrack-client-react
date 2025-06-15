@@ -15,8 +15,10 @@ import useAccounts from "../hooks/useAccounts";
 import useAccountSeries from "../hooks/useAccountSeries";
 import { createAccount, uploadToAccount } from "../client/account";
 import AccountDetail from "../components/AccountDetail";
+import { useAuth } from "../hooks/AuthContext";
 
 function Accounts(props) {
+  const auth = useAuth();
   const [newName, setNewName] = useState("");
   const [currentAccount, setCurrentAccount] = useState(null);
   const overlayRef = useRef(null);
@@ -28,7 +30,7 @@ function Accounts(props) {
     uploadResult = null;
 
   const handleCreateAccount = () => {
-    createAccount(newName);
+    createAccount(newName, auth.user?.token);
     setNewName("");
     if (overlayRef.current !== null) {
       overlayRef.current.hide();
@@ -36,7 +38,7 @@ function Accounts(props) {
   };
 
   const handleUploadToAccount = (account, file) => {
-    uploadToAccount(account, file);
+    uploadToAccount(account, file, auth.user?.token);
   };
 
   if (isLoading) {

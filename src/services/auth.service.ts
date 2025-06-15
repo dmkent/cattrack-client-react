@@ -37,17 +37,24 @@ function dummyLogin(dataOverride: JwtData) {
 }
 
 function login(username: string, password: string) {
-  return fetch(CONFIG.API_URI + "/api-token-auth/", {
+  return fetch(CONFIG.API_URI + "/api/token/", {
     method: "POST",
     body: JSON.stringify({ username: username, password: password }),
     headers: { "Content-Type": "application/json" },
   })
     .then(checkStatus)
     .then((resp) => {
-      localStorage.setItem("jwt", resp.token);
+      localStorage.setItem("jwt", resp.refresh);
 
+      const payload = parseJwt(resp.access);
+      const authExpires = new Date(payload.exp * 1000);
       return {
-        token: resp.token,
+        is_logged_in: true,
+        username: payload.username,
+        user_id: payload.user_id,
+        email: payload.email,
+        expires: authExpires,
+        token: resp.access,
       };
     });
 }

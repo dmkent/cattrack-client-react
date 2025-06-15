@@ -11,9 +11,11 @@ import updateTransactionSplits from "../client/transactions";
 import Categorisor from "./Categorisor";
 import TransactionFilter from "./TransactionFilter";
 import useTransactions from "../hooks/useTransactions";
+import { useAuth } from "../hooks/AuthContext";
 
 function Transactions(props) {
   const { page_size } = props;
+  const auth = useAuth();
   const [active_page, setPage] = useState(1);
   const [filters, setFilters] = useState([]);
   const [selected_transaction, setSelectedTransaction] = useState(null);
@@ -112,7 +114,7 @@ function Transactions(props) {
               showModal={modal_shown}
               setModalShown={setModalShown}
               save={(transaction, splits) =>
-                updateTransactionSplits(transaction, splits, reloadPage)
+                updateTransactionSplits(transaction, splits, reloadPage, auth.user?.token)
               }
             />
           )}

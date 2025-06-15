@@ -1,6 +1,6 @@
 import { fetch_from_api, checkStatus } from "../client/CatTrackAPI";
 
-export default function updateTransactionSplits(transaction, splits, onDone) {
+export default function updateTransactionSplits(transaction, splits, onDone, token) {
   let updated = transaction;
   if (splits !== null && splits.size === 1) {
     let new_category = splits.get(0).category;
@@ -11,7 +11,7 @@ export default function updateTransactionSplits(transaction, splits, onDone) {
     method: "PUT",
     body: JSON.stringify(updated),
     headers: { "Content-Type": "application/json" },
-  })
+  }, token)
     .then(checkStatus)
     .then((resp) => {
       if (splits !== null && splits.size > 1) {
@@ -19,7 +19,7 @@ export default function updateTransactionSplits(transaction, splits, onDone) {
           method: "POST",
           body: JSON.stringify(splits),
           headers: { "Content-Type": "application/json" },
-        })
+        }, token)
           .then(checkStatus)
           .then(() => {
             onDone();

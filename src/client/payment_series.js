@@ -1,7 +1,7 @@
 import { fetch_from_api, checkStatus } from "./CatTrackAPI";
 import { parseErrors } from "./ErrorParser";
 
-export default function paymentSeriesAddBillFromFile(idx, upload_file) {
+export default function paymentSeriesAddBillFromFile(idx, upload_file, token) {
   let data = new FormData();
   data.append("data_file", upload_file);
   data.append("name", idx);
@@ -12,7 +12,7 @@ export default function paymentSeriesAddBillFromFile(idx, upload_file) {
     headers: {
       "Content-Type": undefined,
     },
-  })
+  }, token)
     .then((resp) => {
       if (resp.status == 200) {
         // All done. Resolve to null.
