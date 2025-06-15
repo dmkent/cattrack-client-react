@@ -1,14 +1,14 @@
 import { useQuery } from "react-query";
 import Immutable from "immutable";
-import { fetch_from_api, checkStatus } from "../client/CatTrackAPI";
-import { useAuth } from "./AuthContext";
+import { checkStatusAxios } from "../client/CatTrackAPI";
 import { series_from_json } from "../data/PaymentSeries";
+import { useAxios } from "./AxiosContext";
 
 export default function usePaymentSeries() {
-  const auth = useAuth();
+  const axios = useAxios();
   const fetchPayments = () =>
-    fetch_from_api("/api/payments/", {}, auth.user?.token)
-      .then(checkStatus)
+    axios.get("/api/payments/")
+      .then(checkStatusAxios)
       .then((series) =>
         Immutable.Map(
           series.map((series) => [series.id, series_from_json(series)])

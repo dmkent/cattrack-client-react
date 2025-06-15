@@ -1,14 +1,14 @@
 import { useQuery } from "react-query";
 
-import { fetch_from_api, checkStatus } from "../client/CatTrackAPI";
-import { useAuth } from "./AuthContext";
+import { checkStatusAxios } from "../client/CatTrackAPI";
 import Category from "../data/Category";
+import { useAxios } from "./AxiosContext";
 
 export default function useTransactionSuggestions(transaction) {
-  const auth = useAuth();
+  const axios = useAxios();
   const fetchSuggestions = () =>
-    fetch_from_api("/api/transactions/" + transaction.id + "/suggest", {}, auth.user?.token)
-      .then(checkStatus)
+    axios.get("/api/transactions/" + transaction.id + "/suggest")
+      .then(checkStatusAxios)
       .then((resp) => {
         return resp.map((cat) => {
           return new Category(cat);

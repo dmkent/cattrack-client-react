@@ -1,11 +1,11 @@
 import moment from "moment";
 import { useQuery } from "react-query";
 
-import { useAuth } from "./AuthContext";
-import { fetch_from_api, checkStatus } from "../client/CatTrackAPI";
+import { checkStatusAxios } from "../client/CatTrackAPI";
+import { useAxios } from "./AxiosContext";
 
 export default function useBudgetSummaries(from_date, to_date) {
-  const auth = useAuth();
+  const axios = useAxios();
   const toStr = to_date
     ? to_date.replace("-", "")
     : moment().format("YYYYMMDD");
@@ -13,8 +13,8 @@ export default function useBudgetSummaries(from_date, to_date) {
     ? from_date.replace("-", "")
     : moment().subtract(1, "month").format("YYYYMMDD");
   const fetchSummaries = () =>
-    fetch_from_api(`/api/categories/summary/${fromStr}/${toStr}/`, {}, auth.user?.token)
-      .then(checkStatus)
+    axios.get(`/api/categories/summary/${fromStr}/${toStr}/`)
+      .then(checkStatusAxios)
       .then((raw) => {
         return raw;
       });

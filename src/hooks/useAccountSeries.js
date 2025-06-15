@@ -1,12 +1,21 @@
 import { useQuery } from "react-query";
-import { useAuth } from "./AuthContext";
-import { loadAccountBalanceSeries } from "../client/account";
+import { useAxios } from "./AxiosContext";
+import { checkStatusAxios } from "../client/CatTrackAPI";
 
 export default function useAccountSeries(account) {
-  const auth = useAuth();
+  const axios = useAxios();
   return useQuery(
     ["account_series", account],
-    () => loadAccountBalanceSeries(account, auth.user?.token),
+    () => axios
+      .get(`/api/accounts/${account.id}/series/`)
+      .then(checkStatusAxios)
+      .then((series) =>
+        Immutable.List(
+          series.data.map((raw) => {
+            return Immutable.Map(raw);
+          })
+        )
+      ),
     { enabled: !!account }
   );
 }

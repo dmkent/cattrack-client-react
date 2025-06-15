@@ -1,13 +1,15 @@
 import { useQuery } from "react-query";
 import Immutable from "immutable";
-import { useAuth } from "./AuthContext";
-import { fetch_from_api, checkStatus } from "../client/CatTrackAPI";
+import { useAxios } from "./AxiosContext";
+import { checkStatusAxios } from "../client/CatTrackAPI";
 
 export default function useCategorySeries(category_id) {
-  const auth = useAuth();
+  const axios = useAxios();
+
   const fetchCategories = () =>
-    fetch_from_api("/api/categories/" + category_id + "/series/", {}, auth.user?.token)
-      .then(checkStatus)
+    axios
+      .get(`/api/categories/${category_id}/series/`)
+      .then(checkStatusAxios) // Validate the response using checkStatusAxios
       .then((series) =>
         Immutable.List(
           series.map((raw) => {
@@ -15,6 +17,7 @@ export default function useCategorySeries(category_id) {
           })
         )
       );
+
   return useQuery(["categorySeries", category_id], fetchCategories, {
     enabled: !!category_id,
   });

@@ -1,15 +1,14 @@
 import { useQuery } from "react-query";
 
 import {
-  fetch_from_api,
-  checkStatus,
+  checkStatusAxios,
   filters_to_params,
 } from "../client/CatTrackAPI";
-import { useAuth } from "./AuthContext";
 import Transaction from "../data/Transaction";
+import { useAxios } from "./AxiosContext";
 
 export default function useTransactions(page, pageSize, filters) {
-  const auth = useAuth();
+  const axios = useAxios();
   const params = filters_to_params({
     page: page,
     page_size: pageSize,
@@ -17,8 +16,8 @@ export default function useTransactions(page, pageSize, filters) {
   });
 
   const fetchTransactions = () =>
-    fetch_from_api("/api/transactions/" + params, {}, auth.user?.token)
-      .then(checkStatus)
+    axios.get("/api/transactions/" + params)
+      .then(checkStatusAxios)
       .then((rawTransactions) => {
         return {
           transactions: rawTransactions.results.map((rawTransaction) => {

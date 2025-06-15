@@ -10,62 +10,65 @@ import { IntlProvider } from "react-intl";
 import { BrowserRouter as Router, Route, Navigate, Routes } from "react-router-dom";
 import Login from "./Login";
 import { AuthProvider, useAuth } from "../hooks/AuthContext"
+import { AxiosProvider } from "../hooks/AxiosContext";
 
 function App() {
   return (
     <IntlProvider locale="en-AU">
       <AuthProvider>
-        <Router basename={CONFIG.BASENAME}>
-          <div>
-            <NavComponent />
-            <div className="container-fluid">
-              <h1>CatTrack</h1>
-              <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/logout" element={<Logout />} />
-                <Route
-                  exact
-                  path="/"
-                  element={
-                    <RequireAuth redirectTo="/login">
-                      <Dashboard />
-                    </RequireAuth>
-                  }
-                />
-                <Route path="/accounts" element={
-                  <RequireAuth redirectTo="/login">
-                    <Accounts />
-                  </RequireAuth>
-                }
-                />
-                <Route path="/tracking" element={
-                  <RequireAuth redirectTo="/login">
-                    <Tracking />
-                  </RequireAuth>
-                }
-                />
-                <Route
-                  path="/transactions" element={
-                    <RequireAuth redirectTo="/login">
-                      <Transactions page_size={50} />
-                    </RequireAuth>
-                  }
-                />
-                <Route path="/bills" element={
-                  <RequireAuth redirectTo="/login">
-                    <PaymentSeries />
-                  </RequireAuth>
-                }
-                />
-              </Routes>
-            </div>
+        <AxiosProvider>
+          <Router basename={CONFIG.BASENAME}>
             <div>
-              <p className="pull-right text-muted">
-                <small>Client version: {CONFIG.VERSION}</small>
-              </p>
+              <NavComponent />
+              <div className="container-fluid">
+                <h1>CatTrack</h1>
+                <Routes>
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/logout" element={<Logout />} />
+                  <Route
+                    exact
+                    path="/"
+                    element={
+                      <RequireAuth redirectTo="/login">
+                        <Dashboard />
+                      </RequireAuth>
+                    }
+                  />
+                  <Route path="/accounts" element={
+                    <RequireAuth redirectTo="/login">
+                      <Accounts />
+                    </RequireAuth>
+                  }
+                  />
+                  <Route path="/tracking" element={
+                    <RequireAuth redirectTo="/login">
+                      <Tracking />
+                    </RequireAuth>
+                  }
+                  />
+                  <Route
+                    path="/transactions" element={
+                      <RequireAuth redirectTo="/login">
+                        <Transactions page_size={50} />
+                      </RequireAuth>
+                    }
+                  />
+                  <Route path="/bills" element={
+                    <RequireAuth redirectTo="/login">
+                      <PaymentSeries />
+                    </RequireAuth>
+                  }
+                  />
+                </Routes>
+              </div>
+              <div>
+                <p className="pull-right text-muted">
+                  <small>Client version: {CONFIG.VERSION}</small>
+                </p>
+              </div>
             </div>
-          </div>
-        </Router>
+          </Router>
+        </AxiosProvider>
       </AuthProvider>
     </IntlProvider>
   );
