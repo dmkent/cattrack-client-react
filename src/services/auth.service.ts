@@ -85,36 +85,6 @@ function refreshToken() {
     });
 }
 
-function restoreLogin() {
-  const token = localStorage.getItem("jwt");
-
-  if (!token) {
-    return {
-      is_logged_in: false,
-    };
-  }
-
-  const payload = parseJwt(token);
-  const authExpires = new Date(payload.exp * 1000);
-  if (authExpires <= new Date()) {
-    console.log("Auth expired. Expiry: " + authExpires);
-    // Do more to ensure logout?;
-    return {
-      is_logged_in: false,
-      expires: authExpires,
-    };
-  }
-
-  return {
-    is_logged_in: true,
-    username: payload.username,
-    user_id: payload.user_id,
-    email: payload.email,
-    expires: authExpires,
-    token: token,
-  };
-}
-
 function logout() {
   localStorage.removeItem("jwt");
 }
@@ -122,7 +92,6 @@ function logout() {
 export default {
   login,
   dummyLogin,
-  restoreLogin,
   refreshToken,
   logout,
 };

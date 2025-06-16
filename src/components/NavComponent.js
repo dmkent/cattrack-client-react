@@ -2,13 +2,13 @@ import React from "react";
 import { Nav, Navbar, NavItem } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
-import { useAuthToken } from "../hooks/useAuthToken";
+import { useAuth } from "../hooks/AuthContext";
 
 function NavComponent() {
-  const auth = useAuthToken();
+  const auth = useAuth();
 
   let auth_link = null;
-  if (auth.is_logged_in) {
+  if (auth.user?.is_logged_in) {
     auth_link = (
       <Nav pullRight>
         <LinkContainer to="/logout">
@@ -52,8 +52,8 @@ function NavComponent() {
             <NavItem>Bills</NavItem>
           </LinkContainer>
         </Nav>
-        {auth.is_logged_in ? (
-          <Navbar.Text pullRight>{auth.username}</Navbar.Text>
+        {auth.user?.is_logged_in ? (
+          <Navbar.Text pullRight>{auth.user.username}</Navbar.Text>
         ) : null}
         {auth_link}
       </Navbar.Collapse>
