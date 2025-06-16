@@ -75,16 +75,18 @@ function App() {
 }
 
 export function Logout(props) {
-  useEffect(() => {
-    AuthService.logout();
-  }, []);
-
+  const { signout } = useAuth();
+  
+  useEffect(() => signout(() => {}), []);
   return <Navigate to="/login" />;
 }
 
 function RequireAuth({ children, redirectTo }) {
-  let auth = useAuth();
-  let isAuthenticated = auth.user?.is_logged_in
+  let { user, loading } = useAuth();
+  let isAuthenticated = user?.is_logged_in;
+  if (loading) {
+    return <div>Loading...</div>;
+  }
   return isAuthenticated ? children : <Navigate to={redirectTo} />;
 }
 

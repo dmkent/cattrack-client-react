@@ -11,14 +11,21 @@ let AuthContext = React.createContext<AuthContextType>(null!);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   let [user, setUser] = React.useState<any>(null);
+  let [loading, setLoading] = React.useState<boolean>(true);
 
   useEffect(() => {
     // Restore login state from local storage on mount.
-    AuthService.refreshToken().then((restoredUser) => {
-      setUser(restoredUser);
-    }).catch(() => {
-      setUser(null);
-    });
+    const fetchAuth = async () => {
+      try {
+        const restoredUser = await AuthService.refreshToken();
+        setUser(restoredUser);
+      } catch {
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAuth();
   }, []);
 
   let signin = (username: string, password: string, callback: VoidFunction) => {
@@ -34,7 +41,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     callback();
   };
 
-  let value = { user, signin, signout };
+  let value = { user, signin, signout, loading };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
