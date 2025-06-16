@@ -9,7 +9,7 @@ type JwtData = {
 }
 
 function parseJwt(token: string) {
-  if (!token) {
+  if (!token || token.indexOf(".") === -1) {
     return {};
   }
 
@@ -46,6 +46,32 @@ function login(username: string, password: string) {
     .then((resp) => {
       localStorage.setItem("jwt", resp.refresh);
 
+      const payload = parseJwt(resp.access);
+      const authExpires = new Date(payload.exp * 1000);
+      return {
+        is_logged_in: true,
+        username: payload.username,
+        user_id: payload.user_id,
+        email: payload.email,
+        expires: authExpires,
+        token: resp.access,
+      };
+    });
+}
+
+function refreshToken() {
+  const token = localStorage.getItem("jwt");
+  if (!token) {
+    return Promise.reject(new Error("No token found in local storage"));
+  }
+
+  return fetch(CONFIG.API_URI + "/api/token/refresh/", {
+      method: "POST",
+      body: JSON.stringify({ refresh: token }),
+      headers: { "Content-Type": "application/json" },
+    })
+    .then(checkStatus)
+    .then((resp) => {
       const payload = parseJwt(resp.access);
       const authExpires = new Date(payload.exp * 1000);
       return {
@@ -97,5 +123,6 @@ export default {
   login,
   dummyLogin,
   restoreLogin,
+  refreshToken,
   logout,
 };
