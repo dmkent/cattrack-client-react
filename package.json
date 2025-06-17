@@ -9,7 +9,6 @@
     "build": "webpack --config webpack.prod.js --progress",
     "watch": "webpack-dev-server --config webpack.dev.js",
     "test": "jest",
-    "test:cov": "jest && codecov",
     "test:watch": "npm test -- --watch"
   },
   "dependencies": {
@@ -70,7 +69,6 @@
     "babel-plugin-transform-react-jsx": "^6.7.5",
     "babel-plugin-transform-regenerator": "^6.5.2",
     "babel-plugin-transform-runtime": "^6.5.2",
-    "codecov": "^3.6.5",
     "css-loader": "^6.7.1",
     "eslint": "^8.10.0",
     "eslint-plugin-react": "^7.3.0",
