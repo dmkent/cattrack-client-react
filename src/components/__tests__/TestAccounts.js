@@ -1,28 +1,16 @@
 import React from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { IntlProvider } from "react-intl";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
-import nock from "nock";
-import Immutable from "immutable";
+import { screen, waitFor, fireEvent } from "@testing-library/react";
 import Accounts from "../Accounts";
-import authService from "../../services/auth.service";
+import { renderWithProviders } from "../../RenderWithProviders";
 
 async function setup(accounts, account_id, uploading) {
   const props = {};
-
-  authService.dummyLogin();
-  nock("http://localhost:8000").get("/api/accounts/").reply(200, accounts);
-
-  const queryClient = new QueryClient();
-  render(
-    <IntlProvider locale="en-AU">
-      <QueryClientProvider client={queryClient}>
-        <Accounts {...props} />
-      </QueryClientProvider>
-    </IntlProvider>
+  renderWithProviders(
+    <Accounts {...props} />,
+    {},
+    (mockAdapter) => mockAdapter.onGet("http://localhost:8000/api/accounts/").reply(200, accounts)
   );
   await waitFor(() => screen.getByRole("heading", { name: "Accounts" }));
-
   return {
     props,
   };

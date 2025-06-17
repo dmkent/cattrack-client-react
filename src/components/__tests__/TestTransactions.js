@@ -1,10 +1,7 @@
 import React from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { render, screen, waitFor } from "@testing-library/react";
-import nock from "nock";
-import { IntlProvider } from "react-intl";
+import { screen, waitFor } from "@testing-library/react";
+import { renderWithProviders } from "../../RenderWithProviders";
 import Transactions from "../Transactions";
-import authService from "../../services/auth.service";
 
 const periods = [
   {
@@ -33,34 +30,26 @@ const categories = [
   { id: 3, name: "Cat2" },
 ];
 
-function setup(transactions) {
-  const props = {
-    page_size: 20,
-  };
-
-  authService.dummyLogin();
-  nock("http://localhost:8000").get("/api/periods/").reply(200, periods);
-  nock("http://localhost:8000").get("/api/accounts/").reply(200, accounts);
-  nock("http://localhost:8000").get("/api/categories/").reply(200, categories);
-  nock("http://localhost:8000")
-    .get("/api/transactions/?page=1&page_size=20")
+function setup(mockAdapter, transactions) {
+  mockAdapter.onGet("/api/periods/").reply(200, periods);
+  mockAdapter.onGet("/api/accounts/").reply(200, accounts);
+  mockAdapter.onGet("/api/categories/").reply(200, categories); 
+  mockAdapter
+    .onGet("/api/transactions/?page=1&page_size=20")
     .reply(200, {
       results: transactions,
       count: 40,
     });
-
-  return props;
 }
 
 test("should render self and subcomponents", async () => {
-  const props = setup([]);
-  const queryClient = new QueryClient();
-  render(
-    <IntlProvider locale="en-AU">
-      <QueryClientProvider client={queryClient}>
-        <Transactions {...props} />
-      </QueryClientProvider>
-    </IntlProvider>
+  const props = {
+    page_size: 20,
+  };
+  renderWithProviders(
+    <Transactions {...props} />,
+    {},
+    (mockAdapter) => setup(mockAdapter, [])
   );
   await waitFor(() => screen.getByText("Transactions"));
 
@@ -68,7 +57,10 @@ test("should render self and subcomponents", async () => {
 });
 
 test("should display some transactions", async () => {
-  const props = setup([
+  const props = {
+    page_size: 20,
+  };
+  const transactions = [
     {
       id: 0,
       when: new Date("2017-01-01"),
@@ -82,14 +74,11 @@ test("should display some transactions", async () => {
         "Test this really,  really,  really,  really,  really,  really long description",
       amount: -90.9,
     },
-  ]);
-  const queryClient = new QueryClient();
-  render(
-    <IntlProvider locale="en-AU">
-      <QueryClientProvider client={queryClient}>
-        <Transactions {...props} />
-      </QueryClientProvider>
-    </IntlProvider>
+  ];
+  renderWithProviders(
+    <Transactions {...props} />,
+    {},
+    (mockAdapter) => setup(mockAdapter, transactions)
   );
   await waitFor(() => screen.getByText("Transactions"));
 

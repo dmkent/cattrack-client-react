@@ -1,9 +1,9 @@
 import React from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
-import nock from "nock";
+import { screen, waitFor, fireEvent } from "@testing-library/react";
+import axios from "axios";
+import AxiosMockAdapter from "axios-mock-adapter";
 import Categorisor from "../Categorisor";
-import authService from "../../services/auth.service";
+import { renderWithProviders } from "../../RenderWithProviders";
 
 const categories = [
   { id: 0, name: "Cat1" },
@@ -18,11 +18,12 @@ function setup(transaction, suggestions) {
     save: jest.fn(() => Promise.resolve()),
   };
 
-  authService.dummyLogin();
-  nock("http://localhost:8000").get("/api/categories/").reply(200, categories);
-  nock("http://localhost:8000")
-    .get("/api/transactions/" + transaction.id + "/suggest")
-    .reply(200, suggestions);
+  props.axiosInstance = axios.create({
+    baseURL: "http://localhost:8000",
+  });
+  const mockAdapter = new AxiosMockAdapter(props.axiosInstance);
+  mockAdapter.onGet("/api/categories/").reply(200, categories);
+  mockAdapter.onGet("/api/transactions/" + transaction.id + "/suggest").reply(200, suggestions);
 
   return props;
 }
@@ -37,11 +38,9 @@ test("Categorisor: should render if transaction is defined", async () => {
     },
     []
   );
-  const queryClient = new QueryClient();
-  render(
-    <QueryClientProvider client={queryClient}>
-      <Categorisor {...props} />
-    </QueryClientProvider>
+  renderWithProviders(
+    <Categorisor {...props} />,
+    {}, null, props.axiosInstance
   );
   await waitFor(() => screen.getByText("Categorise transaction"));
 
@@ -58,11 +57,9 @@ test("Categorisor: should render suggestions if defined", async () => {
     },
     [{ name: "suggest1" }, { name: "suggest2" }]
   );
-  const queryClient = new QueryClient();
-  render(
-    <QueryClientProvider client={queryClient}>
-      <Categorisor {...props} />
-    </QueryClientProvider>
+  renderWithProviders(
+    <Categorisor {...props} />,
+    {}, null, props.axiosInstance
   );
   await waitFor(() => screen.getByText("Categorise transaction"));
 
@@ -82,11 +79,9 @@ test("Categorisor: should call save on button click", async () => {
     []
   );
 
-  const queryClient = new QueryClient();
-  render(
-    <QueryClientProvider client={queryClient}>
-      <Categorisor {...props} />
-    </QueryClientProvider>
+  renderWithProviders(
+    <Categorisor {...props} />,
+    {}, null, props.axiosInstance
   );
   await waitFor(() => screen.getByText("Categorise transaction"));
 
@@ -106,11 +101,9 @@ test("Categorisor: should show alert if not valid", async () => {
     []
   );
 
-  const queryClient = new QueryClient();
-  render(
-    <QueryClientProvider client={queryClient}>
-      <Categorisor {...props} />
-    </QueryClientProvider>
+  renderWithProviders(
+    <Categorisor {...props} />,
+    {}, null, props.axiosInstance
   );
   await waitFor(() => screen.getByText("Categorise transaction"));
 

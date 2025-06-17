@@ -43,7 +43,6 @@ function PaymentSeries(props) {
 }
 
 PaymentSeries.propTypes = {
-  paymentSeriesAddBillFromFile: PropTypes.func.isRequired,
 };
 
 export default PaymentSeries;

@@ -2,19 +2,22 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
 import NavComponent from "../NavComponent";
-import AuthService from "../../services/auth.service";
+import { AuthContext } from "../../hooks/AuthContext";
 
 function setup(logged_in) {
-  if (logged_in) {
-    AuthService.dummyLogin();
-  } else {
-    AuthService.logout();
-  }
+  const mockAuth = {
+    user: logged_in ? { is_logged_in: true } : null,
+    signin: jest.fn(),
+    signout: jest.fn(),
+    loading: false,
+  };
 
   render(
-    <Router basename="/">
-      <NavComponent />
-    </Router>
+    <AuthContext.Provider value={mockAuth}>
+      <Router basename="/">
+        <NavComponent />
+      </Router>
+    </AuthContext.Provider>
   );
 }
 

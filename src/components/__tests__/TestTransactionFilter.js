@@ -1,10 +1,8 @@
 import React from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
-import nock from "nock";
+import { screen, waitFor, fireEvent } from "@testing-library/react";
 
+import { renderWithProviders } from "../../RenderWithProviders";
 import TransactionFilter from "../TransactionFilter";
-import authService from "../../services/auth.service";
 
 const periods = [
   {
@@ -32,11 +30,10 @@ const categories = [
 ];
 const filters = { to_date: null, from_date: null, category: 3, account: 0 };
 
-function setup() {
-  authService.dummyLogin();
-  nock("http://localhost:8000").get("/api/periods/").reply(200, periods);
-  nock("http://localhost:8000").get("/api/accounts/").reply(200, accounts);
-  nock("http://localhost:8000").get("/api/categories/").reply(200, categories);
+function setup(mockAdapter) {
+  mockAdapter.onGet("/api/periods/").reply(200, periods);
+  mockAdapter.onGet("/api/accounts/").reply(200, accounts);
+  mockAdapter.onGet("/api/categories/").reply(200, categories);
 }
 
 test("TestTransactionFilter should render self and subcomponents", async () => {
@@ -45,12 +42,10 @@ test("TestTransactionFilter should render self and subcomponents", async () => {
     filters: filters,
   };
 
-  setup();
-  const queryClient = new QueryClient();
-  render(
-    <QueryClientProvider client={queryClient}>
-      <TransactionFilter {...props} />
-    </QueryClientProvider>
+  renderWithProviders(
+    <TransactionFilter {...props} />,
+    {},
+    setup
   );
 
   await waitFor(() => screen.getByText("Time"));
@@ -64,12 +59,10 @@ test("should display some categories and accounts", async () => {
     filters: filters,
   };
 
-  setup();
-  const queryClient = new QueryClient();
-  render(
-    <QueryClientProvider client={queryClient}>
-      <TransactionFilter {...props} />
-    </QueryClientProvider>
+  renderWithProviders(
+    <TransactionFilter {...props} />,
+    {},
+    setup
   );
 
   await waitFor(() => screen.getByText("Time"));
@@ -93,12 +86,10 @@ test("should display some periods and set active", async () => {
     filters: filters,
   };
 
-  setup();
-  const queryClient = new QueryClient();
-  render(
-    <QueryClientProvider client={queryClient}>
-      <TransactionFilter {...props} />
-    </QueryClientProvider>
+  renderWithProviders(
+    <TransactionFilter {...props} />,
+    {},
+    setup
   );
 
   await waitFor(() => screen.getByText("Time"));

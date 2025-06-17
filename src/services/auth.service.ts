@@ -18,24 +18,6 @@ function parseJwt(token: string) {
   return JSON.parse(window.atob(base64));
 }
 
-function dummyLogin(dataOverride: JwtData) {
-  let expiry = new Date();
-  expiry.setDate(expiry.getDate() + 2);
-  let data = dataOverride;
-  if (!data) {
-    data = {
-      exp: expiry.valueOf() / 1000,
-      username: "A User",
-      user_id: "aid",
-      email: "noone@nowhere.com",
-    };
-  }
-
-  let dataStr = JSON.stringify(data);
-  let encoded = window.btoa(dataStr).replace("/", "_").replace("+", "-");
-  localStorage.setItem("jwt", `a.${encoded}.c`);
-}
-
 function login(username: string, password: string) {
   return fetch(CONFIG.API_URI + "/api/token/", {
     method: "POST",
@@ -91,7 +73,6 @@ function logout() {
 
 export default {
   login,
-  dummyLogin,
   refreshToken,
   logout,
 };

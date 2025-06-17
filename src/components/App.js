@@ -26,7 +26,6 @@ function App() {
                   <Route path="/login" element={<Login />} />
                   <Route path="/logout" element={<Logout />} />
                   <Route
-                    exact
                     path="/"
                     element={
                       <RequireAuth redirectTo="/login">
@@ -81,7 +80,7 @@ export function Logout(props) {
   return <Navigate to="/login" />;
 }
 
-function RequireAuth({ children, redirectTo }) {
+export function RequireAuth({ children, redirectTo }) {
   let { user, loading } = useAuth();
   let isAuthenticated = user?.is_logged_in;
   if (loading) {

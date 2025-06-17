@@ -1,9 +1,7 @@
 import React from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { render, screen, waitFor } from "@testing-library/react";
-import nock from "nock";
+import { screen, waitFor } from "@testing-library/react";
 
-import authService from "../../services/auth.service";
+import { renderWithProviders } from "../../RenderWithProviders";
 import Dashboard from "../Dashboard";
 
 const periods = [
@@ -24,17 +22,11 @@ const periods = [
 ];
 
 test("should render self and subcomponents", async () => {
-  authService.dummyLogin();
-  nock("http://localhost:8000").get("/api/periods/").reply(200, periods);
-  nock("http://localhost:8000")
-    .get("/api/transactions/summary/")
-    .reply(200, []);
-
-  const queryClient = new QueryClient();
-  render(
-    <QueryClientProvider client={queryClient}>
-      <Dashboard />
-    </QueryClientProvider>
+  renderWithProviders(
+      <Dashboard />, {}, (mockAdapter) => {
+        mockAdapter.onGet("/api/periods/").reply(200, periods);
+        mockAdapter.onGet("/api/transactions/summary/").reply(200, []);
+      }
   );
   await waitFor(() => screen.getByText("Time"));
 
