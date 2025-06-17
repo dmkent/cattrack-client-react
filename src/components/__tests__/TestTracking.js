@@ -1,10 +1,8 @@
 import React from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
-import nock from "nock";
+import { screen, waitFor, fireEvent } from "@testing-library/react";
 import Immutable from "immutable";
 
-import authService from "../../services/auth.service";
+import { renderWithProviders } from "../../RenderWithProviders";
 import { Tracking } from "../Tracking";
 
 const categories = [
@@ -20,17 +18,14 @@ const series = Immutable.List([
 
 test("should render self and subcomponents", async () => {
   const props = {};
-  authService.dummyLogin();
-  nock("http://localhost:8000").get("/api/categories/").reply(200, categories);
-  nock("http://localhost:8000")
-    .get("/api/category/3/series/")
-    .reply(200, [series]);
 
-  const queryClient = new QueryClient();
-  render(
-    <QueryClientProvider client={queryClient}>
-      <Tracking {...props} />
-    </QueryClientProvider>
+  renderWithProviders(
+    <Tracking {...props} />,
+    {},
+    (mockAdapter) => {
+      mockAdapter.onGet("/api/categories/").reply(200, categories);
+      mockAdapter.onGet("/api/category/3/series/").reply(200, [series]);
+    }
   );
   await waitFor(() => screen.getByText("Spending tracking"));
 

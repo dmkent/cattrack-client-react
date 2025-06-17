@@ -36,7 +36,7 @@ function NavComponent() {
       </Navbar.Header>
       <Navbar.Collapse>
         <Nav>
-          <LinkContainer exact to="/">
+          <LinkContainer to="/">
             <NavItem>Dashboard</NavItem>
           </LinkContainer>
           <LinkContainer to="/accounts">

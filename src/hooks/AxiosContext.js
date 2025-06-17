@@ -5,7 +5,7 @@ import axios from "axios";
 import { useAuth } from "./AuthContext";
 import CONFIG from "ctrack_config";
 
-const AxiosContext = createContext();
+export const AxiosContext = createContext();
 
 export const AxiosProvider = ({ children }) => {
   const { user } = useAuth();
