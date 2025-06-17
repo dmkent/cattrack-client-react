@@ -27,4 +27,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
     - run: yarn install
-    - run: yarn run test:cov
+    - run: yarn run test
+    - uses: codecov/codecov-action@v5
+      with:
+        fail_ci_if_error: true # optional (default = false)
+        flags: ${{ matrix.node-version }}
+        name: PR
+        token: ${{ secrets.CODECOV_TOKEN }}
+        verbose: true # optional (default = false)
