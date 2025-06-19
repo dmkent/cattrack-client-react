@@ -1,13 +1,13 @@
 import React, { createContext, useContext, useMemo } from "react";
 import * as Cookies from "js-cookie";
 
-import axios from "axios";
+import axios, { AxiosInstance } from "axios";
 import { useAuth } from "./AuthContext";
 import CONFIG from "ctrack_config";
+ 
+export const AxiosContext = createContext<AxiosInstance>(null!);
 
-export const AxiosContext = createContext();
-
-export const AxiosProvider = ({ children }) => {
+export const AxiosProvider = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
 
   const axiosInstance = useMemo(() => {

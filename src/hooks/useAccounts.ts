@@ -1,17 +1,21 @@
 import { useQuery } from "react-query";
 import { checkStatusAxios } from "../client/CatTrackAPI";
+import { useAxios } from "./AxiosContext"
 
-import Account from "../data/Account";
-import { useAxios } from "./AxiosContext";
+import { Account } from "../data/Account";
 
 export default function useAccounts() {
   const axios = useAxios();
   const fetchAccounts = () =>
     axios.get("/api/accounts/")
       .then(checkStatusAxios)
-      .then((rawAccounts) => {
+      .then((rawAccounts: any[]) => {
         return rawAccounts.map((rawAccount) => {
-          return new Account(rawAccount.id, rawAccount.name, rawAccount.balance);
+          return {
+            id: rawAccount.id,
+            name: rawAccount.name,
+            balance: rawAccount.balance
+          } as Account;
         });
       });
 

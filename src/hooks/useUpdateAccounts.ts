@@ -1,13 +1,13 @@
 import { parseErrors } from '../client/ErrorParser';
-import { useAxios } from './AxiosContext';
 import { checkStatusAxios } from '../client/CatTrackAPI';
+import { useAxios } from './AxiosContext';
 
-import Account from "../data/Account";
+import { Account } from "../data/Account";
 
 export const useUpdateAccounts = () => {
   const axios = useAxios();
 
-  const uploadFileToAccount = async (account: any, uploadFile: File) => {
+  const uploadFileToAccount = async (account: Account, uploadFile: File): Promise<void> => {
     const formData = new FormData();
     formData.append('file', uploadFile);
     formData.append('accountId', account.id);
@@ -37,17 +37,18 @@ export const useUpdateAccounts = () => {
     }
   }
 
-  const createAccount = async (name: string) => {
+  const createAccount = async (name: string): Promise<Account> => {
     try {
       const response = await axios.post('/api/accounts/', { name });
       if (response.status === 201) {
-        return response.data;
+        return response.data as Account;
       }
 
       const result = await checkStatusAxios(response);
 
-      return new Account(result)
-      throw new Error('Failed to create account');
+      return {
+        ...result
+      } as Account;
     } catch (error) {
       console.error('Error creating account:', error);
       throw error;
