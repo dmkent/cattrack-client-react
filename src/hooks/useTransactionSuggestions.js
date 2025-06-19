@@ -11,7 +11,7 @@ export default function useTransactionSuggestions(transaction) {
       .then(checkStatusAxios)
       .then((resp) => {
         return resp.map((cat) => {
-          return new Category(cat);
+          return new Category(cat.id, cat.name, cat.score);
         });
       });
 

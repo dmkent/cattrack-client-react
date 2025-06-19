@@ -30,9 +30,11 @@ function Categorisor(props) {
         <ul>
           {[...suggestions].map((suggestion) => {
             return (
-              <li key={suggestion.name}>
-                {suggestion.name} <Badge>{suggestion.score}%</Badge>
-              </li>
+              <CategorisorSuggestion
+                key={suggestion.name}
+                suggestion={suggestion}
+                percentage={suggestion.score}
+              />
             );
           })}
         </ul>
@@ -113,5 +115,11 @@ function Categorisor(props) {
     </div>
   );
 }
+
+const CategorisorSuggestion = ({ suggestion, percentage }) => (
+  <li key={suggestion.name}>
+    {suggestion.name} <span className="badge">{percentage}%</span>
+  </li>
+);
 
 export default Categorisor;

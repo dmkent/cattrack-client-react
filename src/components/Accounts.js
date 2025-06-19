@@ -60,6 +60,19 @@ function Accounts(props) {
     </Popover>
   );
 
+  const AccountRow = ({ account, onClick }) => (
+    <tr onClick={() => onClick(account)} key={account.id}>
+      <td>{account.name}</td>
+      <td className="text-right">
+        <FormattedNumber
+          value={account.balance || 0.0}
+          style={"currency"}
+          currency={"AUD"}
+        />
+      </td>
+    </tr>
+  );
+
   return (
     <div>
       <h3>
@@ -80,16 +93,11 @@ function Accounts(props) {
         <tbody>
           {[...accounts.values()].map((account) => {
             return (
-              <tr key={account.id} onClick={() => setCurrentAccount(account)}>
-                <td>{account.name}</td>
-                <td className="text-right">
-                  <FormattedNumber
-                    value={account.balance || 0.0}
-                    style={"currency"}
-                    currency={"AUD"}
-                  />
-                </td>
-              </tr>
+              <AccountRow
+                account={account}
+                onClick={setCurrentAccount}
+                key={account.id}
+              />
             );
           })}
         </tbody>

@@ -21,7 +21,15 @@ export default function useTransactions(page, pageSize, filters) {
       .then((rawTransactions) => {
         return {
           transactions: rawTransactions.results.map((rawTransaction) => {
-            return new Transaction(rawTransaction);
+            return new Transaction(
+              rawTransaction.id,
+              rawTransaction.when,
+              rawTransaction.description,
+              rawTransaction.amount,
+              rawTransaction.category,
+              rawTransaction.category_name,
+              rawTransaction.account
+            );
           }),
           num_records: rawTransactions.count,
         };

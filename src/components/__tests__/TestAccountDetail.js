@@ -1,16 +1,13 @@
 import React from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
-import Immutable from "immutable";
+import { render, screen } from "@testing-library/react";
 import AccountDetail from "../AccountDetail";
-import Account from "../../data/Account";
 
 function setup(account_id, uploading) {
   const props = {
     account: {
       id: account_id,
     },
-    accountSeries: Immutable.List([Immutable.Map()]),
+    accountSeries: [],
     uploadInProgress: uploading,
     uploadProgress: 50,
     uploadResult: "",

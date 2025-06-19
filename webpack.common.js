@@ -48,7 +48,6 @@ module.exports = {
       "react-router",
       "react-intl",
       "babel-preset-react",
-      "immutable",
     ],
     plotly: "./src/client/PlotlyWrapper.js",
   },
