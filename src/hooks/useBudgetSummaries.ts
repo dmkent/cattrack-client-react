@@ -4,7 +4,11 @@ import { useQuery } from "react-query";
 import { checkStatusAxios } from "../client/CatTrackAPI";
 import { useAxios } from "./AxiosContext";
 
-export default function useBudgetSummaries(from_date, to_date) {
+interface BudgetSummary {
+  [key: string]: any;
+}
+
+export default function useBudgetSummaries(from_date: string | null, to_date: string | null) {
   const axios = useAxios();
   const toStr = to_date
     ? to_date.replace("-", "")
@@ -12,10 +16,10 @@ export default function useBudgetSummaries(from_date, to_date) {
   const fromStr = from_date
     ? from_date.replace("-", "")
     : moment().subtract(1, "month").format("YYYYMMDD");
-  const fetchSummaries = () =>
+  const fetchSummaries = (): Promise<BudgetSummary> =>
     axios.get(`/api/categories/summary/${fromStr}/${toStr}/`)
       .then(checkStatusAxios)
-      .then((raw) => {
+      .then((raw: BudgetSummary) => {
         return raw;
       });
 
