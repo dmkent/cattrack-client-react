@@ -1,6 +1,5 @@
 import React from "react";
 import { screen, waitFor, fireEvent } from "@testing-library/react";
-import Immutable from "immutable";
 
 import { renderWithProviders } from "../../RenderWithProviders";
 import { Tracking } from "../Tracking";
@@ -10,11 +9,11 @@ const categories = [
   { id: 2, name: "cat2" },
   { id: 1, name: "cat3" },
 ];
-const series = Immutable.List([
-  Immutable.Map({ value: "-43", label: "2013-01-01" }),
-  Immutable.Map({ value: "-33", label: "2013-02-01" }),
-  Immutable.Map({ value: "-5", label: "2013-03-01" }),
-]);
+const series = [
+  { value: "-43", label: "2013-01-01" },
+  { value: "-33", label: "2013-02-01" },
+  { value: "-5", label: "2013-03-01" },
+];
 
 test("should render self and subcomponents", async () => {
   const props = {};

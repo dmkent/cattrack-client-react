@@ -15,15 +15,15 @@ export const useUpdatePaymentSeries = () => {
       }
     });
     
-    if (resp.status == 200) {
+    if (resp.status === 200) {
       // All done. Resolve to null.
-      return;
+      return null;
     }
 
     let message = "";
-    if (resp.data === null) {
-      return;
-    } else if (resp.data instanceof Object) {
+    if (!resp.data) {
+      return new Error("No response data received.");
+    } else if (typeof resp.data === "object") {
       message = parseErrors(resp.data);
     } else {
       message = resp.data;

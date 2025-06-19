@@ -1,5 +1,4 @@
 import { useQuery } from "react-query";
-import Immutable from "immutable";
 import { useAxios } from "./AxiosContext";
 import { checkStatusAxios } from "../client/CatTrackAPI";
 
@@ -11,11 +10,9 @@ export default function useCategorySeries(category_id) {
       .get(`/api/categories/${category_id}/series/`)
       .then(checkStatusAxios) // Validate the response using checkStatusAxios
       .then((series) =>
-        Immutable.List(
-          series.map((raw) => {
-            return Immutable.Map(raw);
-          })
-        )
+        series.map((raw) => {
+          return { ...raw };
+        })
       );
 
   return useQuery(["categorySeries", category_id], fetchCategories, {

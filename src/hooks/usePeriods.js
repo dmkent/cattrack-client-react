@@ -11,7 +11,13 @@ export default function usePeriods() {
       .then(checkStatusAxios)
       .then((rawPeriods) => {
         return rawPeriods.map((rawPeriod) => {
-          return new Period(rawPeriod);
+          return new Period(
+            rawPeriod.id,
+            rawPeriod.offset,
+            rawPeriod.label,
+            rawPeriod.from_date,
+            rawPeriod.to_date
+          );
         });
       });
 

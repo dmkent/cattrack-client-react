@@ -100,7 +100,6 @@ module.exports = {
     "multiline-ternary": "error",
     // See https://github.com/eslint/eslint/issues/2023#issuecomment-80255655
     // new-cap really isn't very helpful.
-    // Particularly for Immutable "classes" which are actually factory functions...
     "new-cap": "off",
     "new-parens": "error",
     "newline-after-var": "off",

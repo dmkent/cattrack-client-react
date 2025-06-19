@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import { Grid, Col, Row } from "react-bootstrap";
-import { useAuth } from "../hooks/AuthContext";
 import PaymentSeriesDetail from "./PaymentSeriesDetail";
 import usePaymentSeries from "../hooks/usePaymentSeries";
 import { useUpdatePaymentSeries } from "../hooks/useUpdatePaymentSeries";
@@ -20,7 +18,7 @@ function PaymentSeries(props) {
       <Row>
         <Col md={2}>
           <ul>
-            {[...paymentSeries.values()].map((series) => {
+            {Object.values(paymentSeries).map((series) => {
               return (
                 <li key={series.id} onClick={() => setCurrentSeries(series.id)}>
                   {series.name}
@@ -31,7 +29,7 @@ function PaymentSeries(props) {
         </Col>
         <Col md={10}>
           <PaymentSeriesDetail
-            series={paymentSeries.get(currentSeries)}
+            series={paymentSeries[currentSeries]}
             paymentSeriesAddBillFromFile={(file) =>
               paymentSeriesAddBillFromFile(currentSeries, file)
             }

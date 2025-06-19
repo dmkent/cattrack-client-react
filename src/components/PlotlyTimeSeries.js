@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
-import Immutable from "immutable";
 import Plotly from "../client/PlotlyWrapper";
 
 export function plotlyDataFromSeries(
@@ -14,12 +13,12 @@ export function plotlyDataFromSeries(
   // Get grand total
   if (series !== null) {
     series.map(function (element) {
-      let value = parseFloat(element.get("value"));
+      let value = parseFloat(element.value);
       if (plot_invert) {
         value *= -1.0;
       }
       values.push(value);
-      labels.push(element.get("label"));
+      labels.push(element.label);
     });
   }
   return {
@@ -65,7 +64,12 @@ function PlotlyTimeSeries(props) {
 }
 
 PlotlyTimeSeries.propTypes = {
-  series: PropTypes.instanceOf(Immutable.List),
+  series: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      value: PropTypes.string.isRequired,
+    })
+  ).isRequired,
   plot_type: PropTypes.string,
   plot_invert: PropTypes.bool,
 };

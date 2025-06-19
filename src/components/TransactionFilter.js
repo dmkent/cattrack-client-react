@@ -18,6 +18,16 @@ function TransactionFilter(props) {
     return null;
   }
 
+  const TransactionFilterButton = ({ name, isActive, onClick }) => (
+    <button
+      className={`btn btn-default btn-xs ${isActive ? "active" : ""}`}
+      onClick={() => onClick(name)}
+      key={name}
+    >
+      {name}
+    </button>
+  );
+
   return (
     <div className="col-md-2">
       <TransactionFilterPeriods
@@ -48,19 +58,17 @@ function TransactionFilter(props) {
         </Button>
         {[...categories].map((category) => {
           return (
-            <Button
-              className="btn btn-default btn-xs"
+            <TransactionFilterButton
               key={"cat-" + category.id}
+              name={category.name}
               onClick={() => {
                 updateFilters({
                   category: category.id,
                   has_category: "True",
                 });
               }}
-              active={filters.category == category.id}
-            >
-              {category.name}
-            </Button>
+              isActive={filters.category == category.id}
+            />
           );
         })}
       </div>
@@ -78,16 +86,14 @@ function TransactionFilter(props) {
         </Button>
         {[...accounts.values()].map((account) => {
           return (
-            <Button
-              className="btn btn-default btn-xs"
+            <TransactionFilterButton
               key={"acct-" + account.id}
+              name={account.name}
               onClick={() => {
                 updateFilters({ account: account.id });
               }}
-              active={filters.account == account.id}
-            >
-              {account.name}
-            </Button>
+              isActive={filters.account == account.id}
+            />
           );
         })}
       </div>

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import Immutable from "immutable";
 import { FormattedDate, FormattedNumber } from "react-intl";
 import {
   Form,
@@ -32,8 +31,8 @@ function PaymentSeriesDetail(props) {
           )}
         </p>
         <ul>
-          {props.series.bills.size > 0 &&
-            [...props.series.bills.values()].map((bill) => {
+          {props.series.bills &&
+            props.series.bills.map((bill) => {
               return (
                 <li key={bill.id}>
                   <span>{bill.due_date} </span>
@@ -52,7 +51,6 @@ function PaymentSeriesDetail(props) {
 }
 
 PaymentSeriesDetail.propTypes = {
-  series: PropTypes.instanceOf(Immutable.Record),
   paymentSeriesAddBillFromFile: PropTypes.func.isRequired,
 };
 

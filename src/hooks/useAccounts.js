@@ -11,7 +11,7 @@ export default function useAccounts() {
       .then(checkStatusAxios)
       .then((rawAccounts) => {
         return rawAccounts.map((rawAccount) => {
-          return new Account(rawAccount);
+          return new Account(rawAccount.id, rawAccount.name, rawAccount.balance);
         });
       });
 

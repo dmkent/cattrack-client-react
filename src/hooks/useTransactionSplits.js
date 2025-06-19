@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Immutable from "immutable";
 
 function initialSplits(transaction, suggestions) {
   let category = transaction.category;
@@ -11,12 +10,12 @@ function initialSplits(transaction, suggestions) {
     }
   }
 
-  let splits = Immutable.List([
+  const splits = [
     {
       category: String(category),
       amount: transaction.amount,
     },
-  ]);
+  ];
 
   return {
     splits,
@@ -40,7 +39,7 @@ function splitsAreValid(transaction, splits) {
     total += parseFloat(split.amount);
 
     // Get category to check is unique
-    if (cats.indexOf(split.category) < 0) {
+    if (!cats.includes(split.category)) {
       cats.push(split.category);
     }
 
@@ -90,35 +89,31 @@ function useTransactionSplits(transaction, suggestions) {
   }
 
   function pushSplit(categoryId) {
-    setSplits({
-      splits: splits.splits.push({
-        category: categoryId,
-        amount: "0",
-      }),
+    setSplits((prevSplits) => ({
+      splits: [...prevSplits.splits, { category: categoryId, amount: "0" }],
       is_valid: {
         valid: null,
       },
-    });
+    }));
   }
 
   function setSplitValue(name, idx, value) {
-    const new_state = Object.assign({}, splits, {
-      splits: splits.splits.set(
-        idx,
-        Object.assign({}, splits.splits.get(idx), {
-          [name]: value,
-        })
-      ),
-    });
-    new_state.is_valid = splitsAreValid(transaction, new_state.splits);
+    const newSplits = splits.splits.map((split, index) =>
+      index === idx ? { ...split, [name]: value } : split
+    );
+    const new_state = {
+      splits: newSplits,
+      is_valid: splitsAreValid(transaction, newSplits),
+    };
     setSplits(new_state);
   }
 
   function removeSplit(idx) {
-    const new_state = Object.assign({}, splits, {
-      splits: splits.splits.delete(idx),
-    });
-    new_state.is_valid = splitsAreValid(transaction, new_state.splits);
+    const newSplits = splits.splits.filter((_, index) => index !== idx);
+    const new_state = {
+      splits: newSplits,
+      is_valid: splitsAreValid(transaction, newSplits),
+    };
     setSplits(new_state);
   }
 

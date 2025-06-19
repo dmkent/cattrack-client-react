@@ -1,6 +1,5 @@
 import React from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import Immutable from "immutable";
 import { format, sub } from "date-fns";
 import TransactionFilterPeriods from "../TransactionFilterPeriods";
 
@@ -8,7 +7,7 @@ function setup(periods, filters) {
   const props = {
     updateFilters: jest.fn(),
     filters: filters,
-    periods: Immutable.List(periods),
+    periods: periods,
   };
 
   const { container } = render(<TransactionFilterPeriods {...props} />);

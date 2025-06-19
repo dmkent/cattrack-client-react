@@ -13,7 +13,7 @@ export default function useCategories() {
       .then(checkStatusAxios) // Validate the response using checkStatusAxios
       .then((resp) => {
         return resp.map((cat) => {
-          return new Category(cat);
+          return new Category(cat.id, cat.name, cat.score);
         });
       });
 

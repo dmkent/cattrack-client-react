@@ -10,11 +10,9 @@ export default function useAccountSeries(account) {
       .get(`/api/accounts/${account.id}/series/`)
       .then(checkStatusAxios)
       .then((series) =>
-        Immutable.List(
-          series.data.map((raw) => {
-            return Immutable.Map(raw);
-          })
-        )
+        series.map((raw) => {
+          return {...raw};
+         })
       ),
     { enabled: !!account }
   );
