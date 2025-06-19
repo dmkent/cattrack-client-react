@@ -4,7 +4,7 @@ import { useAxios } from "./AxiosContext";
 export const useUpdatePaymentSeries = () => {
   const axios = useAxios();
 
-  const paymentSeriesAddBillFromFile = async (idx, upload_file) => {
+  const paymentSeriesAddBillFromFile = async (idx: string, upload_file: File): Promise<Error | null> => {
     let data = new FormData();
     data.append("data_file", upload_file);
     data.append("name", idx);
@@ -24,7 +24,7 @@ export const useUpdatePaymentSeries = () => {
     if (!resp.data) {
       return new Error("No response data received.");
     } else if (typeof resp.data === "object") {
-      message = parseErrors(resp.data);
+      message = parseErrors(resp.data).join("; ");
     } else {
       message = resp.data;
     }

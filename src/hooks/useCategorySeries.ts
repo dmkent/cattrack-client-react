@@ -2,15 +2,19 @@ import { useQuery } from "react-query";
 import { useAxios } from "./AxiosContext";
 import { checkStatusAxios } from "../client/CatTrackAPI";
 
-export default function useCategorySeries(category_id) {
+interface CategorySeries {
+  [key: string]: any;
+}
+
+export default function useCategorySeries(category_id: string) {
   const axios = useAxios();
 
-  const fetchCategories = () =>
+  const fetchCategories = (): Promise<CategorySeries[]> =>
     axios
       .get(`/api/categories/${category_id}/series/`)
-      .then(checkStatusAxios) // Validate the response using checkStatusAxios
-      .then((series) =>
-        series.map((raw) => {
+      .then(checkStatusAxios)
+      .then((series: any[]) =>
+        series.map((raw): CategorySeries => {
           return { ...raw };
         })
       );
