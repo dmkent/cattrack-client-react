@@ -6,13 +6,18 @@ import {
   checkStatusAxios,
 } from "../client/CatTrackAPI";
 
-export default function useTransactionSummaries(filters) {
+interface TransactionSummary {
+  category: string | number;
+  [key: string]: any;
+}
+
+export default function useTransactionSummaries(filters: any) {
   const axios = useAxios();
   const query_params = filters_to_params(filters);
   const fetchSummary = () =>
     axios.get("/api/transactions/summary/" + query_params)
       .then(checkStatusAxios)
-      .then((resp) => {
+      .then((resp: TransactionSummary[]) => {
         const summaryMap = new Map();
         resp.forEach((item) => {
           summaryMap.set(item.category, item);

@@ -1,6 +1,25 @@
 import { useState } from "react";
+import { Transaction } from "../data/Transaction";
 
-function initialSplits(transaction, suggestions) {
+interface Split {
+  category: string;
+  amount: string | number;
+}
+
+interface SplitsState {
+  splits: Split[];
+  is_valid: {
+    valid: boolean | null;
+    message?: string;
+  };
+}
+
+interface Suggestion {
+  id: string | number;
+  name?: string;
+}
+
+function initialSplits(transaction: Transaction, suggestions?: Suggestion[]): SplitsState {
   let category = transaction.category;
   if (category === null) {
     if (suggestions && suggestions.length > 0) {
@@ -10,7 +29,7 @@ function initialSplits(transaction, suggestions) {
     }
   }
 
-  const splits = [
+  const splits: Split[] = [
     {
       category: String(category),
       amount: transaction.amount,
@@ -25,9 +44,9 @@ function initialSplits(transaction, suggestions) {
   };
 }
 
-function splitsAreValid(transaction, splits) {
+function splitsAreValid(transaction: Transaction, splits: Split[]) {
   let total = 0;
-  let cats = [];
+  let cats: string[] = [];
   let ncats = 0;
   splits.forEach(function (split) {
     // Ignore empty splits
@@ -36,17 +55,17 @@ function splitsAreValid(transaction, splits) {
     }
 
     // Add amounts to total
-    total += parseFloat(split.amount);
+    total += parseFloat(String(split.amount));
 
     // Get category to check is unique
-    if (!cats.includes(split.category)) {
-      cats.push(split.category);
+    if (!cats.includes(String(split.category))) {
+      cats.push(String(split.category));
     }
 
     ncats += 1;
   });
 
-  const delta = Math.abs(total - parseFloat(transaction.amount));
+  const delta = Math.abs(total - parseFloat(String(transaction.amount)));
   if (delta > 0.005) {
     return {
       message: "Split amount must sum to transaction amount.",
@@ -67,12 +86,12 @@ function splitsAreValid(transaction, splits) {
   };
 }
 
-function useTransactionSplits(transaction, suggestions) {
+function useTransactionSplits(transaction: Transaction, suggestions?: Suggestion[]) {
   const [hasReceivedSuggestions, setHasReceivedSuggestions] = useState(false);
   const [currentTransactionId, setCurrentTransactionId] = useState(
     transaction.id
   );
-  const [splits, setSplits] = useState(initialSplits(transaction, suggestions));
+  const [splits, setSplits] = useState<SplitsState>(initialSplits(transaction, suggestions));
 
   // We may still be waiting for suggestions when we first load. This reinitialises the
   // state if we receive the suggestions later.
@@ -88,40 +107,40 @@ function useTransactionSplits(transaction, suggestions) {
     setHasReceivedSuggestions(!!suggestions);
   }
 
-  function pushSplit(categoryId) {
+  function pushSplit(categoryId: string | number) {
     setSplits((prevSplits) => ({
-      splits: [...prevSplits.splits, { category: categoryId, amount: "0" }],
+      splits: [...prevSplits.splits, { category: String(categoryId), amount: "0" }],
       is_valid: {
         valid: null,
       },
     }));
   }
 
-  function setSplitValue(name, idx, value) {
+  function setSplitValue(name: keyof Split, idx: number, value: string | number) {
     const newSplits = splits.splits.map((split, index) =>
       index === idx ? { ...split, [name]: value } : split
     );
-    const new_state = {
+    const new_state: SplitsState = {
       splits: newSplits,
       is_valid: splitsAreValid(transaction, newSplits),
     };
     setSplits(new_state);
   }
 
-  function removeSplit(idx) {
+  function removeSplit(idx: number) {
     const newSplits = splits.splits.filter((_, index) => index !== idx);
-    const new_state = {
+    const new_state: SplitsState = {
       splits: newSplits,
       is_valid: splitsAreValid(transaction, newSplits),
     };
     setSplits(new_state);
   }
 
-  function setSuggestions(suggestions) {
+  function setSuggestions(suggestions: Suggestion[]) {
     setSplits(initialSplits(transaction, suggestions));
   }
 
-  return [splits, setSuggestions, pushSplit, setSplitValue, removeSplit];
+  return [splits, setSuggestions, pushSplit, setSplitValue, removeSplit] as const;
 }
 
 export default useTransactionSplits;
