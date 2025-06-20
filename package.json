@@ -75,8 +75,9 @@
     "git-revision-webpack-plugin": "^3.0.4",
     "html-webpack-plugin": "^5.5.0",
     "http-server": "^14.1.0",
-    "jest": "^27.5.1",
+    "jest": "^28.0.0",
     "jest-canvas-mock": "^2.4.0",
+    "jest-environment-jsdom": "^30.0.2",
     "mini-css-extract-plugin": "^2.6.0",
     "path-browserify": "^1.0.1",
     "prettier": "^2.6.2",
@@ -92,7 +93,9 @@
     "webpack-merge": "^5.8.0"
   },
   "jest": {
-    "testURL": "https://cats.example.com",
+    "testEnvironmentOptions": {
+      "url": "https://cats.example.com"
+    },
     "testEnvironment": "jsdom",
     "collectCoverage": true,
     "collectCoverageFrom": [
