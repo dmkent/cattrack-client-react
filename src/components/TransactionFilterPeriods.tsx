@@ -6,7 +6,26 @@ import { format } from "date-fns";
 
 const fmtStr = "yyyy-MM-dd";
 
-function TransactionFilterPeriods(props) {
+interface Period {
+  id: string | number;
+  label: string;
+  from_date: string;
+  to_date: string;
+  offset: string;
+}
+
+interface Filters {
+  from_date: string | null;
+  to_date: string | null;
+}
+
+interface TransactionFilterPeriodsProps {
+  filters: Filters;
+  updateFilters: (filters: Partial<Filters>) => void;
+  periods: Period[];
+}
+
+function TransactionFilterPeriods(props: TransactionFilterPeriodsProps) {
   const { filters, updateFilters, periods } = props;
 
   let all_periods = filters.from_date === null && filters.to_date === null;
@@ -21,7 +40,7 @@ function TransactionFilterPeriods(props) {
       <h3 data-testid="dateRangePicker">Time</h3>
       <DateRangePicker
         value={[fromDateVal, toDateVal]}
-        onChange={(data) => {
+        onChange={(data: [Date | null, Date | null] | null) => {
           if (!data) return;
 
           const [startDate, endDate] = data;

@@ -1,8 +1,35 @@
 import React from "react";
 import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 
-function SplitFieldset(props) {
-  let vstate = null;
+interface Category {
+  id: string | number;
+  name: string;
+}
+
+interface Split {
+  category: string;
+  amount: string;
+}
+
+interface ValidationState {
+  valid: boolean | null;
+  message?: string;
+}
+
+interface SplitFieldsetProps {
+  index: number;
+  splitIdx: number;
+  multiple_splits_exist: boolean;
+  removeSplitCat: (splitIdx: number) => void;
+  setSplitCategory: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  setSplitAmount: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  split: Split;
+  categories: Category[];
+  is_valid: ValidationState;
+}
+
+function SplitFieldset(props: SplitFieldsetProps) {
+  let vstate: "success" | "error" | null = null;
   if (props.is_valid.valid === true) {
     vstate = "success";
   } else if (props.is_valid.valid === false) {
