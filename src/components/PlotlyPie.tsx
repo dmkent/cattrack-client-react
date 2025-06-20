@@ -1,9 +1,24 @@
 import React, { useRef, useState, useEffect } from "react";
 import Plotly from "../client/PlotlyWrapper";
 
-export function plotlyDataFromSummary(summary) {
-  let values = [];
-  let labels = [];
+interface SummaryItem {
+  total: string;
+  category_name: string;
+}
+
+interface PlotlyData {
+  values: number[];
+  labels: string[];
+  type: string;
+}
+
+interface PlotlyPieProps {
+  summary: SummaryItem[];
+}
+
+export function plotlyDataFromSummary(summary: SummaryItem[]): PlotlyData {
+  let values: number[] = [];
+  let labels: string[] = [];
 
   // Get grand total
   let total = 0.0;
@@ -46,9 +61,9 @@ export function plotlyDataFromSummary(summary) {
   };
 }
 
-function PlotlyPie(props) {
-  const plotContainer = useRef(null);
-  const plotData = useRef([{}]);
+function PlotlyPie(props: PlotlyPieProps) {
+  const plotContainer = useRef<HTMLDivElement>(null);
+  const plotData = useRef<any[]>([{}]);
   const [hasRendered, setHasRendered] = useState(false);
 
   const plotLayout = {

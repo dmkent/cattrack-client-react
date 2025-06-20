@@ -1,14 +1,30 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import PropTypes from "prop-types";
 import Plotly from "../client/PlotlyWrapper";
 
+interface SeriesItem {
+  label: string;
+  value: string;
+}
+
+interface PlotlyData {
+  y: number[];
+  x: string[];
+  type: string;
+}
+
+interface PlotlyTimeSeriesProps {
+  series: SeriesItem[];
+  plot_invert?: boolean;
+  plot_type?: string;
+}
+
 export function plotlyDataFromSeries(
-  series,
-  plot_invert = false,
-  plot_type = "bar"
-) {
-  let values = [];
-  let labels = [];
+  series: SeriesItem[] | null,
+  plot_invert: boolean = false,
+  plot_type: string = "bar"
+): PlotlyData {
+  let values: number[] = [];
+  let labels: string[] = [];
 
   // Get grand total
   if (series !== null) {
@@ -28,12 +44,13 @@ export function plotlyDataFromSeries(
   };
 }
 
-function PlotlyTimeSeries(props) {
-  const plotContainer = useRef(null);
-  const plotData = useRef([{}]);
+function PlotlyTimeSeries(props: PlotlyTimeSeriesProps) {
+  const plotContainer = useRef<HTMLDivElement>(null);
+  const plotData = useRef<any[]>([{}]);
 
   const updateDimensions = useCallback(() =>
-    Plotly.Plots.resize(plotContainer.current)
+    Plotly.Plots.resize(plotContainer.current),
+    []
   );
   useEffect(() => {
     window.addEventListener("resize", updateDimensions);
@@ -46,8 +63,8 @@ function PlotlyTimeSeries(props) {
   const [hasRendered, setHasRendered] = useState(false);
   plotData.current[0] = plotlyDataFromSeries(
     props.series,
-    props.plot_invert,
-    props.plot_type
+    props.plot_invert || false,
+    props.plot_type || "bar"
   );
   const plotLayout = {};
 
@@ -62,21 +79,5 @@ function PlotlyTimeSeries(props) {
 
   return <div data-testid="plotly" ref={plotContainer}></div>;
 }
-
-PlotlyTimeSeries.propTypes = {
-  series: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  plot_type: PropTypes.string,
-  plot_invert: PropTypes.bool,
-};
-
-PlotlyTimeSeries.defaultProps = {
-  plot_type: "bar",
-  plot_invert: false,
-};
 
 export default PlotlyTimeSeries;

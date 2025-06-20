@@ -1,11 +1,17 @@
 import React from "react";
 import { Row, Col, ProgressBar } from "react-bootstrap";
 import { FormattedNumber } from "react-intl";
-import PropTypes from "prop-types";
 import useBudgetSummaries from "../hooks/useBudgetSummaries";
 
-function BudgetLine(props) {
-  let style = null;
+interface BudgetLineProps {
+  name: string;
+  actual: number;
+  budget: number;
+  scale: number;
+}
+
+function BudgetLine(props: BudgetLineProps): JSX.Element {
+  let style: "danger" | "warning" | "success" = "success";
   // 80% should be budget 100% spent.
   const value = (props.actual / props.budget) * 80.0;
   if (value >= 84) {
@@ -48,31 +54,35 @@ function BudgetLine(props) {
   );
 }
 
-BudgetLine.propTypes = {
-  name: PropTypes.string.isRequired,
-  actual: PropTypes.number.isRequired,
-  budget: PropTypes.number.isRequired,
-  scale: PropTypes.number.isRequired,
-};
+interface BudgetSummaryProps {
+  from_date: string;
+  to_date: string;
+}
 
-function BudgetSummary(props) {
+interface Summary {
+  name: string;
+  budget: number;
+  value: number;
+}
+
+function BudgetSummary(props: BudgetSummaryProps): JSX.Element | null {
   const { isLoading, data: summaries } = useBudgetSummaries(
     props.from_date,
     props.to_date
   );
 
-  if (isLoading || summaries === null) {
+  if (isLoading || summaries === null || summaries === undefined) {
     return null;
   }
 
   const max_amount = summaries.reduce(
-    (prev, next) => Math.max(prev, next.budget, -1 * next.value),
+    (prev: number, next: Summary) => Math.max(prev, next.budget, -1 * next.value),
     0
   );
   const scale = 100.0 / max_amount;
   return (
     <div>
-      {summaries.map((summary, idx) => {
+      {summaries.map((summary: Summary, idx: number) => {
         return (
           <BudgetLine
             key={idx}
@@ -86,10 +96,5 @@ function BudgetSummary(props) {
     </div>
   );
 }
-
-BudgetSummary.propTypes = {
-  from_date: PropTypes.string.isRequired,
-  to_date: PropTypes.string.isRequired,
-};
 
 export default BudgetSummary;

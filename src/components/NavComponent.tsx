@@ -4,10 +4,10 @@ import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/AuthContext";
 
-function NavComponent() {
+function NavComponent(): JSX.Element {
   const auth = useAuth();
 
-  let auth_link = null;
+  let auth_link: JSX.Element | null = null;
   if (auth.user?.is_logged_in) {
     auth_link = (
       <Nav pullRight>

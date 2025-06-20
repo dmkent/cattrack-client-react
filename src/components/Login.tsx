@@ -5,7 +5,7 @@ import CheckButton from "react-validation/build/button";
 import { useAuth } from "../hooks/AuthContext";
 import { useNavigate } from "react-router-dom";
 
-const required = (value) => {
+const required = (value: string): JSX.Element | undefined => {
   if (!value) {
     return (
       <div className="alert alert-danger" role="alert">
@@ -15,27 +15,29 @@ const required = (value) => {
   }
 };
 
-const Login = (props) => {
-  const auth = useAuth();
-  const navigate = useNavigate()
-  const form = useRef();
-  const checkBtn = useRef();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+interface LoginProps {}
 
-  const onChangeUsername = (e) => {
+const Login: React.FC<LoginProps> = (props) => {
+  const auth = useAuth();
+  const navigate = useNavigate();
+  const form = useRef<any>(null);
+  const checkBtn = useRef<any>(null);
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
+
+  const onChangeUsername = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const username = e.target.value;
     setUsername(username);
   };
 
-  const onChangePassword = (e) => {
+  const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const password = e.target.value;
     setPassword(password);
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     setMessage("");
     setLoading(true);
@@ -101,4 +103,5 @@ const Login = (props) => {
     </div>
   );
 };
+
 export default Login;
