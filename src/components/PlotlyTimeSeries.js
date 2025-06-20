@@ -55,7 +55,7 @@ function PlotlyTimeSeries(props) {
     if (hasRendered) {
       Plotly.redraw(plotContainer.current);
     } else {
-      Plotly.plot(plotContainer.current, plotData.current, plotLayout);
+      Plotly.newPlot(plotContainer.current, plotData.current, plotLayout);
       setHasRendered(true);
     }
   }, [plotContainer, props.series, props.plot_invert, props.plot_type]);

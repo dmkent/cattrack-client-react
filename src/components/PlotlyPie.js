@@ -61,7 +61,7 @@ function PlotlyPie(props) {
     if (hasRendered) {
       Plotly.redraw(plotContainer.current);
     } else {
-      Plotly.plot(plotContainer.current, plotData.current, plotLayout);
+      Plotly.newPlot(plotContainer.current, plotData.current, plotLayout);
       setHasRendered(true);
     }
   }, [plotContainer, props.summary]);
