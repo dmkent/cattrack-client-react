@@ -21,8 +21,8 @@ interface SplitFieldsetProps {
   splitIdx: number;
   multiple_splits_exist: boolean;
   removeSplitCat: (splitIdx: number) => void;
-  setSplitCategory: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  setSplitAmount: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  setSplitCategory: React.FormEventHandler<FormControl>;
+  setSplitAmount: React.FormEventHandler<FormControl>;
   split: Split;
   categories: Category[];
   is_valid: ValidationState;

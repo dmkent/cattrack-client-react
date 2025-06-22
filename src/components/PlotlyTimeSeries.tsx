@@ -48,10 +48,11 @@ function PlotlyTimeSeries(props: PlotlyTimeSeriesProps) {
   const plotContainer = useRef<HTMLDivElement>(null);
   const plotData = useRef<any[]>([{}]);
 
-  const updateDimensions = useCallback(() =>
-    Plotly.Plots.resize(plotContainer.current),
-    []
-  );
+  const updateDimensions = useCallback(() => {
+    if (plotContainer.current) {
+      Plotly.Plots.resize(plotContainer.current);
+    }
+  }, []);
   useEffect(() => {
     window.addEventListener("resize", updateDimensions);
     return () => {
@@ -69,6 +70,10 @@ function PlotlyTimeSeries(props: PlotlyTimeSeriesProps) {
   const plotLayout = {};
 
   useEffect(() => {
+    if (plotContainer.current === null) {
+      return;
+    }
+    
     if (hasRendered) {
       Plotly.redraw(plotContainer.current);
     } else {
