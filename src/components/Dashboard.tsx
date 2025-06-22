@@ -7,15 +7,26 @@ import BudgetSummary from "./BudgetSummary";
 import usePeriods from "../hooks/usePeriods";
 import useTransactionSummary from "../hooks/useTransactionSummary";
 
-function Dashboard(props) {
+interface Filters {
+  to_date: string | null;
+  from_date: string | null;
+}
+
+interface DashboardProps {}
+
+function Dashboard(props: DashboardProps): JSX.Element | null {
   const { isLoading: isPeriodsLoading, data: periods } = usePeriods();
-  const [filters, setFilters] = useState({ to_date: null, from_date: null });
+  const [filters, setFilters] = useState<Filters>({ to_date: null, from_date: null });
   const { isLoading: isSummaryLoading, data: summary } =
     useTransactionSummary(filters);
 
   if (isPeriodsLoading || isSummaryLoading) {
     return null;
   }
+
+  const handleUpdateFilters = (newFilters: Partial<Filters>) => {
+    setFilters(prevFilters => ({ ...prevFilters, ...newFilters }));
+  };
 
   return (
     <div>
@@ -32,14 +43,14 @@ function Dashboard(props) {
         </Row>
         <Row>
           <Col md={8}>
-            <PlotlyPie summary={summary} />
+            <PlotlyPie summary={summary ? [...summary.values()] : []} />
           </Col>
           <Col md={2}>
             <div className="btn-group-vertical" role="group">
               <TransactionFilterPeriods
                 filters={filters}
-                periods={periods}
-                updateFilters={setFilters}
+                periods={periods || []}
+                updateFilters={handleUpdateFilters}
               />
             </div>
           </Col>

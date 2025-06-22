@@ -4,10 +4,12 @@ import PaymentSeriesDetail from "./PaymentSeriesDetail";
 import usePaymentSeries from "../hooks/usePaymentSeries";
 import { useUpdatePaymentSeries } from "../hooks/useUpdatePaymentSeries";
 
-function PaymentSeries(props) {
+interface PaymentSeriesProps {}
+
+function PaymentSeries(props: PaymentSeriesProps): JSX.Element | null {
   const { isLoading, data: paymentSeries } = usePaymentSeries();
   const { paymentSeriesAddBillFromFile } = useUpdatePaymentSeries();
-  const [currentSeries, setCurrentSeries] = useState(null);
+  const [currentSeries, setCurrentSeries] = useState<string | null>(null);
 
   if (isLoading || !paymentSeries) {
     return null;
@@ -29,9 +31,9 @@ function PaymentSeries(props) {
         </Col>
         <Col md={10}>
           <PaymentSeriesDetail
-            series={paymentSeries[currentSeries]}
-            paymentSeriesAddBillFromFile={(file) =>
-              paymentSeriesAddBillFromFile(currentSeries, file)
+            series={currentSeries ? paymentSeries[currentSeries] : null}
+            paymentSeriesAddBillFromFile={(seriesId: string, file: File) =>
+              paymentSeriesAddBillFromFile(seriesId, file)
             }
           />
         </Col>
@@ -39,8 +41,5 @@ function PaymentSeries(props) {
     </Grid>
   );
 }
-
-PaymentSeries.propTypes = {
-};
 
 export default PaymentSeries;

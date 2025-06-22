@@ -6,19 +6,38 @@ import useCategories from "../hooks/useCategories";
 
 import TransactionFilterPeriods from "./TransactionFilterPeriods";
 
-function TransactionFilter(props) {
+interface TransactionFilters {
+  category: string | null;
+  has_category: string | null;
+  account: string | null;
+  to_date: string | null;
+  from_date: string | null;
+}
+
+interface TransactionFilterProps {
+  filters: TransactionFilters;
+  setFilters: (filters: TransactionFilters) => void;
+}
+
+interface TransactionFilterButtonProps {
+  name: string;
+  isActive: boolean;
+  onClick: (name: string) => void;
+}
+
+function TransactionFilter(props: TransactionFilterProps): JSX.Element | null {
   const { filters, setFilters } = props;
   const { isLoading: isAccountsLoading, data: accounts } = useAccounts();
   const { isLoading: isPeriodsLoading, data: periods } = usePeriods();
   const { isLoading: isCategoriesLoading, data: categories } = useCategories();
-  const updateFilters = (newValues) =>
+  const updateFilters = (newValues: Partial<TransactionFilters>): void =>
     setFilters(Object.assign({}, filters, newValues));
 
   if (isAccountsLoading || isPeriodsLoading || isCategoriesLoading) {
     return null;
   }
 
-  const TransactionFilterButton = ({ name, isActive, onClick }) => (
+  const TransactionFilterButton = ({ name, isActive, onClick }: TransactionFilterButtonProps): JSX.Element => (
     <button
       className={`btn btn-default btn-xs ${isActive ? "active" : ""}`}
       onClick={() => onClick(name)}
@@ -33,7 +52,7 @@ function TransactionFilter(props) {
       <TransactionFilterPeriods
         filters={filters}
         updateFilters={updateFilters}
-        periods={periods}
+        periods={periods || []}
       />
       <h3>Category</h3>
       <div className="btn-group-vertical" role="group">
@@ -56,7 +75,7 @@ function TransactionFilter(props) {
         >
           None
         </Button>
-        {[...categories].map((category) => {
+        {categories && [...categories].map((category) => {
           return (
             <TransactionFilterButton
               key={"cat-" + category.id}
@@ -84,7 +103,7 @@ function TransactionFilter(props) {
         >
           All
         </Button>
-        {[...accounts.values()].map((account) => {
+        {accounts && [...accounts.values()].map((account) => {
           return (
             <TransactionFilterButton
               key={"acct-" + account.id}

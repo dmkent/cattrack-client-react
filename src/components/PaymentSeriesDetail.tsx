@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import { FormattedDate, FormattedNumber } from "react-intl";
 import {
   Form,
@@ -10,8 +9,14 @@ import {
   Col,
   Row,
 } from "react-bootstrap";
+import { PaymentSeries } from "../data/PaymentSeries";
 
-function PaymentSeriesDetail(props) {
+interface PaymentSeriesDetailProps {
+  series: PaymentSeries | null | undefined;
+  paymentSeriesAddBillFromFile: (seriesId: string, file: File) => void;
+}
+
+function PaymentSeriesDetail(props: PaymentSeriesDetailProps): JSX.Element | null {
   if (props.series === null || props.series === undefined) {
     return null;
   }
@@ -22,7 +27,7 @@ function PaymentSeriesDetail(props) {
         <UploadForm
           submit_label="Add"
           uploadFile={(data) =>
-            props.paymentSeriesAddBillFromFile(props.series.id, data)
+            props.paymentSeriesAddBillFromFile(props.series!.id, data)
           }
         />
         <p>
@@ -50,21 +55,28 @@ function PaymentSeriesDetail(props) {
   );
 }
 
-PaymentSeriesDetail.propTypes = {
-  paymentSeriesAddBillFromFile: PropTypes.func.isRequired,
-};
+interface UploadFormProps {
+  uploadFile: (file: File) => void;
+  label?: string;
+  submit_label?: string;
+}
 
-function UploadForm(props) {
-  const [uploadFile, setUploadFile] = useState("");
-  const handleChange = (event) => {
+function UploadForm(props: UploadFormProps): JSX.Element {
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
+  
+  const handleChange = (event: any): void => {
     const target = event.target;
     const files = target.files;
 
-    setUploadFile(files[0]);
+    if (files && files.length > 0) {
+      setUploadFile(files[0]);
+    }
   };
 
-  const handleSubmit = (event) => {
-    props.uploadFile(uploadFile);
+  const handleSubmit = (event: any): void => {
+    if (uploadFile) {
+      props.uploadFile(uploadFile);
+    }
     event.preventDefault();
   };
 
@@ -78,11 +90,5 @@ function UploadForm(props) {
     </Form>
   );
 }
-
-UploadForm.propTypes = {
-  uploadFile: PropTypes.func.isRequired,
-  label: PropTypes.string,
-  submit_label: PropTypes.string,
-};
 
 export default PaymentSeriesDetail;

@@ -1,16 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Col, Row } from "react-bootstrap";
-
-import { useState } from "react";
 import useCategorySeries from "../hooks/useCategorySeries";
 import useCategories from "../hooks/useCategories";
 import PlotlyTimeSeries from "./PlotlyTimeSeries";
 
-export function Tracking(props) {
+interface TrackingProps {}
+
+export function Tracking(props: TrackingProps): JSX.Element | null {
   const { isLoading: isCatsLoading, data: categories } = useCategories();
-  const [current_category, setCategory] = useState(null);
+  const [current_category, setCategory] = useState<string | null>(null);
   const { isLoading: isCatLoading, data: categorySeries } =
-    useCategorySeries(current_category);
+    useCategorySeries(current_category || "");
 
   if (isCatsLoading) {
     return null;
@@ -28,9 +28,9 @@ export function Tracking(props) {
         <Col md={12}>
           <select
             onChange={(e) => setCategory(e.target.value)}
-            value={current_category}
+            value={current_category || ""}
           >
-            {[...categories].map((category) => {
+            {categories && [...categories].map((category) => {
               return (
                 <option value={category.id} key={category.id}>
                   {category.name}

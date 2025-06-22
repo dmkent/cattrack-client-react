@@ -1,10 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import Plotly from "../client/PlotlyWrapper";
-
-interface SeriesItem {
-  label: string;
-  value: string;
-}
+import { CategorySeries } from "src/hooks/useCategorySeries";
 
 interface PlotlyData {
   y: number[];
@@ -13,13 +9,13 @@ interface PlotlyData {
 }
 
 interface PlotlyTimeSeriesProps {
-  series: SeriesItem[];
+  series: CategorySeries[];
   plot_invert?: boolean;
   plot_type?: string;
 }
 
 export function plotlyDataFromSeries(
-  series: SeriesItem[] | null,
+  series: CategorySeries[] | null,
   plot_invert: boolean = false,
   plot_type: string = "bar"
 ): PlotlyData {

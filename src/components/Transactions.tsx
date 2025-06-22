@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { useQueryClient } from "react-query";
-import PropTypes from "prop-types";
 import { FormattedDate, FormattedNumber } from "react-intl";
-import { Button, Tooltip, OverlayTrigger } from "react-bootstrap";
-import { Pagination } from "@react-bootstrap/pagination";
+import { Button, Tooltip, OverlayTrigger, Pagination } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTags } from "@fortawesome/free-solid-svg-icons";
 
@@ -11,13 +9,33 @@ import Categorisor from "./Categorisor";
 import TransactionFilter from "./TransactionFilter";
 import useTransactions from "../hooks/useTransactions";
 import { useUpdateTransactions } from "../hooks/useUpdateTransactions";
-function Transactions(props) {
+import { Transaction } from "../data/Transaction";
+
+interface TransactionFilters {
+  category: string | null;
+  has_category: string | null;
+  account: string | null;
+  to_date: string | null;
+  from_date: string | null;
+}
+
+interface TransactionsProps {
+  page_size: number;
+}
+
+function Transactions(props: TransactionsProps): JSX.Element | null {
   const { page_size } = props;
   const { updateTransactionSplits } = useUpdateTransactions();
-  const [active_page, setPage] = useState(1);
-  const [filters, setFilters] = useState([]);
-  const [selected_transaction, setSelectedTransaction] = useState(null);
-  const [modal_shown, setModalShown] = useState(false);
+  const [active_page, setPage] = useState<number>(1);
+  const [filters, setFilters] = useState<TransactionFilters>({
+    category: null,
+    has_category: null,
+    account: null,
+    to_date: null,
+    from_date: null
+  });
+  const [selected_transaction, setSelectedTransaction] = useState<Transaction | null>(null);
+  const [modal_shown, setModalShown] = useState<boolean>(false);
 
   const { isLoading, isError, data } = useTransactions(
     active_page,
@@ -26,19 +44,19 @@ function Transactions(props) {
   );
   const queryClient = useQueryClient();
 
-  if (isLoading || isError || !data.transactions) {
+  if (isLoading || isError || !data || !data.transactions) {
     return null;
   }
 
-  function reloadPage() {
+  function reloadPage(): void {
     queryClient.invalidateQueries("transactions");
   }
 
   const { num_records, transactions } = data;
-  const num_pages = num_records / page_size;
+  const num_pages = Math.ceil(num_records / page_size);
 
-  const tooltips = {};
-  transactions.forEach((trans) => {
+  const tooltips: { [key: string]: JSX.Element } = {};
+  transactions.forEach((trans: Transaction) => {
     tooltips[trans.id] = (
       <Tooltip key={"tooltip-" + trans.id} id={"tooltip-" + trans.id}>
         {trans.description}
@@ -119,24 +137,26 @@ function Transactions(props) {
         </div>
         <TransactionFilter filters={filters} setFilters={setFilters} />
       </div>
-      <Pagination
-        prev
-        next
-        first
-        last
-        ellipsis
-        boundaryLinks
-        items={num_pages}
-        maxButtons={5}
-        bsSize="medium"
-        activePage={active_page}
-        onSelect={setPage}
-      />
+      <Pagination>
+        <Pagination.First onClick={() => setPage(1)} />
+        <Pagination.Prev onClick={() => setPage(Math.max(1, active_page - 1))} />
+        {Array.from({ length: Math.min(5, num_pages) }, (_, i) => {
+          const page = i + 1;
+          return (
+            <Pagination.Item
+              key={page}
+              active={page === active_page}
+              onClick={() => setPage(page)}
+            >
+              {page}
+            </Pagination.Item>
+          );
+        })}
+        <Pagination.Next onClick={() => setPage(Math.min(num_pages, active_page + 1))} />
+        <Pagination.Last onClick={() => setPage(num_pages)} />
+      </Pagination>
     </div>
   );
 }
 
-Transactions.propTypes = {
-  page_size: PropTypes.number.isRequired,
-};
 export default Transactions;

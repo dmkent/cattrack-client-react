@@ -4,8 +4,26 @@ import useTransactionSplits from "../hooks/useTransactionSplits";
 import SplitFieldset from "./SplitFieldset";
 import useCategories from "../hooks/useCategories";
 import useTransactionSuggestions from "../hooks/useTransactionSuggestions";
+import { Transaction } from "../data/Transaction";
 
-function Categorisor(props) {
+interface TransactionSuggestion {
+  name: string;
+  score: number;
+}
+
+interface CategorisorProps {
+  transaction: Transaction;
+  showModal: boolean;
+  setModalShown: (shown: boolean) => void;
+  save: (transaction: Transaction, splits: any) => Promise<any>;
+}
+
+interface CategorisorSuggestionProps {
+  suggestion: TransactionSuggestion;
+  percentage: number;
+}
+
+function Categorisor(props: CategorisorProps): JSX.Element | null {
   const { transaction, showModal, setModalShown, save } = props;
   const { isLoading: isCategoriesLoading, data: categories } = useCategories();
 
@@ -23,7 +41,7 @@ function Categorisor(props) {
   }
 
   let suggestionsList = null;
-  if (suggestions.length > 1) {
+  if (suggestions && suggestions.length > 1) {
     suggestionsList = (
       <div>
         Multiple categories were suggested:
@@ -67,21 +85,25 @@ function Categorisor(props) {
 
           <Form>
             <div>
-              {[...splits.splits].map((split, idx) => {
+              {splits && splits.splits && [...splits.splits].map((split, idx) => {
                 return (
                   <SplitFieldset
                     key={idx}
-                    split={split}
+                    index={idx + 1}
+                    split={{
+                      category: split.category,
+                      amount: String(split.amount)
+                    }}
                     splitIdx={idx}
-                    categories={categories}
-                    multiple_splits_exist={splits.splits.size > 1}
+                    categories={categories || []}
+                    multiple_splits_exist={splits.splits.length > 1}
                     removeSplitCat={removeSplit}
-                    setSplitCategory={(event) => {
+                    setSplitCategory={(event: any) => {
                       const target = event.target;
                       const value = target.value;
                       setSplitValue("category", idx, value);
                     }}
-                    setSplitAmount={(event) => {
+                    setSplitAmount={(event: any) => {
                       const target = event.target;
                       const value = target.value;
                       setSplitValue("amount", idx, value);
@@ -91,8 +113,8 @@ function Categorisor(props) {
                 );
               })}
 
-              <Button onClick={pushSplit}>Add split</Button>
-              {splits.is_valid.message ? (
+              <Button onClick={() => pushSplit("")}>Add split</Button>
+              {splits && splits.is_valid && splits.is_valid.message ? (
                 <Alert bsStyle="danger">{splits.is_valid.message}</Alert>
               ) : null}
             </div>
@@ -104,9 +126,9 @@ function Categorisor(props) {
           <Button
             bsStyle="primary"
             onClick={() => {
-              save(transaction, splits.splits).then(setModalShown(false));
+              save(transaction, splits.splits).then(() => setModalShown(false));
             }}
-            disabled={splits.is_valid.valid !== true}
+            disabled={splits && splits.is_valid ? splits.is_valid.valid !== true : true}
           >
             Save changes
           </Button>
@@ -116,7 +138,7 @@ function Categorisor(props) {
   );
 }
 
-const CategorisorSuggestion = ({ suggestion, percentage }) => (
+const CategorisorSuggestion = ({ suggestion, percentage }: CategorisorSuggestionProps): JSX.Element => (
   <li key={suggestion.name}>
     {suggestion.name} <span className="badge">{percentage}%</span>
   </li>

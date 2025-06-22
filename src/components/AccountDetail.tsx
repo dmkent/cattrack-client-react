@@ -8,8 +8,23 @@ import {
   Button,
 } from "react-bootstrap";
 import PlotlyTimeSeries from "./PlotlyTimeSeries";
+import { Account } from "../data/Account";
 
-function AccountDetail(props) {
+interface SeriesItem {
+  label: string;
+  value: string;
+}
+
+interface AccountDetailProps {
+  account: Account | null;
+  accountSeries: SeriesItem[] | null;
+  uploadInProgress: boolean;
+  uploadProgress: number;
+  uploadResult: string | null;
+  uploadToAccount: (account: Account, file: File) => void;
+}
+
+function AccountDetail(props: AccountDetailProps): JSX.Element | null {
   const {
     account,
     accountSeries,
@@ -17,17 +32,21 @@ function AccountDetail(props) {
     uploadProgress,
     uploadResult,
   } = props;
-  const [uploadFile, setUploadFile] = useState("");
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
 
-  const handleChange = (event) => {
+  const handleChange = (event: any): void => {
     const target = event.target;
     const files = target.files;
 
-    setUploadFile(files[0]);
+    if (files && files.length > 0) {
+      setUploadFile(files[0]);
+    }
   };
 
-  const handleSubmit = (event) => {
-    props.uploadToAccount(account, uploadFile);
+  const handleSubmit = (event: any): void => {
+    if (account && uploadFile) {
+      props.uploadToAccount(account, uploadFile);
+    }
     event.preventDefault();
   };
 
