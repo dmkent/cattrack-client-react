@@ -1,10 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "react-bootstrap";
-import DateRangePicker from "@wojtekmaj/react-daterange-picker";
-import ParseDate from "date-fns/parse";
-import { format } from "date-fns";
-
-const fmtStr = "yyyy-MM-dd";
 
 interface Period {
   id: string | number;
@@ -29,28 +24,25 @@ function TransactionFilterPeriods(props: TransactionFilterPeriodsProps) {
   const { filters, updateFilters, periods } = props;
 
   let all_periods = filters.from_date === null && filters.to_date === null;
-  const fromDateVal = filters.from_date
-    ? ParseDate(filters.from_date, fmtStr, new Date(2022, 1, 1))
-    : null;
-  const toDateVal = filters.to_date
-    ? ParseDate(filters.to_date, fmtStr, new Date(2022, 1, 1))
-    : null;
+
   return (
     <div>
       <h3 data-testid="dateRangePicker">Time</h3>
-      <DateRangePicker
-        value={[fromDateVal, toDateVal]}
-        onChange={(data: [Date | null, Date | null] | null) => {
-          if (!data) return;
-
-          const [startDate, endDate] = data;
-          updateFilters({
-            from_date: startDate === null ? null : format(startDate, fmtStr),
-            to_date: endDate === null ? null : format(endDate, fmtStr),
-          });
-        }}
+      <input
+        aria-label="Date from"
+        max={filters.to_date ?? undefined}
+        min={undefined} type="date"
+        value={filters.from_date ?? ""}
+        onChange={(e) => updateFilters({ from_date: e.target.value })}
       />
-
+      <input
+        aria-label="Date to"
+        max={undefined}
+        min={filters.from_date ?? undefined}
+        type="date"
+        value={filters.to_date ?? ""}
+        onChange={(e) => updateFilters({ to_date: e.target.value })}
+      />
       <p>-- OR --</p>
       <div className="btn-group-vertical" role="group">
         <Button

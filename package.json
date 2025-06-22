@@ -17,7 +17,6 @@
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.1.18",
     "@react-bootstrap/pagination": "^1.0.0",
-    "@wojtekmaj/react-daterange-picker": "^3.4.0",
     "axios": "^1.10.0",
     "babel-preset-react": "^6.24.1",
     "bootstrap": "^3.3.7",
