@@ -33,23 +33,21 @@ test("TransactionFilterPeriods changing dates should change filter", async () =>
 
   const { props, container } = setup([], {});
 
-  // Open calendar
-  fireEvent.click(
-    container.querySelector(".react-daterange-picker__inputGroup")
-  );
-  await waitFor(() => screen.getByRole("button", { name: testFromDateName }));
+  // Input from date
+  var fromInput = screen.getByLabelText("Date from");
+  fireEvent.change(fromInput, {target: {value: testFromDateEvt}});
 
-  // Click from date
-  fireEvent.click(screen.getByRole("button", { name: testFromDateName }));
-
-  // Click to date
-  fireEvent.click(screen.getByRole("button", { name: testToDateName }));
+  // Input to date
+  var toInput = screen.getByLabelText("Date to");
+  fireEvent.change(toInput, {target: {value: testToDateEvt}});
 
   expect(props.updateFilters.mock.calls[0][0]).toEqual({
     from_date: testFromDateEvt,
+  });
+  expect(props.updateFilters.mock.calls[1][0]).toEqual({
     to_date: testToDateEvt,
   });
-  expect(props.updateFilters.mock.calls.length).toBe(1);
+  expect(props.updateFilters.mock.calls.length).toBe(2);
 });
 
 test("TransactionFilterPeriods should display some periods", () => {

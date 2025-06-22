@@ -43,7 +43,6 @@ module.exports = {
       "react-dom",
       "react-bootstrap",
       "react-router-bootstrap",
-      "@wojtekmaj/react-daterange-picker",
       "react-router-dom",
       "react-router",
       "react-intl",
