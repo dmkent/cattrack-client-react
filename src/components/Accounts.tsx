@@ -15,20 +15,28 @@ import useAccounts from "../hooks/useAccounts";
 import useAccountSeries from "../hooks/useAccountSeries";
 import AccountDetail from "../components/AccountDetail";
 import { useUpdateAccounts } from "../hooks/useUpdateAccounts";
+import { Account } from "../data/Account";
 
-function Accounts(props) {
+interface AccountRowProps {
+  account: Account;
+  onClick: (account: Account) => void;
+}
+
+interface AccountsProps {}
+
+function Accounts(props: AccountsProps): JSX.Element | null {
   const { uploadFileToAccount, createAccount } = useUpdateAccounts();
-  const [newName, setNewName] = useState("");
-  const [currentAccount, setCurrentAccount] = useState(null);
-  const overlayRef = useRef(null);
+  const [newName, setNewName] = useState<string>("");
+  const [currentAccount, setCurrentAccount] = useState<Account | null>(null);
+  const overlayRef = useRef<any>(null);
   const { isLoading, data: accounts } = useAccounts();
-  const { isAccountLoading, data: accountSeries } =
-    useAccountSeries(currentAccount);
+  const { isLoading: isSeriesLoading, data: accountSeries } =
+    useAccountSeries(currentAccount || { id: "", name: "", balance: null });
   const uploadInProgress = false,
     uploadProgress = 0,
     uploadResult = null;
 
-  const handleCreateAccount = () => {
+  const handleCreateAccount = (): void => {
     createAccount(newName);
     setNewName("");
     if (overlayRef.current !== null) {
@@ -36,7 +44,7 @@ function Accounts(props) {
     }
   };
 
-  const handleUploadToAccount = (account, file) => {
+  const handleUploadToAccount = (account: Account, file: File): void => {
     uploadFileToAccount(account, file);
   };
 
@@ -50,7 +58,7 @@ function Accounts(props) {
         <ControlLabel>Name: </ControlLabel>
         <FormControl
           type="text"
-          onChange={(event) => {
+          onChange={(event: any) => {
             setNewName(event.target.value);
           }}
           value={newName}
@@ -60,7 +68,7 @@ function Accounts(props) {
     </Popover>
   );
 
-  const AccountRow = ({ account, onClick }) => (
+  const AccountRow = ({ account, onClick }: AccountRowProps): JSX.Element => (
     <tr onClick={() => onClick(account)} key={account.id}>
       <td>{account.name}</td>
       <td className="text-right">
@@ -91,7 +99,7 @@ function Accounts(props) {
       </h3>
       <Table>
         <tbody>
-          {[...accounts.values()].map((account) => {
+          {accounts && [...accounts.values()].map((account) => {
             return (
               <AccountRow
                 account={account}

@@ -5,6 +5,7 @@ interface AuthContextType {
   user: any;
   signin: (username: string, password: string, callback: VoidFunction) => void;
   signout: (callback: VoidFunction) => void;
+  loading: boolean;
 }
 
 export let AuthContext = React.createContext<AuthContextType>(null!);

@@ -2,8 +2,9 @@ import { useQuery } from "react-query";
 import { useAxios } from "./AxiosContext";
 import { checkStatusAxios } from "../client/CatTrackAPI";
 
-interface CategorySeries {
-  [key: string]: any;
+export interface CategorySeries {
+  label: string;
+  value: string;
 }
 
 export default function useCategorySeries(category_id: string) {

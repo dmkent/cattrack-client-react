@@ -100,7 +100,9 @@
     "testEnvironment": "jsdom",
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "src/**/*js"
+      "src/**/*js",
+      "src/**/*ts",
+      "src/**/*tsx"
     ],
     "setupFilesAfterEnv": [
       "jest-canvas-mock",
@@ -112,7 +114,8 @@
     },
     "coveragePathIgnorePatterns": [
       "<rootDir>/src/config",
-      "<rootDir>/src/root.js"
+      "<rootDir>/src/root.js",
+      ".*.d.ts"
     ],
     "transformIgnorePatterns": [
       "node_modules/(?!(axios|react-query)/)"

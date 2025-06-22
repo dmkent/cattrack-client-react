@@ -12,7 +12,14 @@ import Login from "./Login";
 import { AuthProvider, useAuth } from "../hooks/AuthContext"
 import { AxiosProvider } from "../hooks/AxiosContext";
 
-function App() {
+interface LogoutProps {}
+
+interface RequireAuthProps {
+  children: React.ReactNode;
+  redirectTo: string;
+}
+
+function App(): JSX.Element {
   return (
     <IntlProvider locale="en-AU">
       <AuthProvider>
@@ -73,20 +80,20 @@ function App() {
   );
 }
 
-export function Logout(props) {
+export function Logout(props: LogoutProps): JSX.Element {
   const { signout } = useAuth();
   
-  useEffect(() => signout(() => {}), []);
+  useEffect(() => signout(() => {}), [signout]);
   return <Navigate to="/login" />;
 }
 
-export function RequireAuth({ children, redirectTo }) {
+export function RequireAuth({ children, redirectTo }: RequireAuthProps): JSX.Element | null {
   let { user, loading } = useAuth();
   let isAuthenticated = user?.is_logged_in;
   if (loading) {
     return <div>Loading...</div>;
   }
-  return isAuthenticated ? children : <Navigate to={redirectTo} />;
+  return isAuthenticated ? <>{children}</> : <Navigate to={redirectTo} />;
 }
 
 export default App;
