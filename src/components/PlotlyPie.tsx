@@ -47,7 +47,7 @@ export function plotlyDataFromSummary(summary: SummaryItem[]): PlotlyData {
       values.push(val);
       labels.push(element.category_name);
     }
-  }, this);
+  });
 
   if (other > 0) {
     values.push(other);
@@ -73,6 +73,9 @@ function PlotlyPie(props: PlotlyPieProps) {
   plotData.current[0] = plotlyDataFromSummary(props.summary);
 
   useEffect(() => {
+    if (!plotContainer.current) {
+      return;
+    }
     if (hasRendered) {
       Plotly.redraw(plotContainer.current);
     } else {
