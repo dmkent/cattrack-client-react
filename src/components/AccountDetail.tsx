@@ -8,16 +8,11 @@ import {
   Button,
 } from "react-bootstrap";
 import PlotlyTimeSeries from "./PlotlyTimeSeries";
-import { Account } from "../data/Account";
-
-interface SeriesItem {
-  label: string;
-  value: string;
-}
+import { Account, SeriesPoint } from "../data/Account";
 
 interface AccountDetailProps {
   account: Account | null;
-  accountSeries: SeriesItem[] | null;
+  accountSeries?: SeriesPoint[];
   uploadInProgress: boolean;
   uploadProgress: number;
   uploadResult: string | null;

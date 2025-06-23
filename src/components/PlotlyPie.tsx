@@ -1,10 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import Plotly from "../client/PlotlyWrapper";
-
-interface SummaryItem {
-  total: string;
-  category_name: string;
-}
+import { CategorySummary } from "src/data/Transaction";
 
 interface PlotlyData {
   values: number[];
@@ -13,17 +9,17 @@ interface PlotlyData {
 }
 
 interface PlotlyPieProps {
-  summary: SummaryItem[];
+  summary: CategorySummary[];
 }
 
-export function plotlyDataFromSummary(summary: SummaryItem[]): PlotlyData {
+export function plotlyDataFromSummary(summary: CategorySummary[]): PlotlyData {
   let values: number[] = [];
   let labels: string[] = [];
 
   // Get grand total
   let total = 0.0;
-  [...summary.values()].forEach(function (element) {
-    let val = parseFloat(element.total);
+  summary.forEach(function (element) {
+    let val = element.total;
     if (val > 0) {
       // skip income for now...
       return;
@@ -34,8 +30,8 @@ export function plotlyDataFromSummary(summary: SummaryItem[]): PlotlyData {
   let thresh = total * 0.01;
   let other = 0.0;
 
-  [...summary.values()].forEach(function (element) {
-    let val = parseFloat(element.total);
+  summary.forEach(function (element) {
+    let val = element.total;
     if (val > 0) {
       // skip income for now...
       return;

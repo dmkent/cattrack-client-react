@@ -3,3 +3,8 @@ export interface Account {
   name: string;
   balance: number | null;
 }
+
+export interface SeriesPoint {
+  label: string;
+  value: number;
+}

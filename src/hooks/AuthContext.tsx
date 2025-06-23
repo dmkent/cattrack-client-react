@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import AuthService from "../services/auth.service";
 
-interface AuthContextType {
+export interface AuthContextType {
   user: any;
   signin: (username: string, password: string, callback: VoidFunction) => void;
   signout: (callback: VoidFunction) => void;

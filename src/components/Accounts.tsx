@@ -31,7 +31,7 @@ function Accounts(props: AccountsProps): JSX.Element | null {
   const overlayRef = useRef<any>(null);
   const { isLoading, data: accounts } = useAccounts();
   const { isLoading: isSeriesLoading, data: accountSeries } =
-    useAccountSeries(currentAccount || { id: "", name: "", balance: null });
+    useAccountSeries(currentAccount?.id);
   const uploadInProgress = false,
     uploadProgress = 0,
     uploadResult = null;

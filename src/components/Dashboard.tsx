@@ -1,30 +1,25 @@
 import React, { useState } from "react";
 import PlotlyPie from "./PlotlyPie";
-import { Grid, Col, Row, Well } from "react-bootstrap";
+import { Grid, Col, Row } from "react-bootstrap";
 
 import TransactionFilterPeriods from "./TransactionFilterPeriods";
-import BudgetSummary from "./BudgetSummary";
 import usePeriods from "../hooks/usePeriods";
 import useTransactionSummary from "../hooks/useTransactionSummary";
-
-interface Filters {
-  to_date: string | null;
-  from_date: string | null;
-}
+import { PeriodFilters } from "./TransactionFilters";
 
 interface DashboardProps {}
 
 function Dashboard(props: DashboardProps): JSX.Element | null {
   const { isLoading: isPeriodsLoading, data: periods } = usePeriods();
-  const [filters, setFilters] = useState<Filters>({ to_date: null, from_date: null });
+  const [filters, setFilters] = useState<PeriodFilters>({ to_date: null, from_date: null });
   const { isLoading: isSummaryLoading, data: summary } =
     useTransactionSummary(filters);
 
-  if (isPeriodsLoading || isSummaryLoading) {
+  if (isPeriodsLoading || isSummaryLoading || summary === undefined) {
     return null;
   }
 
-  const handleUpdateFilters = (newFilters: Partial<Filters>) => {
+  const handleUpdateFilters = (newFilters: Partial<PeriodFilters>) => {
     setFilters(prevFilters => ({ ...prevFilters, ...newFilters }));
   };
 
@@ -43,7 +38,7 @@ function Dashboard(props: DashboardProps): JSX.Element | null {
         </Row>
         <Row>
           <Col md={8}>
-            <PlotlyPie summary={summary ? [...summary.values()] : []} />
+            <PlotlyPie summary={summary} />
           </Col>
           <Col md={2}>
             <div className="btn-group-vertical" role="group">
