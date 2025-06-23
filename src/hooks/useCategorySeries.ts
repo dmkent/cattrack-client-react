@@ -1,8 +1,9 @@
 import { useQuery } from "react-query";
 import { useAxios } from "./AxiosContext";
 import { checkStatusAxios } from "../client/CatTrackAPI";
+import { SeriesPoint } from "src/data/Account";
 
-export interface CategorySeries {
+interface CategorySeriesResponse {
   label: string;
   value: string;
 }
@@ -10,13 +11,13 @@ export interface CategorySeries {
 export default function useCategorySeries(category_id: string) {
   const axios = useAxios();
 
-  const fetchCategories = (): Promise<CategorySeries[]> =>
+  const fetchCategories = (): Promise<SeriesPoint[]> =>
     axios
       .get(`/api/categories/${category_id}/series/`)
       .then(checkStatusAxios)
       .then((series: any[]) =>
-        series.map((raw): CategorySeries => {
-          return { ...raw };
+        series.map((raw: CategorySeriesResponse) => {
+          return { label: raw.label, value: parseFloat(raw.value) };
         })
       );
 

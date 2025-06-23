@@ -7,3 +7,9 @@ export interface Transaction {
   category_name: string;
   account: string | number;
 }
+
+export interface CategorySummary {
+  category_id: string;
+  category_name: string;
+  total: number;
+}

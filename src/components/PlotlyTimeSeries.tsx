@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import Plotly from "../client/PlotlyWrapper";
-import { CategorySeries } from "src/hooks/useCategorySeries";
+import { SeriesPoint } from "src/data/Account";
 
 interface PlotlyData {
   y: number[];
@@ -9,13 +9,13 @@ interface PlotlyData {
 }
 
 interface PlotlyTimeSeriesProps {
-  series: CategorySeries[];
+  series: SeriesPoint[];
   plot_invert?: boolean;
   plot_type?: string;
 }
 
 export function plotlyDataFromSeries(
-  series: CategorySeries[] | null,
+  series: SeriesPoint[] | null,
   plot_invert: boolean = false,
   plot_type: string = "bar"
 ): PlotlyData {
@@ -25,7 +25,7 @@ export function plotlyDataFromSeries(
   // Get grand total
   if (series !== null) {
     series.map(function (element) {
-      let value = parseFloat(element.value);
+      let value = element.value;
       if (plot_invert) {
         value *= -1.0;
       }

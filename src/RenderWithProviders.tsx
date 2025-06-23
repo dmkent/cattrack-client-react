@@ -3,20 +3,13 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { IntlProvider } from "react-intl";
 import { render, RenderResult } from "@testing-library/react";
 import { AxiosContext } from "./hooks/AxiosContext";
-import { AuthContext } from "./hooks/AuthContext";
+import { AuthContext, AuthContextType } from "./hooks/AuthContext";
 import axios, { AxiosInstance } from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
 
-interface AuthState {
-  user: any;
-  signin: (username: string, password: string, callback: VoidFunction) => void;
-  signout: (callback: VoidFunction) => void;
-  loading: boolean;
-}
-
 export function renderWithProviders(
   children: React.ReactElement,
-  authState: AuthState,
+  authState: AuthContextType,
   configureMocks?: (mockAdapter: AxiosMockAdapter) => void,
   axiosInstance: AxiosInstance | null = null
 ): RenderResult {

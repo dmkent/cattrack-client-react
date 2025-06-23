@@ -5,11 +5,7 @@ import SplitFieldset from "./SplitFieldset";
 import useCategories from "../hooks/useCategories";
 import useTransactionSuggestions from "../hooks/useTransactionSuggestions";
 import { Transaction } from "../data/Transaction";
-
-interface TransactionSuggestion {
-  name: string;
-  score: number;
-}
+import { Category } from "src/data/Category";
 
 interface CategorisorProps {
   transaction: Transaction;
@@ -19,7 +15,7 @@ interface CategorisorProps {
 }
 
 interface CategorisorSuggestionProps {
-  suggestion: TransactionSuggestion;
+  suggestion: Category;
   percentage: number;
 }
 

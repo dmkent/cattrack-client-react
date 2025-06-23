@@ -7,17 +7,10 @@ import { faTags } from "@fortawesome/free-solid-svg-icons";
 
 import Categorisor from "./Categorisor";
 import TransactionFilter from "./TransactionFilter";
+import { TransactionFilters } from "./TransactionFilters";
 import useTransactions from "../hooks/useTransactions";
 import { useUpdateTransactions } from "../hooks/useUpdateTransactions";
 import { Transaction } from "../data/Transaction";
-
-interface TransactionFilters {
-  category: string | null;
-  has_category: string | null;
-  account: string | null;
-  to_date: string | null;
-  from_date: string | null;
-}
 
 interface TransactionsProps {
   page_size: number;

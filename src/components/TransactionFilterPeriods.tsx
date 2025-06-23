@@ -1,22 +1,11 @@
 import React from "react";
 import { Button } from "react-bootstrap";
-
-interface Period {
-  id: string | number;
-  label: string;
-  from_date: string;
-  to_date: string;
-  offset: string;
-}
-
-interface Filters {
-  from_date: string | null;
-  to_date: string | null;
-}
+import { Period } from "src/data/Period";
+import { PeriodFilters } from "./TransactionFilters";
 
 interface TransactionFilterPeriodsProps {
-  filters: Filters;
-  updateFilters: (filters: Partial<Filters>) => void;
+  filters: PeriodFilters;
+  updateFilters: (filters: Partial<PeriodFilters>) => void;
   periods: Period[];
 }
 

@@ -11,7 +11,7 @@ export default function useTransactionSuggestions(transaction: Transaction) {
     axios.get("/api/transactions/" + transaction.id + "/suggest")
       .then(checkStatusAxios)
       .then((resp) => {
-        return resp.map((cat: any) => {
+        return resp.map((cat: Category) => {
           return {
             id: cat.id,
             name: cat.name,
@@ -20,5 +20,5 @@ export default function useTransactionSuggestions(transaction: Transaction) {
         });
       });
 
-  return useQuery(["suggestions", transaction.id], fetchSuggestions);
+  return useQuery<Category[]>(["suggestions", transaction.id], fetchSuggestions);
 }

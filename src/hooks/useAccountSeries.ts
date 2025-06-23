@@ -1,20 +1,29 @@
 import { useQuery } from "react-query";
 import { useAxios } from "./AxiosContext";
 import { checkStatusAxios } from "../client/CatTrackAPI";
-import { Account } from "../data/Account";
+import { Account, SeriesPoint } from "../data/Account";
 
-export default function useAccountSeries(account: Account) {
+interface AccountSeriesResponse {
+  label: string;
+  value: string;
+}
+
+export default function useAccountSeries(accountId: string | undefined) {
   const axios = useAxios();
-  return useQuery(
-    ["account_series", account],
+
+  return useQuery<SeriesPoint[]>(
+    ["account_series", accountId],
     () => axios
-      .get(`/api/accounts/${account.id}/series/`)
+      .get(`/api/accounts/${accountId}/series/`)
       .then(checkStatusAxios)
       .then((series) =>
-        series.map((raw: any) => {
-          return {...raw};
+        series.map((raw: AccountSeriesResponse) => {
+          return {
+            label: raw.label,
+            value: parseFloat(raw.value),
+          };
          })
       ),
-    { enabled: !!account }
+    { enabled: !!accountId }
   );
 }

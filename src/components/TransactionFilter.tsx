@@ -5,14 +5,7 @@ import usePeriods from "../hooks/usePeriods";
 import useCategories from "../hooks/useCategories";
 
 import TransactionFilterPeriods from "./TransactionFilterPeriods";
-
-interface TransactionFilters {
-  category: string | null;
-  has_category: string | null;
-  account: string | null;
-  to_date: string | null;
-  from_date: string | null;
-}
+import { TransactionFilters } from "./TransactionFilters";
 
 interface TransactionFilterProps {
   filters: TransactionFilters;
@@ -33,7 +26,7 @@ function TransactionFilter(props: TransactionFilterProps): JSX.Element | null {
   const updateFilters = (newValues: Partial<TransactionFilters>): void =>
     setFilters(Object.assign({}, filters, newValues));
 
-  if (isAccountsLoading || isPeriodsLoading || isCategoriesLoading) {
+  if (isAccountsLoading || isPeriodsLoading || isCategoriesLoading || periods === undefined || categories === undefined) {
     return null;
   }
 
@@ -52,7 +45,7 @@ function TransactionFilter(props: TransactionFilterProps): JSX.Element | null {
       <TransactionFilterPeriods
         filters={filters}
         updateFilters={updateFilters}
-        periods={periods || []}
+        periods={periods}
       />
       <h3>Category</h3>
       <div className="btn-group-vertical" role="group">
