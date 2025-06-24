@@ -9,7 +9,7 @@ import AxiosMockAdapter from "axios-mock-adapter";
 
 export function renderWithProviders(
   children: React.ReactElement,
-  authState: AuthContextType,
+  authState?: AuthContextType,
   configureMocks?: (mockAdapter: AxiosMockAdapter) => void,
   axiosInstance: AxiosInstance | null = null
 ): RenderResult {
@@ -28,7 +28,7 @@ export function renderWithProviders(
   return render(
     <IntlProvider locale="en-AU">
       <QueryClientProvider client={queryClient}>
-        <AuthContext.Provider value={authState}>
+        <AuthContext.Provider value={authState ?? { user: null, loading: false, signin: jest.fn(), signout: jest.fn() }}>
           <AxiosContext.Provider value={axiosInstance}>
             {children}
           </AxiosContext.Provider>

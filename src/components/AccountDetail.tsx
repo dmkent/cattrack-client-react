@@ -10,7 +10,7 @@ import {
 import PlotlyTimeSeries from "./PlotlyTimeSeries";
 import { Account, SeriesPoint } from "../data/Account";
 
-interface AccountDetailProps {
+export interface AccountDetailProps {
   account: Account | null;
   accountSeries?: SeriesPoint[];
   uploadInProgress: boolean;
