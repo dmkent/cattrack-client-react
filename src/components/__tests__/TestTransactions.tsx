@@ -1,18 +1,24 @@
 import React from "react";
 import { screen, waitFor } from "@testing-library/react";
+import AxiosMockAdapter from "axios-mock-adapter";
+
 import { renderWithProviders } from "../../RenderWithProviders";
 import Transactions from "../Transactions";
+import { Period } from "src/data/Period";
+import { Account } from "src/data/Account";
+import { Category } from "src/data/Category";
+import { Transaction } from "src/data/Transaction";
 
-const periods = [
+const periods: Period[] = [
   {
-    id: 4,
+    id: "4",
     label: "Last month",
     from_date: "2011-01-02",
     to_date: "2011-02-02",
     offset: "1",
   },
   {
-    id: 1,
+    id: "1",
     label: "Last week",
     from_date: "2011-01-24",
     to_date: "2011-02-02",
@@ -20,17 +26,17 @@ const periods = [
   },
 ];
 
-const accounts = [
-  { id: 0, name: "account 1" },
-  { id: 1, name: "account 2" },
+const accounts: Account[] = [
+  { id: "0", name: "account 1", "balance": 1000 },
+  { id: "1", name: "account 2", "balance": 500 },
 ];
 
-const categories = [
-  { id: 0, name: "Cat1" },
-  { id: 3, name: "Cat2" },
+const categories: Category[] = [
+  { id: "0", name: "Cat1", score: 0.5 },
+  { id: "3", name: "Cat2", score: 0.8 },
 ];
 
-function setup(mockAdapter, transactions) {
+function setup(mockAdapter: AxiosMockAdapter, transactions: Transaction[]) {
   mockAdapter.onGet("/api/periods/").reply(200, periods);
   mockAdapter.onGet("/api/accounts/").reply(200, accounts);
   mockAdapter.onGet("/api/categories/").reply(200, categories); 
@@ -48,7 +54,7 @@ test("should render self and subcomponents", async () => {
   };
   renderWithProviders(
     <Transactions {...props} />,
-    {},
+    undefined,
     (mockAdapter) => setup(mockAdapter, [])
   );
   await waitFor(() => screen.getByText("Transactions"));
@@ -60,12 +66,15 @@ test("should display some transactions", async () => {
   const props = {
     page_size: 20,
   };
-  const transactions = [
+  const transactions : Transaction[] = [
     {
       id: 0,
       when: new Date("2017-01-01"),
       description: "Test this",
       amount: -90.9,
+      category: "0",
+      account: "0",
+      category_name: "Cat1",
     },
     {
       id: 1,
@@ -73,11 +82,14 @@ test("should display some transactions", async () => {
       description:
         "Test this really,  really,  really,  really,  really,  really long description",
       amount: -90.9,
+      category: "0",
+      account: "0",
+      category_name: "Cat1",
     },
   ];
   renderWithProviders(
     <Transactions {...props} />,
-    {},
+    undefined,
     (mockAdapter) => setup(mockAdapter, transactions)
   );
   await waitFor(() => screen.getByText("Transactions"));

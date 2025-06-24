@@ -1,46 +1,53 @@
 import React from "react";
 import { screen, waitFor, fireEvent } from "@testing-library/react";
-import axios from "axios";
+import axios, { AxiosInstance } from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
-import Categorisor from "../Categorisor";
+import Categorisor, { CategorisorProps } from "../Categorisor";
 import { renderWithProviders } from "../../RenderWithProviders";
+import { Transaction } from "../../data/Transaction";
+import { Category } from "../../data/Category";
 
-const categories = [
-  { id: 0, name: "Cat1" },
-  { id: 3, name: "Cat2" },
+const categories: Category[] = [
+  { id: "0", name: "Cat1", score: 0 },
+  { id: "3", name: "Cat2", score: 0 },
 ];
 
-function setup(transaction, suggestions) {
-  const props = {
+
+function setup(transaction: Transaction, suggestions: Category[]): { axiosInstance: AxiosInstance, props: CategorisorProps, saveMock: jest.Mock } {
+  const saveMock = jest.fn(() => Promise.resolve());
+  const props: CategorisorProps = {
     transaction,
     showModal: true,
     setModalShown: jest.fn(),
-    save: jest.fn(() => Promise.resolve()),
+    save: saveMock,
   };
-
-  props.axiosInstance = axios.create({
+  const axiosInstance = axios.create({
     baseURL: "http://localhost:8000",
   });
-  const mockAdapter = new AxiosMockAdapter(props.axiosInstance);
+
+  const mockAdapter = new AxiosMockAdapter(axiosInstance);
   mockAdapter.onGet("/api/categories/").reply(200, categories);
   mockAdapter.onGet("/api/transactions/" + transaction.id + "/suggest").reply(200, suggestions);
 
-  return props;
+  return { axiosInstance, props, saveMock };
 }
 
 test("Categorisor: should render if transaction is defined", async () => {
-  let props = setup(
+  const { props, axiosInstance } = setup(
     {
       id: "1",
       description: "test",
       when: "2012-01-01",
       amount: -34.4,
+      category: "0",
+      category_name: "Test Category",
+      account: "1",
     },
     []
   );
   renderWithProviders(
     <Categorisor {...props} />,
-    {}, null, props.axiosInstance
+    undefined, undefined, axiosInstance
   );
   await waitFor(() => screen.getByText("Categorise transaction"));
 
@@ -48,18 +55,21 @@ test("Categorisor: should render if transaction is defined", async () => {
 });
 
 test("Categorisor: should render suggestions if defined", async () => {
-  let props = setup(
+  const { props, axiosInstance } = setup(
     {
       id: "1",
       description: "test",
       when: "2012-01-01",
       amount: -34.4,
+      category: "0",
+      category_name: "Test Category",
+      account: "1",
     },
-    [{ name: "suggest1" }, { name: "suggest2" }]
+    [{ id: "1", name: "suggest1", score: 80 }, { id: "2", name: "suggest2", score: 60 }]
   );
   renderWithProviders(
     <Categorisor {...props} />,
-    {}, null, props.axiosInstance
+    undefined, undefined, axiosInstance
   );
   await waitFor(() => screen.getByText("Categorise transaction"));
 
@@ -69,41 +79,47 @@ test("Categorisor: should render suggestions if defined", async () => {
 });
 
 test("Categorisor: should call save on button click", async () => {
-  let props = setup(
+  const { props, axiosInstance, saveMock } = setup(
     {
       id: "1",
       description: "test",
       when: "2012-01-01",
       amount: -34.4,
+      category: "0",
+      category_name: "Test Category",
+      account: "1",
     },
     []
   );
 
   renderWithProviders(
     <Categorisor {...props} />,
-    {}, null, props.axiosInstance
+    undefined, undefined, axiosInstance
   );
   await waitFor(() => screen.getByText("Categorise transaction"));
 
-  expect(props.save.mock.calls.length).toBe(0);
+  expect(saveMock.mock.calls.length).toBe(0);
   fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
-  expect(props.save.mock.calls.length).toBe(1);
+  expect(saveMock.mock.calls.length).toBe(1);
 });
 
 test("Categorisor: should show alert if not valid", async () => {
-  let props = setup(
+  const { props, axiosInstance } = setup(
     {
       id: "1",
       description: "test",
       when: "2012-01-01",
       amount: -34.4,
+      category: "0",
+      category_name: "Test Category",
+      account: "1",
     },
     []
   );
 
   renderWithProviders(
     <Categorisor {...props} />,
-    {}, null, props.axiosInstance
+    undefined, undefined, axiosInstance
   );
   await waitFor(() => screen.getByText("Categorise transaction"));
 

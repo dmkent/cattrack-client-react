@@ -7,7 +7,7 @@ import useTransactionSuggestions from "../hooks/useTransactionSuggestions";
 import { Transaction } from "../data/Transaction";
 import { Category } from "src/data/Category";
 
-interface CategorisorProps {
+export interface CategorisorProps {
   transaction: Transaction;
   showModal: boolean;
   setModalShown: (shown: boolean) => void;

@@ -2,22 +2,26 @@ import React from "react";
 import { screen, waitFor, fireEvent } from "@testing-library/react";
 import Accounts from "../Accounts";
 import { renderWithProviders } from "../../RenderWithProviders";
+import { Account } from "../../data/Account";
+import AxiosMockAdapter from "axios-mock-adapter";
 
-async function setup(accounts, account_id, uploading) {
-  const props = {};
+
+async function setup(
+  accounts: Account[],
+): Promise<void> {
+  const props = {}
   renderWithProviders(
     <Accounts {...props} />,
-    {},
-    (mockAdapter) => mockAdapter.onGet("http://localhost:8000/api/accounts/").reply(200, accounts)
+    undefined,
+    (mockAdapter: AxiosMockAdapter) =>
+      mockAdapter.onGet("http://localhost:8000/api/accounts/").reply(200, accounts)
   );
   await waitFor(() => screen.getByRole("heading", { name: "Accounts" }));
-  return {
-    props,
-  };
+  return;
 }
 
 test("should render self and subcomponents", async () => {
-  await setup([{ id: 0, name: "acct1" }], 0, false);
+  await setup([{ id: "0", name: "acct1", balance: null }]);
 
   expect(screen.getAllByRole("row").length).toBe(1);
 });
@@ -25,11 +29,9 @@ test("should render self and subcomponents", async () => {
 test("should call selectAccount when row clicked", async () => {
   await setup(
     [
-      { id: 0, name: "acct1" },
-      { id: 1, name: "acct2" },
-    ],
-    0,
-    false
+      { id: "0", name: "acct1", balance: null },
+      { id: "1", name: "acct2", balance: null },
+    ]
   );
 
   // Click a row
@@ -38,7 +40,7 @@ test("should call selectAccount when row clicked", async () => {
 });
 
 test("should call show popover with form when add button clicked", async () => {
-  const { props } = await setup([{ id: 0, name: "acct1" }], 0, false);
+  await setup([{ id: "0", name: "acct1", balance: null }]);
 
   // Click a row
   fireEvent.click(screen.getByRole("button"));
