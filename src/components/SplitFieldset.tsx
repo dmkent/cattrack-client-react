@@ -16,7 +16,7 @@ interface ValidationState {
   message?: string;
 }
 
-interface SplitFieldsetProps {
+export interface SplitFieldsetProps {
   index: number;
   splitIdx: number;
   multiple_splits_exist: boolean;

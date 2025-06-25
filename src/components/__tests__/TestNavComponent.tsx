@@ -4,7 +4,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import NavComponent from "../NavComponent";
 import { AuthContext } from "../../hooks/AuthContext";
 
-function setup(logged_in) {
+function setup(logged_in: boolean) {
   const mockAuth = {
     user: logged_in ? { is_logged_in: true } : null,
     signin: jest.fn(),

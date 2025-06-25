@@ -7,7 +7,7 @@ import useCategories from "../hooks/useCategories";
 import TransactionFilterPeriods from "./TransactionFilterPeriods";
 import { TransactionFilters } from "./TransactionFilters";
 
-interface TransactionFilterProps {
+export interface TransactionFilterProps {
   filters: TransactionFilters;
   setFilters: (filters: TransactionFilters) => void;
 }

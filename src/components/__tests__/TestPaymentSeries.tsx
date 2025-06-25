@@ -2,8 +2,9 @@ import React from "react";
 import { screen, waitFor, fireEvent } from "@testing-library/react";
 import { renderWithProviders } from "../../RenderWithProviders";
 import PaymentSeries from "../PaymentSeries";
+import { PaymentSeriesItem } from "src/data/PaymentSeries";
 
-const payments = [
+const payments: PaymentSeriesItem[] = [
   {
     id: "100",
     name: "Elec",
@@ -24,7 +25,7 @@ const payments = [
 test("PaymentSeries should render self and subcomponents", async () => {
   renderWithProviders(
     <PaymentSeries />,
-    {},
+    undefined,
     (mockAdapter) => {
       mockAdapter.onGet("/api/payments/").reply(200, payments);
     }

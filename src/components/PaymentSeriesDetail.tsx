@@ -9,15 +9,15 @@ import {
   Col,
   Row,
 } from "react-bootstrap";
-import { PaymentSeries } from "../data/PaymentSeries";
+import { PaymentSeriesItem } from "../data/PaymentSeries";
 
 interface PaymentSeriesDetailProps {
-  series: PaymentSeries | null | undefined;
+  series: PaymentSeriesItem | null;
   paymentSeriesAddBillFromFile: (seriesId: string, file: File) => void;
 }
 
 function PaymentSeriesDetail(props: PaymentSeriesDetailProps): JSX.Element | null {
-  if (props.series === null || props.series === undefined) {
+  if (props.series === null) {
     return null;
   }
   return (

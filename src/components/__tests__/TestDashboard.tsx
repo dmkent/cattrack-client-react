@@ -23,7 +23,7 @@ const periods = [
 
 test("should render self and subcomponents", async () => {
   renderWithProviders(
-      <Dashboard />, {}, (mockAdapter) => {
+      <Dashboard />, undefined, (mockAdapter) => {
         mockAdapter.onGet("/api/periods/").reply(200, periods);
         mockAdapter.onGet("/api/transactions/summary/").reply(200, []);
       }

@@ -6,7 +6,7 @@ export interface Bill {
   is_paid: boolean;
 }
 
-export interface PaymentSeries {
+export interface PaymentSeriesItem {
   id: string;
   name: string;
   is_income: boolean;
@@ -14,7 +14,7 @@ export interface PaymentSeries {
   bills: Bill[];
 }
 
-export function series_from_json(json_data: any): PaymentSeries {
+export function series_from_json(json_data: any): PaymentSeriesItem {
   const bills: Bill[] = json_data.bills.map((bill: any): Bill => ({
     id: bill.id,
     description: bill.description,
@@ -23,7 +23,7 @@ export function series_from_json(json_data: any): PaymentSeries {
     is_paid: bill.is_paid,
   }));
   
-  const series: PaymentSeries = {
+  const series: PaymentSeriesItem = {
     id: json_data.id,
     name: json_data.name,
     is_income: json_data.is_income,
