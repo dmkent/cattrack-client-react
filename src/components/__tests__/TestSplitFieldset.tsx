@@ -1,9 +1,9 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import SplitFieldset from "../SplitFieldset";
+import SplitFieldset, { SplitFieldsetProps } from "../SplitFieldset";
 
-function setup(valid, message) {
-  const props = {
+function setup(valid: boolean | null, message: string) {
+  const props : SplitFieldsetProps = {
     is_valid: {
       valid: valid,
       message: message,
@@ -13,6 +13,7 @@ function setup(valid, message) {
     removeSplitCat: jest.fn(),
     setSplitCategory: jest.fn(),
     setSplitAmount: jest.fn(),
+    splitIdx: 0,
     split: {
       category: "1",
       amount: "-23",
@@ -25,7 +26,7 @@ function setup(valid, message) {
 
   render(<SplitFieldset {...props} />);
 
-  return props;
+  return;
 }
 
 test("should render self and subcomponents", () => {

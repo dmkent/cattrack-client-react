@@ -2,7 +2,9 @@ import React from "react";
 import { screen, waitFor, fireEvent } from "@testing-library/react";
 
 import { renderWithProviders } from "../../RenderWithProviders";
-import TransactionFilter from "../TransactionFilter";
+import TransactionFilter, { TransactionFilterProps } from "../TransactionFilter";
+import { TransactionFilters } from "../TransactionFilters";
+import AxiosMockAdapter from "axios-mock-adapter";
 
 const periods = [
   {
@@ -28,23 +30,23 @@ const categories = [
   { id: 0, name: "Cat1" },
   { id: 3, name: "Cat2" },
 ];
-const filters = { to_date: null, from_date: null, category: 3, account: 0 };
+const filters : TransactionFilters = { to_date: null, from_date: null, category: "3", account: "0", has_category: "1" };
 
-function setup(mockAdapter) {
+function setup(mockAdapter : AxiosMockAdapter) {
   mockAdapter.onGet("/api/periods/").reply(200, periods);
   mockAdapter.onGet("/api/accounts/").reply(200, accounts);
   mockAdapter.onGet("/api/categories/").reply(200, categories);
 }
 
 test("TestTransactionFilter should render self and subcomponents", async () => {
-  const props = {
+  const props : TransactionFilterProps = {
     setFilters: jest.fn(),
     filters: filters,
   };
 
   renderWithProviders(
     <TransactionFilter {...props} />,
-    {},
+    undefined,
     setup
   );
 
@@ -61,7 +63,7 @@ test("should display some categories and accounts", async () => {
 
   renderWithProviders(
     <TransactionFilter {...props} />,
-    {},
+    undefined,
     setup
   );
 
@@ -88,7 +90,7 @@ test("should display some periods and set active", async () => {
 
   renderWithProviders(
     <TransactionFilter {...props} />,
-    {},
+    undefined,
     setup
   );
 
@@ -103,7 +105,7 @@ test("should display some periods and set active", async () => {
   fireEvent.click(screen.getByTestId("cat-all"));
   expect(props.setFilters.mock.calls.length).toBe(1);
   expect(props.setFilters.mock.calls[0][0]).toEqual({
-    account: 0,
+    account: "0",
     category: null,
     has_category: null,
     from_date: null,
@@ -115,8 +117,9 @@ test("should display some periods and set active", async () => {
   expect(props.setFilters.mock.calls.length).toBe(2);
   expect(props.setFilters.mock.calls[1][0]).toEqual({
     account: null,
-    category: 3,
+    category: "3",
     from_date: null,
+    has_category: "1",
     to_date: null,
   });
 });

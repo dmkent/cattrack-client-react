@@ -3,16 +3,18 @@ import { screen, waitFor, fireEvent } from "@testing-library/react";
 
 import { renderWithProviders } from "../../RenderWithProviders";
 import { Tracking } from "../Tracking";
+import { Category } from "src/data/Category";
+import { SeriesPoint } from "src/data/Account";
 
-const categories = [
-  { id: 3, name: "cat1" },
-  { id: 2, name: "cat2" },
-  { id: 1, name: "cat3" },
+const categories : Category[] = [
+  { id: "3", name: "cat1", score: 0.5 },
+  { id: "2", name: "cat2", score: 1 },
+  { id: "1", name: "cat3", score: 2 },
 ];
-const series = [
-  { value: "-43", label: "2013-01-01" },
-  { value: "-33", label: "2013-02-01" },
-  { value: "-5", label: "2013-03-01" },
+const series : SeriesPoint[] = [
+  { value: -43, label: "2013-01-01" },
+  { value: -33, label: "2013-02-01" },
+  { value: -5, label: "2013-03-01" },
 ];
 
 test("should render self and subcomponents", async () => {
@@ -20,7 +22,7 @@ test("should render self and subcomponents", async () => {
 
   renderWithProviders(
     <Tracking {...props} />,
-    {},
+    undefined,
     (mockAdapter) => {
       mockAdapter.onGet("/api/categories/").reply(200, categories);
       mockAdapter.onGet("/api/category/3/series/").reply(200, [series]);

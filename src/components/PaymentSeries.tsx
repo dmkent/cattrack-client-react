@@ -3,13 +3,14 @@ import { Grid, Col, Row } from "react-bootstrap";
 import PaymentSeriesDetail from "./PaymentSeriesDetail";
 import usePaymentSeries from "../hooks/usePaymentSeries";
 import { useUpdatePaymentSeries } from "../hooks/useUpdatePaymentSeries";
+import { PaymentSeriesItem } from "src/data/PaymentSeries";
 
 interface PaymentSeriesProps {}
 
 function PaymentSeries(props: PaymentSeriesProps): JSX.Element | null {
   const { isLoading, data: paymentSeries } = usePaymentSeries();
   const { paymentSeriesAddBillFromFile } = useUpdatePaymentSeries();
-  const [currentSeries, setCurrentSeries] = useState<string | null>(null);
+  const [currentSeries, setCurrentSeries] = useState<PaymentSeriesItem | null>(null);
 
   if (isLoading || !paymentSeries) {
     return null;
@@ -20,9 +21,9 @@ function PaymentSeries(props: PaymentSeriesProps): JSX.Element | null {
       <Row>
         <Col md={2}>
           <ul>
-            {Object.values(paymentSeries).map((series) => {
+            {paymentSeries.map((series) => {
               return (
-                <li key={series.id} onClick={() => setCurrentSeries(series.id)}>
+                <li key={series.id} onClick={() => setCurrentSeries(series)}>
                   {series.name}
                 </li>
               );
@@ -31,7 +32,7 @@ function PaymentSeries(props: PaymentSeriesProps): JSX.Element | null {
         </Col>
         <Col md={10}>
           <PaymentSeriesDetail
-            series={currentSeries ? paymentSeries[currentSeries] : null}
+            series={currentSeries}
             paymentSeriesAddBillFromFile={(seriesId: string, file: File) =>
               paymentSeriesAddBillFromFile(seriesId, file)
             }

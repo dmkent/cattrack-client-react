@@ -2,12 +2,13 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 
 import PlotlyTimeSeries, { plotlyDataFromSeries } from "../PlotlyTimeSeries";
+import { SeriesPoint } from "src/data/Account";
 
 test("PlotlyTimeSeries should reshape series", () => {
-  const raw = [
-    ({ label: "2013-02-01", value: "-54" }),
-    ({ label: "2013-03-01", value: "-3" }),
-    ({ label: "2013-04-01", value: "-4" }),
+  const raw : SeriesPoint[] = [
+    ({ label: "2013-02-01", value: -54 }),
+    ({ label: "2013-03-01", value: -3 }),
+    ({ label: "2013-04-01", value: -4 }),
   ];
   const res = plotlyDataFromSeries(raw, true);
   expect(res.y).toEqual([54, 3, 4]);
@@ -30,14 +31,12 @@ test("PlotlyTimeSeries should render empty", () => {
 });
 
 test("PlotlyTimeSeries should render content", () => {
-  const props = {
-    series: [
-      { label: "2013-02-01", value: "-54" },
-      { label: "2013-03-01", value: "-3" },
-      { label: "2013-04-01", value: "-4" },
-    ],
-  };
-  render(<PlotlyTimeSeries {...props} />);
+    const series : SeriesPoint[]= [
+      { label: "2013-02-01", value: -54 },
+      { label: "2013-03-01", value: -3 },
+      { label: "2013-04-01", value: -4 },
+    ];
+      render(<PlotlyTimeSeries series={series} />);
 
   expect(screen.getByTestId("plotly")).toBeTruthy();
 });
