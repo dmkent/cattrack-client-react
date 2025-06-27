@@ -19,7 +19,10 @@ interface Suggestion {
   name?: string;
 }
 
-function initialSplits(transaction: Transaction, suggestions?: Suggestion[]): SplitsState {
+function initialSplits(
+  transaction: Transaction,
+  suggestions?: Suggestion[],
+): SplitsState {
   let category = transaction.category;
   if (category === null) {
     if (suggestions && suggestions.length > 0) {
@@ -86,12 +89,17 @@ function splitsAreValid(transaction: Transaction, splits: Split[]) {
   };
 }
 
-function useTransactionSplits(transaction: Transaction, suggestions?: Suggestion[]) {
+function useTransactionSplits(
+  transaction: Transaction,
+  suggestions?: Suggestion[],
+) {
   const [hasReceivedSuggestions, setHasReceivedSuggestions] = useState(false);
   const [currentTransactionId, setCurrentTransactionId] = useState(
-    transaction.id
+    transaction.id,
   );
-  const [splits, setSplits] = useState<SplitsState>(initialSplits(transaction, suggestions));
+  const [splits, setSplits] = useState<SplitsState>(
+    initialSplits(transaction, suggestions),
+  );
 
   // We may still be waiting for suggestions when we first load. This reinitialises the
   // state if we receive the suggestions later.
@@ -109,16 +117,23 @@ function useTransactionSplits(transaction: Transaction, suggestions?: Suggestion
 
   function pushSplit(categoryId: string | number) {
     setSplits((prevSplits) => ({
-      splits: [...prevSplits.splits, { category: String(categoryId), amount: "0" }],
+      splits: [
+        ...prevSplits.splits,
+        { category: String(categoryId), amount: "0" },
+      ],
       is_valid: {
         valid: null,
       },
     }));
   }
 
-  function setSplitValue(name: keyof Split, idx: number, value: string | number) {
+  function setSplitValue(
+    name: keyof Split,
+    idx: number,
+    value: string | number,
+  ) {
     const newSplits = splits.splits.map((split, index) =>
-      index === idx ? { ...split, [name]: value } : split
+      index === idx ? { ...split, [name]: value } : split,
     );
     const new_state: SplitsState = {
       splits: newSplits,
@@ -140,7 +155,13 @@ function useTransactionSplits(transaction: Transaction, suggestions?: Suggestion
     setSplits(initialSplits(transaction, suggestions));
   }
 
-  return [splits, setSuggestions, pushSplit, setSplitValue, removeSplit] as const;
+  return [
+    splits,
+    setSuggestions,
+    pushSplit,
+    setSplitValue,
+    removeSplit,
+  ] as const;
 }
 
 export default useTransactionSplits;

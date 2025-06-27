@@ -11,7 +11,10 @@ interface DashboardProps {}
 
 function Dashboard(props: DashboardProps): JSX.Element | null {
   const { isLoading: isPeriodsLoading, data: periods } = usePeriods();
-  const [filters, setFilters] = useState<PeriodFilters>({ to_date: null, from_date: null });
+  const [filters, setFilters] = useState<PeriodFilters>({
+    to_date: null,
+    from_date: null,
+  });
   const { isLoading: isSummaryLoading, data: summary } =
     useTransactionSummary(filters);
 
@@ -20,7 +23,7 @@ function Dashboard(props: DashboardProps): JSX.Element | null {
   }
 
   const handleUpdateFilters = (newFilters: Partial<PeriodFilters>) => {
-    setFilters(prevFilters => ({ ...prevFilters, ...newFilters }));
+    setFilters((prevFilters) => ({ ...prevFilters, ...newFilters }));
   };
 
   return (

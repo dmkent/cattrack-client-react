@@ -7,7 +7,7 @@ test("should render self and subcomponents", () => {
   render(
     <Router>
       <Login />
-    </Router>
+    </Router>,
   );
 
   expect(screen.findByLabelText("Username")).toBeTruthy();

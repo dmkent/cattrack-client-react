@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import SplitFieldset, { SplitFieldsetProps } from "../SplitFieldset";
 
 function setup(valid: boolean | null, message: string) {
-  const props : SplitFieldsetProps = {
+  const props: SplitFieldsetProps = {
     is_valid: {
       valid: valid,
       message: message,

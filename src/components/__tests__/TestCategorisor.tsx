@@ -12,8 +12,14 @@ const categories: Category[] = [
   { id: "3", name: "Cat2", score: 0 },
 ];
 
-
-function setup(transaction: Transaction, suggestions: Category[]): { axiosInstance: AxiosInstance, props: CategorisorProps, saveMock: jest.Mock } {
+function setup(
+  transaction: Transaction,
+  suggestions: Category[],
+): {
+  axiosInstance: AxiosInstance;
+  props: CategorisorProps;
+  saveMock: jest.Mock;
+} {
   const saveMock = jest.fn(() => Promise.resolve());
   const props: CategorisorProps = {
     transaction,
@@ -27,7 +33,9 @@ function setup(transaction: Transaction, suggestions: Category[]): { axiosInstan
 
   const mockAdapter = new AxiosMockAdapter(axiosInstance);
   mockAdapter.onGet("/api/categories/").reply(200, categories);
-  mockAdapter.onGet("/api/transactions/" + transaction.id + "/suggest").reply(200, suggestions);
+  mockAdapter
+    .onGet("/api/transactions/" + transaction.id + "/suggest")
+    .reply(200, suggestions);
 
   return { axiosInstance, props, saveMock };
 }
@@ -43,11 +51,13 @@ test("Categorisor: should render if transaction is defined", async () => {
       category_name: "Test Category",
       account: "1",
     },
-    []
+    [],
   );
   renderWithProviders(
     <Categorisor {...props} />,
-    undefined, undefined, axiosInstance
+    undefined,
+    undefined,
+    axiosInstance,
   );
   await waitFor(() => screen.getByText("Categorise transaction"));
 
@@ -65,11 +75,16 @@ test("Categorisor: should render suggestions if defined", async () => {
       category_name: "Test Category",
       account: "1",
     },
-    [{ id: "1", name: "suggest1", score: 80 }, { id: "2", name: "suggest2", score: 60 }]
+    [
+      { id: "1", name: "suggest1", score: 80 },
+      { id: "2", name: "suggest2", score: 60 },
+    ],
   );
   renderWithProviders(
     <Categorisor {...props} />,
-    undefined, undefined, axiosInstance
+    undefined,
+    undefined,
+    axiosInstance,
   );
   await waitFor(() => screen.getByText("Categorise transaction"));
 
@@ -89,12 +104,14 @@ test("Categorisor: should call save on button click", async () => {
       category_name: "Test Category",
       account: "1",
     },
-    []
+    [],
   );
 
   renderWithProviders(
     <Categorisor {...props} />,
-    undefined, undefined, axiosInstance
+    undefined,
+    undefined,
+    axiosInstance,
   );
   await waitFor(() => screen.getByText("Categorise transaction"));
 
@@ -114,12 +131,14 @@ test("Categorisor: should show alert if not valid", async () => {
       category_name: "Test Category",
       account: "1",
     },
-    []
+    [],
   );
 
   renderWithProviders(
     <Categorisor {...props} />,
-    undefined, undefined, axiosInstance
+    undefined,
+    undefined,
+    axiosInstance,
   );
   await waitFor(() => screen.getByText("Categorise transaction"));
 

@@ -17,7 +17,7 @@ function setup(logged_in: boolean) {
       <Router basename="/">
         <NavComponent />
       </Router>
-    </AuthContext.Provider>
+    </AuthContext.Provider>,
   );
 }
 

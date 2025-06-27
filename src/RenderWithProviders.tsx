@@ -11,7 +11,7 @@ export function renderWithProviders(
   children: React.ReactElement,
   authState?: AuthContextType,
   configureMocks?: (mockAdapter: AxiosMockAdapter) => void,
-  axiosInstance: AxiosInstance | null = null
+  axiosInstance: AxiosInstance | null = null,
 ): RenderResult {
   const queryClient = new QueryClient();
 
@@ -28,12 +28,21 @@ export function renderWithProviders(
   return render(
     <IntlProvider locale="en-AU">
       <QueryClientProvider client={queryClient}>
-        <AuthContext.Provider value={authState ?? { user: null, loading: false, signin: jest.fn(), signout: jest.fn() }}>
+        <AuthContext.Provider
+          value={
+            authState ?? {
+              user: null,
+              loading: false,
+              signin: jest.fn(),
+              signout: jest.fn(),
+            }
+          }
+        >
           <AxiosContext.Provider value={axiosInstance}>
             {children}
           </AxiosContext.Provider>
         </AuthContext.Provider>
       </QueryClientProvider>
-    </IntlProvider>
+    </IntlProvider>,
   );
 }

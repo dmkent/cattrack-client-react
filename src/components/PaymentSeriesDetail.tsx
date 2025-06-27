@@ -16,7 +16,9 @@ interface PaymentSeriesDetailProps {
   paymentSeriesAddBillFromFile: (seriesId: string, file: File) => void;
 }
 
-function PaymentSeriesDetail(props: PaymentSeriesDetailProps): JSX.Element | null {
+function PaymentSeriesDetail(
+  props: PaymentSeriesDetailProps,
+): JSX.Element | null {
   if (props.series === null) {
     return null;
   }
@@ -63,7 +65,7 @@ interface UploadFormProps {
 
 function UploadForm(props: UploadFormProps): JSX.Element {
   const [uploadFile, setUploadFile] = useState<File | null>(null);
-  
+
   const handleChange = (event: any): void => {
     const target = event.target;
     const files = target.files;

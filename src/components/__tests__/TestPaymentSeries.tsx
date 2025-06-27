@@ -23,13 +23,9 @@ const payments: PaymentSeriesItem[] = [
 ];
 
 test("PaymentSeries should render self and subcomponents", async () => {
-  renderWithProviders(
-    <PaymentSeries />,
-    undefined,
-    (mockAdapter) => {
-      mockAdapter.onGet("/api/payments/").reply(200, payments);
-    }
-  );
+  renderWithProviders(<PaymentSeries />, undefined, (mockAdapter) => {
+    mockAdapter.onGet("/api/payments/").reply(200, payments);
+  });
   await waitFor(() => screen.getByText("Elec"));
 
   fireEvent.click(screen.getByText("Elec"));

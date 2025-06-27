@@ -11,9 +11,9 @@ export const useUpdateTransactions = () => {
   const axios = useAxios();
 
   const updateTransactionSplits = async (
-    transaction: Transaction, 
-    splits: Map<number, Split> | null, 
-    onDone: () => void
+    transaction: Transaction,
+    splits: Map<number, Split> | null,
+    onDone: () => void,
   ) => {
     let updated = { ...transaction };
     if (splits !== null && splits.size === 1) {
@@ -23,21 +23,27 @@ export const useUpdateTransactions = () => {
       }
     }
 
-    const updateResponse = await axios.put(`/api/transactions/${updated.id}/`, updated);
+    const updateResponse = await axios.put(
+      `/api/transactions/${updated.id}/`,
+      updated,
+    );
 
     await checkStatusAxios(updateResponse);
-    
+
     if (splits !== null && splits.size > 1) {
       const splitsArray = Array.from(splits.values());
-      const splitsResponse = await axios.post(`/api/transactions/${updated.id}/split/`, splitsArray);
+      const splitsResponse = await axios.post(
+        `/api/transactions/${updated.id}/split/`,
+        splitsArray,
+      );
       await checkStatusAxios(splitsResponse);
       onDone();
     } else {
       onDone();
     }
-  }
+  };
 
   return {
     updateTransactionSplits,
   };
-}
+};

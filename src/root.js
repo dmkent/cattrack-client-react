@@ -22,5 +22,5 @@ render(
   <QueryClientProvider client={queryClient}>
     <App />
   </QueryClientProvider>,
-  document.getElementById("root")
+  document.getElementById("root"),
 );
