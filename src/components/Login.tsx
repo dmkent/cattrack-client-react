@@ -44,7 +44,7 @@ const Login: React.FC<LoginProps> = (props) => {
     form.current.validateAll();
     if (checkBtn.current.context._errors.length === 0) {
       auth.signin(username, password, () => {
-        navigate("/"); 
+        navigate("/");
       });
     } else {
       setLoading(false);

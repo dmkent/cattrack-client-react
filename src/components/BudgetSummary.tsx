@@ -68,7 +68,7 @@ interface Summary {
 function BudgetSummary(props: BudgetSummaryProps): JSX.Element | null {
   const { isLoading, data: summaries } = useBudgetSummaries(
     props.from_date,
-    props.to_date
+    props.to_date,
   );
 
   if (isLoading || summaries === null || summaries === undefined) {
@@ -76,8 +76,9 @@ function BudgetSummary(props: BudgetSummaryProps): JSX.Element | null {
   }
 
   const max_amount = summaries.reduce(
-    (prev: number, next: Summary) => Math.max(prev, next.budget, -1 * next.value),
-    0
+    (prev: number, next: Summary) =>
+      Math.max(prev, next.budget, -1 * next.value),
+    0,
   );
   const scale = 100.0 / max_amount;
   return (

@@ -1,4 +1,10 @@
 // Place your settings in this file to overwrite default and user settings.
 {
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
+    "editor.formatOnType": false,
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+    "vs-code-prettier-eslint.prettierLast": false
 }

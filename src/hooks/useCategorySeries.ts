@@ -18,7 +18,7 @@ export default function useCategorySeries(category_id: string) {
       .then((series: any[]) =>
         series.map((raw: CategorySeriesResponse) => {
           return { label: raw.label, value: parseFloat(raw.value) };
-        })
+        }),
       );
 
   return useQuery(["categorySeries", category_id], fetchCategories, {

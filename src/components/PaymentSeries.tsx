@@ -10,7 +10,9 @@ interface PaymentSeriesProps {}
 function PaymentSeries(props: PaymentSeriesProps): JSX.Element | null {
   const { isLoading, data: paymentSeries } = usePaymentSeries();
   const { paymentSeriesAddBillFromFile } = useUpdatePaymentSeries();
-  const [currentSeries, setCurrentSeries] = useState<PaymentSeriesItem | null>(null);
+  const [currentSeries, setCurrentSeries] = useState<PaymentSeriesItem | null>(
+    null,
+  );
 
   if (isLoading || !paymentSeries) {
     return null;

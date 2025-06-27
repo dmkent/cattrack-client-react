@@ -27,8 +27,8 @@ const periods: Period[] = [
 ];
 
 const accounts: Account[] = [
-  { id: "0", name: "account 1", "balance": 1000 },
-  { id: "1", name: "account 2", "balance": 500 },
+  { id: "0", name: "account 1", balance: 1000 },
+  { id: "1", name: "account 2", balance: 500 },
 ];
 
 const categories: Category[] = [
@@ -39,23 +39,19 @@ const categories: Category[] = [
 function setup(mockAdapter: AxiosMockAdapter, transactions: Transaction[]) {
   mockAdapter.onGet("/api/periods/").reply(200, periods);
   mockAdapter.onGet("/api/accounts/").reply(200, accounts);
-  mockAdapter.onGet("/api/categories/").reply(200, categories); 
-  mockAdapter
-    .onGet("/api/transactions/?page=1&page_size=20")
-    .reply(200, {
-      results: transactions,
-      count: 40,
-    });
+  mockAdapter.onGet("/api/categories/").reply(200, categories);
+  mockAdapter.onGet("/api/transactions/?page=1&page_size=20").reply(200, {
+    results: transactions,
+    count: 40,
+  });
 }
 
 test("should render self and subcomponents", async () => {
   const props = {
     page_size: 20,
   };
-  renderWithProviders(
-    <Transactions {...props} />,
-    undefined,
-    (mockAdapter) => setup(mockAdapter, [])
+  renderWithProviders(<Transactions {...props} />, undefined, (mockAdapter) =>
+    setup(mockAdapter, []),
   );
   await waitFor(() => screen.getByText("Transactions"));
 
@@ -66,7 +62,7 @@ test("should display some transactions", async () => {
   const props = {
     page_size: 20,
   };
-  const transactions : Transaction[] = [
+  const transactions: Transaction[] = [
     {
       id: 0,
       when: new Date("2017-01-01"),
@@ -87,10 +83,8 @@ test("should display some transactions", async () => {
       category_name: "Cat1",
     },
   ];
-  renderWithProviders(
-    <Transactions {...props} />,
-    undefined,
-    (mockAdapter) => setup(mockAdapter, transactions)
+  renderWithProviders(<Transactions {...props} />, undefined, (mockAdapter) =>
+    setup(mockAdapter, transactions),
   );
   await waitFor(() => screen.getByText("Transactions"));
 
@@ -100,6 +94,6 @@ test("should display some transactions", async () => {
   expect(screen.getByText("Test this")).toBeTruthy();
 
   expect(screen.getByText(/Test this really, +really/)).toHaveTextContent(
-    "Test this really, really, really, really, real..."
+    "Test this really, really, really, really, real...",
   );
 });

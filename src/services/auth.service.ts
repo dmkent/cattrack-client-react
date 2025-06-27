@@ -6,7 +6,7 @@ type JwtData = {
   username: string;
   user_id: string;
   email: string;
-}
+};
 
 function parseJwt(token: string) {
   if (!token || token.indexOf(".") === -1) {
@@ -48,10 +48,10 @@ function refreshToken() {
   }
 
   return fetch(CONFIG.API_URI + "/api/token/refresh/", {
-      method: "POST",
-      body: JSON.stringify({ refresh: token }),
-      headers: { "Content-Type": "application/json" },
-    })
+    method: "POST",
+    body: JSON.stringify({ refresh: token }),
+    headers: { "Content-Type": "application/json" },
+  })
     .then(checkStatus)
     .then((resp) => {
       const payload = parseJwt(resp.access);

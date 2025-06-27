@@ -25,7 +25,7 @@ describe("API and helpers", () => {
 
   it("can convert camel case", () => {
     expect(camelCaseToVerbose("ThisIsInCamelCase")).toEqual(
-      "This Is In Camel Case"
+      "This Is In Camel Case",
     );
     expect(camelCaseToVerbose("This_is_not")).toEqual("This_is_not");
     expect(camelCaseToVerbose("")).toEqual("");
@@ -33,7 +33,7 @@ describe("API and helpers", () => {
 
   it("can convert snake case", () => {
     expect(underscoredToVerbose("this_is_in_snake_case")).toEqual(
-      "this is in snake case"
+      "this is in snake case",
     );
     expect(underscoredToVerbose("ThisIsNot")).toEqual("ThisIsNot");
     expect(underscoredToVerbose("")).toEqual("");
@@ -47,7 +47,7 @@ describe("API and helpers", () => {
       parseErrors({
         AmountKey: ["Amount is required"],
         name: ["Name must be longer than zero"],
-      })
+      }),
     ).toEqual([
       "Amount key: Amount is required",
       "Name: Name must be longer than zero",
@@ -59,7 +59,7 @@ describe("API and helpers", () => {
             something: "nested",
           },
         ],
-      })
+      }),
     ).toEqual(['Amount key: [\n  {\n    "something": "nested"\n  }\n]']);
     expect(parseErrors({ detail: null })).toEqual(["detail"]);
   });

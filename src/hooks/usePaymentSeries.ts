@@ -6,10 +6,11 @@ import { useAxios } from "./AxiosContext";
 export default function usePaymentSeries() {
   const axios = useAxios();
   const fetchPayments = (): Promise<PaymentSeriesItem[]> =>
-    axios.get("/api/payments/")
+    axios
+      .get("/api/payments/")
       .then(checkStatusAxios)
       .then((series: any[]) => {
-        return series.map(seriesData => series_from_json(seriesData));
+        return series.map((seriesData) => series_from_json(seriesData));
       });
 
   return useQuery("payments", fetchPayments);

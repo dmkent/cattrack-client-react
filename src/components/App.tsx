@@ -7,9 +7,14 @@ import PaymentSeries from "./PaymentSeries";
 import CONFIG from "ctrack_config";
 import NavComponent from "./NavComponent";
 import { IntlProvider } from "react-intl";
-import { BrowserRouter as Router, Route, Navigate, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Navigate,
+  Routes,
+} from "react-router-dom";
 import Login from "./Login";
-import { AuthProvider, useAuth } from "../hooks/AuthContext"
+import { AuthProvider, useAuth } from "../hooks/AuthContext";
 import { AxiosProvider } from "../hooks/AxiosContext";
 
 interface LogoutProps {}
@@ -40,30 +45,37 @@ function App(): JSX.Element {
                       </RequireAuth>
                     }
                   />
-                  <Route path="/accounts" element={
-                    <RequireAuth redirectTo="/login">
-                      <Accounts />
-                    </RequireAuth>
-                  }
-                  />
-                  <Route path="/tracking" element={
-                    <RequireAuth redirectTo="/login">
-                      <Tracking />
-                    </RequireAuth>
-                  }
+                  <Route
+                    path="/accounts"
+                    element={
+                      <RequireAuth redirectTo="/login">
+                        <Accounts />
+                      </RequireAuth>
+                    }
                   />
                   <Route
-                    path="/transactions" element={
+                    path="/tracking"
+                    element={
+                      <RequireAuth redirectTo="/login">
+                        <Tracking />
+                      </RequireAuth>
+                    }
+                  />
+                  <Route
+                    path="/transactions"
+                    element={
                       <RequireAuth redirectTo="/login">
                         <Transactions page_size={50} />
                       </RequireAuth>
                     }
                   />
-                  <Route path="/bills" element={
-                    <RequireAuth redirectTo="/login">
-                      <PaymentSeries />
-                    </RequireAuth>
-                  }
+                  <Route
+                    path="/bills"
+                    element={
+                      <RequireAuth redirectTo="/login">
+                        <PaymentSeries />
+                      </RequireAuth>
+                    }
                   />
                 </Routes>
               </div>
@@ -82,12 +94,15 @@ function App(): JSX.Element {
 
 export function Logout(props: LogoutProps): JSX.Element {
   const { signout } = useAuth();
-  
+
   useEffect(() => signout(() => {}), [signout]);
   return <Navigate to="/login" />;
 }
 
-export function RequireAuth({ children, redirectTo }: RequireAuthProps): JSX.Element | null {
+export function RequireAuth({
+  children,
+  redirectTo,
+}: RequireAuthProps): JSX.Element | null {
   let { user, loading } = useAuth();
   let isAuthenticated = user?.is_logged_in;
   if (loading) {

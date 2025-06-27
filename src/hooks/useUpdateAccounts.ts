@@ -1,23 +1,30 @@
-import { parseErrors } from '../client/ErrorParser';
-import { checkStatusAxios } from '../client/CatTrackAPI';
-import { useAxios } from './AxiosContext';
+import { parseErrors } from "../client/ErrorParser";
+import { checkStatusAxios } from "../client/CatTrackAPI";
+import { useAxios } from "./AxiosContext";
 
 import { Account } from "../data/Account";
 
 export const useUpdateAccounts = () => {
   const axios = useAxios();
 
-  const uploadFileToAccount = async (account: Account, uploadFile: File): Promise<void> => {
+  const uploadFileToAccount = async (
+    account: Account,
+    uploadFile: File,
+  ): Promise<void> => {
     const formData = new FormData();
-    formData.append('file', uploadFile);
-    formData.append('accountId', account.id);
-    
+    formData.append("file", uploadFile);
+    formData.append("accountId", account.id);
+
     try {
-      const response = await axios.post(`/api/accounts/${account.id}/load/`, formData, {
-        headers: {
-          'Content-Type': null, // Let the browser set the content type for multipart/form-data
-        }
-      });
+      const response = await axios.post(
+        `/api/accounts/${account.id}/load/`,
+        formData,
+        {
+          headers: {
+            "Content-Type": null, // Let the browser set the content type for multipart/form-data
+          },
+        },
+      );
       if (response.status === 200) {
         return;
       }
@@ -32,14 +39,14 @@ export const useUpdateAccounts = () => {
       }
       return Promise.reject(new Error(message));
     } catch (error) {
-      console.error('Error uploading file:', error);
+      console.error("Error uploading file:", error);
       throw error;
     }
-  }
+  };
 
   const createAccount = async (name: string): Promise<Account> => {
     try {
-      const response = await axios.post('/api/accounts/', { name });
+      const response = await axios.post("/api/accounts/", { name });
       if (response.status === 201) {
         return response.data as Account;
       }
@@ -47,16 +54,16 @@ export const useUpdateAccounts = () => {
       const result = await checkStatusAxios(response);
 
       return {
-        ...result
+        ...result,
       } as Account;
     } catch (error) {
-      console.error('Error creating account:', error);
+      console.error("Error creating account:", error);
       throw error;
     }
-  }
+  };
 
   return {
     uploadFileToAccount,
-    createAccount
-  }
-}
+    createAccount,
+  };
+};

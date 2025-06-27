@@ -9,8 +9,9 @@ interface TrackingProps {}
 export function Tracking(props: TrackingProps): JSX.Element | null {
   const { isLoading: isCatsLoading, data: categories } = useCategories();
   const [current_category, setCategory] = useState<string | null>(null);
-  const { isLoading: isCatLoading, data: categorySeries } =
-    useCategorySeries(current_category || "");
+  const { isLoading: isCatLoading, data: categorySeries } = useCategorySeries(
+    current_category || "",
+  );
 
   if (isCatsLoading) {
     return null;
@@ -30,13 +31,14 @@ export function Tracking(props: TrackingProps): JSX.Element | null {
             onChange={(e) => setCategory(e.target.value)}
             value={current_category || ""}
           >
-            {categories && [...categories].map((category) => {
-              return (
-                <option value={category.id} key={category.id}>
-                  {category.name}
-                </option>
-              );
-            })}
+            {categories &&
+              [...categories].map((category) => {
+                return (
+                  <option value={category.id} key={category.id}>
+                    {category.name}
+                  </option>
+                );
+              })}
           </select>
         </Col>
       </Row>

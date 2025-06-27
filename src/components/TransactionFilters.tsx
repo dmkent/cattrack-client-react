@@ -1,4 +1,3 @@
-
 export interface PeriodFilters {
   to_date: string | null;
   from_date: string | null;

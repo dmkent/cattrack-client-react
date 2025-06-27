@@ -35,11 +35,11 @@ test("TransactionFilterPeriods changing dates should change filter", async () =>
 
   // Input from date
   var fromInput = screen.getByLabelText("Date from");
-  fireEvent.change(fromInput, {target: {value: testFromDateEvt}});
+  fireEvent.change(fromInput, { target: { value: testFromDateEvt } });
 
   // Input to date
   var toInput = screen.getByLabelText("Date to");
-  fireEvent.change(toInput, {target: {value: testToDateEvt}});
+  fireEvent.change(toInput, { target: { value: testToDateEvt } });
 
   expect(props.updateFilters.mock.calls[0][0]).toEqual({
     from_date: testFromDateEvt,
@@ -51,34 +51,30 @@ test("TransactionFilterPeriods changing dates should change filter", async () =>
 });
 
 test("TransactionFilterPeriods should display some periods", () => {
-  const { props } = setup(
-    [
-      {
-        id: "0",
-        offset: "0",
-        from_date: "2017-01-01",
-        to_date: "2017-02-01",
-        label: "Month",
-      },
-    ]
-  );
+  const { props } = setup([
+    {
+      id: "0",
+      offset: "0",
+      from_date: "2017-01-01",
+      to_date: "2017-02-01",
+      label: "Month",
+    },
+  ]);
   expect(screen.getByRole("button", { name: "Month" })).not.toBeDisabled();
   fireEvent.click(screen.getByRole("button", { name: "Month" }));
   expect(props.updateFilters.mock.calls.length).toBe(1);
 });
 
 test("TransactionFilterPeriods should detect null current filter", () => {
-  const { props } = setup(
-    [
-      {
-        id: "0",
-        offset: "0",
-        from_date: "2017-01-01",
-        to_date: "2017-02-01",
-        label: "Month",
-      },
-    ]
-  );
+  const { props } = setup([
+    {
+      id: "0",
+      offset: "0",
+      from_date: "2017-01-01",
+      to_date: "2017-02-01",
+      label: "Month",
+    },
+  ]);
   expect(screen.getByRole("button", { name: "Month" })).not.toBeDisabled();
   fireEvent.click(screen.getByRole("button", { name: "Month" }));
   expect(props.updateFilters.mock.calls.length).toBe(1);

@@ -1,10 +1,7 @@
 import { useQuery } from "react-query";
 import { useAxios } from "./AxiosContext";
 
-import {
-  filters_to_params,
-  checkStatusAxios,
-} from "../client/CatTrackAPI";
+import { filters_to_params, checkStatusAxios } from "../client/CatTrackAPI";
 import { CategorySummary } from "src/data/Transaction";
 
 interface TransactionSummaryResponse {
@@ -17,15 +14,18 @@ export default function useTransactionSummaries(filters: any) {
   const axios = useAxios();
   const query_params = filters_to_params(filters);
   const fetchSummary = () =>
-    axios.get("/api/transactions/summary/" + query_params)
+    axios
+      .get("/api/transactions/summary/" + query_params)
       .then(checkStatusAxios)
-      .then((resp: TransactionSummaryResponse[]) => resp.map((item) => {
-        return {
-          category_id: item.category,
-          category_name: item.category_name,
-          total: parseFloat(item.total),
-        } as CategorySummary;
-      }));
+      .then((resp: TransactionSummaryResponse[]) =>
+        resp.map((item) => {
+          return {
+            category_id: item.category,
+            category_name: item.category_name,
+            total: parseFloat(item.total),
+          } as CategorySummary;
+        }),
+      );
 
   return useQuery(["summary", filters], fetchSummary);
 }

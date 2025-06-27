@@ -20,7 +20,8 @@ function TransactionFilterPeriods(props: TransactionFilterPeriodsProps) {
       <input
         aria-label="Date from"
         max={filters.to_date ?? undefined}
-        min={undefined} type="date"
+        min={undefined}
+        type="date"
         value={filters.from_date ?? ""}
         onChange={(e) => updateFilters({ from_date: e.target.value })}
       />

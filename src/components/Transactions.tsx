@@ -25,15 +25,16 @@ function Transactions(props: TransactionsProps): JSX.Element | null {
     has_category: null,
     account: null,
     to_date: null,
-    from_date: null
+    from_date: null,
   });
-  const [selected_transaction, setSelectedTransaction] = useState<Transaction | null>(null);
+  const [selected_transaction, setSelectedTransaction] =
+    useState<Transaction | null>(null);
   const [modal_shown, setModalShown] = useState<boolean>(false);
 
   const { isLoading, isError, data } = useTransactions(
     active_page,
     page_size,
-    filters
+    filters,
   );
   const queryClient = useQueryClient();
 
@@ -132,7 +133,9 @@ function Transactions(props: TransactionsProps): JSX.Element | null {
       </div>
       <Pagination>
         <Pagination.First onClick={() => setPage(1)} />
-        <Pagination.Prev onClick={() => setPage(Math.max(1, active_page - 1))} />
+        <Pagination.Prev
+          onClick={() => setPage(Math.max(1, active_page - 1))}
+        />
         {Array.from({ length: Math.min(5, num_pages) }, (_, i) => {
           const page = i + 1;
           return (
@@ -145,7 +148,9 @@ function Transactions(props: TransactionsProps): JSX.Element | null {
             </Pagination.Item>
           );
         })}
-        <Pagination.Next onClick={() => setPage(Math.min(num_pages, active_page + 1))} />
+        <Pagination.Next
+          onClick={() => setPage(Math.min(num_pages, active_page + 1))}
+        />
         <Pagination.Last onClick={() => setPage(num_pages)} />
       </Pagination>
     </div>

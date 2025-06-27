@@ -2,7 +2,9 @@ import React from "react";
 import { screen, waitFor, fireEvent } from "@testing-library/react";
 
 import { renderWithProviders } from "../../RenderWithProviders";
-import TransactionFilter, { TransactionFilterProps } from "../TransactionFilter";
+import TransactionFilter, {
+  TransactionFilterProps,
+} from "../TransactionFilter";
 import { TransactionFilters } from "../TransactionFilters";
 import AxiosMockAdapter from "axios-mock-adapter";
 
@@ -30,25 +32,27 @@ const categories = [
   { id: 0, name: "Cat1" },
   { id: 3, name: "Cat2" },
 ];
-const filters : TransactionFilters = { to_date: null, from_date: null, category: "3", account: "0", has_category: "1" };
+const filters: TransactionFilters = {
+  to_date: null,
+  from_date: null,
+  category: "3",
+  account: "0",
+  has_category: "1",
+};
 
-function setup(mockAdapter : AxiosMockAdapter) {
+function setup(mockAdapter: AxiosMockAdapter) {
   mockAdapter.onGet("/api/periods/").reply(200, periods);
   mockAdapter.onGet("/api/accounts/").reply(200, accounts);
   mockAdapter.onGet("/api/categories/").reply(200, categories);
 }
 
 test("TestTransactionFilter should render self and subcomponents", async () => {
-  const props : TransactionFilterProps = {
+  const props: TransactionFilterProps = {
     setFilters: jest.fn(),
     filters: filters,
   };
 
-  renderWithProviders(
-    <TransactionFilter {...props} />,
-    undefined,
-    setup
-  );
+  renderWithProviders(<TransactionFilter {...props} />, undefined, setup);
 
   await waitFor(() => screen.getByText("Time"));
 
@@ -61,16 +65,12 @@ test("should display some categories and accounts", async () => {
     filters: filters,
   };
 
-  renderWithProviders(
-    <TransactionFilter {...props} />,
-    undefined,
-    setup
-  );
+  renderWithProviders(<TransactionFilter {...props} />, undefined, setup);
 
   await waitFor(() => screen.getByText("Time"));
 
   expect(screen.getByRole("button", { name: "Cat1" })).not.toHaveClass(
-    "active"
+    "active",
   );
   expect(screen.getByRole("button", { name: "Cat2" })).toHaveClass("active");
 
@@ -88,16 +88,12 @@ test("should display some periods and set active", async () => {
     filters: filters,
   };
 
-  renderWithProviders(
-    <TransactionFilter {...props} />,
-    undefined,
-    setup
-  );
+  renderWithProviders(<TransactionFilter {...props} />, undefined, setup);
 
   await waitFor(() => screen.getByText("Time"));
 
   expect(screen.getByRole("button", { name: "Cat1" })).not.toHaveClass(
-    "active"
+    "active",
   );
   expect(screen.getByRole("button", { name: "Cat2" })).toHaveClass("active");
 

@@ -8,7 +8,10 @@ interface BudgetSummary {
   [key: string]: any;
 }
 
-export default function useBudgetSummaries(from_date: string | null, to_date: string | null) {
+export default function useBudgetSummaries(
+  from_date: string | null,
+  to_date: string | null,
+) {
   const axios = useAxios();
   const toStr = to_date
     ? to_date.replace("-", "")
@@ -17,7 +20,8 @@ export default function useBudgetSummaries(from_date: string | null, to_date: st
     ? from_date.replace("-", "")
     : moment().subtract(1, "month").format("YYYYMMDD");
   const fetchSummaries = (): Promise<BudgetSummary> =>
-    axios.get(`/api/categories/summary/${fromStr}/${toStr}/`)
+    axios
+      .get(`/api/categories/summary/${fromStr}/${toStr}/`)
       .then(checkStatusAxios)
       .then((raw: BudgetSummary) => {
         return raw;

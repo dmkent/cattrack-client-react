@@ -26,11 +26,21 @@ function TransactionFilter(props: TransactionFilterProps): JSX.Element | null {
   const updateFilters = (newValues: Partial<TransactionFilters>): void =>
     setFilters(Object.assign({}, filters, newValues));
 
-  if (isAccountsLoading || isPeriodsLoading || isCategoriesLoading || periods === undefined || categories === undefined) {
+  if (
+    isAccountsLoading ||
+    isPeriodsLoading ||
+    isCategoriesLoading ||
+    periods === undefined ||
+    categories === undefined
+  ) {
     return null;
   }
 
-  const TransactionFilterButton = ({ name, isActive, onClick }: TransactionFilterButtonProps): JSX.Element => (
+  const TransactionFilterButton = ({
+    name,
+    isActive,
+    onClick,
+  }: TransactionFilterButtonProps): JSX.Element => (
     <button
       className={`btn btn-default btn-xs ${isActive ? "active" : ""}`}
       onClick={() => onClick(name)}
@@ -68,21 +78,22 @@ function TransactionFilter(props: TransactionFilterProps): JSX.Element | null {
         >
           None
         </Button>
-        {categories && [...categories].map((category) => {
-          return (
-            <TransactionFilterButton
-              key={"cat-" + category.id}
-              name={category.name}
-              onClick={() => {
-                updateFilters({
-                  category: category.id,
-                  has_category: "True",
-                });
-              }}
-              isActive={filters.category == category.id}
-            />
-          );
-        })}
+        {categories &&
+          [...categories].map((category) => {
+            return (
+              <TransactionFilterButton
+                key={"cat-" + category.id}
+                name={category.name}
+                onClick={() => {
+                  updateFilters({
+                    category: category.id,
+                    has_category: "True",
+                  });
+                }}
+                isActive={filters.category == category.id}
+              />
+            );
+          })}
       </div>
       <h3>Account</h3>
       <div className="btn-group-vertical" role="group">
@@ -96,18 +107,19 @@ function TransactionFilter(props: TransactionFilterProps): JSX.Element | null {
         >
           All
         </Button>
-        {accounts && [...accounts.values()].map((account) => {
-          return (
-            <TransactionFilterButton
-              key={"acct-" + account.id}
-              name={account.name}
-              onClick={() => {
-                updateFilters({ account: account.id });
-              }}
-              isActive={filters.account == account.id}
-            />
-          );
-        })}
+        {accounts &&
+          [...accounts.values()].map((account) => {
+            return (
+              <TransactionFilterButton
+                key={"acct-" + account.id}
+                name={account.name}
+                onClick={() => {
+                  updateFilters({ account: account.id });
+                }}
+                isActive={filters.account == account.id}
+              />
+            );
+          })}
       </div>
     </div>
   );

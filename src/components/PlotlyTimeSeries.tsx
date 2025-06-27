@@ -17,7 +17,7 @@ interface PlotlyTimeSeriesProps {
 export function plotlyDataFromSeries(
   series: SeriesPoint[] | null,
   plot_invert: boolean = false,
-  plot_type: string = "bar"
+  plot_type: string = "bar",
 ): PlotlyData {
   let values: number[] = [];
   let labels: string[] = [];
@@ -61,7 +61,7 @@ function PlotlyTimeSeries(props: PlotlyTimeSeriesProps) {
   plotData.current[0] = plotlyDataFromSeries(
     props.series,
     props.plot_invert || false,
-    props.plot_type || "bar"
+    props.plot_type || "bar",
   );
   const plotLayout = {};
 
@@ -69,7 +69,7 @@ function PlotlyTimeSeries(props: PlotlyTimeSeriesProps) {
     if (plotContainer.current === null) {
       return;
     }
-    
+
     if (hasRendered) {
       Plotly.redraw(plotContainer.current);
     } else {

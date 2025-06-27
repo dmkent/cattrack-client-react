@@ -19,7 +19,7 @@ type TransactionFilters = {
   category?: string;
   has_category?: "True" | "False";
   account: string;
-}
+};
 
 /**
  * Converts an object to a URL encoded string of GET paramters.
@@ -29,7 +29,7 @@ type TransactionFilters = {
  * @param {Object} filters - The filters to be converted.
  * @returns {string} A string that can be appended to URL.
  */
-export function filters_to_params(filters : TransactionFilters) {
+export function filters_to_params(filters: TransactionFilters) {
   let query_params = Object.entries(filters)
     .map(([key, val]) => {
       if (val !== null) {

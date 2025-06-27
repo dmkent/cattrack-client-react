@@ -30,8 +30,9 @@ function Accounts(props: AccountsProps): JSX.Element | null {
   const [currentAccount, setCurrentAccount] = useState<Account | null>(null);
   const overlayRef = useRef<any>(null);
   const { isLoading, data: accounts } = useAccounts();
-  const { isLoading: isSeriesLoading, data: accountSeries } =
-    useAccountSeries(currentAccount?.id);
+  const { isLoading: isSeriesLoading, data: accountSeries } = useAccountSeries(
+    currentAccount?.id,
+  );
   const uploadInProgress = false,
     uploadProgress = 0,
     uploadResult = null;
@@ -99,15 +100,16 @@ function Accounts(props: AccountsProps): JSX.Element | null {
       </h3>
       <Table>
         <tbody>
-          {accounts && [...accounts.values()].map((account) => {
-            return (
-              <AccountRow
-                account={account}
-                onClick={setCurrentAccount}
-                key={account.id}
-              />
-            );
-          })}
+          {accounts &&
+            [...accounts.values()].map((account) => {
+              return (
+                <AccountRow
+                  account={account}
+                  onClick={setCurrentAccount}
+                  key={account.id}
+                />
+              );
+            })}
         </tbody>
       </Table>
       <div>
