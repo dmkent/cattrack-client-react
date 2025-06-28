@@ -34,7 +34,7 @@ function BudgetLine(props: BudgetLineProps): JSX.Element {
         <span className="text pull-right budget-label">{props.name}</span>
       </Col>
       <Col md={5}>
-        <ProgressBar bsStyle={style} now={value} label={marker} />
+        <ProgressBar variant={style} now={value} label={marker} />
       </Col>
       <Col md={3}>
         <span className={"text pull-left text-" + style}>

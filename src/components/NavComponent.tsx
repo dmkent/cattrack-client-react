@@ -1,5 +1,5 @@
 import React from "react";
-import { Nav, Navbar, NavItem } from "react-bootstrap";
+import { Nav, Navbar } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/AuthContext";
@@ -7,55 +7,44 @@ import { useAuth } from "../hooks/AuthContext";
 function NavComponent(): JSX.Element {
   const auth = useAuth();
 
-  let auth_link: JSX.Element | null = null;
-  if (auth.user?.is_logged_in) {
-    auth_link = (
-      <Nav pullRight>
-        <LinkContainer to="/logout">
-          <NavItem>Logout</NavItem>
-        </LinkContainer>
-      </Nav>
-    );
-  } else {
-    auth_link = (
-      <Nav pullRight>
-        <LinkContainer to="/login">
-          <NavItem>Login</NavItem>
-        </LinkContainer>
-      </Nav>
-    );
-  }
-
   return (
-    <Navbar inverse collapseOnSelect>
-      <Navbar.Header>
-        <Navbar.Brand>
-          <Link to="/">CatTrack</Link>
-        </Navbar.Brand>
-        <Navbar.Toggle />
-      </Navbar.Header>
-      <Navbar.Collapse>
-        <Nav>
-          <LinkContainer to="/">
-            <NavItem>Dashboard</NavItem>
-          </LinkContainer>
-          <LinkContainer to="/accounts">
-            <NavItem>Accounts</NavItem>
-          </LinkContainer>
-          <LinkContainer to="/tracking">
-            <NavItem>Tracking</NavItem>
-          </LinkContainer>
-          <LinkContainer to="/transactions">
-            <NavItem>Transactions</NavItem>
-          </LinkContainer>
-          <LinkContainer to="/bills">
-            <NavItem>Bills</NavItem>
-          </LinkContainer>
+    <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
+      <Navbar.Brand as={Link} to="/">
+        CatTrack
+      </Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="me-auto">
+          <Nav.Link as={Link} to="/">
+            Dashboard
+          </Nav.Link>
+          <Nav.Link as={Link} to="/accounts">
+            Accounts
+          </Nav.Link>
+          <Nav.Link as={Link} to="/tracking">
+            Tracking
+          </Nav.Link>
+          <Nav.Link as={Link} to="/transactions">
+            Transactions
+          </Nav.Link>
+          <Nav.Link as={Link} to="/bills">
+            Bills
+          </Nav.Link>
         </Nav>
-        {auth.user?.is_logged_in ? (
-          <Navbar.Text pullRight>{auth.user.username}</Navbar.Text>
-        ) : null}
-        {auth_link}
+        <Nav>
+          {auth.user?.is_logged_in && (
+            <Navbar.Text className="me-3">{auth.user.username}</Navbar.Text>
+          )}
+          {auth.user?.is_logged_in ? (
+            <Nav.Link as={Link} to="/logout">
+              Logout
+            </Nav.Link>
+          ) : (
+            <Nav.Link as={Link} to="/login">
+              Login
+            </Nav.Link>
+          )}
+        </Nav>
       </Navbar.Collapse>
     </Navbar>
   );

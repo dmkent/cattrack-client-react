@@ -63,7 +63,7 @@ function Transactions(props: TransactionsProps): JSX.Element | null {
       <h3>Transactions</h3>
       <div className="row">
         <div className="col-md-10">
-          <table className="table table-condensed">
+          <table className="table table-sm">
             <tbody>
               {[...transactions.values()].map((trans) => {
                 let description = trans.description;
@@ -97,13 +97,14 @@ function Transactions(props: TransactionsProps): JSX.Element | null {
                       </span>
                     </td>
                     <td>
-                      <span className="label label-default">
+                      <span className="badge text-bg-secondary">
                         {trans.category_name}
                       </span>
                     </td>
                     <td>
                       <Button
-                        bsSize="small"
+                        size="sm"
+                        variant="outline-secondary"
                         onClick={(e) => {
                           setSelectedTransaction(trans);
                           setModalShown(true);

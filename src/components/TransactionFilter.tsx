@@ -41,13 +41,15 @@ function TransactionFilter(props: TransactionFilterProps): JSX.Element | null {
     isActive,
     onClick,
   }: TransactionFilterButtonProps): JSX.Element => (
-    <button
-      className={`btn btn-default btn-xs ${isActive ? "active" : ""}`}
+    <Button
+      variant="outline-secondary"
+      size="sm"
+      active={isActive}
       onClick={() => onClick(name)}
       key={name}
     >
       {name}
-    </button>
+    </Button>
   );
 
   return (
@@ -58,9 +60,9 @@ function TransactionFilter(props: TransactionFilterProps): JSX.Element | null {
         periods={periods}
       />
       <h3>Category</h3>
-      <div className="btn-group-vertical" role="group">
+      <div className="btn-group-vertical btn-group-sm" role="group">
         <Button
-          className="btn btn-default btn-xs"
+          variant="outline-secondary"
           onClick={() => {
             updateFilters({ category: null, has_category: null });
           }}
@@ -70,7 +72,7 @@ function TransactionFilter(props: TransactionFilterProps): JSX.Element | null {
           All
         </Button>
         <Button
-          className="btn btn-default btn-xs"
+          variant="outline-secondary"
           onClick={() => {
             updateFilters({ has_category: "False", category: null });
           }}
@@ -98,7 +100,7 @@ function TransactionFilter(props: TransactionFilterProps): JSX.Element | null {
       <h3>Account</h3>
       <div className="btn-group-vertical" role="group">
         <Button
-          className="btn btn-default btn-xs"
+          variant="outline-secondary"
           onClick={() => {
             updateFilters({ account: null });
           }}

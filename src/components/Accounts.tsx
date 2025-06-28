@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { FormattedNumber } from "react-intl";
 import {
   Button,
-  ControlLabel,
+  FormLabel,
   FormGroup,
   FormControl,
   Table,
@@ -28,7 +28,7 @@ function Accounts(props: AccountsProps): JSX.Element | null {
   const { uploadFileToAccount, createAccount } = useUpdateAccounts();
   const [newName, setNewName] = useState<string>("");
   const [currentAccount, setCurrentAccount] = useState<Account | null>(null);
-  const overlayRef = useRef<any>(null);
+  const [showCreatePopover, setShowCreatePopover] = useState<boolean>(false);
   const { isLoading, data: accounts } = useAccounts();
   const { isLoading: isSeriesLoading, data: accountSeries } = useAccountSeries(
     currentAccount?.id,
@@ -40,9 +40,7 @@ function Accounts(props: AccountsProps): JSX.Element | null {
   const handleCreateAccount = (): void => {
     createAccount(newName);
     setNewName("");
-    if (overlayRef.current !== null) {
-      overlayRef.current.hide();
-    }
+    setShowCreatePopover(false);
   };
 
   const handleUploadToAccount = (account: Account, file: File): void => {
@@ -56,7 +54,7 @@ function Accounts(props: AccountsProps): JSX.Element | null {
   const popoverCreate = (
     <Popover id="popover-create" title="Add account">
       <FormGroup controlId="name">
-        <ControlLabel>Name: </ControlLabel>
+        <FormLabel>Name: </FormLabel>
         <FormControl
           type="text"
           onChange={(event: any) => {
@@ -65,7 +63,13 @@ function Accounts(props: AccountsProps): JSX.Element | null {
           value={newName}
         />
       </FormGroup>
-      <Button onClick={handleCreateAccount}>Add</Button>
+      <Button
+        variant="outline-secondary"
+        size="sm"
+        onClick={handleCreateAccount}
+      >
+        Add
+      </Button>
     </Popover>
   );
 
@@ -91,9 +95,10 @@ function Accounts(props: AccountsProps): JSX.Element | null {
           rootClose
           placement="right"
           overlay={popoverCreate}
-          ref={overlayRef}
+          show={showCreatePopover}
+          onToggle={setShowCreatePopover}
         >
-          <Button bsSize="small">
+          <Button variant="outline-secondary" size="sm">
             <FontAwesomeIcon icon={faPlus} />
           </Button>
         </OverlayTrigger>

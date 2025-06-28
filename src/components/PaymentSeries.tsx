@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Grid, Col, Row } from "react-bootstrap";
+import { Container, Col, Row } from "react-bootstrap";
 import PaymentSeriesDetail from "./PaymentSeriesDetail";
 import usePaymentSeries from "../hooks/usePaymentSeries";
 import { useUpdatePaymentSeries } from "../hooks/useUpdatePaymentSeries";
@@ -19,7 +19,7 @@ function PaymentSeries(props: PaymentSeriesProps): JSX.Element | null {
   }
 
   return (
-    <Grid>
+    <Container>
       <Row>
         <Col md={2}>
           <ul>
@@ -41,7 +41,7 @@ function PaymentSeries(props: PaymentSeriesProps): JSX.Element | null {
           />
         </Col>
       </Row>
-    </Grid>
+    </Container>
   );
 }
 
