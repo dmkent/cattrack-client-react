@@ -34,9 +34,10 @@ function TransactionFilterPeriods(props: TransactionFilterPeriodsProps) {
         onChange={(e) => updateFilters({ to_date: e.target.value })}
       />
       <p>-- OR --</p>
-      <div className="btn-group-vertical" role="group">
+      <div className="btn-group-vertical btn-group-sm" role="group">
         <Button
-          className="btn btn-default btn-xs"
+          variant="outline-secondary"
+          size="sm"
           onClick={() => {
             updateFilters({ from_date: null, to_date: null });
           }}
@@ -50,7 +51,8 @@ function TransactionFilterPeriods(props: TransactionFilterPeriodsProps) {
             period.to_date == filters.to_date;
           return (
             <Button
-              className="btn btn-default btn-xs"
+              variant="outline-secondary"
+              size="sm"
               key={"period-" + period.id + "-" + period.offset}
               onClick={() => {
                 updateFilters({

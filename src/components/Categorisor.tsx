@@ -68,7 +68,11 @@ function Categorisor(props: CategorisorProps): JSX.Element | null {
           <h4>{transaction.description}</h4>
           <dl className="dl-horizontal">
             <dt>Date</dt>
-            <dd>{transaction.when}</dd>
+            <dd>
+              {transaction.when instanceof Date
+                ? transaction.when.toLocaleDateString()
+                : transaction.when}
+            </dd>
             <dt>Account</dt>
             <dd>{transaction.account}</dd>
             <dt>Current category:</dt>
@@ -111,18 +115,31 @@ function Categorisor(props: CategorisorProps): JSX.Element | null {
                   );
                 })}
 
-              <Button onClick={() => pushSplit("")}>Add split</Button>
+              <Button
+                onClick={() => pushSplit("")}
+                variant="outline-secondary"
+                size="sm"
+              >
+                Add split
+              </Button>
               {splits && splits.is_valid && splits.is_valid.message ? (
-                <Alert bsStyle="danger">{splits.is_valid.message}</Alert>
+                <Alert variant="danger">{splits.is_valid.message}</Alert>
               ) : null}
             </div>
           </Form>
         </Modal.Body>
 
         <Modal.Footer>
-          <Button onClick={() => setModalShown(false)}>Close</Button>
           <Button
-            bsStyle="primary"
+            variant="outline-secondary"
+            size="sm"
+            onClick={() => setModalShown(false)}
+          >
+            Close
+          </Button>
+          <Button
+            variant="dark"
+            size="sm"
             onClick={() => {
               save(transaction, splits.splits).then(() => setModalShown(false));
             }}

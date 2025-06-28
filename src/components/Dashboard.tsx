@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PlotlyPie from "./PlotlyPie";
-import { Grid, Col, Row } from "react-bootstrap";
+import { Container, Col, Row } from "react-bootstrap";
 
 import TransactionFilterPeriods from "./TransactionFilterPeriods";
 import usePeriods from "../hooks/usePeriods";
@@ -28,7 +28,7 @@ function Dashboard(props: DashboardProps): JSX.Element | null {
 
   return (
     <div>
-      <Grid>
+      <Container>
         <Row>
           {/*
           <Col md={6}>
@@ -53,7 +53,7 @@ function Dashboard(props: DashboardProps): JSX.Element | null {
             </div>
           </Col>
         </Row>
-      </Grid>
+      </Container>
     </div>
   );
 }

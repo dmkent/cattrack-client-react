@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {
   Form,
   FormGroup,
-  ControlLabel,
+  FormLabel,
   FormControl,
   ProgressBar,
   Button,
@@ -54,7 +54,7 @@ function AccountDetail(props: AccountDetailProps): JSX.Element | null {
       <h2>{account.name}</h2>
       <Form onSubmit={handleSubmit}>
         <FormGroup controlId="form-upload">
-          <ControlLabel>Load data: </ControlLabel>
+          <FormLabel>Load data: </FormLabel>
           <FormControl type="file" name="upload_file" onChange={handleChange} />
           {uploadInProgress ? (
             <div>
@@ -66,7 +66,7 @@ function AccountDetail(props: AccountDetailProps): JSX.Element | null {
             </div>
           ) : null}
         </FormGroup>
-        <Button type="submit" active={!!uploadFile}>
+        <Button variant="dark" active={!!uploadFile}>
           Submit
         </Button>
       </Form>

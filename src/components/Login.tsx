@@ -25,7 +25,7 @@ const Login: React.FC<LoginProps> = (props) => {
   };
 
   return (
-    <div className="col-md-12">
+    <div className="col-12">
       <div className="card card-container">
         <img
           src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
@@ -44,7 +44,7 @@ const Login: React.FC<LoginProps> = (props) => {
           {errors.username && (
             <div className="form-group">
               <div className="alert alert-danger" role="alert">
-                {errors.username}
+                {errors.username.message}
               </div>
             </div>
           )}
@@ -58,7 +58,7 @@ const Login: React.FC<LoginProps> = (props) => {
             {errors.password && (
               <div className="form-group">
                 <div className="alert alert-danger" role="alert">
-                  {errors.password}
+                  {errors.password.message}
                 </div>
               </div>
             )}

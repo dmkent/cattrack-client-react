@@ -4,7 +4,7 @@ import {
   Form,
   FormControl,
   FormGroup,
-  ControlLabel,
+  FormLabel,
   Button,
   Col,
   Row,
@@ -85,10 +85,12 @@ function UploadForm(props: UploadFormProps): JSX.Element {
   return (
     <Form onSubmit={handleSubmit}>
       <FormGroup controlId="form-upload">
-        {props.label && <ControlLabel>{props.label}: </ControlLabel>}
+        {props.label && <FormLabel>{props.label}: </FormLabel>}
         <FormControl type="file" name="upload_file" onChange={handleChange} />
       </FormGroup>
-      <Button type="submit">{props.submit_label || "Submit"}</Button>
+      <Button variant="outline-secondary" size="sm" type="submit">
+        {props.submit_label || "Submit"}
+      </Button>
     </Form>
   );
 }
