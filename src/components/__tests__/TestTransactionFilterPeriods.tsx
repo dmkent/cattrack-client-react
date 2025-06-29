@@ -1,5 +1,6 @@
 import React from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { expect, test, vi } from "vitest";
 import { format, sub } from "date-fns";
 import TransactionFilterPeriods from "../TransactionFilterPeriods";
 import { Period } from "src/data/Period";
@@ -7,7 +8,7 @@ import { TransactionFilters } from "../TransactionFilters";
 
 function setup(periods: Period[], filters?: TransactionFilters) {
   const props = {
-    updateFilters: jest.fn(),
+    updateFilters: vi.fn(),
     filters: filters ?? { from_date: null, to_date: null },
     periods: periods,
   };

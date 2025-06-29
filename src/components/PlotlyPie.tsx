@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import Plotly from "../client/PlotlyWrapper";
+import Plotly from "plotly.js-basic-dist";
 import { CategorySummary } from "src/data/Transaction";
 
 interface PlotlyData {

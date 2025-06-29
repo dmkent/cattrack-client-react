@@ -1,5 +1,6 @@
 import React from "react";
 import { screen, waitFor } from "@testing-library/react";
+import { expect, test } from "vitest";
 
 import { renderWithProviders } from "../../RenderWithProviders";
 import Dashboard from "../Dashboard";

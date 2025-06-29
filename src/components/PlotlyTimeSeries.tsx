@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import Plotly from "../client/PlotlyWrapper";
+import Plotly from "plotly.js-basic-dist";
 import { SeriesPoint } from "src/data/Account";
 
 interface PlotlyData {
