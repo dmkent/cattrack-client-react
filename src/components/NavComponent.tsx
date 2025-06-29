@@ -31,10 +31,10 @@ function NavComponent(): JSX.Element {
           </Nav.Link>
         </Nav>
         <Nav>
-          {auth.user?.is_logged_in && (
-            <Navbar.Text className="me-3">{auth.user.username}</Navbar.Text>
+          {auth.authData?.is_logged_in && (
+            <Navbar.Text className="me-3">{auth.authData.username}</Navbar.Text>
           )}
-          {auth.user?.is_logged_in ? (
+          {auth.authData?.is_logged_in ? (
             <Nav.Link as={Link} to="/logout">
               Logout
             </Nav.Link>

@@ -7,9 +7,19 @@ import { AuthContext } from "../../hooks/AuthContext";
 
 function setup(logged_in: boolean) {
   const mockAuth = {
-    user: logged_in ? { is_logged_in: true } : null,
+    authData: logged_in
+      ? {
+          is_logged_in: true,
+          username: "testuser",
+          user_id: 1,
+          email: "testuser@example.com",
+          expires: new Date(Date.now() + 3600 * 1000),
+          token: "testtoken",
+        }
+      : null,
     signin: vi.fn(),
     signout: vi.fn(),
+    refresh: vi.fn(),
     loading: false,
   };
 
