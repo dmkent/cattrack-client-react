@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { checkStatusAxios } from "../client/CatTrackAPI";
 import { series_from_json, PaymentSeriesItem } from "../data/PaymentSeries";
 import { useAxios } from "./AxiosContext";
@@ -13,5 +13,8 @@ export default function usePaymentSeries() {
         return series.map((seriesData) => series_from_json(seriesData));
       });
 
-  return useQuery("payments", fetchPayments);
+  return useQuery({
+    queryKey: ["payments"],
+    queryFn: fetchPayments,
+  });
 }

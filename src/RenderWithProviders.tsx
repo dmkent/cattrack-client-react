@@ -1,5 +1,5 @@
 import React from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { IntlProvider } from "react-intl";
 import { render, RenderResult } from "@testing-library/react";
 import { AxiosContext } from "./hooks/AxiosContext";
@@ -13,7 +13,14 @@ export function renderWithProviders(
   configureMocks?: (mockAdapter: AxiosMockAdapter) => void,
   axiosInstance: AxiosInstance | null = null,
 ): RenderResult {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+        staleTime: Infinity,
+      },
+    },
+  });
 
   if (!axiosInstance) {
     axiosInstance = axios.create({

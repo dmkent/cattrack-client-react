@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { checkStatusAxios } from "../client/CatTrackAPI";
 import { useAxios } from "./AxiosContext";
 
@@ -20,5 +20,8 @@ export default function useAccounts() {
         });
       });
 
-  return useQuery("accounts", fetchAccounts);
+  return useQuery({
+    queryKey: ["accounts"],
+    queryFn: fetchAccounts,
+  });
 }

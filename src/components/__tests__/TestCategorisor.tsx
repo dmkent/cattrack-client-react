@@ -45,7 +45,7 @@ test("Categorisor: should render if transaction is defined", async () => {
     {
       id: "1",
       description: "test",
-      when: "2012-01-01",
+      when: new Date("2012-01-01"),
       amount: -34.4,
       category: "0",
       category_name: "Test Category",
@@ -69,7 +69,7 @@ test("Categorisor: should render suggestions if defined", async () => {
     {
       id: "1",
       description: "test",
-      when: "2012-01-01",
+      when: new Date("2012-01-01"),
       amount: -34.4,
       category: "0",
       category_name: "Test Category",
@@ -98,7 +98,7 @@ test("Categorisor: should call save on button click", async () => {
     {
       id: "1",
       description: "test",
-      when: "2012-01-01",
+      when: new Date("2012-01-01"),
       amount: -34.4,
       category: "0",
       category_name: "Test Category",
@@ -125,7 +125,7 @@ test("Categorisor: should show alert if not valid", async () => {
     {
       id: "1",
       description: "test",
-      when: "2012-01-01",
+      when: new Date("2012-01-01"),
       amount: -34.4,
       category: "0",
       category_name: "Test Category",

@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 import { checkStatusAxios } from "../client/CatTrackAPI";
 import { useAxios } from "./AxiosContext";
@@ -21,8 +21,8 @@ export default function useTransactionSuggestions(transaction: Transaction) {
         });
       });
 
-  return useQuery<Category[]>(
-    ["suggestions", transaction.id],
-    fetchSuggestions,
-  );
+  return useQuery<Category[]>({
+    queryKey: ["suggestions", transaction.id],
+    queryFn: fetchSuggestions,
+  });
 }

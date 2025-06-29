@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useAxios } from "./AxiosContext";
 import { checkStatusAxios } from "../client/CatTrackAPI";
 import { Account, SeriesPoint } from "../data/Account";
@@ -11,9 +11,9 @@ interface AccountSeriesResponse {
 export default function useAccountSeries(accountId: string | undefined) {
   const axios = useAxios();
 
-  return useQuery<SeriesPoint[]>(
-    ["account_series", accountId],
-    () =>
+  return useQuery<SeriesPoint[]>({
+    queryKey: ["account_series", accountId],
+    queryFn: () =>
       axios
         .get(`/api/accounts/${accountId}/series/`)
         .then(checkStatusAxios)
@@ -25,6 +25,6 @@ export default function useAccountSeries(accountId: string | undefined) {
             };
           }),
         ),
-    { enabled: !!accountId },
-  );
+    enabled: !!accountId,
+  });
 }

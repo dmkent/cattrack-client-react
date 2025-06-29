@@ -15,7 +15,7 @@ interface SplitsState {
 }
 
 interface Suggestion {
-  id: string | number;
+  id: string;
   name?: string;
 }
 

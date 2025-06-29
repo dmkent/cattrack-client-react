@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useAxios } from "./AxiosContext";
 
 import { filters_to_params, checkStatusAxios } from "../client/CatTrackAPI";
@@ -27,5 +27,8 @@ export default function useTransactionSummaries(filters: any) {
         }),
       );
 
-  return useQuery(["summary", filters], fetchSummary);
+  return useQuery({
+    queryKey: ["summary", filters],
+    queryFn: fetchSummary,
+  });
 }

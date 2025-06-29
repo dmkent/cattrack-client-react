@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { FormattedDate, FormattedNumber } from "react-intl";
 import { Button, Tooltip, OverlayTrigger, Pagination } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -43,7 +43,7 @@ function Transactions(props: TransactionsProps): JSX.Element | null {
   }
 
   function reloadPage(): void {
-    queryClient.invalidateQueries("transactions");
+    queryClient.invalidateQueries({ queryKey: ["transactions"] });
   }
 
   const { num_records, transactions } = data;
