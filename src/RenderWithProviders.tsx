@@ -2,10 +2,12 @@ import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { IntlProvider } from "react-intl";
 import { render, RenderResult } from "@testing-library/react";
-import { AxiosContext } from "./hooks/AxiosContext";
-import { AuthContext, AuthContextType } from "./hooks/AuthContext";
 import axios, { AxiosInstance } from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
+import { vi } from "vitest";
+
+import { AxiosContext } from "./hooks/AxiosContext";
+import { AuthContext, AuthContextType } from "./hooks/AuthContext";
 
 export function renderWithProviders(
   children: React.ReactElement,
@@ -40,8 +42,8 @@ export function renderWithProviders(
             authState ?? {
               user: null,
               loading: false,
-              signin: jest.fn(),
-              signout: jest.fn(),
+              signin: vi.fn(),
+              signout: vi.fn(),
             }
           }
         >

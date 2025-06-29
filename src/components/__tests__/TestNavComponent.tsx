@@ -1,5 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 import { BrowserRouter as Router } from "react-router-dom";
 import NavComponent from "../NavComponent";
 import { AuthContext } from "../../hooks/AuthContext";
@@ -7,8 +8,8 @@ import { AuthContext } from "../../hooks/AuthContext";
 function setup(logged_in: boolean) {
   const mockAuth = {
     user: logged_in ? { is_logged_in: true } : null,
-    signin: jest.fn(),
-    signout: jest.fn(),
+    signin: vi.fn(),
+    signout: vi.fn(),
     loading: false,
   };
 

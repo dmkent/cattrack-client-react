@@ -2,6 +2,7 @@ import React from "react";
 import { screen, waitFor, fireEvent } from "@testing-library/react";
 import axios, { AxiosInstance } from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
+import { vi, MockedFunction, test, expect } from "vitest";
 import Categorisor, { CategorisorProps } from "../Categorisor";
 import { renderWithProviders } from "../../RenderWithProviders";
 import { Transaction } from "../../data/Transaction";
@@ -18,13 +19,13 @@ function setup(
 ): {
   axiosInstance: AxiosInstance;
   props: CategorisorProps;
-  saveMock: jest.Mock;
+  saveMock: MockedFunction<() => Promise<void>>;
 } {
-  const saveMock = jest.fn(() => Promise.resolve());
+  const saveMock = vi.fn(() => Promise.resolve());
   const props: CategorisorProps = {
     transaction,
     showModal: true,
-    setModalShown: jest.fn(),
+    setModalShown: vi.fn(),
     save: saveMock,
   };
   const axiosInstance = axios.create({

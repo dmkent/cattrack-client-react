@@ -1,5 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
+import { expect, test, vi } from "vitest";
 import SplitFieldset, { SplitFieldsetProps } from "../SplitFieldset";
 
 function setup(valid: boolean | null, message: string) {
@@ -10,9 +11,9 @@ function setup(valid: boolean | null, message: string) {
     },
     index: 1,
     multiple_splits_exist: true,
-    removeSplitCat: jest.fn(),
-    setSplitCategory: jest.fn(),
-    setSplitAmount: jest.fn(),
+    removeSplitCat: vi.fn(),
+    setSplitCategory: vi.fn(),
+    setSplitAmount: vi.fn(),
     splitIdx: 0,
     split: {
       category: "1",

@@ -1,4 +1,5 @@
 import React from "react";
+import { expect, test, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import AccountDetail, { AccountDetailProps } from "../AccountDetail";
 
@@ -13,7 +14,7 @@ function setup(account_id: string, uploading: boolean): AccountDetailProps {
     uploadInProgress: uploading,
     uploadProgress: 50,
     uploadResult: "",
-    uploadToAccount: jest.fn(),
+    uploadToAccount: vi.fn(),
   };
 
   render(<AccountDetail {...props} />);

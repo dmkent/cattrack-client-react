@@ -1,5 +1,6 @@
 import React from "react";
 import { screen, waitFor, fireEvent } from "@testing-library/react";
+import { expect, test, vi } from "vitest";
 
 import { renderWithProviders } from "../../RenderWithProviders";
 import TransactionFilter, {
@@ -48,7 +49,7 @@ function setup(mockAdapter: AxiosMockAdapter) {
 
 test("TestTransactionFilter should render self and subcomponents", async () => {
   const props: TransactionFilterProps = {
-    setFilters: jest.fn(),
+    setFilters: vi.fn(),
     filters: filters,
   };
 
@@ -61,7 +62,7 @@ test("TestTransactionFilter should render self and subcomponents", async () => {
 
 test("should display some categories and accounts", async () => {
   const props = {
-    setFilters: jest.fn(),
+    setFilters: vi.fn(),
     filters: filters,
   };
 
@@ -84,7 +85,7 @@ test("should display some categories and accounts", async () => {
 
 test("should display some periods and set active", async () => {
   const props = {
-    setFilters: jest.fn(),
+    setFilters: vi.fn(),
     filters: filters,
   };
 

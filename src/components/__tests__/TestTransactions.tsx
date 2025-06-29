@@ -1,5 +1,6 @@
 import React from "react";
 import { screen, waitFor } from "@testing-library/react";
+import { expect, test } from "vitest";
 import AxiosMockAdapter from "axios-mock-adapter";
 
 import { renderWithProviders } from "../../RenderWithProviders";
