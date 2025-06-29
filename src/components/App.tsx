@@ -103,8 +103,8 @@ export function RequireAuth({
   children,
   redirectTo,
 }: RequireAuthProps): JSX.Element | null {
-  let { user, loading } = useAuth();
-  let isAuthenticated = user?.is_logged_in;
+  let { authData, loading } = useAuth();
+  let isAuthenticated = authData?.is_logged_in;
   if (loading) {
     return <div>Loading...</div>;
   }

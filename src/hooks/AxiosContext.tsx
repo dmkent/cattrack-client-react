@@ -8,7 +8,7 @@ import CONFIG from "ctrack_config";
 export const AxiosContext = createContext<AxiosInstance>(null!);
 
 export const AxiosProvider = ({ children }: { children: React.ReactNode }) => {
-  const { user, refresh } = useAuth();
+  const { authData: user, refresh } = useAuth();
 
   const axiosInstance = useMemo(() => {
     const instance = axios.create({
