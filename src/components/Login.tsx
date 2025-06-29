@@ -31,6 +31,7 @@ const Login: React.FC<LoginProps> = (props) => {
           src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
           alt="profile-img"
           className="profile-img-card"
+          style={{ width: "100px", height: "100px", margin: "auto" }}
         />
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-group">

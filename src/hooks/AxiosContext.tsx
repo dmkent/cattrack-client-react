@@ -8,7 +8,7 @@ import CONFIG from "ctrack_config";
 export const AxiosContext = createContext<AxiosInstance>(null!);
 
 export const AxiosProvider = ({ children }: { children: React.ReactNode }) => {
-  const { user } = useAuth();
+  const { user, refresh } = useAuth();
 
   const axiosInstance = useMemo(() => {
     const instance = axios.create({
@@ -34,6 +34,35 @@ export const AxiosProvider = ({ children }: { children: React.ReactNode }) => {
 
       return config;
     });
+
+    instance.interceptors.response.use(
+      (response) => response, // Directly return successful responses.
+      async (error) => {
+        const originalRequest = error.config;
+        if (
+          (error.response.status === 401 || error.response.status == 403) &&
+          !originalRequest._retry
+        ) {
+          originalRequest._retry = true; // Mark the request as retried to avoid infinite loops.
+          try {
+            const data = await refresh();
+
+            if (data?.token) {
+              // Update the authorization header with the new access token.
+              instance.defaults.headers.common["Authorization"] =
+                `Bearer ${data.token}`;
+
+              return instance(originalRequest); // Retry the original request with the new access token.
+            }
+          } catch (refreshError) {
+            // Handle refresh token errors by clearing stored tokens and redirecting to the login page.
+            console.error("Token refresh failed:", refreshError);
+            return Promise.reject(refreshError);
+          }
+        }
+        return Promise.reject(error); // For all other errors, return the error as is.
+      },
+    );
 
     return instance;
   }, [user]);

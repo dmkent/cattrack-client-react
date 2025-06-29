@@ -1,10 +1,20 @@
 import React, { useEffect } from "react";
 import AuthService from "../services/auth.service";
 
+export interface AuthData {
+  is_logged_in: boolean;
+  username: string;
+  user_id: number;
+  email: string;
+  expires: Date;
+  token: string;
+}
+
 export interface AuthContextType {
-  user: any;
+  user: AuthData | null;
   signin: (username: string, password: string, callback: VoidFunction) => void;
   signout: (callback: VoidFunction) => void;
+  refresh: () => Promise<AuthData | null>;
   loading: boolean;
 }
 
@@ -14,20 +24,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   let [user, setUser] = React.useState<any>(null);
   let [loading, setLoading] = React.useState<boolean>(true);
 
-  useEffect(() => {
-    // Restore login state from local storage on mount.
-    const fetchAuth = async () => {
-      try {
-        const restoredUser = await AuthService.refreshToken();
-        setUser(restoredUser);
-      } catch {
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchAuth();
-  }, []);
+  let refresh = async () => {
+    let restoredUser = user;
+    try {
+      restoredUser = await AuthService.refreshToken();
+      setUser(restoredUser);
+    } catch {
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+    return restoredUser;
+  };
 
   let signin = (username: string, password: string, callback: VoidFunction) => {
     return AuthService.login(username, password).then((data) => {
@@ -42,7 +50,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     callback();
   };
 
-  let value = { user, signin, signout, loading };
+  useEffect(() => {
+    // Restore login state from local storage on mount.
+    refresh();
+  }, []);
+
+  let value = { user, signin, signout, refresh, loading };
+  console.log("Expires:", user.expires);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
