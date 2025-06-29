@@ -1,5 +1,5 @@
 import moment from "moment";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 import { checkStatusAxios } from "../client/CatTrackAPI";
 import { useAxios } from "./AxiosContext";
@@ -27,5 +27,8 @@ export default function useBudgetSummaries(
         return raw;
       });
 
-  return useQuery(["budget_summaries", from_date, to_date], fetchSummaries);
+  return useQuery({
+    queryKey: ["budget_summaries", from_date, to_date],
+    queryFn: fetchSummaries,
+  });
 }

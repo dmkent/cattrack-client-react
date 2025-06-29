@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useAxios } from "./AxiosContext";
 import { checkStatusAxios } from "../client/CatTrackAPI";
 import { SeriesPoint } from "src/data/Account";
@@ -21,7 +21,9 @@ export default function useCategorySeries(category_id: string) {
         }),
       );
 
-  return useQuery(["categorySeries", category_id], fetchCategories, {
+  return useQuery({
+    queryKey: ["categorySeries", category_id],
+    queryFn: fetchCategories,
     enabled: !!category_id,
   });
 }

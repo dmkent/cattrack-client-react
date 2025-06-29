@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 import { checkStatusAxios, filters_to_params } from "../client/CatTrackAPI";
 import { Transaction } from "../data/Transaction";
@@ -42,9 +42,9 @@ export default function useTransactions(
         };
       });
 
-  return useQuery(
-    ["transactions", page, pageSize, filters],
-    fetchTransactions,
-    { keepPreviousData: true },
-  );
+  return useQuery({
+    queryKey: ["transactions", page, pageSize, filters],
+    queryFn: fetchTransactions,
+    placeholderData: (previousData) => previousData,
+  });
 }

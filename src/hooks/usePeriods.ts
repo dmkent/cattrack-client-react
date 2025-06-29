@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { checkStatusAxios } from "../client/CatTrackAPI";
 import { Period } from "../data/Period";
 import { useAxios } from "./AxiosContext";
@@ -21,5 +21,8 @@ export default function usePeriods() {
         );
       });
 
-  return useQuery("periods", fetchPeriods);
+  return useQuery({
+    queryKey: ["periods"],
+    queryFn: fetchPeriods,
+  });
 }

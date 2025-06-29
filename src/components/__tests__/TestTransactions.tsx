@@ -64,7 +64,7 @@ test("should display some transactions", async () => {
   };
   const transactions: Transaction[] = [
     {
-      id: 0,
+      id: "0",
       when: new Date("2017-01-01"),
       description: "Test this",
       amount: -90.9,
@@ -73,7 +73,7 @@ test("should display some transactions", async () => {
       category_name: "Cat1",
     },
     {
-      id: 1,
+      id: "1",
       when: new Date("2017-01-02"),
       description:
         "Test this really,  really,  really,  really,  really,  really long description",

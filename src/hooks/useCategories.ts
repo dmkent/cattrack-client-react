@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useAxios } from "./AxiosContext";
 import { checkStatusAxios } from "../client/CatTrackAPI";
 import { Category } from "../data/Category";
@@ -20,5 +20,8 @@ export default function useCategories() {
         });
       });
 
-  return useQuery("categories", fetchCategories);
+  return useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
+  });
 }
