@@ -138,7 +138,8 @@ function Transactions(props: TransactionsProps): JSX.Element | null {
           onClick={() => setPage(Math.max(1, active_page - 1))}
         />
         {Array.from({ length: Math.min(5, num_pages) }, (_, i) => {
-          const page = i + 1;
+          const first_page = Math.max(0, active_page - 2);
+          const page = first_page + i + 1;
           return (
             <Pagination.Item
               key={page}
