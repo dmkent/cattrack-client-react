@@ -1,11 +1,11 @@
 export interface Transaction {
-  id: string | number;
-  when: string | Date;
+  id: string;
+  when: Date;
   description: string;
-  amount: string | number;
-  category: string | number;
+  amount: number;
+  category: string;
   category_name: string;
-  account: string | number;
+  account: string;
 }
 
 export interface CategorySummary {

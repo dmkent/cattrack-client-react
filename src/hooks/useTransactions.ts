@@ -16,7 +16,10 @@ export default function useTransactions(
     ...filters,
   });
 
-  const fetchTransactions = () =>
+  const fetchTransactions: () => Promise<{
+    num_records: number;
+    transactions: Transaction[];
+  }> = () =>
     axios
       .get("/api/transactions/" + params)
       .then(checkStatusAxios)

@@ -42,7 +42,6 @@ module.exports = {
       "react",
       "react-dom",
       "react-bootstrap",
-      "react-router-bootstrap",
       "react-router-dom",
       "react-router",
       "react-intl",
