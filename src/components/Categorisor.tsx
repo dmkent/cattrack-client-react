@@ -1,4 +1,3 @@
-import React from "react";
 import { Alert, Modal, Form, Button } from "react-bootstrap";
 
 import { Category } from "../data/Category";

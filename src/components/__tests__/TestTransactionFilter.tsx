@@ -1,6 +1,5 @@
 import { screen, waitFor, fireEvent } from "@testing-library/react";
 import AxiosMockAdapter from "axios-mock-adapter";
-import React from "react";
 import { expect, test, vi } from "vitest";
 
 import { renderWithProviders } from "../../RenderWithProviders";

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Container, Col, Row } from "react-bootstrap";
 
 import { PaymentSeriesItem } from "../data/PaymentSeries";

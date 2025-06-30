@@ -1,7 +1,7 @@
 import { faTags } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQueryClient } from "@tanstack/react-query";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button, Tooltip, OverlayTrigger, Pagination } from "react-bootstrap";
 import { FormattedDate, FormattedNumber } from "react-intl";
 

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import React from "react";
+import { PlotData } from "plotly.js-basic-dist";
 import { expect, test } from "vitest";
 
 import { SeriesPoint } from "../../data/Account";
@@ -11,13 +11,13 @@ test("PlotlyTimeSeries should reshape series", () => {
     { label: "2013-03-01", value: -3 },
     { label: "2013-04-01", value: -4 },
   ];
-  const res = plotlyDataFromSeries(raw, true);
+  const res = plotlyDataFromSeries(raw, true) as PlotData;
   expect(res.y).toEqual([54, 3, 4]);
   expect(res.x).toEqual(["2013-02-01", "2013-03-01", "2013-04-01"]);
 });
 
 test("should handle null series", () => {
-  const res = plotlyDataFromSeries(null);
+  const res = plotlyDataFromSeries(null) as PlotData;
   expect(res.y).toEqual([]);
   expect(res.x).toEqual([]);
 });

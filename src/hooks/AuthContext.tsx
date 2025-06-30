@@ -1,4 +1,10 @@
-import React, { useEffect } from "react";
+import {
+  useEffect,
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+} from "react";
 
 import AuthService from "../services/auth.service";
 
@@ -19,11 +25,11 @@ export interface AuthContextType {
   loading: boolean;
 }
 
-export const AuthContext = React.createContext<AuthContextType>(null!);
+export const AuthContext = createContext<AuthContextType>(null!);
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [authData, setAuthData] = React.useState<AuthData>();
-  const [loading, setLoading] = React.useState<boolean>(true);
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [authData, setAuthData] = useState<AuthData>();
+  const [loading, setLoading] = useState<boolean>(true);
 
   const refresh = async () => {
     let restoredData = authData;
@@ -66,5 +72,5 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useAuth() {
-  return React.useContext(AuthContext);
+  return useContext(AuthContext);
 }
