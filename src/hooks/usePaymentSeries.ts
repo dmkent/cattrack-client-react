@@ -4,7 +4,7 @@ import { checkStatusAxios } from "../client/CatTrackAPI";
 import { series_from_json, PaymentSeriesItem } from "../data/PaymentSeries";
 import { useAxios } from "./AxiosContext";
 
-export default function usePaymentSeries() {
+export function usePaymentSeries() {
   const axios = useAxios();
   const fetchPayments = (): Promise<PaymentSeriesItem[]> =>
     axios

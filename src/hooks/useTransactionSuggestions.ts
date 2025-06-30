@@ -5,7 +5,7 @@ import { Category } from "../data/Category";
 import { Transaction } from "../data/Transaction";
 import { useAxios } from "./AxiosContext";
 
-export default function useTransactionSuggestions(transaction: Transaction) {
+export function useTransactionSuggestions(transaction: Transaction) {
   const axios = useAxios();
   const fetchSuggestions = () =>
     axios

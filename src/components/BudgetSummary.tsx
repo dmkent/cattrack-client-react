@@ -1,7 +1,7 @@
 import { Row, Col, ProgressBar } from "react-bootstrap";
 import { FormattedNumber } from "react-intl";
 
-import useBudgetSummaries from "../hooks/useBudgetSummaries";
+import { useBudgetSummaries } from "../hooks/useBudgetSummaries";
 
 interface BudgetLineProps {
   name: string;
@@ -65,7 +65,7 @@ interface Summary {
   value: number;
 }
 
-function BudgetSummary(props: BudgetSummaryProps): JSX.Element | null {
+export function BudgetSummary(props: BudgetSummaryProps): JSX.Element | null {
   const { isLoading, data: summaries } = useBudgetSummaries(
     props.from_date,
     props.to_date,
@@ -97,5 +97,3 @@ function BudgetSummary(props: BudgetSummaryProps): JSX.Element | null {
     </div>
   );
 }
-
-export default BudgetSummary;

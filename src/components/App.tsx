@@ -11,20 +11,20 @@ import CONFIG from "ctrack_config";
 
 import { AuthProvider, useAuth } from "../hooks/AuthContext";
 import { AxiosProvider } from "../hooks/AxiosContext";
-import Accounts from "./Accounts";
-import Dashboard from "./Dashboard";
-import Login from "./Login";
-import NavComponent from "./NavComponent";
-import PaymentSeries from "./PaymentSeries";
-import Tracking from "./Tracking";
-import Transactions from "./Transactions";
+import { Accounts } from "./Accounts";
+import { Dashboard } from "./Dashboard";
+import { Login } from "./Login";
+import { NavComponent } from "./NavComponent";
+import { PaymentSeries } from "./PaymentSeries";
+import { Tracking } from "./Tracking";
+import { Transactions } from "./Transactions";
 
 interface RequireAuthProps {
   children: React.ReactNode;
   redirectTo: string;
 }
 
-function App(): JSX.Element {
+export function App(): JSX.Element {
   return (
     <IntlProvider locale="en-AU">
       <AuthProvider>
@@ -110,5 +110,3 @@ export function RequireAuth({
   }
   return isAuthenticated ? <>{children}</> : <Navigate to={redirectTo} />;
 }
-
-export default App;

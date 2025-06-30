@@ -9,7 +9,7 @@ interface CategorySeriesResponse {
   value: string;
 }
 
-export default function useCategorySeries(category_id: string) {
+export function useCategorySeries(category_id: string) {
   const axios = useAxios();
 
   const fetchCategories = (): Promise<SeriesPoint[]> =>

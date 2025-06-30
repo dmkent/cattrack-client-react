@@ -2,11 +2,11 @@ import { useState } from "react";
 import { Container, Col, Row } from "react-bootstrap";
 
 import { PaymentSeriesItem } from "../data/PaymentSeries";
-import usePaymentSeries from "../hooks/usePaymentSeries";
+import { usePaymentSeries } from "../hooks/usePaymentSeries";
 import { useUpdatePaymentSeries } from "../hooks/useUpdatePaymentSeries";
-import PaymentSeriesDetail from "./PaymentSeriesDetail";
+import { PaymentSeriesDetail } from "./PaymentSeriesDetail";
 
-function PaymentSeries(): JSX.Element | null {
+export function PaymentSeries(): JSX.Element | null {
   const { isLoading, data: paymentSeries } = usePaymentSeries();
   const { paymentSeriesAddBillFromFile } = useUpdatePaymentSeries();
   const [currentSeries, setCurrentSeries] = useState<PaymentSeriesItem | null>(
@@ -43,5 +43,3 @@ function PaymentSeries(): JSX.Element | null {
     </Container>
   );
 }
-
-export default PaymentSeries;

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Col, Row } from "react-bootstrap";
 
-import useCategories from "../hooks/useCategories";
-import useCategorySeries from "../hooks/useCategorySeries";
-import PlotlyTimeSeries from "./PlotlyTimeSeries";
+import { useCategories } from "../hooks/useCategories";
+import { useCategorySeries } from "../hooks/useCategorySeries";
+import { PlotlyTimeSeries } from "./PlotlyTimeSeries";
 
 export function Tracking(): JSX.Element | null {
   const { isLoading: isCatsLoading, data: categories } = useCategories();
@@ -55,5 +55,3 @@ export function Tracking(): JSX.Element | null {
     </div>
   );
 }
-
-export default Tracking;

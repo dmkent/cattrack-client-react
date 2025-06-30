@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { expect, test, vi } from "vitest";
 
-import AccountDetail, { AccountDetailProps } from "../AccountDetail";
+import { AccountDetail, AccountDetailProps } from "../AccountDetail";
 
 function setup(account_id: string, uploading: boolean): AccountDetailProps {
   const props: AccountDetailProps = {

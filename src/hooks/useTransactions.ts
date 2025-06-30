@@ -5,7 +5,7 @@ import { Transaction } from "../data/Transaction";
 import { TransactionFilters } from "../data/TransactionFilters";
 import { useAxios } from "./AxiosContext";
 
-export default function useTransactions(
+export function useTransactions(
   page: number,
   pageSize: number,
   filters: TransactionFilters,

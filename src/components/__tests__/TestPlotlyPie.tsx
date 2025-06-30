@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { expect, test } from "vitest";
 
 import { CategorySummary } from "../../data/Transaction";
-import PlotlyPie, { plotlyDataFromSummary } from "../PlotlyPie";
+import { PlotlyPie, plotlyDataFromSummary } from "../PlotlyPie";
 
 function setup(summary: CategorySummary[]) {
   const props = {

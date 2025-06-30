@@ -17,7 +17,7 @@ interface PaymentSeriesDetailProps {
   paymentSeriesAddBillFromFile: (seriesId: string, file: File) => void;
 }
 
-function PaymentSeriesDetail(
+export function PaymentSeriesDetail(
   props: PaymentSeriesDetailProps,
 ): JSX.Element | null {
   if (props.series === null) {
@@ -95,5 +95,3 @@ function UploadForm(props: UploadFormProps): JSX.Element {
     </Form>
   );
 }
-
-export default PaymentSeriesDetail;

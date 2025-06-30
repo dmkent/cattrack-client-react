@@ -7,7 +7,7 @@ import { Account } from "../../data/Account";
 import { Category } from "../../data/Category";
 import { Period } from "../../data/Period";
 import { Transaction } from "../../data/Transaction";
-import Transactions from "../Transactions";
+import { Transactions } from "../Transactions";
 
 const periods: Period[] = [
   {

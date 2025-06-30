@@ -4,7 +4,7 @@ import { checkStatusAxios } from "../client/CatTrackAPI";
 import { Category } from "../data/Category";
 import { useAxios } from "./AxiosContext";
 
-export default function useCategories() {
+export function useCategories() {
   const axios = useAxios();
 
   const fetchCategories = () =>

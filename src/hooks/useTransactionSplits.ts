@@ -85,7 +85,7 @@ function splitsAreValid(transaction: Transaction, splits: Split[]) {
   };
 }
 
-function useTransactionSplits(
+export function useTransactionSplits(
   transaction: Transaction,
   suggestions?: Suggestion[],
 ) {
@@ -159,5 +159,3 @@ function useTransactionSplits(
     removeSplit,
   ] as const;
 }
-
-export default useTransactionSplits;

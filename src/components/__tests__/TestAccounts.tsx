@@ -5,7 +5,7 @@ import { expect, test } from "vitest";
 
 import { renderWithProviders } from "../../RenderWithProviders";
 import { Account } from "../../data/Account";
-import Accounts from "../Accounts";
+import { Accounts } from "../Accounts";
 
 async function setup(accounts: Account[]): Promise<void> {
   const props = {};

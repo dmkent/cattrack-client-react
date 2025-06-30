@@ -6,7 +6,7 @@ import {
   ReactNode,
 } from "react";
 
-import AuthService from "../services/auth.service";
+import { AuthService } from "../services/auth.service";
 
 export interface AuthData {
   is_logged_in: boolean;

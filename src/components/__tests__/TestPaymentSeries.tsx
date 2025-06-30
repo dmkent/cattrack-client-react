@@ -3,7 +3,7 @@ import { expect, test } from "vitest";
 
 import { renderWithProviders } from "../../RenderWithProviders";
 import { PaymentSeriesItem } from "../../data/PaymentSeries";
-import PaymentSeries from "../PaymentSeries";
+import { PaymentSeries } from "../PaymentSeries";
 
 const payments: PaymentSeriesItem[] = [
   {

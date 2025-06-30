@@ -9,7 +9,7 @@ interface TransactionFilterPeriodsProps {
   periods: Period[];
 }
 
-function TransactionFilterPeriods(props: TransactionFilterPeriodsProps) {
+export function TransactionFilterPeriods(props: TransactionFilterPeriodsProps) {
   const { filters, updateFilters, periods } = props;
 
   const all_periods = filters.from_date === null && filters.to_date === null;
@@ -70,5 +70,3 @@ function TransactionFilterPeriods(props: TransactionFilterPeriodsProps) {
     </div>
   );
 }
-
-export default TransactionFilterPeriods;
