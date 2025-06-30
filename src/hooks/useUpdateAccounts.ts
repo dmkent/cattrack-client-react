@@ -11,18 +11,13 @@ export const useUpdateAccounts = () => {
     uploadFile: File,
   ): Promise<void> => {
     const formData = new FormData();
-    formData.append("file", uploadFile);
+    formData.append("data_file", uploadFile);
     formData.append("accountId", account.id);
 
     try {
       const response = await axios.post(
         `/api/accounts/${account.id}/load/`,
         formData,
-        {
-          headers: {
-            "Content-Type": null, // Let the browser set the content type for multipart/form-data
-          },
-        },
       );
       if (response.status === 200) {
         return;
