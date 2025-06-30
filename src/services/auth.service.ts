@@ -2,13 +2,6 @@ import CONFIG from "ctrack_config";
 
 import { checkStatus } from "../client/CatTrackAPI";
 
-type JwtData = {
-  exp: number;
-  username: string;
-  user_id: string;
-  email: string;
-};
-
 function parseJwt(token: string) {
   if (!token || token.indexOf(".") === -1) {
     return {};

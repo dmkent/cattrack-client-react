@@ -6,11 +6,11 @@ import { Button, Tooltip, OverlayTrigger, Pagination } from "react-bootstrap";
 import { FormattedDate, FormattedNumber } from "react-intl";
 
 import { Transaction } from "../data/Transaction";
+import { TransactionFilters } from "../data/TransactionFilters";
 import useTransactions from "../hooks/useTransactions";
 import { useUpdateTransactions } from "../hooks/useUpdateTransactions";
 import Categorisor from "./Categorisor";
 import TransactionFilter from "./TransactionFilter";
-import { TransactionFilters } from "./TransactionFilters";
 
 interface TransactionsProps {
   page_size: number;
@@ -105,7 +105,7 @@ function Transactions(props: TransactionsProps): JSX.Element | null {
                       <Button
                         size="sm"
                         variant="outline-secondary"
-                        onClick={(e) => {
+                        onClick={() => {
                           setSelectedTransaction(trans);
                           setModalShown(true);
                         }}

@@ -1,11 +1,11 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 
+import { TransactionFilters } from "../data/TransactionFilters";
 import useAccounts from "../hooks/useAccounts";
 import useCategories from "../hooks/useCategories";
 import usePeriods from "../hooks/usePeriods";
 import TransactionFilterPeriods from "./TransactionFilterPeriods";
-import { TransactionFilters } from "./TransactionFilters";
 
 export interface TransactionFilterProps {
   filters: TransactionFilters;

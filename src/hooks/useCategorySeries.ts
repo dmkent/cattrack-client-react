@@ -16,6 +16,7 @@ export default function useCategorySeries(category_id: string) {
     axios
       .get(`/api/categories/${category_id}/series/`)
       .then(checkStatusAxios)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .then((series: any[]) =>
         series.map((raw: CategorySeriesResponse) => {
           return { label: raw.label, value: parseFloat(raw.value) };

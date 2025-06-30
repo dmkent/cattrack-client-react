@@ -10,7 +10,7 @@
  *
  */
 
-export function isString(val: any) {
+export function isString(val: unknown) {
   return typeof val === "string" || val instanceof String;
 }
 

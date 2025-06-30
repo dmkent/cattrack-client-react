@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { filters_to_params, checkStatusAxios } from "../client/CatTrackAPI";
 import { CategorySummary } from "../data/Transaction";
+import { PaginatedTransactionFilters } from "../data/TransactionFilters";
 import { useAxios } from "./AxiosContext";
 
 interface TransactionSummaryResponse {
@@ -10,7 +11,9 @@ interface TransactionSummaryResponse {
   total: string;
 }
 
-export default function useTransactionSummaries(filters: any) {
+export default function useTransactionSummaries(
+  filters: Partial<PaginatedTransactionFilters>,
+) {
   const axios = useAxios();
   const query_params = filters_to_params(filters);
   const fetchSummary = () =>

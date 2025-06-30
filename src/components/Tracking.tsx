@@ -5,9 +5,7 @@ import useCategories from "../hooks/useCategories";
 import useCategorySeries from "../hooks/useCategorySeries";
 import PlotlyTimeSeries from "./PlotlyTimeSeries";
 
-interface TrackingProps {}
-
-export function Tracking(props: TrackingProps): JSX.Element | null {
+export function Tracking(): JSX.Element | null {
   const { isLoading: isCatsLoading, data: categories } = useCategories();
   const [current_category, setCategory] = useState<string | null>(null);
   const { isLoading: isCatLoading, data: categorySeries } = useCategorySeries(

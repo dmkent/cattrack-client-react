@@ -1,17 +1,15 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../hooks/AuthContext";
-
-interface LoginProps {}
 
 type Inputs = {
   username: string;
   password: string;
 };
 
-const Login: React.FC<LoginProps> = (props) => {
+const Login: React.FC = () => {
   const auth = useAuth();
   const navigate = useNavigate();
   const {

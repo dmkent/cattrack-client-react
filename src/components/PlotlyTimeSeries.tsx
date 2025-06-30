@@ -3,23 +3,17 @@ import React, { useState, useCallback, useEffect, useRef } from "react";
 
 import { SeriesPoint } from "../data/Account";
 
-interface PlotlyData {
-  y: number[];
-  x: string[];
-  type: string;
-}
-
 interface PlotlyTimeSeriesProps {
   series: SeriesPoint[];
   plot_invert?: boolean;
-  plot_type?: string;
+  plot_type?: Plotly.PlotType;
 }
 
 export function plotlyDataFromSeries(
   series: SeriesPoint[] | null,
   plot_invert: boolean = false,
-  plot_type: string = "bar",
-): PlotlyData {
+  plot_type: Plotly.PlotType = "bar",
+): Plotly.Data {
   const values: number[] = [];
   const labels: string[] = [];
 
@@ -43,7 +37,7 @@ export function plotlyDataFromSeries(
 
 function PlotlyTimeSeries(props: PlotlyTimeSeriesProps) {
   const plotContainer = useRef<HTMLDivElement>(null);
-  const plotData = useRef<any[]>([{}]);
+  const plotData = useRef<Plotly.Data>();
 
   const updateDimensions = useCallback(() => {
     if (plotContainer.current) {
@@ -59,7 +53,7 @@ function PlotlyTimeSeries(props: PlotlyTimeSeriesProps) {
   });
 
   const [hasRendered, setHasRendered] = useState(false);
-  plotData.current[0] = plotlyDataFromSeries(
+  plotData.current = plotlyDataFromSeries(
     props.series,
     props.plot_invert || false,
     props.plot_type || "bar",
@@ -67,14 +61,14 @@ function PlotlyTimeSeries(props: PlotlyTimeSeriesProps) {
   const plotLayout = {};
 
   useEffect(() => {
-    if (plotContainer.current === null) {
+    if (plotContainer.current === null || plotData.current === undefined) {
       return;
     }
 
     if (hasRendered) {
       Plotly.redraw(plotContainer.current);
     } else {
-      Plotly.newPlot(plotContainer.current, plotData.current, plotLayout);
+      Plotly.newPlot(plotContainer.current, [plotData.current], plotLayout);
       setHasRendered(true);
     }
   }, [plotContainer, props.series, props.plot_invert, props.plot_type]);

@@ -30,7 +30,7 @@ function AccountDetail(props: AccountDetailProps): JSX.Element | null {
   } = props;
   const [uploadFile, setUploadFile] = useState<File | null>(null);
 
-  const handleChange = (event: any): void => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const target = event.target;
     const files = target.files;
 
@@ -39,7 +39,7 @@ function AccountDetail(props: AccountDetailProps): JSX.Element | null {
     }
   };
 
-  const handleSubmit = (event: any): void => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     if (account && uploadFile) {
       props.uploadToAccount(account, uploadFile);
     }
@@ -81,7 +81,7 @@ function AccountDetail(props: AccountDetailProps): JSX.Element | null {
         </div>
       ) : null}
       {!!accountSeries && (
-        <PlotlyTimeSeries series={accountSeries} plot_type="line" />
+        <PlotlyTimeSeries series={accountSeries} plot_type="scatter" />
       )}
     </div>
   );

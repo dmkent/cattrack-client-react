@@ -8,3 +8,8 @@ export interface TransactionFilters extends PeriodFilters {
   has_category: string | null;
   account: string | null;
 }
+
+export interface PaginatedTransactionFilters extends TransactionFilters {
+  page: number;
+  page_size: number;
+}

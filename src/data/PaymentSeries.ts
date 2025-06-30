@@ -14,8 +14,10 @@ export interface PaymentSeriesItem {
   bills: Bill[];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function series_from_json(json_data: any): PaymentSeriesItem {
   const bills: Bill[] = json_data.bills.map(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (bill: any): Bill => ({
       id: bill.id,
       description: bill.description,

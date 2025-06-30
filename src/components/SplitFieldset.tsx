@@ -1,14 +1,11 @@
 import React from "react";
 import { FormGroup, FormControl, FormLabel, FormSelect } from "react-bootstrap";
 
+import { Split } from "../data/Transaction";
+
 interface Category {
   id: string | number;
   name: string;
-}
-
-interface Split {
-  category: string;
-  amount: string;
 }
 
 interface ValidationState {
@@ -33,6 +30,7 @@ function SplitFieldset(props: SplitFieldsetProps) {
   if (props.is_valid.valid === true) {
     vstate = "success";
   } else if (props.is_valid.valid === false) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     vstate = "error";
   }
   return (

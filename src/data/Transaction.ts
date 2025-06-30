@@ -13,3 +13,8 @@ export interface CategorySummary {
   category_name: string;
   total: number;
 }
+
+export interface Split {
+  category: string;
+  amount: string | number;
+}

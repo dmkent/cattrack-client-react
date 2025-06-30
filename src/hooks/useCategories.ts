@@ -12,6 +12,7 @@ export default function useCategories() {
       .get("/api/categories/")
       .then(checkStatusAxios) // Validate the response using checkStatusAxios
       .then((resp) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return resp.map((cat: any) => {
           return {
             id: cat.id,
