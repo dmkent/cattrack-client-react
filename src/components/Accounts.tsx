@@ -80,6 +80,10 @@ export function Accounts(): JSX.Element | null {
           currency={"AUD"}
         />
       </td>
+      <td>
+        {account.last_transaction &&
+          account.last_transaction.toLocaleDateString()}
+      </td>
     </tr>
   );
 
@@ -103,7 +107,7 @@ export function Accounts(): JSX.Element | null {
       <Table>
         <tbody>
           {accounts &&
-            [...accounts.values()].map((account) => {
+            accounts.map((account) => {
               return (
                 <AccountRow
                   account={account}

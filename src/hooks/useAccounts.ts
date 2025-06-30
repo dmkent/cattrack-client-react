@@ -17,6 +17,9 @@ export function useAccounts() {
             id: rawAccount.id,
             name: rawAccount.name,
             balance: rawAccount.balance,
+            last_transaction: rawAccount.last_transaction
+              ? new Date(rawAccount.last_transaction)
+              : null,
           } as Account;
         });
       });
