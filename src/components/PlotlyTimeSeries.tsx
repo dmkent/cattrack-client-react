@@ -20,8 +20,8 @@ export function plotlyDataFromSeries(
   plot_invert: boolean = false,
   plot_type: string = "bar",
 ): PlotlyData {
-  let values: number[] = [];
-  let labels: string[] = [];
+  const values: number[] = [];
+  const labels: string[] = [];
 
   // Get grand total
   if (series !== null) {

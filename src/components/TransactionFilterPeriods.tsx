@@ -13,7 +13,7 @@ interface TransactionFilterPeriodsProps {
 function TransactionFilterPeriods(props: TransactionFilterPeriodsProps) {
   const { filters, updateFilters, periods } = props;
 
-  let all_periods = filters.from_date === null && filters.to_date === null;
+  const all_periods = filters.from_date === null && filters.to_date === null;
 
   return (
     <div>
@@ -47,7 +47,7 @@ function TransactionFilterPeriods(props: TransactionFilterPeriodsProps) {
           All
         </Button>
         {[...periods].map((period) => {
-          let current_period =
+          const current_period =
             period.from_date == filters.from_date &&
             period.to_date == filters.to_date;
           return (

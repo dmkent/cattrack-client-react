@@ -50,7 +50,7 @@ function initialSplits(
 
 function splitsAreValid(transaction: Transaction, splits: Split[]) {
   let total = 0;
-  let cats: string[] = [];
+  const cats: string[] = [];
   let ncats = 0;
   splits.forEach(function (split) {
     // Ignore empty splits

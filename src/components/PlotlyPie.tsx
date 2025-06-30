@@ -14,13 +14,13 @@ interface PlotlyPieProps {
 }
 
 export function plotlyDataFromSummary(summary: CategorySummary[]): PlotlyData {
-  let values: number[] = [];
-  let labels: string[] = [];
+  const values: number[] = [];
+  const labels: string[] = [];
 
   // Get grand total
   let total = 0.0;
   summary.forEach(function (element) {
-    let val = element.total;
+    const val = element.total;
     if (val > 0) {
       // skip income for now...
       return;
@@ -28,7 +28,7 @@ export function plotlyDataFromSummary(summary: CategorySummary[]): PlotlyData {
     total += val * -1.0;
   });
 
-  let thresh = total * 0.01;
+  const thresh = total * 0.01;
   let other = 0.0;
 
   summary.forEach(function (element) {

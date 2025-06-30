@@ -8,7 +8,7 @@ export const useUpdatePaymentSeries = () => {
     idx: string,
     upload_file: File,
   ): Promise<Error | null> => {
-    let data = new FormData();
+    const data = new FormData();
     data.append("data_file", upload_file);
     data.append("name", idx);
 
