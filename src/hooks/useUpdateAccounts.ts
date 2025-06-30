@@ -9,10 +9,18 @@ export const useUpdateAccounts = () => {
   const uploadFileToAccount = async (
     account: Account,
     uploadFile: File,
+    fromDate: string | null = null,
+    toDate: string | null = null,
   ): Promise<void> => {
     const formData = new FormData();
     formData.append("data_file", uploadFile);
     formData.append("accountId", account.id);
+    if (fromDate) {
+      formData.append("from_date", fromDate);
+    }
+    if (toDate) {
+      formData.append("to_date", toDate);
+    }
 
     try {
       const response = await axios.post(
