@@ -67,7 +67,7 @@ export function AccountDetail(props: AccountDetailProps): JSX.Element | null {
             </div>
           ) : null}
         </FormGroup>
-        <Button variant="dark" active={!!uploadFile}>
+        <Button type="submit" variant="dark" active={!!uploadFile}>
           Submit
         </Button>
       </Form>
