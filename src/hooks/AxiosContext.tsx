@@ -1,9 +1,10 @@
-import React, { createContext, useContext, useMemo } from "react";
-import * as Cookies from "js-cookie";
-
 import axios, { AxiosInstance } from "axios";
-import { useAuth } from "./AuthContext";
+import * as Cookies from "js-cookie";
+import React, { createContext, useContext, useMemo } from "react";
+
 import CONFIG from "ctrack_config";
+
+import { useAuth } from "./AuthContext";
 
 export const AxiosContext = createContext<AxiosInstance>(null!);
 

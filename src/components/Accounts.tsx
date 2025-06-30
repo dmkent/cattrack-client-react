@@ -1,5 +1,6 @@
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useRef, useState } from "react";
-import { FormattedNumber } from "react-intl";
 import {
   Button,
   FormLabel,
@@ -9,13 +10,13 @@ import {
   Popover,
   OverlayTrigger,
 } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import useAccounts from "../hooks/useAccounts";
-import useAccountSeries from "../hooks/useAccountSeries";
+import { FormattedNumber } from "react-intl";
+
 import AccountDetail from "../components/AccountDetail";
-import { useUpdateAccounts } from "../hooks/useUpdateAccounts";
 import { Account } from "../data/Account";
+import useAccountSeries from "../hooks/useAccountSeries";
+import useAccounts from "../hooks/useAccounts";
+import { useUpdateAccounts } from "../hooks/useUpdateAccounts";
 
 interface AccountRowProps {
   account: Account;

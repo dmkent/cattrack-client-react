@@ -1,11 +1,4 @@
 import React, { useEffect } from "react";
-import Dashboard from "./Dashboard";
-import Accounts from "./Accounts";
-import Transactions from "./Transactions";
-import Tracking from "./Tracking";
-import PaymentSeries from "./PaymentSeries";
-import CONFIG from "ctrack_config";
-import NavComponent from "./NavComponent";
 import { IntlProvider } from "react-intl";
 import {
   BrowserRouter as Router,
@@ -13,11 +6,18 @@ import {
   Navigate,
   Routes,
 } from "react-router-dom";
-import Login from "./Login";
+
+import CONFIG from "ctrack_config";
+
 import { AuthProvider, useAuth } from "../hooks/AuthContext";
 import { AxiosProvider } from "../hooks/AxiosContext";
-
-interface LogoutProps {}
+import Accounts from "./Accounts";
+import Dashboard from "./Dashboard";
+import Login from "./Login";
+import NavComponent from "./NavComponent";
+import PaymentSeries from "./PaymentSeries";
+import Tracking from "./Tracking";
+import Transactions from "./Transactions";
 
 interface RequireAuthProps {
   children: React.ReactNode;
@@ -92,7 +92,7 @@ function App(): JSX.Element {
   );
 }
 
-export function Logout(props: LogoutProps): JSX.Element {
+export function Logout(): JSX.Element {
   const { signout } = useAuth();
 
   useEffect(() => signout(() => {}), [signout]);
@@ -103,8 +103,8 @@ export function RequireAuth({
   children,
   redirectTo,
 }: RequireAuthProps): JSX.Element | null {
-  let { authData, loading } = useAuth();
-  let isAuthenticated = authData?.is_logged_in;
+  const { authData, loading } = useAuth();
+  const isAuthenticated = authData?.is_logged_in;
   if (loading) {
     return <div>Loading...</div>;
   }

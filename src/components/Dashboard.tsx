@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import PlotlyPie from "./PlotlyPie";
 import { Container, Col, Row } from "react-bootstrap";
 
-import TransactionFilterPeriods from "./TransactionFilterPeriods";
 import usePeriods from "../hooks/usePeriods";
 import useTransactionSummary from "../hooks/useTransactionSummary";
+import PlotlyPie from "./PlotlyPie";
+import TransactionFilterPeriods from "./TransactionFilterPeriods";
 import { PeriodFilters } from "./TransactionFilters";
 
 interface DashboardProps {}

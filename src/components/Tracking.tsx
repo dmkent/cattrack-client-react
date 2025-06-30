@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import useCategorySeries from "../hooks/useCategorySeries";
+
 import useCategories from "../hooks/useCategories";
+import useCategorySeries from "../hooks/useCategorySeries";
 import PlotlyTimeSeries from "./PlotlyTimeSeries";
 
 interface TrackingProps {}

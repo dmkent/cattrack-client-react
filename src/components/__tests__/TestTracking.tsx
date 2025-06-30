@@ -1,11 +1,11 @@
-import React from "react";
 import { screen, waitFor, fireEvent } from "@testing-library/react";
+import React from "react";
 import { expect, test } from "vitest";
 
 import { renderWithProviders } from "../../RenderWithProviders";
+import { SeriesPoint } from "../../data/Account";
+import { Category } from "../../data/Category";
 import { Tracking } from "../Tracking";
-import { Category } from "src/data/Category";
-import { SeriesPoint } from "src/data/Account";
 
 const categories: Category[] = [
   { id: "3", name: "cat1", score: 0.5 },

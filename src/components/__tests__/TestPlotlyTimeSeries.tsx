@@ -1,9 +1,9 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
+import React from "react";
 import { expect, test } from "vitest";
 
+import { SeriesPoint } from "../../data/Account";
 import PlotlyTimeSeries, { plotlyDataFromSeries } from "../PlotlyTimeSeries";
-import { SeriesPoint } from "src/data/Account";
 
 test("PlotlyTimeSeries should reshape series", () => {
   const raw: SeriesPoint[] = [

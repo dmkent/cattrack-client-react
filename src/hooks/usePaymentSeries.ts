@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+
 import { checkStatusAxios } from "../client/CatTrackAPI";
 import { series_from_json, PaymentSeriesItem } from "../data/PaymentSeries";
 import { useAxios } from "./AxiosContext";

@@ -1,6 +1,7 @@
-import React, { useRef, useState, useEffect } from "react";
 import Plotly from "plotly.js-basic-dist";
-import { CategorySummary } from "src/data/Transaction";
+import React, { useRef, useState, useEffect } from "react";
+
+import { CategorySummary } from "../data/Transaction";
 
 interface PlotlyData {
   values: number[];

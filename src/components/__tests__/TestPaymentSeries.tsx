@@ -1,9 +1,10 @@
-import React from "react";
 import { screen, waitFor, fireEvent } from "@testing-library/react";
+import React from "react";
 import { expect, test } from "vitest";
+
 import { renderWithProviders } from "../../RenderWithProviders";
+import { PaymentSeriesItem } from "../../data/PaymentSeries";
 import PaymentSeries from "../PaymentSeries";
-import { PaymentSeriesItem } from "src/data/PaymentSeries";
 
 const payments: PaymentSeriesItem[] = [
   {

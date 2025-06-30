@@ -1,13 +1,13 @@
-import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { IntlProvider } from "react-intl";
 import { render, RenderResult } from "@testing-library/react";
 import axios, { AxiosInstance } from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
+import React from "react";
+import { IntlProvider } from "react-intl";
 import { vi } from "vitest";
 
-import { AxiosContext } from "./hooks/AxiosContext";
 import { AuthContext, AuthContextType } from "./hooks/AuthContext";
+import { AxiosContext } from "./hooks/AxiosContext";
 
 export function renderWithProviders(
   children: React.ReactElement,

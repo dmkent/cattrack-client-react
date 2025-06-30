@@ -1,8 +1,7 @@
-import { parseErrors } from "../client/ErrorParser";
 import { checkStatusAxios } from "../client/CatTrackAPI";
-import { useAxios } from "./AxiosContext";
-
+import { parseErrors } from "../client/ErrorParser";
 import { Account } from "../data/Account";
+import { useAxios } from "./AxiosContext";
 
 export const useUpdateAccounts = () => {
   const axios = useAxios();

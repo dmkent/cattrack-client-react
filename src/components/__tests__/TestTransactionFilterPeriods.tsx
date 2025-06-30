@@ -1,9 +1,10 @@
-import React from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { expect, test, vi } from "vitest";
 import { format, sub } from "date-fns";
+import React from "react";
+import { expect, test, vi } from "vitest";
+
+import { Period } from "../../data/Period";
 import TransactionFilterPeriods from "../TransactionFilterPeriods";
-import { Period } from "src/data/Period";
 import { TransactionFilters } from "../TransactionFilters";
 
 function setup(periods: Period[], filters?: TransactionFilters) {

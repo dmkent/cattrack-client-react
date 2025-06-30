@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Container, Col, Row } from "react-bootstrap";
-import PaymentSeriesDetail from "./PaymentSeriesDetail";
+
+import { PaymentSeriesItem } from "../data/PaymentSeries";
 import usePaymentSeries from "../hooks/usePaymentSeries";
 import { useUpdatePaymentSeries } from "../hooks/useUpdatePaymentSeries";
-import { PaymentSeriesItem } from "src/data/PaymentSeries";
+import PaymentSeriesDetail from "./PaymentSeriesDetail";
 
 interface PaymentSeriesProps {}
 

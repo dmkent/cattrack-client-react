@@ -1,12 +1,12 @@
-import React, { act } from "react";
-import { screen, waitFor, fireEvent } from "@testing-library/react";
-import { expect, test } from "vitest";
 import "@testing-library/jest-dom";
+import { screen, waitFor, fireEvent } from "@testing-library/react";
+import AxiosMockAdapter from "axios-mock-adapter";
+import React, { act } from "react";
+import { expect, test } from "vitest";
 
-import Accounts from "../Accounts";
 import { renderWithProviders } from "../../RenderWithProviders";
 import { Account } from "../../data/Account";
-import AxiosMockAdapter from "axios-mock-adapter";
+import Accounts from "../Accounts";
 
 async function setup(accounts: Account[]): Promise<void> {
   const props = {};

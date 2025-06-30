@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { FormattedDate, FormattedNumber } from "react-intl";
 import {
   Form,
   FormControl,
@@ -9,6 +8,8 @@ import {
   Col,
   Row,
 } from "react-bootstrap";
+import { FormattedDate, FormattedNumber } from "react-intl";
+
 import { PaymentSeriesItem } from "../data/PaymentSeries";
 
 interface PaymentSeriesDetailProps {
