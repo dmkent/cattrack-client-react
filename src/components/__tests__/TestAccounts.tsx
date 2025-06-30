@@ -1,7 +1,6 @@
 import "@testing-library/jest-dom";
-import { screen, waitFor, fireEvent } from "@testing-library/react";
+import { screen, waitFor, fireEvent, act } from "@testing-library/react";
 import AxiosMockAdapter from "axios-mock-adapter";
-import React, { act } from "react";
 import { expect, test } from "vitest";
 
 import { renderWithProviders } from "../../RenderWithProviders";

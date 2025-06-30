@@ -1,5 +1,5 @@
 import Plotly from "plotly.js-basic-dist";
-import React, { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 
 import { CategorySummary } from "../data/Transaction";
 
@@ -54,7 +54,7 @@ export function plotlyDataFromSummary(summary: CategorySummary[]): Plotly.Data {
 
 function PlotlyPie(props: PlotlyPieProps) {
   const plotContainer = useRef<HTMLDivElement>(null);
-  const plotData = useRef<Plotly.Data>();
+  const plotData = useRef<Plotly.Data>(undefined);
   const [hasRendered, setHasRendered] = useState(false);
 
   const plotLayout = {

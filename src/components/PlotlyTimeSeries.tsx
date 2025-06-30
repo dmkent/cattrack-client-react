@@ -1,5 +1,5 @@
 import Plotly from "plotly.js-basic-dist";
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 
 import { SeriesPoint } from "../data/Account";
 
@@ -37,7 +37,7 @@ export function plotlyDataFromSeries(
 
 function PlotlyTimeSeries(props: PlotlyTimeSeriesProps) {
   const plotContainer = useRef<HTMLDivElement>(null);
-  const plotData = useRef<Plotly.Data>();
+  const plotData = useRef<Plotly.Data>(undefined);
 
   const updateDimensions = useCallback(() => {
     if (plotContainer.current) {

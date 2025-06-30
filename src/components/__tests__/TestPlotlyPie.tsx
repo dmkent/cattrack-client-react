@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import React from "react";
 import { expect, test } from "vitest";
 
 import { CategorySummary } from "../../data/Transaction";
@@ -26,7 +25,7 @@ test("plotyDataForSummary should determine totals, values", () => {
     { category_id: "5", category_name: "E", total: -0.001 },
     { category_id: "6", category_name: "F", total: -0.001 },
   ];
-  const res = plotlyDataFromSummary(summary);
+  const res = plotlyDataFromSummary(summary) as Plotly.PlotData;
   expect(res.values).toEqual([3.5, 2.1, 0.4, 0.002]);
   expect(res.labels).toEqual(["A", "B", "C", "Other"]);
 });

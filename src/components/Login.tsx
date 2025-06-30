@@ -1,4 +1,4 @@
-import React from "react";
+import { FC } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
@@ -9,7 +9,7 @@ type Inputs = {
   password: string;
 };
 
-const Login: React.FC = () => {
+const Login: FC = () => {
   const auth = useAuth();
   const navigate = useNavigate();
   const {

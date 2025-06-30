@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 
@@ -17,7 +16,7 @@ function setup(logged_in: boolean) {
           expires: new Date(Date.now() + 3600 * 1000),
           token: "testtoken",
         }
-      : null,
+      : undefined,
     signin: vi.fn(),
     signout: vi.fn(),
     refresh: vi.fn(),

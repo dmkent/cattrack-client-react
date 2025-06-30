@@ -1,4 +1,3 @@
-import React from "react";
 import { Row, Col, ProgressBar } from "react-bootstrap";
 import { FormattedNumber } from "react-intl";
 

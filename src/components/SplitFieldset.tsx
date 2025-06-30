@@ -1,4 +1,4 @@
-import React from "react";
+import { ChangeEvent } from "react";
 import { FormGroup, FormControl, FormLabel, FormSelect } from "react-bootstrap";
 
 import { Split } from "../data/Transaction";
@@ -18,8 +18,8 @@ export interface SplitFieldsetProps {
   splitIdx: number;
   multiple_splits_exist: boolean;
   removeSplitCat: (splitIdx: number) => void;
-  setSplitCategory: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  setSplitAmount: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setSplitCategory: (e: ChangeEvent<HTMLSelectElement>) => void;
+  setSplitAmount: (e: ChangeEvent<HTMLInputElement>) => void;
   split: Split;
   categories: Category[];
   is_valid: ValidationState;

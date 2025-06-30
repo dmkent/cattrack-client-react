@@ -1,6 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { format, sub } from "date-fns";
-import React from "react";
 import { expect, test, vi } from "vitest";
 
 import { Period } from "../../data/Period";
