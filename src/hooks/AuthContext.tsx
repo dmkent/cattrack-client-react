@@ -19,13 +19,13 @@ export interface AuthContextType {
   loading: boolean;
 }
 
-export let AuthContext = React.createContext<AuthContextType>(null!);
+export const AuthContext = React.createContext<AuthContextType>(null!);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  let [authData, setAuthData] = React.useState<any>(null);
-  let [loading, setLoading] = React.useState<boolean>(true);
+  const [authData, setAuthData] = React.useState<any>(null);
+  const [loading, setLoading] = React.useState<boolean>(true);
 
-  let refresh = async () => {
+  const refresh = async () => {
     let restoredData = authData;
     try {
       restoredData = await AuthService.refreshToken();
@@ -38,14 +38,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return restoredData;
   };
 
-  let signin = (username: string, password: string, callback: VoidFunction) => {
+  const signin = (username: string, password: string, callback: VoidFunction) => {
     return AuthService.login(username, password).then((data) => {
       setAuthData(data);
       callback();
     });
   };
 
-  let signout = (callback: VoidFunction) => {
+  const signout = (callback: VoidFunction) => {
     AuthService.logout();
     setAuthData(null);
     callback();
@@ -56,7 +56,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     refresh();
   }, []);
 
-  let value = { authData, signin, signout, refresh, loading };
+  const value = { authData, signin, signout, refresh, loading };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

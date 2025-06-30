@@ -36,11 +36,11 @@ test("TransactionFilterPeriods changing dates should change filter", async () =>
   const { props } = setup([]);
 
   // Input from date
-  var fromInput = screen.getByLabelText("Date from");
+  const fromInput = screen.getByLabelText("Date from");
   fireEvent.change(fromInput, { target: { value: testFromDateEvt } });
 
   // Input to date
-  var toInput = screen.getByLabelText("Date to");
+  const toInput = screen.getByLabelText("Date to");
   fireEvent.change(toInput, { target: { value: testToDateEvt } });
 
   expect(props.updateFilters.mock.calls[0][0]).toEqual({
