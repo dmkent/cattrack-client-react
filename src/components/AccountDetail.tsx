@@ -17,7 +17,12 @@ export interface AccountDetailProps {
   uploadInProgress: boolean;
   uploadProgress: number;
   uploadResult: string | null;
-  uploadToAccount: (account: Account, file: File) => void;
+  uploadToAccount: (
+    account: Account,
+    file: File,
+    fromDate: string | null,
+    toDate: string | null,
+  ) => void;
 }
 
 export function AccountDetail(props: AccountDetailProps): JSX.Element | null {
@@ -29,6 +34,8 @@ export function AccountDetail(props: AccountDetailProps): JSX.Element | null {
     uploadResult,
   } = props;
   const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [fromDate, setFromDate] = useState<string | null>(null);
+  const [toDate, setToDate] = useState<string | null>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const target = event.target;
@@ -41,7 +48,7 @@ export function AccountDetail(props: AccountDetailProps): JSX.Element | null {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     if (account && uploadFile) {
-      props.uploadToAccount(account, uploadFile);
+      props.uploadToAccount(account, uploadFile, fromDate, toDate);
     }
     event.preventDefault();
   };
@@ -57,6 +64,20 @@ export function AccountDetail(props: AccountDetailProps): JSX.Element | null {
         <FormGroup controlId="form-upload">
           <FormLabel>Load data: </FormLabel>
           <FormControl type="file" name="upload_file" onChange={handleChange} />
+          <FormControl
+            type="date"
+            aria-label="Date from"
+            max={toDate ?? undefined}
+            min={undefined}
+            onChange={(e) => setFromDate(e.target.value)}
+          />
+          <FormControl
+            type="date"
+            aria-label="Date to"
+            max={undefined}
+            min={fromDate ?? undefined}
+            onChange={(e) => setToDate(e.target.value)}
+          />
           {uploadInProgress ? (
             <div>
               <span className="spinner">Loading...</span>

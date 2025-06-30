@@ -40,8 +40,13 @@ export function Accounts(): JSX.Element | null {
     setShowCreatePopover(false);
   };
 
-  const handleUploadToAccount = (account: Account, file: File): void => {
-    uploadFileToAccount(account, file);
+  const handleUploadToAccount = (
+    account: Account,
+    file: File,
+    fromDate: string | null,
+    toDate: string | null,
+  ): void => {
+    uploadFileToAccount(account, file, fromDate, toDate);
   };
 
   if (isLoading) {
