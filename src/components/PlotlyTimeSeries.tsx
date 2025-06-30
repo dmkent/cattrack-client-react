@@ -1,6 +1,7 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
 import Plotly from "plotly.js-basic-dist";
-import { SeriesPoint } from "src/data/Account";
+import React, { useState, useCallback, useEffect, useRef } from "react";
+
+import { SeriesPoint } from "../data/Account";
 
 interface PlotlyData {
   y: number[];

@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { checkStatusAxios } from "../client/CatTrackAPI";
-import { useAxios } from "./AxiosContext";
-import { Transaction } from "../data/Transaction";
 import { Category } from "../data/Category";
+import { Transaction } from "../data/Transaction";
+import { useAxios } from "./AxiosContext";
 
 export default function useTransactionSuggestions(transaction: Transaction) {
   const axios = useAxios();

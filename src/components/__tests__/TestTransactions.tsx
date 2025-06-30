@@ -1,14 +1,14 @@
-import React from "react";
 import { screen, waitFor } from "@testing-library/react";
-import { expect, test } from "vitest";
 import AxiosMockAdapter from "axios-mock-adapter";
+import React from "react";
+import { expect, test } from "vitest";
 
 import { renderWithProviders } from "../../RenderWithProviders";
+import { Account } from "../../data/Account";
+import { Category } from "../../data/Category";
+import { Period } from "../../data/Period";
+import { Transaction } from "../../data/Transaction";
 import Transactions from "../Transactions";
-import { Period } from "src/data/Period";
-import { Account } from "src/data/Account";
-import { Category } from "src/data/Category";
-import { Transaction } from "src/data/Transaction";
 
 const periods: Period[] = [
   {

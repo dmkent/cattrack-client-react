@@ -1,5 +1,6 @@
-import { checkStatus } from "../client/CatTrackAPI";
 import CONFIG from "ctrack_config";
+
+import { checkStatus } from "../client/CatTrackAPI";
 
 type JwtData = {
   exp: number;

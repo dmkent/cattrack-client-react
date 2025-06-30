@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { useAxios } from "./AxiosContext";
+
 import { checkStatusAxios } from "../client/CatTrackAPI";
 import { Category } from "../data/Category";
+import { useAxios } from "./AxiosContext";
 
 export default function useCategories() {
   const axios = useAxios();

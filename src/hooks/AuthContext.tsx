@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+
 import AuthService from "../services/auth.service";
 
 export interface AuthData {

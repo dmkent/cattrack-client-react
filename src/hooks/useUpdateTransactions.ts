@@ -1,6 +1,6 @@
 import { checkStatusAxios } from "../client/CatTrackAPI";
-import { useAxios } from "./AxiosContext";
 import { Transaction } from "../data/Transaction";
+import { useAxios } from "./AxiosContext";
 
 interface Split {
   category: string;

@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { useAxios } from "./AxiosContext";
+
 import { checkStatusAxios } from "../client/CatTrackAPI";
-import { SeriesPoint } from "src/data/Account";
+import { SeriesPoint } from "../data/Account";
+import { useAxios } from "./AxiosContext";
 
 interface CategorySeriesResponse {
   label: string;

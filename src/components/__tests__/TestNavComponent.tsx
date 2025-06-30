@@ -1,9 +1,10 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import NavComponent from "../NavComponent";
+import { describe, expect, it, vi } from "vitest";
+
 import { AuthContext } from "../../hooks/AuthContext";
+import NavComponent from "../NavComponent";
 
 function setup(logged_in: boolean) {
   const mockAuth = {

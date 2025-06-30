@@ -1,12 +1,13 @@
-import React from "react";
 import { screen, waitFor, fireEvent } from "@testing-library/react";
 import axios, { AxiosInstance } from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
+import React from "react";
 import { vi, MockedFunction, test, expect } from "vitest";
-import Categorisor, { CategorisorProps } from "../Categorisor";
+
 import { renderWithProviders } from "../../RenderWithProviders";
-import { Transaction } from "../../data/Transaction";
 import { Category } from "../../data/Category";
+import { Transaction } from "../../data/Transaction";
+import Categorisor, { CategorisorProps } from "../Categorisor";
 
 const categories: Category[] = [
   { id: "0", name: "Cat1", score: 0 },

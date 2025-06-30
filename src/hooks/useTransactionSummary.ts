@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { useAxios } from "./AxiosContext";
 
 import { filters_to_params, checkStatusAxios } from "../client/CatTrackAPI";
-import { CategorySummary } from "src/data/Transaction";
+import { CategorySummary } from "../data/Transaction";
+import { useAxios } from "./AxiosContext";
 
 interface TransactionSummaryResponse {
   category: string;

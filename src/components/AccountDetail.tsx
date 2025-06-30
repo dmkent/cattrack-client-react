@@ -7,8 +7,9 @@ import {
   ProgressBar,
   Button,
 } from "react-bootstrap";
-import PlotlyTimeSeries from "./PlotlyTimeSeries";
+
 import { Account, SeriesPoint } from "../data/Account";
+import PlotlyTimeSeries from "./PlotlyTimeSeries";
 
 export interface AccountDetailProps {
   account: Account | null;

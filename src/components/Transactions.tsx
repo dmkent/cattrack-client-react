@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { FormattedDate, FormattedNumber } from "react-intl";
-import { Button, Tooltip, OverlayTrigger, Pagination } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTags } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useQueryClient } from "@tanstack/react-query";
+import React, { useState } from "react";
+import { Button, Tooltip, OverlayTrigger, Pagination } from "react-bootstrap";
+import { FormattedDate, FormattedNumber } from "react-intl";
 
+import { Transaction } from "../data/Transaction";
+import useTransactions from "../hooks/useTransactions";
+import { useUpdateTransactions } from "../hooks/useUpdateTransactions";
 import Categorisor from "./Categorisor";
 import TransactionFilter from "./TransactionFilter";
 import { TransactionFilters } from "./TransactionFilters";
-import useTransactions from "../hooks/useTransactions";
-import { useUpdateTransactions } from "../hooks/useUpdateTransactions";
-import { Transaction } from "../data/Transaction";
 
 interface TransactionsProps {
   page_size: number;

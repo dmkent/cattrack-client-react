@@ -1,11 +1,12 @@
 import React from "react";
-import { Alert, Modal, Form, Button, Badge } from "react-bootstrap";
-import useTransactionSplits from "../hooks/useTransactionSplits";
-import SplitFieldset from "./SplitFieldset";
-import useCategories from "../hooks/useCategories";
-import useTransactionSuggestions from "../hooks/useTransactionSuggestions";
+import { Alert, Modal, Form, Button } from "react-bootstrap";
+
+import { Category } from "../data/Category";
 import { Transaction } from "../data/Transaction";
-import { Category } from "src/data/Category";
+import useCategories from "../hooks/useCategories";
+import useTransactionSplits from "../hooks/useTransactionSplits";
+import useTransactionSuggestions from "../hooks/useTransactionSuggestions";
+import SplitFieldset from "./SplitFieldset";
 
 export interface CategorisorProps {
   transaction: Transaction;
