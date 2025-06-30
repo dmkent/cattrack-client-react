@@ -6,7 +6,7 @@ import { vi, MockedFunction, test, expect } from "vitest";
 import { renderWithProviders } from "../../RenderWithProviders";
 import { Category } from "../../data/Category";
 import { Transaction } from "../../data/Transaction";
-import Categorisor, { CategorisorProps } from "../Categorisor";
+import { Categorisor, CategorisorProps } from "../Categorisor";
 
 const categories: Category[] = [
   { id: "0", name: "Cat1", score: 0 },

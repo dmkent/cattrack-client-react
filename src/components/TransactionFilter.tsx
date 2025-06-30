@@ -1,10 +1,10 @@
 import { Button } from "react-bootstrap";
 
 import { TransactionFilters } from "../data/TransactionFilters";
-import useAccounts from "../hooks/useAccounts";
-import useCategories from "../hooks/useCategories";
-import usePeriods from "../hooks/usePeriods";
-import TransactionFilterPeriods from "./TransactionFilterPeriods";
+import { useAccounts } from "../hooks/useAccounts";
+import { useCategories } from "../hooks/useCategories";
+import { usePeriods } from "../hooks/usePeriods";
+import { TransactionFilterPeriods } from "./TransactionFilterPeriods";
 
 export interface TransactionFilterProps {
   filters: TransactionFilters;
@@ -17,7 +17,9 @@ interface TransactionFilterButtonProps {
   onClick: (name: string) => void;
 }
 
-function TransactionFilter(props: TransactionFilterProps): JSX.Element | null {
+export function TransactionFilter(
+  props: TransactionFilterProps,
+): JSX.Element | null {
   const { filters, setFilters } = props;
   const { isLoading: isAccountsLoading, data: accounts } = useAccounts();
   const { isLoading: isPeriodsLoading, data: periods } = usePeriods();
@@ -125,5 +127,3 @@ function TransactionFilter(props: TransactionFilterProps): JSX.Element | null {
     </div>
   );
 }
-
-export default TransactionFilter;

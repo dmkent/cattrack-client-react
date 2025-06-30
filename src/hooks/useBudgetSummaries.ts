@@ -5,7 +5,7 @@ import { checkStatusAxios } from "../client/CatTrackAPI";
 import { BudgetSummary } from "../data/Category";
 import { useAxios } from "./AxiosContext";
 
-export default function useBudgetSummaries(
+export function useBudgetSummaries(
   from_date: string | null,
   to_date: string | null,
 ) {

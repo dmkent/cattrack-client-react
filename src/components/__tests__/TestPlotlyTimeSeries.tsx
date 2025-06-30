@@ -3,7 +3,7 @@ import { PlotData } from "plotly.js-basic-dist";
 import { expect, test } from "vitest";
 
 import { SeriesPoint } from "../../data/Account";
-import PlotlyTimeSeries, { plotlyDataFromSeries } from "../PlotlyTimeSeries";
+import { PlotlyTimeSeries, plotlyDataFromSeries } from "../PlotlyTimeSeries";
 
 test("PlotlyTimeSeries should reshape series", () => {
   const raw: SeriesPoint[] = [

@@ -65,7 +65,7 @@ function logout() {
   localStorage.removeItem("jwt");
 }
 
-export default {
+export const AuthService = {
   login,
   refreshToken,
   logout,

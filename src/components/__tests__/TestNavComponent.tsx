@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 
 import { AuthContext } from "../../hooks/AuthContext";
-import NavComponent from "../NavComponent";
+import { NavComponent } from "../NavComponent";
 
 function setup(logged_in: boolean) {
   const mockAuth = {

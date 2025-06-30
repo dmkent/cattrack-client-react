@@ -7,16 +7,16 @@ import { FormattedDate, FormattedNumber } from "react-intl";
 
 import { Transaction } from "../data/Transaction";
 import { TransactionFilters } from "../data/TransactionFilters";
-import useTransactions from "../hooks/useTransactions";
+import { useTransactions } from "../hooks/useTransactions";
 import { useUpdateTransactions } from "../hooks/useUpdateTransactions";
-import Categorisor from "./Categorisor";
-import TransactionFilter from "./TransactionFilter";
+import { Categorisor } from "./Categorisor";
+import { TransactionFilter } from "./TransactionFilter";
 
 interface TransactionsProps {
   page_size: number;
 }
 
-function Transactions(props: TransactionsProps): JSX.Element | null {
+export function Transactions(props: TransactionsProps): JSX.Element | null {
   const { page_size } = props;
   const { updateTransactionSplits } = useUpdateTransactions();
   const [active_page, setPage] = useState<number>(1);
@@ -158,5 +158,3 @@ function Transactions(props: TransactionsProps): JSX.Element | null {
     </div>
   );
 }
-
-export default Transactions;

@@ -4,7 +4,7 @@ import { expect, test, vi } from "vitest";
 
 import { Period } from "../../data/Period";
 import { TransactionFilters } from "../../data/TransactionFilters";
-import TransactionFilterPeriods from "../TransactionFilterPeriods";
+import { TransactionFilterPeriods } from "../TransactionFilterPeriods";
 
 function setup(periods: Period[], filters?: TransactionFilters) {
   const props = {

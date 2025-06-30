@@ -25,7 +25,7 @@ export interface SplitFieldsetProps {
   is_valid: ValidationState;
 }
 
-function SplitFieldset(props: SplitFieldsetProps) {
+export function SplitFieldset(props: SplitFieldsetProps) {
   let vstate: "success" | "error" | null = null;
   if (props.is_valid.valid === true) {
     vstate = "success";
@@ -88,5 +88,3 @@ function SplitFieldset(props: SplitFieldsetProps) {
     </fieldset>
   );
 }
-
-export default SplitFieldset;

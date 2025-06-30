@@ -4,7 +4,7 @@ import { checkStatusAxios } from "../client/CatTrackAPI";
 import { Period } from "../data/Period";
 import { useAxios } from "./AxiosContext";
 
-export default function usePeriods() {
+export function usePeriods() {
   const axios = useAxios();
   const fetchPeriods = (): Promise<Period[]> =>
     axios

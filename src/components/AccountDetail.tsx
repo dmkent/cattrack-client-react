@@ -9,7 +9,7 @@ import {
 } from "react-bootstrap";
 
 import { Account, SeriesPoint } from "../data/Account";
-import PlotlyTimeSeries from "./PlotlyTimeSeries";
+import { PlotlyTimeSeries } from "./PlotlyTimeSeries";
 
 export interface AccountDetailProps {
   account: Account | null;
@@ -20,7 +20,7 @@ export interface AccountDetailProps {
   uploadToAccount: (account: Account, file: File) => void;
 }
 
-function AccountDetail(props: AccountDetailProps): JSX.Element | null {
+export function AccountDetail(props: AccountDetailProps): JSX.Element | null {
   const {
     account,
     accountSeries,
@@ -86,5 +86,3 @@ function AccountDetail(props: AccountDetailProps): JSX.Element | null {
     </div>
   );
 }
-
-export default AccountDetail;

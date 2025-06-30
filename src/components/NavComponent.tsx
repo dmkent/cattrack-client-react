@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import { useAuth } from "../hooks/AuthContext";
 
-function NavComponent(): JSX.Element {
+export function NavComponent(): JSX.Element {
   const auth = useAuth();
 
   return (
@@ -48,5 +48,3 @@ function NavComponent(): JSX.Element {
     </Navbar>
   );
 }
-
-export default NavComponent;

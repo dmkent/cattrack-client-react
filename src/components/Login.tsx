@@ -9,7 +9,7 @@ type Inputs = {
   password: string;
 };
 
-const Login: FC = () => {
+export const Login: FC = () => {
   const auth = useAuth();
   const navigate = useNavigate();
   const {
@@ -76,5 +76,3 @@ const Login: FC = () => {
     </div>
   );
 };
-
-export default Login;

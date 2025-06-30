@@ -2,10 +2,10 @@ import { Alert, Modal, Form, Button } from "react-bootstrap";
 
 import { Category } from "../data/Category";
 import { Split, Transaction } from "../data/Transaction";
-import useCategories from "../hooks/useCategories";
-import useTransactionSplits from "../hooks/useTransactionSplits";
-import useTransactionSuggestions from "../hooks/useTransactionSuggestions";
-import SplitFieldset from "./SplitFieldset";
+import { useCategories } from "../hooks/useCategories";
+import { useTransactionSplits } from "../hooks/useTransactionSplits";
+import { useTransactionSuggestions } from "../hooks/useTransactionSuggestions";
+import { SplitFieldset } from "./SplitFieldset";
 
 export interface CategorisorProps {
   transaction: Transaction;
@@ -19,7 +19,7 @@ interface CategorisorSuggestionProps {
   percentage: number;
 }
 
-function Categorisor(props: CategorisorProps): JSX.Element | null {
+export function Categorisor(props: CategorisorProps): JSX.Element | null {
   const { transaction, showModal, setModalShown, save } = props;
   const { isLoading: isCategoriesLoading, data: categories } = useCategories();
 
@@ -161,5 +161,3 @@ const CategorisorSuggestion = ({
     {suggestion.name} <span className="badge">{percentage}%</span>
   </li>
 );
-
-export default Categorisor;

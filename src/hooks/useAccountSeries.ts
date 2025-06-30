@@ -9,7 +9,7 @@ interface AccountSeriesResponse {
   value: string;
 }
 
-export default function useAccountSeries(accountId: string | undefined) {
+export function useAccountSeries(accountId: string | undefined) {
   const axios = useAxios();
 
   return useQuery<SeriesPoint[]>({

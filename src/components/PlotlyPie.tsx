@@ -52,7 +52,7 @@ export function plotlyDataFromSummary(summary: CategorySummary[]): Plotly.Data {
   };
 }
 
-function PlotlyPie(props: PlotlyPieProps) {
+export function PlotlyPie(props: PlotlyPieProps) {
   const plotContainer = useRef<HTMLDivElement>(null);
   const plotData = useRef<Plotly.Data>(undefined);
   const [hasRendered, setHasRendered] = useState(false);
@@ -77,5 +77,3 @@ function PlotlyPie(props: PlotlyPieProps) {
 
   return <div data-testid="plotly" ref={plotContainer}></div>;
 }
-
-export default PlotlyPie;

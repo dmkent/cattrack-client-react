@@ -4,7 +4,8 @@ import { expect, test, vi } from "vitest";
 
 import { renderWithProviders } from "../../RenderWithProviders";
 import { TransactionFilters } from "../../data/TransactionFilters";
-import TransactionFilter, {
+import {
+  TransactionFilter,
   TransactionFilterProps,
 } from "../TransactionFilter";
 

@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { expect, test } from "vitest";
 
-import Login from "../Login";
+import { Login } from "../Login";
 
 test("should render self and subcomponents", () => {
   render(

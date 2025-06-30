@@ -35,7 +35,7 @@ export function plotlyDataFromSeries(
   };
 }
 
-function PlotlyTimeSeries(props: PlotlyTimeSeriesProps) {
+export function PlotlyTimeSeries(props: PlotlyTimeSeriesProps) {
   const plotContainer = useRef<HTMLDivElement>(null);
   const plotData = useRef<Plotly.Data>(undefined);
 
@@ -75,5 +75,3 @@ function PlotlyTimeSeries(props: PlotlyTimeSeriesProps) {
 
   return <div data-testid="plotly" ref={plotContainer}></div>;
 }
-
-export default PlotlyTimeSeries;

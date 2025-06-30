@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { expect, test, vi } from "vitest";
 
-import SplitFieldset, { SplitFieldsetProps } from "../SplitFieldset";
+import { SplitFieldset, SplitFieldsetProps } from "../SplitFieldset";
 
 function setup(valid: boolean | null, message: string) {
   const props: SplitFieldsetProps = {

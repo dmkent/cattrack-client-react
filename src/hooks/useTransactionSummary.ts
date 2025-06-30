@@ -11,7 +11,7 @@ interface TransactionSummaryResponse {
   total: string;
 }
 
-export default function useTransactionSummaries(
+export function useTransactionSummaries(
   filters: Partial<PaginatedTransactionFilters>,
 ) {
   const axios = useAxios();

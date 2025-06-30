@@ -12,10 +12,10 @@ import {
 } from "react-bootstrap";
 import { FormattedNumber } from "react-intl";
 
-import AccountDetail from "../components/AccountDetail";
+import { AccountDetail } from "../components/AccountDetail";
 import { Account } from "../data/Account";
-import useAccountSeries from "../hooks/useAccountSeries";
-import useAccounts from "../hooks/useAccounts";
+import { useAccountSeries } from "../hooks/useAccountSeries";
+import { useAccounts } from "../hooks/useAccounts";
 import { useUpdateAccounts } from "../hooks/useUpdateAccounts";
 
 interface AccountRowProps {
@@ -23,7 +23,7 @@ interface AccountRowProps {
   onClick: (account: Account) => void;
 }
 
-function Accounts(): JSX.Element | null {
+export function Accounts(): JSX.Element | null {
   const { uploadFileToAccount, createAccount } = useUpdateAccounts();
   const [newName, setNewName] = useState<string>("");
   const [currentAccount, setCurrentAccount] = useState<Account | null>(null);
@@ -129,5 +129,3 @@ function Accounts(): JSX.Element | null {
     </div>
   );
 }
-
-export default Accounts;

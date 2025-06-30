@@ -9,7 +9,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "bootstrap/dist/css/bootstrap.css";
 import { createRoot } from "react-dom/client";
 
-import App from "./components/App";
+import { App } from "./components/App";
 import "./styles/local.css";
 
 // React query client
