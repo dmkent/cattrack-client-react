@@ -40,7 +40,7 @@ export function renderWithProviders(
         <AuthContext.Provider
           value={
             authState ?? {
-              authData: null,
+              authData: undefined,
               loading: false,
               signin: vi.fn(),
               signout: vi.fn(),

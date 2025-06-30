@@ -4,10 +4,10 @@ import React from "react";
 import { expect, test, vi } from "vitest";
 
 import { renderWithProviders } from "../../RenderWithProviders";
+import { TransactionFilters } from "../../data/TransactionFilters";
 import TransactionFilter, {
   TransactionFilterProps,
 } from "../TransactionFilter";
-import { TransactionFilters } from "../TransactionFilters";
 
 const periods = [
   {

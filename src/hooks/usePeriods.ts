@@ -10,6 +10,7 @@ export default function usePeriods() {
     axios
       .get("/api/periods/")
       .then(checkStatusAxios)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .then((rawPeriods: any[]) => {
         return rawPeriods.map(
           (rawPeriod): Period => ({

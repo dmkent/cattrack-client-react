@@ -12,17 +12,17 @@ export interface AuthData {
 }
 
 export interface AuthContextType {
-  authData: AuthData | null;
+  authData: AuthData | undefined;
   signin: (username: string, password: string, callback: VoidFunction) => void;
   signout: (callback: VoidFunction) => void;
-  refresh: () => Promise<AuthData | null>;
+  refresh: () => Promise<AuthData | undefined>;
   loading: boolean;
 }
 
 export const AuthContext = React.createContext<AuthContextType>(null!);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [authData, setAuthData] = React.useState<any>(null);
+  const [authData, setAuthData] = React.useState<AuthData>();
   const [loading, setLoading] = React.useState<boolean>(true);
 
   const refresh = async () => {
@@ -31,14 +31,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       restoredData = await AuthService.refreshToken();
       setAuthData(restoredData);
     } catch {
-      setAuthData(null);
+      setAuthData(undefined);
     } finally {
       setLoading(false);
     }
     return restoredData;
   };
 
-  const signin = (username: string, password: string, callback: VoidFunction) => {
+  const signin = (
+    username: string,
+    password: string,
+    callback: VoidFunction,
+  ) => {
     return AuthService.login(username, password).then((data) => {
       setAuthData(data);
       callback();
@@ -47,7 +51,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signout = (callback: VoidFunction) => {
     AuthService.logout();
-    setAuthData(null);
+    setAuthData(undefined);
     callback();
   };
 

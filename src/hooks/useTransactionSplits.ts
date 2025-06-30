@@ -1,11 +1,6 @@
 import { useState } from "react";
 
-import { Transaction } from "../data/Transaction";
-
-interface Split {
-  category: string;
-  amount: string | number;
-}
+import { Split, Transaction } from "../data/Transaction";
 
 interface SplitsState {
   splits: Split[];

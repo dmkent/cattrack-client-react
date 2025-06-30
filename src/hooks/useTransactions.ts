@@ -2,12 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 
 import { checkStatusAxios, filters_to_params } from "../client/CatTrackAPI";
 import { Transaction } from "../data/Transaction";
+import { TransactionFilters } from "../data/TransactionFilters";
 import { useAxios } from "./AxiosContext";
 
 export default function useTransactions(
   page: number,
   pageSize: number,
-  filters: any,
+  filters: TransactionFilters,
 ) {
   const axios = useAxios();
   const params = filters_to_params({
@@ -23,9 +24,11 @@ export default function useTransactions(
     axios
       .get("/api/transactions/" + params)
       .then(checkStatusAxios)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .then((rawTransactions: any) => {
         return {
           transactions: rawTransactions.results.map(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (rawTransaction: any): Transaction => {
               return {
                 id: rawTransaction.id,

@@ -6,9 +6,7 @@ import usePaymentSeries from "../hooks/usePaymentSeries";
 import { useUpdatePaymentSeries } from "../hooks/useUpdatePaymentSeries";
 import PaymentSeriesDetail from "./PaymentSeriesDetail";
 
-interface PaymentSeriesProps {}
-
-function PaymentSeries(props: PaymentSeriesProps): JSX.Element | null {
+function PaymentSeries(): JSX.Element | null {
   const { isLoading, data: paymentSeries } = usePaymentSeries();
   const { paymentSeriesAddBillFromFile } = useUpdatePaymentSeries();
   const [currentSeries, setCurrentSeries] = useState<PaymentSeriesItem | null>(

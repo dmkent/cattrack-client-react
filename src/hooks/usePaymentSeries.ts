@@ -10,6 +10,7 @@ export default function usePaymentSeries() {
     axios
       .get("/api/payments/")
       .then(checkStatusAxios)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .then((series: any[]) => {
         return series.map((seriesData) => series_from_json(seriesData));
       });

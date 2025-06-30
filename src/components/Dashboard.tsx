@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 import { Container, Col, Row } from "react-bootstrap";
 
+import { PeriodFilters } from "../data/TransactionFilters";
 import usePeriods from "../hooks/usePeriods";
 import useTransactionSummary from "../hooks/useTransactionSummary";
 import PlotlyPie from "./PlotlyPie";
 import TransactionFilterPeriods from "./TransactionFilterPeriods";
-import { PeriodFilters } from "./TransactionFilters";
 
-interface DashboardProps {}
-
-function Dashboard(props: DashboardProps): JSX.Element | null {
+function Dashboard(): JSX.Element | null {
   const { isLoading: isPeriodsLoading, data: periods } = usePeriods();
   const [filters, setFilters] = useState<PeriodFilters>({
     to_date: null,

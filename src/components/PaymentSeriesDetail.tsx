@@ -67,7 +67,7 @@ interface UploadFormProps {
 function UploadForm(props: UploadFormProps): JSX.Element {
   const [uploadFile, setUploadFile] = useState<File | null>(null);
 
-  const handleChange = (event: any): void => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const target = event.target;
     const files = target.files;
 
@@ -76,7 +76,7 @@ function UploadForm(props: UploadFormProps): JSX.Element {
     }
   };
 
-  const handleSubmit = (event: any): void => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     if (uploadFile) {
       props.uploadFile(uploadFile);
     }

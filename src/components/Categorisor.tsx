@@ -2,7 +2,7 @@ import React from "react";
 import { Alert, Modal, Form, Button } from "react-bootstrap";
 
 import { Category } from "../data/Category";
-import { Transaction } from "../data/Transaction";
+import { Split, Transaction } from "../data/Transaction";
 import useCategories from "../hooks/useCategories";
 import useTransactionSplits from "../hooks/useTransactionSplits";
 import useTransactionSuggestions from "../hooks/useTransactionSuggestions";
@@ -12,7 +12,7 @@ export interface CategorisorProps {
   transaction: Transaction;
   showModal: boolean;
   setModalShown: (shown: boolean) => void;
-  save: (transaction: Transaction, splits: any) => Promise<any>;
+  save: (transaction: Transaction, splits: Split[]) => Promise<void>;
 }
 
 interface CategorisorSuggestionProps {
@@ -24,12 +24,10 @@ function Categorisor(props: CategorisorProps): JSX.Element | null {
   const { transaction, showModal, setModalShown, save } = props;
   const { isLoading: isCategoriesLoading, data: categories } = useCategories();
 
-  const {
-    isLoading: isSuggestionsLoading,
-    isError: isSuggestError,
-    data: suggestions,
-  } = useTransactionSuggestions(transaction);
+  const { isLoading: isSuggestionsLoading, data: suggestions } =
+    useTransactionSuggestions(transaction);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [splits, setSuggestions, pushSplit, setSplitValue, removeSplit] =
     useTransactionSplits(transaction, suggestions);
 
@@ -88,7 +86,7 @@ function Categorisor(props: CategorisorProps): JSX.Element | null {
             <div>
               {splits &&
                 splits.splits &&
-                [...splits.splits].map((split, idx) => {
+                splits.splits.map((split, idx) => {
                   return (
                     <SplitFieldset
                       key={idx}
@@ -101,12 +99,12 @@ function Categorisor(props: CategorisorProps): JSX.Element | null {
                       categories={categories || []}
                       multiple_splits_exist={splits.splits.length > 1}
                       removeSplitCat={removeSplit}
-                      setSplitCategory={(event: any) => {
+                      setSplitCategory={(event) => {
                         const target = event.target;
                         const value = target.value;
                         setSplitValue("category", idx, value);
                       }}
-                      setSplitAmount={(event: any) => {
+                      setSplitAmount={(event) => {
                         const target = event.target;
                         const value = target.value;
                         setSplitValue("amount", idx, value);

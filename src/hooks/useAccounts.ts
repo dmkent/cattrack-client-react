@@ -10,6 +10,7 @@ export default function useAccounts() {
     axios
       .get("/api/accounts/")
       .then(checkStatusAxios)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .then((rawAccounts: any[]) => {
         return rawAccounts.map((rawAccount) => {
           return {

@@ -1,6 +1,6 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   FormLabel,
@@ -23,17 +23,13 @@ interface AccountRowProps {
   onClick: (account: Account) => void;
 }
 
-interface AccountsProps {}
-
-function Accounts(props: AccountsProps): JSX.Element | null {
+function Accounts(): JSX.Element | null {
   const { uploadFileToAccount, createAccount } = useUpdateAccounts();
   const [newName, setNewName] = useState<string>("");
   const [currentAccount, setCurrentAccount] = useState<Account | null>(null);
   const [showCreatePopover, setShowCreatePopover] = useState<boolean>(false);
   const { isLoading, data: accounts } = useAccounts();
-  const { isLoading: isSeriesLoading, data: accountSeries } = useAccountSeries(
-    currentAccount?.id,
-  );
+  const { data: accountSeries } = useAccountSeries(currentAccount?.id);
   const uploadInProgress = false,
     uploadProgress = 0,
     uploadResult = null;
@@ -58,7 +54,7 @@ function Accounts(props: AccountsProps): JSX.Element | null {
         <FormLabel>Name: </FormLabel>
         <FormControl
           type="text"
-          onChange={(event: any) => {
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setNewName(event.target.value);
           }}
           value={newName}

@@ -1,11 +1,11 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { format, sub } from "date-fns";
 import React from "react";
 import { expect, test, vi } from "vitest";
 
 import { Period } from "../../data/Period";
+import { TransactionFilters } from "../../data/TransactionFilters";
 import TransactionFilterPeriods from "../TransactionFilterPeriods";
-import { TransactionFilters } from "../TransactionFilters";
 
 function setup(periods: Period[], filters?: TransactionFilters) {
   const props = {

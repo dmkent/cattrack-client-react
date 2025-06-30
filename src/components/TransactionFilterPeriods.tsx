@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "react-bootstrap";
 
 import { Period } from "../data/Period";
-import { PeriodFilters } from "./TransactionFilters";
+import { PeriodFilters } from "../data/TransactionFilters";
 
 interface TransactionFilterPeriodsProps {
   filters: PeriodFilters;

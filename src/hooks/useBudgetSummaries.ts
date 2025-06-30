@@ -2,11 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import moment from "moment";
 
 import { checkStatusAxios } from "../client/CatTrackAPI";
+import { BudgetSummary } from "../data/Category";
 import { useAxios } from "./AxiosContext";
-
-interface BudgetSummary {
-  [key: string]: any;
-}
 
 export default function useBudgetSummaries(
   from_date: string | null,
@@ -19,13 +16,11 @@ export default function useBudgetSummaries(
   const fromStr = from_date
     ? from_date.replace("-", "")
     : moment().subtract(1, "month").format("YYYYMMDD");
-  const fetchSummaries = (): Promise<BudgetSummary> =>
+  const fetchSummaries = (): Promise<BudgetSummary[]> =>
     axios
       .get(`/api/categories/summary/${fromStr}/${toStr}/`)
       .then(checkStatusAxios)
-      .then((raw: BudgetSummary) => {
-        return raw;
-      });
+      .then((raw) => raw as BudgetSummary[]);
 
   return useQuery({
     queryKey: ["budget_summaries", from_date, to_date],

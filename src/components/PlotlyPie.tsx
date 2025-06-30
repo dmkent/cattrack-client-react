@@ -3,17 +3,11 @@ import React, { useRef, useState, useEffect } from "react";
 
 import { CategorySummary } from "../data/Transaction";
 
-interface PlotlyData {
-  values: number[];
-  labels: string[];
-  type: string;
-}
-
 interface PlotlyPieProps {
   summary: CategorySummary[];
 }
 
-export function plotlyDataFromSummary(summary: CategorySummary[]): PlotlyData {
+export function plotlyDataFromSummary(summary: CategorySummary[]): Plotly.Data {
   const values: number[] = [];
   const labels: string[] = [];
 
@@ -60,23 +54,23 @@ export function plotlyDataFromSummary(summary: CategorySummary[]): PlotlyData {
 
 function PlotlyPie(props: PlotlyPieProps) {
   const plotContainer = useRef<HTMLDivElement>(null);
-  const plotData = useRef<any[]>([{}]);
+  const plotData = useRef<Plotly.Data>();
   const [hasRendered, setHasRendered] = useState(false);
 
   const plotLayout = {
     //height: 800,
     //width: 1000
   };
-  plotData.current[0] = plotlyDataFromSummary(props.summary);
+  plotData.current = plotlyDataFromSummary(props.summary);
 
   useEffect(() => {
-    if (!plotContainer.current) {
+    if (!plotContainer.current || !plotData.current) {
       return;
     }
     if (hasRendered) {
       Plotly.redraw(plotContainer.current);
     } else {
-      Plotly.newPlot(plotContainer.current, plotData.current, plotLayout);
+      Plotly.newPlot(plotContainer.current, [plotData.current], plotLayout);
       setHasRendered(true);
     }
   }, [plotContainer, props.summary]);

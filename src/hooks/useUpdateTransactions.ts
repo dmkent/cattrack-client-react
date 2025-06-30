@@ -1,23 +1,18 @@
 import { checkStatusAxios } from "../client/CatTrackAPI";
-import { Transaction } from "../data/Transaction";
+import { Split, Transaction } from "../data/Transaction";
 import { useAxios } from "./AxiosContext";
-
-interface Split {
-  category: string;
-  amount: string | number;
-}
 
 export const useUpdateTransactions = () => {
   const axios = useAxios();
 
   const updateTransactionSplits = async (
     transaction: Transaction,
-    splits: Map<number, Split> | null,
+    splits: Split[] | null,
     onDone: () => void,
   ) => {
     let updated = { ...transaction };
-    if (splits !== null && splits.size === 1) {
-      const firstSplit = splits.get(0);
+    if (splits !== null && splits.length === 1) {
+      const firstSplit = splits[0];
       if (firstSplit) {
         updated = { ...updated, category: firstSplit.category };
       }
@@ -30,11 +25,10 @@ export const useUpdateTransactions = () => {
 
     await checkStatusAxios(updateResponse);
 
-    if (splits !== null && splits.size > 1) {
-      const splitsArray = Array.from(splits.values());
+    if (splits !== null && splits.length > 1) {
       const splitsResponse = await axios.post(
         `/api/transactions/${updated.id}/split/`,
-        splitsArray,
+        splits,
       );
       await checkStatusAxios(splitsResponse);
       onDone();
