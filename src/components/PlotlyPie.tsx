@@ -1,5 +1,5 @@
 import Plotly from "plotly.js-basic-dist";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useEffect } from "react";
 
 import { CategorySummary } from "../data/Transaction";
 
@@ -54,25 +54,19 @@ export function plotlyDataFromSummary(summary: CategorySummary[]): Plotly.Data {
 
 export function PlotlyPie(props: PlotlyPieProps) {
   const plotContainer = useRef<HTMLDivElement>(null);
-  const plotData = useRef<Plotly.Data>(undefined);
-  const [hasRendered, setHasRendered] = useState(false);
 
   const plotLayout = {
     //height: 800,
     //width: 1000
   };
-  plotData.current = plotlyDataFromSummary(props.summary);
+  const plotData = plotlyDataFromSummary(props.summary);
 
   useEffect(() => {
-    if (!plotContainer.current || !plotData.current) {
+    if (!plotContainer.current || !plotData) {
       return;
     }
-    if (hasRendered) {
-      Plotly.redraw(plotContainer.current);
-    } else {
-      Plotly.newPlot(plotContainer.current, [plotData.current], plotLayout);
-      setHasRendered(true);
-    }
+
+    Plotly.react(plotContainer.current, [plotData], plotLayout);
   }, [plotContainer, props.summary]);
 
   return <div data-testid="plotly" ref={plotContainer}></div>;

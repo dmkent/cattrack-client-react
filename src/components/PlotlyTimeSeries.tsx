@@ -1,5 +1,5 @@
 import Plotly from "plotly.js-basic-dist";
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import { SeriesPoint } from "../data/Account";
 
@@ -37,7 +37,6 @@ export function plotlyDataFromSeries(
 
 export function PlotlyTimeSeries(props: PlotlyTimeSeriesProps) {
   const plotContainer = useRef<HTMLDivElement>(null);
-  const plotData = useRef<Plotly.Data>(undefined);
 
   const updateDimensions = useCallback(() => {
     if (plotContainer.current) {
@@ -52,8 +51,7 @@ export function PlotlyTimeSeries(props: PlotlyTimeSeriesProps) {
     };
   });
 
-  const [hasRendered, setHasRendered] = useState(false);
-  plotData.current = plotlyDataFromSeries(
+  const plotData = plotlyDataFromSeries(
     props.series,
     props.plot_invert || false,
     props.plot_type || "bar",
@@ -61,16 +59,11 @@ export function PlotlyTimeSeries(props: PlotlyTimeSeriesProps) {
   const plotLayout = {};
 
   useEffect(() => {
-    if (plotContainer.current === null || plotData.current === undefined) {
+    if (plotContainer.current === null || plotData === undefined) {
       return;
     }
 
-    if (hasRendered) {
-      Plotly.redraw(plotContainer.current);
-    } else {
-      Plotly.newPlot(plotContainer.current, [plotData.current], plotLayout);
-      setHasRendered(true);
-    }
+    Plotly.react(plotContainer.current, [plotData], plotLayout);
   }, [plotContainer, props.series, props.plot_invert, props.plot_type]);
 
   return <div data-testid="plotly" ref={plotContainer}></div>;

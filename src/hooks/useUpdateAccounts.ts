@@ -1,3 +1,5 @@
+import { useQueryClient } from "@tanstack/react-query";
+
 import { checkStatusAxios } from "../client/CatTrackAPI";
 import { parseErrors } from "../client/ErrorParser";
 import { Account } from "../data/Account";
@@ -5,6 +7,7 @@ import { useAxios } from "./AxiosContext";
 
 export const useUpdateAccounts = () => {
   const axios = useAxios();
+  const queryClient = useQueryClient();
 
   const uploadFileToAccount = async (
     account: Account,
@@ -28,6 +31,10 @@ export const useUpdateAccounts = () => {
         formData,
       );
       if (response.status === 200) {
+        await queryClient.invalidateQueries({
+          queryKey: ["account_series", account.id],
+        });
+
         return;
       }
 
@@ -49,11 +56,9 @@ export const useUpdateAccounts = () => {
   const createAccount = async (name: string): Promise<Account> => {
     try {
       const response = await axios.post("/api/accounts/", { name });
-      if (response.status === 201) {
-        return response.data as Account;
-      }
-
       const result = await checkStatusAxios(response);
+
+      await queryClient.invalidateQueries({ queryKey: ["accounts"] });
 
       return {
         ...result,
