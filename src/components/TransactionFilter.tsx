@@ -82,7 +82,7 @@ export function TransactionFilter(
           None
         </Button>
         {categories &&
-          [...categories].map((category) => {
+          categories.map((category) => {
             return (
               <TransactionFilterButton
                 key={"cat-" + category.id}
@@ -111,7 +111,7 @@ export function TransactionFilter(
           All
         </Button>
         {accounts &&
-          [...accounts.values()].map((account) => {
+          accounts.map((account) => {
             return (
               <TransactionFilterButton
                 key={"acct-" + account.id}

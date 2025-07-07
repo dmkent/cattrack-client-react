@@ -7,7 +7,7 @@ import { useAxios } from "./AxiosContext";
 export function useCategories() {
   const axios = useAxios();
 
-  const fetchCategories = () =>
+  const fetchCategories: () => Promise<Category[]> = () =>
     axios
       .get("/api/categories/")
       .then(checkStatusAxios) // Validate the response using checkStatusAxios
