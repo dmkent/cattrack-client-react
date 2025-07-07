@@ -48,6 +48,9 @@ export function Transactions(props: TransactionsProps): JSX.Element | null {
 
   const { num_records, transactions } = data;
   const num_pages = Math.ceil(num_records / page_size);
+  const paginationProps = (active: boolean) => ({
+    linkClassName: active ? "link-muted" : "link-secondary",
+  });
 
   const tooltips: { [key: string]: JSX.Element } = {};
   transactions.forEach((trans: Transaction) => {
@@ -65,7 +68,7 @@ export function Transactions(props: TransactionsProps): JSX.Element | null {
         <div className="col-md-10">
           <table className="table table-sm">
             <tbody>
-              {[...transactions.values()].map((trans) => {
+              {transactions.map((trans) => {
                 let description = trans.description;
                 if (description.length > 50) {
                   description = description.substr(0, 50) + "...";
@@ -119,6 +122,38 @@ export function Transactions(props: TransactionsProps): JSX.Element | null {
               })}
             </tbody>
           </table>
+          <Pagination className="justify-content-center">
+            <Pagination.First
+              onClick={() => setPage(1)}
+              {...paginationProps(false)}
+            />
+            <Pagination.Prev
+              onClick={() => setPage(Math.max(1, active_page - 1))}
+              {...paginationProps(false)}
+            />
+            {Array.from({ length: Math.min(5, num_pages) }, (_, i) => {
+              const first_page = Math.max(0, active_page - 2);
+              const page = first_page + i + 1;
+              return (
+                <Pagination.Item
+                  key={page}
+                  active={page === active_page}
+                  onClick={() => setPage(page)}
+                  {...paginationProps(page === active_page)}
+                >
+                  {page}
+                </Pagination.Item>
+              );
+            })}
+            <Pagination.Next
+              onClick={() => setPage(Math.min(num_pages, active_page + 1))}
+              {...paginationProps(false)}
+            />
+            <Pagination.Last
+              onClick={() => setPage(num_pages)}
+              {...paginationProps(false)}
+            />
+          </Pagination>
           {selected_transaction && (
             <Categorisor
               transaction={selected_transaction}
@@ -132,29 +167,6 @@ export function Transactions(props: TransactionsProps): JSX.Element | null {
         </div>
         <TransactionFilter filters={filters} setFilters={setFilters} />
       </div>
-      <Pagination>
-        <Pagination.First onClick={() => setPage(1)} />
-        <Pagination.Prev
-          onClick={() => setPage(Math.max(1, active_page - 1))}
-        />
-        {Array.from({ length: Math.min(5, num_pages) }, (_, i) => {
-          const first_page = Math.max(0, active_page - 2);
-          const page = first_page + i + 1;
-          return (
-            <Pagination.Item
-              key={page}
-              active={page === active_page}
-              onClick={() => setPage(page)}
-            >
-              {page}
-            </Pagination.Item>
-          );
-        })}
-        <Pagination.Next
-          onClick={() => setPage(Math.min(num_pages, active_page + 1))}
-        />
-        <Pagination.Last onClick={() => setPage(num_pages)} />
-      </Pagination>
     </div>
   );
 }
