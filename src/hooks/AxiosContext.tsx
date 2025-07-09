@@ -17,7 +17,7 @@ export const AxiosProvider = ({ children }: { children: ReactNode }) => {
     });
 
     instance.interceptors.request.use((config) => {
-      if (user?.token) {
+      if (!config.headers.Authorization && user?.token) {
         config.headers.Authorization = `Bearer ${user.token}`;
       }
 
@@ -50,7 +50,8 @@ export const AxiosProvider = ({ children }: { children: ReactNode }) => {
 
             if (data?.token) {
               // Update the authorization header with the new access token.
-              originalRequest.headers["Authorization"] = `Bearer ${data.token}`;
+              originalRequest.headers.Authorization = `Bearer ${data.token}`;
+
               return instance(originalRequest); // Retry the original request with the new access token.
             }
           } catch (refreshError) {
