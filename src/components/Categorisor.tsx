@@ -1,4 +1,5 @@
 import { Alert, Modal, Form, Button } from "react-bootstrap";
+import { useAccounts } from "../hooks/useAccounts";
 
 import { Category } from "../data/Category";
 import { Split, Transaction } from "../data/Transaction";
@@ -22,6 +23,7 @@ interface CategorisorSuggestionProps {
 export function Categorisor(props: CategorisorProps): JSX.Element | null {
   const { transaction, showModal, setModalShown, save } = props;
   const { isLoading: isCategoriesLoading, data: categories } = useCategories();
+  const { data: accounts } = useAccounts();
 
   const { isLoading: isSuggestionsLoading, data: suggestions } =
     useTransactionSuggestions(transaction);
@@ -33,6 +35,8 @@ export function Categorisor(props: CategorisorProps): JSX.Element | null {
   if (isSuggestionsLoading || isCategoriesLoading) {
     return null;
   }
+
+  const account = accounts?.find((acc) => acc.id === transaction.account);
 
   let suggestionsList = null;
   if (suggestions && suggestions.length > 1) {
@@ -72,7 +76,7 @@ export function Categorisor(props: CategorisorProps): JSX.Element | null {
                 : transaction.when}
             </dd>
             <dt>Account</dt>
-            <dd>{transaction.account}</dd>
+            <dd>{account?.name ?? transaction.account}</dd>
             <dt>Current category:</dt>
             <dd>{transaction.category_name}</dd>
             <dt>Total amount</dt>
