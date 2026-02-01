@@ -38,3 +38,13 @@
   height: 25px;
   width: 1px;
 }
+
+.category-badge-clickable {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.category-badge-clickable:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}

@@ -1,12 +1,14 @@
 import { faTags } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { Button, Tooltip, OverlayTrigger, Pagination } from "react-bootstrap";
+import { useState, useRef, useEffect } from "react";
+import { Button, Tooltip, OverlayTrigger, Pagination, FormSelect } from "react-bootstrap";
 import { FormattedDate, FormattedNumber } from "react-intl";
 
+import { Category } from "../data/Category";
 import { Transaction } from "../data/Transaction";
 import { TransactionFilters } from "../data/TransactionFilters";
+import { useCategories } from "../hooks/useCategories";
 import { useTransactions } from "../hooks/useTransactions";
 import { useUpdateTransactions } from "../hooks/useUpdateTransactions";
 import { Categorisor } from "./Categorisor";
@@ -30,6 +32,20 @@ export function Transactions(props: TransactionsProps): JSX.Element | null {
   const [selected_transaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
   const [modal_shown, setModalShown] = useState<boolean>(false);
+  const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
+  const selectRef = useRef<HTMLSelectElement>(null);
+
+  const { data: categoriesData } = useCategories();
+  const categories = categoriesData || [];
+
+  useEffect(() => {
+    if (editingCategoryId && selectRef.current) {
+      // Small delay to ensure the select is rendered and focused
+      setTimeout(() => {
+        selectRef.current?.showPicker?.();
+      }, 0);
+    }
+  }, [editingCategoryId]);
 
   const { isLoading, isError, data } = useTransactions(
     active_page,
@@ -44,6 +60,27 @@ export function Transactions(props: TransactionsProps): JSX.Element | null {
 
   function reloadPage(): void {
     queryClient.invalidateQueries({ queryKey: ["transactions"] });
+  }
+
+  function handleCategoryClick(transactionId: string): void {
+    setEditingCategoryId(transactionId);
+  }
+
+  function handleCategoryChange(trans: Transaction, newCategoryId: string): void {
+    if (newCategoryId === trans.category) {
+      setEditingCategoryId(null);
+      return;
+    }
+    
+    const updatedTransaction = { ...trans, category: newCategoryId };
+    updateTransactionSplits(updatedTransaction, null, () => {
+      reloadPage();
+      setEditingCategoryId(null);
+    });
+  }
+
+  function handleCategoryBlur(): void {
+    setEditingCategoryId(null);
   }
 
   const { num_records, transactions } = data;
@@ -100,9 +137,31 @@ export function Transactions(props: TransactionsProps): JSX.Element | null {
                       </span>
                     </td>
                     <td>
-                      <span className="badge text-bg-secondary">
-                        {trans.category_name}
-                      </span>
+                      {editingCategoryId === trans.id ? (
+                        <FormSelect
+                          ref={selectRef}
+                          size="sm"
+                          value={trans.category}
+                          onChange={(e) => handleCategoryChange(trans, e.target.value)}
+                          onBlur={handleCategoryBlur}
+                          autoFocus
+                        >
+                          {categories.map((cat: Category) => (
+                            <option key={cat.id} value={cat.id}>
+                              {cat.name}
+                            </option>
+                          ))}
+                        </FormSelect>
+                      ) : (
+                        <span 
+                          className="badge text-bg-secondary category-badge-clickable"
+                          onClick={() => handleCategoryClick(trans.id)}
+                          role="button"
+                          tabIndex={0}
+                        >
+                          {trans.category_name}
+                        </span>
+                      )}
                     </td>
                     <td>
                       <Button
