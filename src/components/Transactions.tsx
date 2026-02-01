@@ -166,15 +166,14 @@ export function Transactions(props: TransactionsProps): JSX.Element | null {
                           ))}
                         </FormSelect>
                       ) : (
-                        <a
-                          href="#"
+                        <button
                           className="badge text-bg-secondary"
                           onClick={() => handleCategoryClick(trans.id)}
                           role="button"
                           tabIndex={0}
                         >
                           {trans.category_name}
-                        </a>
+                        </button>
                       )}
                     </td>
                     <td>
