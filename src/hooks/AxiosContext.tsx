@@ -56,7 +56,6 @@ export const AxiosProvider = ({ children }: { children: ReactNode }) => {
             }
           } catch (refreshError) {
             // Handle refresh token errors by clearing stored tokens and redirecting to the login page.
-            console.error("Token refresh failed:", refreshError);
             return Promise.reject(refreshError);
           }
         }
