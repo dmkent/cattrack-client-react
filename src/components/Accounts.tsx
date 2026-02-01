@@ -24,29 +24,17 @@ interface AccountRowProps {
 }
 
 export function Accounts(): JSX.Element | null {
-  const { uploadFileToAccount, createAccount } = useUpdateAccounts();
+  const { createAccount } = useUpdateAccounts();
   const [newName, setNewName] = useState<string>("");
   const [currentAccount, setCurrentAccount] = useState<Account | null>(null);
   const [showCreatePopover, setShowCreatePopover] = useState<boolean>(false);
   const { isLoading, data: accounts } = useAccounts();
   const { data: accountSeries } = useAccountSeries(currentAccount?.id);
-  const uploadInProgress = false,
-    uploadProgress = 0,
-    uploadResult = null;
 
   const handleCreateAccount = (): void => {
     createAccount(newName);
     setNewName("");
     setShowCreatePopover(false);
-  };
-
-  const handleUploadToAccount = (
-    account: Account,
-    file: File,
-    fromDate: string | null,
-    toDate: string | null,
-  ): void => {
-    uploadFileToAccount(account, file, fromDate, toDate);
   };
 
   if (isLoading) {
@@ -128,10 +116,6 @@ export function Accounts(): JSX.Element | null {
           <AccountDetail
             account={currentAccount}
             accountSeries={accountSeries}
-            uploadToAccount={handleUploadToAccount}
-            uploadInProgress={uploadInProgress}
-            uploadProgress={uploadProgress}
-            uploadResult={uploadResult}
           />
         )}
       </div>
