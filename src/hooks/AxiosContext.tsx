@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import * as Cookies from "js-cookie";
+import Cookies from "js-cookie";
 import { createContext, useContext, useMemo, ReactNode } from "react";
 
 import CONFIG from "ctrack_config";
@@ -56,7 +56,6 @@ export const AxiosProvider = ({ children }: { children: ReactNode }) => {
             }
           } catch (refreshError) {
             // Handle refresh token errors by clearing stored tokens and redirecting to the login page.
-            console.error("Token refresh failed:", refreshError);
             return Promise.reject(refreshError);
           }
         }

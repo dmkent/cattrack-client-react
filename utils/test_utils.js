@@ -1,5 +1,41 @@
 import "@testing-library/jest-dom";
 
+// Suppress JSDOM AggregateError messages from network requests
+const originalConsoleError = console.error;
+const originalStderrWrite = process.stderr.write;
+
+console.error = (...args) => {
+  // Filter out AggregateError stack traces from JSDOM
+  const stringified = args[0]?.toString() || "";
+  if (
+    stringified.includes("AggregateError") ||
+    stringified.includes("xhr-utils.js") ||
+    stringified.includes("XMLHttpRequest-impl.js")
+  ) {
+    return;
+  }
+  originalConsoleError.apply(console, args);
+};
+
+// Suppress stderr output for JSDOM AggregateErrors
+process.stderr.write = function (chunk, encoding, callback) {
+  const str = chunk.toString();
+  if (
+    str.includes("AggregateError") ||
+    str.includes("xhr-utils.js") ||
+    str.includes("XMLHttpRequest-impl.js") ||
+    str.includes("at Object.dispatchError")
+  ) {
+    if (typeof encoding === "function") {
+      encoding();
+    } else if (callback) {
+      callback();
+    }
+    return true;
+  }
+  return originalStderrWrite.apply(process.stderr, arguments);
+};
+
 // Mock canvas for plotly.js
 Object.defineProperty(HTMLCanvasElement.prototype, "getContext", {
   value: () => ({
