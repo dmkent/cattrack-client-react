@@ -28,8 +28,18 @@ const periods: Period[] = [
 ];
 
 const accounts: Account[] = [
-  { id: "0", name: "account 1", balance: 1000 },
-  { id: "1", name: "account 2", balance: 500 },
+  {
+    id: "0",
+    name: "account 1",
+    balance: 1000,
+    last_transaction: null,
+  },
+  {
+    id: "1",
+    name: "account 2",
+    balance: 500,
+    last_transaction: null,
+  },
 ];
 
 const categories: Category[] = [
@@ -173,18 +183,18 @@ test("should update category when new category is selected", async () => {
       category_name: "Cat1",
     },
   ];
-  
+
   renderWithProviders(<Transactions {...props} />, undefined, (mockAdapter) => {
     mockAdapter.onGet("/api/periods/").reply(200, periods);
     mockAdapter.onGet("/api/accounts/").reply(200, accounts);
     mockAdapter.onGet("/api/categories/").reply(200, categories);
-    
+
     // Initial load - return Cat1
     mockAdapter.onGet("/api/transactions/?page=1&page_size=20").replyOnce(200, {
       results: transactions,
       count: 1,
     });
-    
+
     // Mock the update endpoint
     mockAdapter.onPut("/api/transactions/0/").reply(200, {
       id: "0",
@@ -195,7 +205,7 @@ test("should update category when new category is selected", async () => {
       account: "0",
       category_name: "Cat2",
     });
-    
+
     // After update - return Cat2
     mockAdapter.onGet("/api/transactions/?page=1&page_size=20").reply(200, {
       results: [
@@ -226,7 +236,7 @@ test("should update category when new category is selected", async () => {
   await waitFor(() => {
     expect(screen.queryByRole("combobox")).toBeFalsy();
   });
-  
+
   // Verify the updated category is now displayed in the table
   await waitFor(() => {
     const updatedTable = screen.getByRole("table");
@@ -269,7 +279,7 @@ test("should close dropdown on blur without saving", async () => {
   await waitFor(() => {
     expect(screen.queryByRole("combobox")).toBeFalsy();
   });
-  
+
   // Original badge should still be visible in the table
   const tableAfter = screen.getByRole("table");
   expect(within(tableAfter).getByText("Cat1")).toBeTruthy();
@@ -291,13 +301,13 @@ test("should not update when same category is selected", async () => {
       category_name: "Cat1",
     },
   ];
-  
+
   const updateSpy = vi.fn();
-  
+
   renderWithProviders(<Transactions {...props} />, undefined, (mockAdapter) => {
     setup(mockAdapter, transactions);
     // Track if update endpoint is called
-    mockAdapter.onPut("/api/transactions/0/").reply((config) => {
+    mockAdapter.onPut("/api/transactions/0/").reply(() => {
       updateSpy();
       return [200, transactions[0]];
     });
@@ -316,6 +326,6 @@ test("should not update when same category is selected", async () => {
   await waitFor(() => {
     expect(screen.queryByRole("combobox")).toBeFalsy();
   });
-  
+
   expect(updateSpy).not.toHaveBeenCalled();
 });
