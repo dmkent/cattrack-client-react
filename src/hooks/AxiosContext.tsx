@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import * as Cookies from "js-cookie";
+import Cookies from "js-cookie";
 import { createContext, useContext, useMemo, ReactNode } from "react";
 
 import CONFIG from "ctrack_config";
