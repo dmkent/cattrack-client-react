@@ -31,6 +31,7 @@ export function AccountDetail(props: AccountDetailProps): JSX.Element | null {
     message: string;
   } | null>(null);
   const successTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // Cleanup timer on unmount
   useEffect(() => {
@@ -97,11 +98,8 @@ export function AccountDetail(props: AccountDetailProps): JSX.Element | null {
       setToDate(null);
 
       // Reset file input
-      const fileInput = document.querySelector(
-        'input[type="file"]',
-      ) as HTMLInputElement;
-      if (fileInput) {
-        fileInput.value = "";
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
       }
     } catch (error) {
       const errorMessage =
@@ -130,6 +128,7 @@ export function AccountDetail(props: AccountDetailProps): JSX.Element | null {
             name="upload_file"
             onChange={handleChange}
             disabled={uploadInProgress}
+            ref={fileInputRef}
           />
           <FormControl
             type="date"
