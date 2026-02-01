@@ -14,6 +14,7 @@ export const useUpdateAccounts = () => {
     uploadFile: File,
     fromDate: string | null = null,
     toDate: string | null = null,
+    onProgress?: (progress: number) => void,
   ): Promise<void> => {
     const formData = new FormData();
     formData.append("data_file", uploadFile);
@@ -29,6 +30,16 @@ export const useUpdateAccounts = () => {
       const response = await axios.post(
         `/api/accounts/${account.id}/load/`,
         formData,
+        {
+          onUploadProgress: (progressEvent) => {
+            if (progressEvent.total && onProgress) {
+              const percentage = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total,
+              );
+              onProgress(percentage);
+            }
+          },
+        },
       );
       if (response.status === 200) {
         await queryClient.invalidateQueries({
