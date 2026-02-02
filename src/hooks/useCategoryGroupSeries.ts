@@ -4,21 +4,21 @@ import { checkStatusAxios } from "../client/CatTrackAPI";
 import { SeriesPoint } from "../data/Account";
 import { useAxios } from "./AxiosContext";
 
-interface CategorySeriesResponse {
+interface CategoryGroupSeriesResponse {
   label: string;
   value: string;
 }
 
-export function useCategorySeries(category_id: string) {
+export function useCategoryGroupSeries(categoryGroupId: string) {
   const axios = useAxios();
 
-  const fetchCategories = (): Promise<SeriesPoint[]> => {
+  const fetchCategoryGroupSeries = (): Promise<SeriesPoint[]> => {
     const fromDate = "2023-01-01";
     const toDate = new Date().toISOString().split("T")[0];
 
     return (
       axios
-        .get(`/api/categories/${category_id}/series/`, {
+        .get(`/api/category-groups/${categoryGroupId}/weekly_summary/`, {
           params: {
             from_date: fromDate,
             to_date: toDate,
@@ -27,7 +27,7 @@ export function useCategorySeries(category_id: string) {
         .then(checkStatusAxios)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .then((series: any[]) =>
-          series.map((raw: CategorySeriesResponse) => {
+          series.map((raw: CategoryGroupSeriesResponse) => {
             return { label: raw.label, value: parseFloat(raw.value) };
           }),
         )
@@ -35,8 +35,8 @@ export function useCategorySeries(category_id: string) {
   };
 
   return useQuery({
-    queryKey: ["categorySeries", category_id],
-    queryFn: fetchCategories,
-    enabled: !!category_id,
+    queryKey: ["categoryGroupSeries", categoryGroupId],
+    queryFn: fetchCategoryGroupSeries,
+    enabled: !!categoryGroupId,
   });
 }

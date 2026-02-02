@@ -4,6 +4,11 @@ export interface Category {
   score: number;
 }
 
+export interface CategoryGroup {
+  id: string;
+  name: string;
+}
+
 export interface BudgetSummary {
   id: string;
   name: string;
