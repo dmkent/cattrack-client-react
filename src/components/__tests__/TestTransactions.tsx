@@ -338,26 +338,42 @@ test("should scroll to top when page changes", async () => {
   const props = {
     page_size: 20,
   };
-  const transactions: Transaction[] = Array.from({ length: 20 }, (_, i) => ({
-    id: String(i),
-    when: new Date("2017-01-01"),
-    description: `Transaction ${i}`,
-    amount: -10.0,
-    category: "0",
-    account: "0",
-    category_name: "Cat1",
-  }));
+  const page1Transactions: Transaction[] = Array.from(
+    { length: 20 },
+    (_, i) => ({
+      id: String(i),
+      when: new Date("2017-01-01"),
+      description: `Transaction ${i}`,
+      amount: -10.0,
+      category: "0",
+      account: "0",
+      category_name: "Cat1",
+    }),
+  );
+
+  const page2Transactions: Transaction[] = Array.from(
+    { length: 20 },
+    (_, i) => ({
+      id: String(i + 20),
+      when: new Date("2017-01-02"),
+      description: `Transaction ${i + 20}`,
+      amount: -15.0,
+      category: "0",
+      account: "0",
+      category_name: "Cat1",
+    }),
+  );
 
   renderWithProviders(<Transactions {...props} />, undefined, (mockAdapter) => {
     mockAdapter.onGet("/api/periods/").reply(200, periods);
     mockAdapter.onGet("/api/accounts/").reply(200, accounts);
     mockAdapter.onGet("/api/categories/").reply(200, categories);
     mockAdapter.onGet("/api/transactions/?page=1&page_size=20").reply(200, {
-      results: transactions,
+      results: page1Transactions,
       count: 40, // 2 pages worth of data
     });
     mockAdapter.onGet("/api/transactions/?page=2&page_size=20").reply(200, {
-      results: transactions,
+      results: page2Transactions,
       count: 40,
     });
   });
