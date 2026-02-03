@@ -44,6 +44,11 @@ export function Transactions(props: TransactionsProps): JSX.Element | null {
   );
   const selectRef = useRef<HTMLSelectElement>(null);
 
+  const handlePageChange = (newPage: number): void => {
+    setPage(newPage);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const { data: categoriesData } = useCategories();
   const categories = categoriesData || [];
 
@@ -221,11 +226,11 @@ export function Transactions(props: TransactionsProps): JSX.Element | null {
           </div>
           <Pagination className="justify-content-center">
             <Pagination.First
-              onClick={() => setPage(1)}
+              onClick={() => handlePageChange(1)}
               {...paginationProps(false)}
             />
             <Pagination.Prev
-              onClick={() => setPage(Math.max(1, active_page - 1))}
+              onClick={() => handlePageChange(Math.max(1, active_page - 1))}
               {...paginationProps(false)}
             />
             {Array.from({ length: Math.min(5, num_pages) }, (_, i) => {
@@ -235,7 +240,7 @@ export function Transactions(props: TransactionsProps): JSX.Element | null {
                 <Pagination.Item
                   key={page}
                   active={page === active_page}
-                  onClick={() => setPage(page)}
+                  onClick={() => handlePageChange(page)}
                   {...paginationProps(page === active_page)}
                 >
                   {page}
@@ -243,11 +248,13 @@ export function Transactions(props: TransactionsProps): JSX.Element | null {
               );
             })}
             <Pagination.Next
-              onClick={() => setPage(Math.min(num_pages, active_page + 1))}
+              onClick={() =>
+                handlePageChange(Math.min(num_pages, active_page + 1))
+              }
               {...paginationProps(false)}
             />
             <Pagination.Last
-              onClick={() => setPage(num_pages)}
+              onClick={() => handlePageChange(num_pages)}
               {...paginationProps(false)}
             />
           </Pagination>
