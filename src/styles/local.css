@@ -38,3 +38,78 @@
   height: 25px;
   width: 1px;
 }
+
+/* Responsive Transactions Table - Bootstrap 5 Mobile Approach */
+@media (max-width: 767.98px) {
+  .transactions-table {
+    border: 0;
+  }
+
+  .transactions-table thead {
+    display: none;
+  }
+
+  .transactions-table tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    background-color: #fff;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  }
+
+  .transactions-table tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    border: none;
+    border-bottom: 1px solid #dee2e6;
+    text-align: right;
+  }
+
+  .transactions-table tbody td:last-child {
+    border-bottom: none;
+  }
+
+  .transactions-table tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    text-align: left;
+    flex-shrink: 0;
+    margin-right: 1rem;
+  }
+
+  .transactions-table tbody td > * {
+    flex: 1;
+    text-align: right;
+  }
+
+  /* Ensure category badge stays sized to content */
+  .transactions-table tbody td[data-label="Category"] button {
+    flex: 0 1 auto;
+    width: auto;
+  }
+
+  /* Ensure category select is appropriately sized on mobile */
+  .transactions-table tbody td[data-label="Category"] select {
+    flex: 1;
+    min-width: 150px;
+  }
+
+  /* Make actions button center aligned */
+  .transactions-table tbody td[data-label="Actions"] {
+    justify-content: space-between;
+  }
+
+  .transactions-table tbody td[data-label="Actions"] button {
+    flex: 0;
+  }
+}
+
+/* Desktop view improvements */
+@media (min-width: 768px) {
+  .transactions-table tbody td.text-end {
+    text-align: right !important;
+  }
+}

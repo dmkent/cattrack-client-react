@@ -8,6 +8,7 @@ import {
   OverlayTrigger,
   Pagination,
   FormSelect,
+  Accordion,
 } from "react-bootstrap";
 import { FormattedDate, FormattedNumber } from "react-intl";
 
@@ -112,88 +113,112 @@ export function Transactions(props: TransactionsProps): JSX.Element | null {
   return (
     <div>
       <h3>Transactions</h3>
+      {/* Mobile filter accordion */}
+      <div className="d-md-none mb-3">
+        <Accordion>
+          <Accordion.Item eventKey="0">
+            <Accordion.Header>Filter Transactions</Accordion.Header>
+            <Accordion.Body>
+              <TransactionFilter filters={filters} setFilters={setFilters} />
+            </Accordion.Body>
+          </Accordion.Item>
+        </Accordion>
+      </div>
       <div className="row">
         <div className="col-md-10">
-          <table className="table table-sm">
-            <tbody>
-              {transactions.map((trans) => {
-                let description = trans.description;
-                if (description.length > 50) {
-                  description = description.substr(0, 50) + "...";
-                }
-                return (
-                  <tr key={trans.id}>
-                    <td>
-                      <FormattedDate value={trans.when} />
-                    </td>
-                    <td>
-                      {tooltips && (
-                        <OverlayTrigger
-                          placement="bottom"
-                          overlay={tooltips[trans.id]}
-                        >
-                          <span>{description}</span>
-                        </OverlayTrigger>
-                      )}
-                    </td>
-                    <td className="text-right">
-                      <span
-                        className={trans.amount < 0 ? "text-danger" : undefined}
-                      >
-                        <FormattedNumber
-                          value={trans.amount || 0.0}
-                          style="currency"
-                          currency="AUD"
-                        />
-                      </span>
-                    </td>
-                    <td>
-                      {editingCategoryId === trans.id ? (
-                        <FormSelect
-                          ref={selectRef}
-                          size="sm"
-                          value={trans.category}
-                          onChange={(e) =>
-                            handleCategoryChange(trans, e.target.value)
+          <div className="table-responsive-custom">
+            <table className="table table-sm transactions-table">
+              <thead className="d-none d-md-table-header-group">
+                <tr>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th className="text-end">Amount</th>
+                  <th>Category</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {transactions.map((trans) => {
+                  let description = trans.description;
+                  if (description.length > 50) {
+                    description = description.substr(0, 50) + "...";
+                  }
+                  return (
+                    <tr key={trans.id}>
+                      <td data-label="Date">
+                        <FormattedDate value={trans.when} />
+                      </td>
+                      <td data-label="Description">
+                        {tooltips && (
+                          <OverlayTrigger
+                            placement="bottom"
+                            overlay={tooltips[trans.id]}
+                          >
+                            <span>{description}</span>
+                          </OverlayTrigger>
+                        )}
+                      </td>
+                      <td data-label="Amount" className="text-end">
+                        <span
+                          className={
+                            trans.amount < 0 ? "text-danger" : undefined
                           }
-                          onBlur={handleCategoryBlur}
-                          autoFocus
                         >
-                          {categories.map((cat: Category) => (
-                            <option key={cat.id} value={cat.id}>
-                              {cat.name}
-                            </option>
-                          ))}
-                        </FormSelect>
-                      ) : (
-                        <button
-                          className="badge text-bg-secondary"
-                          onClick={() => handleCategoryClick(trans.id)}
-                          role="button"
-                          tabIndex={0}
+                          <FormattedNumber
+                            value={trans.amount || 0.0}
+                            style="currency"
+                            currency="AUD"
+                          />
+                        </span>
+                      </td>
+                      <td data-label="Category">
+                        {editingCategoryId === trans.id ? (
+                          <FormSelect
+                            ref={selectRef}
+                            size="sm"
+                            value={trans.category}
+                            onChange={(e) =>
+                              handleCategoryChange(trans, e.target.value)
+                            }
+                            onBlur={handleCategoryBlur}
+                            autoFocus
+                          >
+                            {categories.map((cat: Category) => (
+                              <option key={cat.id} value={cat.id}>
+                                {cat.name}
+                              </option>
+                            ))}
+                          </FormSelect>
+                        ) : (
+                          <button
+                            className="badge text-bg-secondary"
+                            onClick={() => handleCategoryClick(trans.id)}
+                            role="button"
+                            tabIndex={0}
+                          >
+                            {trans.category_name}
+                          </button>
+                        )}
+                      </td>
+                      <td data-label="Actions">
+                        <Button
+                          size="sm"
+                          variant="outline-secondary"
+                          onClick={() => {
+                            setSelectedTransaction(trans);
+                            setModalShown(true);
+                          }}
+                          data-testid={"catbutton-" + trans.id}
                         >
-                          {trans.category_name}
-                        </button>
-                      )}
-                    </td>
-                    <td>
-                      <Button
-                        size="sm"
-                        variant="outline-secondary"
-                        onClick={() => {
-                          setSelectedTransaction(trans);
-                          setModalShown(true);
-                        }}
-                        data-testid={"catbutton-" + trans.id}
-                      >
-                        <FontAwesomeIcon icon={faTags} />
-                      </Button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                          <FontAwesomeIcon icon={faTags} />
+                        </Button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
           <Pagination className="justify-content-center">
             <Pagination.First
               onClick={() => setPage(1)}
@@ -237,7 +262,10 @@ export function Transactions(props: TransactionsProps): JSX.Element | null {
             />
           )}
         </div>
-        <TransactionFilter filters={filters} setFilters={setFilters} />
+        {/* Desktop filter in right rail */}
+        <div className="d-none d-md-block">
+          <TransactionFilter filters={filters} setFilters={setFilters} />
+        </div>
       </div>
     </div>
   );
