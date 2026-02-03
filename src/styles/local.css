@@ -97,7 +97,7 @@
     min-width: 150px;
   }
 
-  /* Make actions button center aligned */
+  /* Make actions button aligned with label */
   .transactions-table tbody td[data-label="Actions"] {
     justify-content: space-between;
   }

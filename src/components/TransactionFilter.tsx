@@ -54,7 +54,8 @@ export function TransactionFilter(
   );
 
   return (
-    <div className="col-md-2">
+    <>
+      {" "}
       <TransactionFilterPeriods
         filters={filters}
         updateFilters={updateFilters}
@@ -124,6 +125,6 @@ export function TransactionFilter(
             );
           })}
       </div>
-    </div>
+    </>
   );
 }

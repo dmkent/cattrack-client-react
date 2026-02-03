@@ -141,7 +141,7 @@ export function Transactions(props: TransactionsProps): JSX.Element | null {
                 {transactions.map((trans) => {
                   let description = trans.description;
                   if (description.length > 50) {
-                    description = description.substr(0, 50) + "...";
+                    description = description.substring(0, 50) + "...";
                   }
                   return (
                     <tr key={trans.id}>
@@ -263,7 +263,7 @@ export function Transactions(props: TransactionsProps): JSX.Element | null {
           )}
         </div>
         {/* Desktop filter in right rail */}
-        <div className="d-none d-md-block">
+        <div className="d-none d-md-block col-md-2">
           <TransactionFilter filters={filters} setFilters={setFilters} />
         </div>
       </div>
