@@ -329,3 +329,47 @@ test("should not update when same category is selected", async () => {
 
   expect(updateSpy).not.toHaveBeenCalled();
 });
+
+test("should scroll to top when page changes", async () => {
+  const user = userEvent.setup();
+  const scrollToMock = vi.fn();
+  window.scrollTo = scrollToMock;
+
+  const props = {
+    page_size: 20,
+  };
+  const transactions: Transaction[] = Array.from({ length: 20 }, (_, i) => ({
+    id: String(i),
+    when: new Date("2017-01-01"),
+    description: `Transaction ${i}`,
+    amount: -10.0,
+    category: "0",
+    account: "0",
+    category_name: "Cat1",
+  }));
+
+  renderWithProviders(<Transactions {...props} />, undefined, (mockAdapter) => {
+    mockAdapter.onGet("/api/periods/").reply(200, periods);
+    mockAdapter.onGet("/api/accounts/").reply(200, accounts);
+    mockAdapter.onGet("/api/categories/").reply(200, categories);
+    mockAdapter.onGet("/api/transactions/?page=1&page_size=20").reply(200, {
+      results: transactions,
+      count: 40, // 2 pages worth of data
+    });
+    mockAdapter.onGet("/api/transactions/?page=2&page_size=20").reply(200, {
+      results: transactions,
+      count: 40,
+    });
+  });
+
+  await waitFor(() => screen.getByText("Transactions"));
+
+  // Find and click the next page button
+  const nextButton = screen.getByText("›");
+  await user.click(nextButton);
+
+  // Verify scrollTo was called with correct parameters
+  await waitFor(() => {
+    expect(scrollToMock).toHaveBeenCalledWith({ top: 0, behavior: "smooth" });
+  });
+});
