@@ -68,7 +68,9 @@ export function TransactionFilter(
           placeholder="Filter by description"
           value={filters.description || ""}
           onChange={(e) => {
-            updateFilters({ description: e.target.value || null });
+            updateFilters({
+              description: e.target.value === "" ? null : e.target.value,
+            });
           }}
           data-testid="description-filter"
         />
