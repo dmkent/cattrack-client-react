@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { Container, Col, Row } from "react-bootstrap";
+import { Container, Col, Row, ButtonGroup, Button } from "react-bootstrap";
 
 import { PeriodFilters } from "../data/TransactionFilters";
 import { usePeriods } from "../hooks/usePeriods";
 import { useTransactionSummaries } from "../hooks/useTransactionSummary";
+import { CategoryAveragesTable } from "./CategoryAveragesTable";
 import { PlotlyPie } from "./PlotlyPie";
 import { TransactionFilterPeriods } from "./TransactionFilterPeriods";
+
+type ViewMode = "plot" | "table";
 
 export function Dashboard(): JSX.Element | null {
   const { isLoading: isPeriodsLoading, data: periods } = usePeriods();
@@ -13,6 +16,7 @@ export function Dashboard(): JSX.Element | null {
     to_date: null,
     from_date: null,
   });
+  const [viewMode, setViewMode] = useState<ViewMode>("plot");
   const { isLoading: isSummaryLoading, data: summary } =
     useTransactionSummaries(filters);
 
@@ -39,7 +43,25 @@ export function Dashboard(): JSX.Element | null {
         </Row>
         <Row>
           <Col md={8}>
-            <PlotlyPie summary={summary} />
+            <ButtonGroup className="mb-3">
+              <Button
+                variant={viewMode === "plot" ? "primary" : "outline-primary"}
+                onClick={() => setViewMode("plot")}
+              >
+                Plot View
+              </Button>
+              <Button
+                variant={viewMode === "table" ? "primary" : "outline-primary"}
+                onClick={() => setViewMode("table")}
+              >
+                Table View
+              </Button>
+            </ButtonGroup>
+            {viewMode === "plot" ? (
+              <PlotlyPie summary={summary} />
+            ) : (
+              <CategoryAveragesTable summary={summary} filters={filters} />
+            )}
           </Col>
           <Col md={2}>
             <div className="btn-group-vertical" role="group">
