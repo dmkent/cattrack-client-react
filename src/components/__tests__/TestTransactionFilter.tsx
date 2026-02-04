@@ -39,6 +39,7 @@ const filters: TransactionFilters = {
   category: "3",
   account: "0",
   has_category: "1",
+  description: null,
 };
 
 function setup(mockAdapter: AxiosMockAdapter) {
@@ -107,6 +108,7 @@ test("should display some periods and set active", async () => {
     has_category: null,
     from_date: null,
     to_date: null,
+    description: null,
   });
 
   // Reset account to "All"
@@ -118,5 +120,31 @@ test("should display some periods and set active", async () => {
     from_date: null,
     has_category: "1",
     to_date: null,
+    description: null,
+  });
+});
+
+test("should allow filtering by description", async () => {
+  const props = {
+    setFilters: vi.fn(),
+    filters: filters,
+  };
+
+  renderWithProviders(<TransactionFilter {...props} />, undefined, setup);
+
+  await waitFor(() => screen.getByText("Time"));
+
+  const descriptionInput = screen.getByTestId("description-filter");
+  expect(descriptionInput).toBeTruthy();
+
+  fireEvent.change(descriptionInput, { target: { value: "test description" } });
+  expect(props.setFilters.mock.calls.length).toBe(1);
+  expect(props.setFilters.mock.calls[0][0]).toEqual({
+    account: "0",
+    category: "3",
+    from_date: null,
+    has_category: "1",
+    to_date: null,
+    description: "test description",
   });
 });

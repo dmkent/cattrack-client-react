@@ -1,4 +1,4 @@
-import { Button } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 
 import { TransactionFilters } from "../data/TransactionFilters";
 import { useAccounts } from "../hooks/useAccounts";
@@ -61,6 +61,20 @@ export function TransactionFilter(
         updateFilters={updateFilters}
         periods={periods}
       />
+      <h3>Description</h3>
+      <Form.Group className="mb-3">
+        <Form.Control
+          type="text"
+          placeholder="Filter by description"
+          value={filters.description || ""}
+          onChange={(e) => {
+            updateFilters({
+              description: e.target.value === "" ? null : e.target.value,
+            });
+          }}
+          data-testid="description-filter"
+        />
+      </Form.Group>
       <h3>Category</h3>
       <div className="btn-group-vertical btn-group-sm" role="group">
         <Button
