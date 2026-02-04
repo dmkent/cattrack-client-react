@@ -7,6 +7,7 @@ export interface TransactionFilters extends PeriodFilters {
   category: string | null;
   has_category: string | null;
   account: string | null;
+  description: string | null;
 }
 
 export interface PaginatedTransactionFilters extends TransactionFilters {

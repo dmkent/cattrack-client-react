@@ -35,6 +35,7 @@ export function Transactions(props: TransactionsProps): JSX.Element | null {
     account: null,
     to_date: null,
     from_date: null,
+    description: null,
   });
   const [selected_transaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
