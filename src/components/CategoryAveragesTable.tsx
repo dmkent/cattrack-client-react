@@ -82,9 +82,9 @@ export function CategoryAveragesTable(
                     <FormattedNumber
                       value={Math.abs(average)}
                       style="currency"
-                      currency="USD"
-                      minimumFractionDigits={2}
-                      maximumFractionDigits={2}
+                      currency="AUD"
+                      minimumFractionDigits={0}
+                      maximumFractionDigits={0}
                     />
                   </td>
                 );
