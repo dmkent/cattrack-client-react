@@ -23,7 +23,7 @@
     "@fortawesome/react-fontawesome": "^3.1.1",
     "@popperjs/core": "^2.11.8",
     "@tanstack/react-query": "^5.90.20",
-    "axios": "^1.13.4",
+    "axios": "^1.13.5",
     "bootstrap": "^5.3.8",
     "es6-promise": "^4.2.8",
     "isomorphic-fetch": "^3.0.0",
