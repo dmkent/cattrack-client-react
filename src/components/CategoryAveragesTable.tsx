@@ -70,6 +70,10 @@ export function CategoryAveragesTable(
     const groupMap = new Map<string, CategorySummary[]>();
     summary.forEach((item) => {
       const key = item.subcategory ?? "None";
+      if (key === "Transferring Money" || key === "Loan transaction") {
+        return; // Skip these categories
+      }
+
       if (!groupMap.has(key)) {
         groupMap.set(key, []);
       }
