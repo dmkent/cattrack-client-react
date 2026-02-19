@@ -18,6 +18,10 @@ import { TransactionFilters } from "../data/TransactionFilters";
 import { useCategories } from "../hooks/useCategories";
 import { useTransactions } from "../hooks/useTransactions";
 import { useUpdateTransactions } from "../hooks/useUpdateTransactions";
+import {
+  loadFiltersFromCookie,
+  saveFiltersToCookie,
+} from "../utils/filterCookies";
 import { Categorisor } from "./Categorisor";
 import { TransactionFilter } from "./TransactionFilter";
 
@@ -29,14 +33,21 @@ export function Transactions(props: TransactionsProps): JSX.Element | null {
   const { page_size } = props;
   const { updateTransactionSplits } = useUpdateTransactions();
   const [active_page, setPage] = useState<number>(1);
-  const [filters, setFilters] = useState<TransactionFilters>({
+  
+  const defaultFilters: TransactionFilters = {
     category: null,
     has_category: null,
     account: null,
     to_date: null,
     from_date: null,
     description: null,
+  };
+  
+  const [filters, setFilters] = useState<TransactionFilters>(() => {
+    const savedFilters = loadFiltersFromCookie();
+    return savedFilters || defaultFilters;
   });
+  
   const [selected_transaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
   const [modal_shown, setModalShown] = useState<boolean>(false);
@@ -44,6 +55,11 @@ export function Transactions(props: TransactionsProps): JSX.Element | null {
     null,
   );
   const selectRef = useRef<HTMLSelectElement>(null);
+
+  // Save filters to cookie whenever they change
+  useEffect(() => {
+    saveFiltersToCookie(filters);
+  }, [filters]);
 
   const handlePageChange = (newPage: number): void => {
     setPage(newPage);
