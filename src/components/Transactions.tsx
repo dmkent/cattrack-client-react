@@ -14,7 +14,10 @@ import { FormattedDate, FormattedNumber } from "react-intl";
 
 import { Category } from "../data/Category";
 import { Transaction } from "../data/Transaction";
-import { TransactionFilters } from "../data/TransactionFilters";
+import {
+  TransactionFilters,
+  createDefaultTransactionFilters,
+} from "../data/TransactionFilters";
 import { useCategories } from "../hooks/useCategories";
 import { useTransactions } from "../hooks/useTransactions";
 import { useUpdateTransactions } from "../hooks/useUpdateTransactions";
@@ -33,21 +36,12 @@ export function Transactions(props: TransactionsProps): JSX.Element | null {
   const { page_size } = props;
   const { updateTransactionSplits } = useUpdateTransactions();
   const [active_page, setPage] = useState<number>(1);
-  
-  const defaultFilters: TransactionFilters = {
-    category: null,
-    has_category: null,
-    account: null,
-    to_date: null,
-    from_date: null,
-    description: null,
-  };
-  
+
   const [filters, setFilters] = useState<TransactionFilters>(() => {
     const savedFilters = loadFiltersFromCookie();
-    return savedFilters || defaultFilters;
+    return savedFilters ?? createDefaultTransactionFilters();
   });
-  
+
   const [selected_transaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
   const [modal_shown, setModalShown] = useState<boolean>(false);

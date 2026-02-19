@@ -1,9 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Col, Row, ButtonGroup, Button } from "react-bootstrap";
 
-import { PeriodFilters } from "../data/TransactionFilters";
+import {
+  PeriodFilters,
+  createDefaultPeriodFilters,
+} from "../data/TransactionFilters";
 import { usePeriods } from "../hooks/usePeriods";
 import { useTransactionSummaries } from "../hooks/useTransactionSummary";
+import {
+  loadPeriodFiltersFromCookie,
+  savePeriodFiltersToCookie,
+} from "../utils/filterCookies";
 import { CategoryAveragesTable } from "./CategoryAveragesTable";
 import { PlotlyPie } from "./PlotlyPie";
 import { TransactionFilterPeriods } from "./TransactionFilterPeriods";
@@ -12,13 +19,16 @@ type ViewMode = "plot" | "table";
 
 export function Dashboard(): JSX.Element | null {
   const { isLoading: isPeriodsLoading, data: periods } = usePeriods();
-  const [filters, setFilters] = useState<PeriodFilters>({
-    to_date: null,
-    from_date: null,
+  const [filters, setFilters] = useState<PeriodFilters>(() => {
+    return loadPeriodFiltersFromCookie() ?? createDefaultPeriodFilters();
   });
   const [viewMode, setViewMode] = useState<ViewMode>("plot");
   const { isLoading: isSummaryLoading, data: summary } =
     useTransactionSummaries(filters);
+
+  useEffect(() => {
+    savePeriodFiltersToCookie(filters);
+  }, [filters]);
 
   if (isPeriodsLoading || isSummaryLoading || summary === undefined) {
     return null;

@@ -1,12 +1,18 @@
 import Cookies from "js-cookie";
 
-import { TransactionFilters } from "../data/TransactionFilters";
+import {
+  PeriodFilters,
+  TransactionFilters,
+  createDefaultTransactionFilters,
+} from "../data/TransactionFilters";
 
 const COOKIE_NAME = "transactionFilters";
 const COOKIE_EXPIRES = 365; // days
 
 export function saveFiltersToCookie(filters: TransactionFilters): void {
-  Cookies.set(COOKIE_NAME, JSON.stringify(filters), { expires: COOKIE_EXPIRES });
+  Cookies.set(COOKIE_NAME, JSON.stringify(filters), {
+    expires: COOKIE_EXPIRES,
+  });
 }
 
 export function loadFiltersFromCookie(): TransactionFilters | null {
@@ -20,4 +26,26 @@ export function loadFiltersFromCookie(): TransactionFilters | null {
     // If cookie is malformed, return null
     return null;
   }
+}
+
+export function loadPeriodFiltersFromCookie(): PeriodFilters | null {
+  const filters = loadFiltersFromCookie();
+  if (!filters) {
+    return null;
+  }
+  return {
+    from_date: filters.from_date,
+    to_date: filters.to_date,
+  };
+}
+
+export function savePeriodFiltersToCookie(filters: PeriodFilters): void {
+  const existingFilters =
+    loadFiltersFromCookie() ?? createDefaultTransactionFilters();
+  const mergedFilters: TransactionFilters = {
+    ...existingFilters,
+    from_date: filters.from_date,
+    to_date: filters.to_date,
+  };
+  saveFiltersToCookie(mergedFilters);
 }
