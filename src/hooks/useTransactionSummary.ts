@@ -8,6 +8,7 @@ import { useAxios } from "./AxiosContext";
 interface TransactionSummaryResponse {
   category: string;
   category_name: string;
+  subcategory: string;
   total: string;
 }
 
@@ -25,6 +26,7 @@ export function useTransactionSummaries(
           return {
             category_id: item.category,
             category_name: item.category_name,
+            subcategory: item.subcategory,
             total: parseFloat(item.total),
           } as CategorySummary;
         }),

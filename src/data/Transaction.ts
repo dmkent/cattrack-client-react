@@ -11,6 +11,7 @@ export interface Transaction {
 export interface CategorySummary {
   category_id: string;
   category_name: string;
+  subcategory: string;
   total: number;
 }
 
