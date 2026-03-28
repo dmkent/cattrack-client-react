@@ -44,9 +44,10 @@ describe("components", () => {
 
     it("should render self and subcomponents when logged in", () => {
       setup(true);
-      expect(screen.getAllByRole("link").length).toBe(7);
+      expect(screen.getAllByRole("link").length).toBe(8);
       expect(screen.getByRole("link", { name: "Dashboard" })).toBeTruthy();
       expect(screen.getByRole("link", { name: "Accounts" })).toBeTruthy();
+      expect(screen.getByRole("link", { name: "Preferences" })).toBeTruthy();
       expect(screen.getByRole("link", { name: "Logout" })).toBeTruthy();
     });
   });

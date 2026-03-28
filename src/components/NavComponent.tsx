@@ -32,6 +32,11 @@ export function NavComponent(): JSX.Element {
         </Nav>
         <Nav>
           {auth.authData?.is_logged_in && (
+            <Nav.Link as={Link} to="/preferences">
+              Preferences
+            </Nav.Link>
+          )}
+          {auth.authData?.is_logged_in && (
             <Navbar.Text className="me-3">{auth.authData.username}</Navbar.Text>
           )}
           {auth.authData?.is_logged_in ? (
