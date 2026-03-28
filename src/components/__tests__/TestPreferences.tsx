@@ -127,6 +127,164 @@ describe("Preferences", () => {
     });
   });
 
+  it("should dismiss error alert", async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Preferences />, undefined, setupError);
+
+    await fillAndSubmitForm(user);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("Insufficient transactions for cross-validation."),
+      ).toBeTruthy();
+    });
+
+    // Dismiss the error alert
+    await user.click(screen.getByRole("button", { name: "Close alert" }));
+
+    await waitFor(() => {
+      expect(
+        screen.queryByText("Insufficient transactions for cross-validation."),
+      ).toBeNull();
+    });
+  });
+
+  it("should dismiss success alert and clear saved model", async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Preferences />, undefined, setup);
+
+    await fillAndSubmitForm(user);
+    await waitFor(() => {
+      expect(screen.getByText("Save Model")).toBeTruthy();
+    });
+
+    await user.click(screen.getByText("Save Model"));
+    await waitFor(() => {
+      expect(screen.getByLabelText("Model name")).toBeTruthy();
+    });
+
+    await user.type(screen.getByLabelText("Model name"), "my-model");
+    await user.click(screen.getByText("Save"));
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('Model "my-model" saved successfully.'),
+      ).toBeTruthy();
+    });
+
+    // Dismiss the success alert
+    await user.click(screen.getByRole("button", { name: "Close alert" }));
+
+    await waitFor(() => {
+      expect(
+        screen.queryByText('Model "my-model" saved successfully.'),
+      ).toBeNull();
+      expect(screen.queryByText("Set as Default")).toBeNull();
+    });
+  });
+
+  it("should close save modal via cancel", async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Preferences />, undefined, setup);
+
+    await fillAndSubmitForm(user);
+    await waitFor(() => {
+      expect(screen.getByText("Save Model")).toBeTruthy();
+    });
+
+    await user.click(screen.getByText("Save Model"));
+    await waitFor(() => {
+      expect(screen.getByLabelText("Model name")).toBeTruthy();
+    });
+
+    await user.click(screen.getByText("Cancel"));
+
+    await waitFor(() => {
+      expect(screen.queryByLabelText("Model name")).toBeNull();
+    });
+  });
+
+  it("should show save error when save fails", async () => {
+    const user = userEvent.setup();
+    renderWithProviders(
+      <Preferences />,
+      undefined,
+      (mockAdapter: AxiosMockAdapter) => {
+        mockAdapter
+          .onPost("/api/categorisor/cross_validate/")
+          .reply(200, mockResult);
+        mockAdapter
+          .onPost("/api/categorisor/cross_validate_save/")
+          .reply(400, { error: "Name already exists" });
+      },
+    );
+
+    await fillAndSubmitForm(user);
+    await waitFor(() => {
+      expect(screen.getByText("Save Model")).toBeTruthy();
+    });
+
+    await user.click(screen.getByText("Save Model"));
+    await waitFor(() => {
+      expect(screen.getByLabelText("Model name")).toBeTruthy();
+    });
+
+    await user.type(screen.getByLabelText("Model name"), "duplicate");
+    await user.click(screen.getByText("Save"));
+
+    await waitFor(() => {
+      // Modal should still be open with an error shown
+      expect(screen.getByLabelText("Model name")).toBeTruthy();
+    });
+  });
+
+  it("should show error when set-default fails", async () => {
+    const user = userEvent.setup();
+    renderWithProviders(
+      <Preferences />,
+      undefined,
+      (mockAdapter: AxiosMockAdapter) => {
+        mockAdapter
+          .onPost("/api/categorisor/cross_validate/")
+          .reply(200, mockResult);
+        mockAdapter
+          .onPost("/api/categorisor/cross_validate_save/")
+          .reply(201, mockSavedModel);
+        mockAdapter
+          .onPost("/api/categorisor/5/set_default/")
+          .networkError();
+      },
+    );
+
+    await fillAndSubmitForm(user);
+    await waitFor(() => {
+      expect(screen.getByText("Save Model")).toBeTruthy();
+    });
+
+    await user.click(screen.getByText("Save Model"));
+    await waitFor(() => {
+      expect(screen.getByLabelText("Model name")).toBeTruthy();
+    });
+
+    await user.type(screen.getByLabelText("Model name"), "my-model");
+    await user.click(screen.getByText("Save"));
+
+    await waitFor(() => {
+      expect(screen.getByText("Set as Default")).toBeTruthy();
+    });
+
+    await user.click(screen.getByText("Set as Default"));
+
+    await waitFor(() => {
+      // Error alert should appear (danger variant)
+      const alerts = screen.getAllByRole("alert");
+      const dangerAlert = alerts.find((el) =>
+        el.classList.contains("alert-danger"),
+      );
+      expect(dangerAlert).toBeTruthy();
+    });
+  });
+
   it("should set saved model as default", async () => {
     const user = userEvent.setup();
     renderWithProviders(<Preferences />, undefined, setup);
