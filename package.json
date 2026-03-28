@@ -37,6 +37,10 @@
     "react-intl": "^8.1.1",
     "react-router-dom": "^7.13.0"
   },
+  "resolutions": {
+    "minimatch": "^9.0.7",
+    "picomatch": ">=2.3.2"
+  },
   "devDependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",

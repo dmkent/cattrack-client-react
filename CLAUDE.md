@@ -34,14 +34,14 @@ cattrack-client-react — React-based client for the cattrack app. Built with Ty
 ## Project Structure
 
 - `src/` — Application source
-  - `components/` — React components (with `__tests__/` subdirectories)
-  - `services/` — API/service layer (auth only)
-  - `hooks/` — Custom React hooks (API integration via react-query, context providers)
-  - `client/` — API client utilities (`checkStatusAxios`, error parsing)
-  - `config/` — Environment configs (dev/prod/jest)
-  - `data/` — TypeScript interfaces (pure types, no runtime code)
-  - `styles/` — CSS/styling
-  - `utils/` — Utility functions
+- `components/` — React components (with `__tests__/` subdirectories)
+- `services/` — API/service layer (auth only)
+- `hooks/` — Custom React hooks (API integration via react-query, context providers)
+- `client/` — API client utilities (`checkStatusAxios`, error parsing)
+- `config/` — Environment configs (dev/prod/jest)
+- `data/` — TypeScript interfaces (pure types, no runtime code)
+- `styles/` — CSS/styling
+- `utils/` — Utility functions
 - `utils/` — Test utilities (test setup)
 - `vite.config.ts` — Vite + Vitest configuration
 - `src/RenderWithProviders.tsx` — Test helper wrapping components with providers + axios-mock-adapter
