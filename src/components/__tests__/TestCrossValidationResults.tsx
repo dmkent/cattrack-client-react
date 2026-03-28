@@ -8,9 +8,10 @@ import {
 } from "../../data/CrossValidation";
 import { CrossValidationResults } from "../CrossValidationResults";
 
-function makeFailedPrediction(id: number): FailedPrediction {
+function makeFailedPrediction(id: number, score = 65): FailedPrediction {
   return {
     transaction: {
+      url: `http://localhost:8000/api/transactions/${id}/`,
       id,
       when: "2025-03-15T10:30:00Z",
       amount: "12.50",
@@ -22,7 +23,7 @@ function makeFailedPrediction(id: number): FailedPrediction {
     modelled: {
       id: 3,
       name: "Transport",
-      score: 65,
+      score,
     },
   };
 }
@@ -56,7 +57,7 @@ describe("CrossValidationResults", () => {
     expect(screen.getByText("Validation set")).toBeTruthy();
   });
 
-  it("should render category metrics table", () => {
+  it("should render category metrics sorted by precision ascending", () => {
     render(<CrossValidationResults result={baseResult} onSave={vi.fn()} />);
 
     const table = screen.getByText("Per-Category Precision").nextElementSibling as HTMLElement;
@@ -64,6 +65,11 @@ describe("CrossValidationResults", () => {
     expect(within(table).getByText("Transport")).toBeTruthy();
     expect(within(table).getByText("90.0%")).toBeTruthy();
     expect(within(table).getByText("85.7%")).toBeTruthy();
+
+    // Verify sort order: Transport (85.7%) should come before Shopping (90.0%)
+    const rows = within(table).getAllByRole("row");
+    expect(within(rows[1]).getByText("Transport")).toBeTruthy();
+    expect(within(rows[2]).getByText("Shopping")).toBeTruthy();
   });
 
   it("should render failed predictions accordion", () => {
@@ -89,11 +95,10 @@ describe("CrossValidationResults", () => {
     expect(screen.getByText("Transaction 1")).toBeTruthy();
     expect(screen.queryByText("Transaction 11")).toBeNull();
 
-    // Go to next page
-    const nextButton = screen
-      .getByText("Next")
-      .closest("li") as HTMLElement;
-    await user.click(within(nextButton).getByRole("button"));
+    // Go to next page via the pagination list
+    const pagination = screen.getByLabelText("Failed predictions pagination");
+    const [, nextItem] = within(pagination).getAllByRole("listitem");
+    await user.click(within(nextItem).getByRole("button"));
 
     expect(screen.getByText("11-15 of 15")).toBeTruthy();
     expect(screen.getByText("Transaction 11")).toBeTruthy();
@@ -108,6 +113,25 @@ describe("CrossValidationResults", () => {
     await user.click(screen.getByText("Save Model"));
 
     expect(onSave).toHaveBeenCalledOnce();
+  });
+
+  it("should sort failed predictions by score descending", async () => {
+    const user = userEvent.setup();
+    const failed = [
+      makeFailedPrediction(1, 30),
+      makeFailedPrediction(2, 90),
+      makeFailedPrediction(3, 60),
+    ];
+    const result = { ...baseResult, failed };
+
+    render(<CrossValidationResults result={result} onSave={vi.fn()} />);
+    await user.click(screen.getByText("Failed Predictions (3)"));
+
+    const tbody = screen.getAllByRole("rowgroup")[3]; // second table's tbody
+    const rows = within(tbody).getAllByRole("row");
+    expect(within(rows[0]).getByText("90.0%")).toBeTruthy();
+    expect(within(rows[1]).getByText("60.0%")).toBeTruthy();
+    expect(within(rows[2]).getByText("30.0%")).toBeTruthy();
   });
 
   it("should not show accordion when no failed predictions", () => {

@@ -41,6 +41,9 @@ function setup(mockAdapter: AxiosMockAdapter) {
   mockAdapter
     .onPost("/api/categorisor/cross_validate_save/")
     .reply(201, mockSavedModel);
+  mockAdapter
+    .onPost("/api/categorisor/5/set_default/")
+    .reply(200, { detail: "Model set as default." });
 }
 
 function setupError(mockAdapter: AxiosMockAdapter) {
@@ -96,7 +99,7 @@ describe("Preferences", () => {
     });
   });
 
-  it("should open save modal and save model", async () => {
+  it("should open save modal and save model with set-as-default option", async () => {
     const user = userEvent.setup();
     renderWithProviders(<Preferences />, undefined, setup);
 
@@ -119,6 +122,41 @@ describe("Preferences", () => {
       expect(
         screen.getByText('Model "my-model" saved successfully.'),
       ).toBeTruthy();
+      // "Set as Default" button should appear since set_as_default was unchecked
+      expect(screen.getByText("Set as Default")).toBeTruthy();
+    });
+  });
+
+  it("should set saved model as default", async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<Preferences />, undefined, setup);
+
+    await fillAndSubmitForm(user);
+
+    await waitFor(() => {
+      expect(screen.getByText("Save Model")).toBeTruthy();
+    });
+
+    await user.click(screen.getByText("Save Model"));
+
+    await waitFor(() => {
+      expect(screen.getByLabelText("Model name")).toBeTruthy();
+    });
+
+    await user.type(screen.getByLabelText("Model name"), "my-model");
+    await user.click(screen.getByText("Save"));
+
+    await waitFor(() => {
+      expect(screen.getByText("Set as Default")).toBeTruthy();
+    });
+
+    await user.click(screen.getByText("Set as Default"));
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('Model "my-model" is now the default.'),
+      ).toBeTruthy();
+      expect(screen.queryByText("Set as Default")).toBeNull();
     });
   });
 });

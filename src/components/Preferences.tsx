@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Alert } from "react-bootstrap";
+import { Alert, Button } from "react-bootstrap";
 
 import {
   CrossValidateRequest,
   CrossValidateResult,
+  SavedModel,
 } from "../data/CrossValidation";
 import { useCrossValidation } from "../hooks/useCrossValidation";
 import { CrossValidationForm } from "./CrossValidationForm";
@@ -11,7 +12,8 @@ import { CrossValidationResults } from "./CrossValidationResults";
 import { SaveModelModal, SaveModelValues } from "./SaveModelModal";
 
 export function Preferences(): JSX.Element {
-  const { runCrossValidation, saveModel } = useCrossValidation();
+  const { runCrossValidation, saveModel, setDefaultModel } =
+    useCrossValidation();
 
   const [isRunning, setIsRunning] = useState(false);
   const [result, setResult] = useState<CrossValidateResult | null>(null);
@@ -20,12 +22,27 @@ export function Preferences(): JSX.Element {
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | undefined>();
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [savedModel, setSavedModel] = useState<SavedModel | null>(null);
+
+  const handleSetDefault = async () => {
+    if (!savedModel) return;
+    try {
+      await setDefaultModel(savedModel.id);
+      setSavedModel(null);
+      setSuccessMessage(
+        `Model "${savedModel.name}" is now the default.`,
+      );
+    } catch (e: unknown) {
+      setError((e as Error).message);
+    }
+  };
 
   const handleRunCrossValidation = async (request: CrossValidateRequest) => {
     setIsRunning(true);
     setError(null);
     setResult(null);
     setSuccessMessage(null);
+    setSavedModel(null);
     try {
       const cvResult = await runCrossValidation(request);
       setResult(cvResult);
@@ -54,10 +71,15 @@ export function Preferences(): JSX.Element {
           random_seed: result.random_seed,
         }),
       };
-      await saveModel(request);
+      const saved = await saveModel(request);
       setShowSaveModal(false);
       setResult(null);
-      setSuccessMessage(`Model "${values.name}" saved successfully.`);
+      setSavedModel(values.set_as_default ? null : saved);
+      setSuccessMessage(
+        values.set_as_default
+          ? `Model "${values.name}" saved and set as default.`
+          : `Model "${values.name}" saved successfully.`,
+      );
     } catch (e: unknown) {
       setSaveError((e as Error).message);
     } finally {
@@ -80,9 +102,22 @@ export function Preferences(): JSX.Element {
         <Alert
           variant="success"
           dismissible
-          onClose={() => setSuccessMessage(null)}
+          onClose={() => {
+            setSuccessMessage(null);
+            setSavedModel(null);
+          }}
         >
           {successMessage}
+          {savedModel && (
+            <Button
+              variant="outline-success"
+              size="sm"
+              className="ms-3"
+              onClick={handleSetDefault}
+            >
+              Set as Default
+            </Button>
+          )}
         </Alert>
       )}
 

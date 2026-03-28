@@ -26,6 +26,7 @@ export interface CategoryMetric {
 
 export interface FailedPrediction {
   transaction: {
+    url: string;
     id: number;
     when: string;
     amount: string;

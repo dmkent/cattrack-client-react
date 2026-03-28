@@ -11,7 +11,7 @@ export interface CrossValidationFormProps {
 type FormInputs = {
   from_date: string;
   to_date: string;
-  split_ratio: number;
+  split_ratio: string;
   random_seed: string;
   implementation: string;
 };
@@ -26,7 +26,7 @@ export function CrossValidationForm({
     formState: { errors },
   } = useForm<FormInputs>({
     defaultValues: {
-      split_ratio: 0.5,
+      split_ratio: "0.5",
       implementation: "SklearnCategoriser",
       random_seed: "",
     },
@@ -111,6 +111,7 @@ export function CrossValidationForm({
             animation="border"
             size="sm"
             role="status"
+            aria-label="Running"
             className="me-2"
           />
         )}

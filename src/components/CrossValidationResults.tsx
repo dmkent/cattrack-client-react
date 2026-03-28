@@ -24,8 +24,16 @@ export function CrossValidationResults({
 }: CrossValidationResultsProps): JSX.Element {
   const [failedPage, setFailedPage] = useState(0);
 
-  const totalFailedPages = Math.ceil(result.failed.length / FAILED_PAGE_SIZE);
-  const pagedFailed = result.failed.slice(
+  const sortedMetrics = [...result.category_metrics].sort(
+    (a, b) => a.precision - b.precision,
+  );
+
+  const sortedFailed = [...result.failed].sort(
+    (a, b) => b.modelled.score - a.modelled.score,
+  );
+
+  const totalFailedPages = Math.ceil(sortedFailed.length / FAILED_PAGE_SIZE);
+  const pagedFailed = sortedFailed.slice(
     failedPage * FAILED_PAGE_SIZE,
     (failedPage + 1) * FAILED_PAGE_SIZE,
   );
@@ -69,7 +77,7 @@ export function CrossValidationResults({
           </tr>
         </thead>
         <tbody>
-          {result.category_metrics.map((metric) => (
+          {sortedMetrics.map((metric) => (
             <tr key={metric.category_name}>
               <td>{metric.category_name}</td>
               <td>{metric.correct}</td>
@@ -80,11 +88,11 @@ export function CrossValidationResults({
         </tbody>
       </Table>
 
-      {result.failed.length > 0 && (
+      {sortedFailed.length > 0 && (
         <Accordion className="mb-3">
           <Accordion.Item eventKey="0">
             <Accordion.Header>
-              Failed Predictions ({result.failed.length})
+              Failed Predictions ({sortedFailed.length})
             </Accordion.Header>
             <Accordion.Body>
               <Table striped bordered hover size="sm">
@@ -104,14 +112,14 @@ export function CrossValidationResults({
                       <td>{item.transaction.amount}</td>
                       <td>{item.transaction.category_name}</td>
                       <td>{item.modelled.name}</td>
-                      <td>{item.modelled.score}%</td>
+                      <td>{item.modelled.score.toFixed(1)}%</td>
                     </tr>
                   ))}
                 </tbody>
               </Table>
               {totalFailedPages > 1 && (
                 <div className="d-flex align-items-center gap-2">
-                  <Pagination className="mb-0">
+                  <Pagination className="mb-0" aria-label="Failed predictions pagination">
                     <Pagination.Prev
                       disabled={failedPage === 0}
                       onClick={() => setFailedPage(failedPage - 1)}
@@ -125,9 +133,9 @@ export function CrossValidationResults({
                     {failedPage * FAILED_PAGE_SIZE + 1}-
                     {Math.min(
                       (failedPage + 1) * FAILED_PAGE_SIZE,
-                      result.failed.length,
+                      sortedFailed.length,
                     )}{" "}
-                    of {result.failed.length}
+                    of {sortedFailed.length}
                   </span>
                 </div>
               )}

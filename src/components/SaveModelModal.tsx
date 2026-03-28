@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Alert, Button, Form, Modal, Spinner } from "react-bootstrap";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -25,6 +26,7 @@ export function SaveModelModal({
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<SaveModelValues>({
     defaultValues: {
@@ -33,6 +35,12 @@ export function SaveModelModal({
       set_as_default: false,
     },
   });
+
+  useEffect(() => {
+    if (show) {
+      reset();
+    }
+  }, [show, reset]);
 
   const onFormSubmit: SubmitHandler<SaveModelValues> = (data) => {
     onSave(data);
@@ -86,6 +94,7 @@ export function SaveModelModal({
                 animation="border"
                 size="sm"
                 role="status"
+                aria-label="Saving"
                 className="me-2"
               />
             )}

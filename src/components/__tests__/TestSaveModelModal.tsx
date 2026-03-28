@@ -74,4 +74,20 @@ describe("SaveModelModal", () => {
 
     expect(screen.getByRole("status")).toBeTruthy();
   });
+
+  it("should reset form when reopened", async () => {
+    const user = userEvent.setup();
+    const { rerender } = render(<SaveModelModal {...defaultProps} />);
+
+    // Type a name
+    await user.type(screen.getByLabelText("Model name"), "old-name");
+    expect(screen.getByLabelText("Model name")).toHaveValue("old-name");
+
+    // Close and reopen
+    rerender(<SaveModelModal {...defaultProps} show={false} />);
+    rerender(<SaveModelModal {...defaultProps} show={true} />);
+
+    // Name should be reset
+    expect(screen.getByLabelText("Model name")).toHaveValue("");
+  });
 });
