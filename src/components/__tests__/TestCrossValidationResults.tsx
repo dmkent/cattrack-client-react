@@ -140,4 +140,34 @@ describe("CrossValidationResults", () => {
 
     expect(screen.queryByText(/Failed Predictions/)).toBeNull();
   });
+
+  it("should reset pagination when result changes", async () => {
+    const user = userEvent.setup();
+    const failed = Array.from({ length: 15 }, (_, i) =>
+      makeFailedPrediction(i + 1),
+    );
+    const result1 = { ...baseResult, failed };
+
+    const { rerender } = render(
+      <CrossValidationResults result={result1} onSave={vi.fn()} />,
+    );
+
+    // Expand accordion and go to page 2
+    await user.click(screen.getByText("Failed Predictions (15)"));
+    const pagination = screen.getByLabelText("Failed predictions pagination");
+    const [, nextItem] = within(pagination).getAllByRole("listitem");
+    await user.click(within(nextItem).getByRole("button"));
+    expect(screen.getByText("11-15 of 15")).toBeTruthy();
+
+    // Re-render with a new result that has fewer failures
+    const result2 = {
+      ...baseResult,
+      failed: [makeFailedPrediction(100), makeFailedPrediction(101)],
+    };
+    rerender(<CrossValidationResults result={result2} onSave={vi.fn()} />);
+
+    // Should be back on first page, no pagination shown (only 2 items)
+    expect(screen.queryByText("11-15 of 15")).toBeNull();
+    expect(screen.getByText("Failed Predictions (2)")).toBeTruthy();
+  });
 });

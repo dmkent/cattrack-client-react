@@ -137,7 +137,10 @@ export function Preferences(): JSX.Element {
 
       <SaveModelModal
         show={showSaveModal}
-        onHide={() => setShowSaveModal(false)}
+        onHide={() => {
+          setShowSaveModal(false);
+          setSaveError(undefined);
+        }}
         onSave={handleSave}
         isSaving={isSaving}
         error={saveError}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Accordion,
   Button,
@@ -23,6 +23,10 @@ export function CrossValidationResults({
   onSave,
 }: CrossValidationResultsProps): JSX.Element {
   const [failedPage, setFailedPage] = useState(0);
+
+  useEffect(() => {
+    setFailedPage(0);
+  }, [result]);
 
   const sortedMetrics = [...result.category_metrics].sort(
     (a, b) => a.precision - b.precision,

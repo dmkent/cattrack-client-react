@@ -238,6 +238,56 @@ describe("Preferences", () => {
     });
   });
 
+  it("should clear save error when modal is closed and reopened", async () => {
+    const user = userEvent.setup();
+    renderWithProviders(
+      <Preferences />,
+      undefined,
+      (mockAdapter: AxiosMockAdapter) => {
+        mockAdapter
+          .onPost("/api/categorisor/cross_validate/")
+          .reply(200, mockResult);
+        mockAdapter
+          .onPost("/api/categorisor/cross_validate_save/")
+          .replyOnce(400, { error: "Name already exists" })
+          .onPost("/api/categorisor/cross_validate_save/")
+          .reply(201, mockSavedModel);
+      },
+    );
+
+    // Run cross-validation and open save modal
+    await fillAndSubmitForm(user);
+    await waitFor(() => {
+      expect(screen.getByText("Save Model")).toBeTruthy();
+    });
+    await user.click(screen.getByText("Save Model"));
+    await waitFor(() => {
+      expect(screen.getByLabelText("Model name")).toBeTruthy();
+    });
+
+    // Trigger a save error
+    await user.type(screen.getByLabelText("Model name"), "duplicate");
+    await user.click(screen.getByText("Save"));
+    await waitFor(() => {
+      expect(screen.getByLabelText("Model name")).toBeTruthy();
+    });
+
+    // Close modal and reopen — error should be gone
+    await user.click(screen.getByText("Cancel"));
+    await waitFor(() => {
+      expect(screen.queryByLabelText("Model name")).toBeNull();
+    });
+
+    await user.click(screen.getByText("Save Model"));
+    await waitFor(() => {
+      expect(screen.getByLabelText("Model name")).toBeTruthy();
+      // No error alerts should be visible inside the modal
+      expect(
+        screen.queryByText("Name already exists"),
+      ).toBeNull();
+    });
+  });
+
   it("should show error when set-default fails", async () => {
     const user = userEvent.setup();
     renderWithProviders(
