@@ -16,6 +16,7 @@ import { Dashboard } from "./Dashboard";
 import { Login } from "./Login";
 import { NavComponent } from "./NavComponent";
 import { PaymentSeries } from "./PaymentSeries";
+import { Preferences } from "./Preferences";
 import { Tracking } from "./Tracking";
 import { Transactions } from "./Transactions";
 
@@ -74,6 +75,14 @@ export function App(): JSX.Element {
                     element={
                       <RequireAuth redirectTo="/login">
                         <PaymentSeries />
+                      </RequireAuth>
+                    }
+                  />
+                  <Route
+                    path="/preferences"
+                    element={
+                      <RequireAuth redirectTo="/login">
+                        <Preferences />
                       </RequireAuth>
                     }
                   />
