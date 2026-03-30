@@ -72,14 +72,18 @@ export function useApplyRecategorise() {
   const applyRecategorise = async (
     modelId: number,
     updates: RecategoriseUpdate[],
+    options?: { invalidate?: boolean },
   ): Promise<RecategoriseApplyResponse> => {
+    const { invalidate = true } = options ?? {};
     const response = await axios.post(
       `/api/categorisor/${modelId}/apply_recategorize/`,
       { updates },
     );
     const data: RecategoriseApplyResponse = checkStatusAxios(response);
-    queryClient.invalidateQueries({ queryKey: ["transactions"] });
-    queryClient.invalidateQueries({ queryKey: ["recategorise-preview"] });
+    if (invalidate) {
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["recategorise-preview"] });
+    }
     return data;
   };
 

@@ -176,10 +176,13 @@ export function Recategorise(): JSX.Element | null {
 
     try {
       let totalUpdated = 0;
-      // Chunk into batches of 500
+      // Chunk into batches of 500; only invalidate queries on the final batch
       for (let i = 0; i < updates.length; i += 500) {
         const batch = updates.slice(i, i + 500);
-        const result = await applyRecategorise(previewModelId, batch);
+        const isLastBatch = i + 500 >= updates.length;
+        const result = await applyRecategorise(previewModelId, batch, {
+          invalidate: isLastBatch,
+        });
         totalUpdated += result.updated_count;
       }
       setApplyResult(totalUpdated);
@@ -311,7 +314,7 @@ export function Recategorise(): JSX.Element | null {
           </div>
 
           {/* Preview table */}
-          <div className="table-responsive-custom">
+          <div className="table-responsive">
             <table className="table table-sm">
               <thead>
                 <tr>
@@ -337,6 +340,20 @@ export function Recategorise(): JSX.Element | null {
                       ref={(el) => { rowRefs.current[index] = el; }}
                       className={rowClassName(item, index)}
                       onClick={() => toggleDecision(item)}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          toggleDecision(item);
+                        }
+                      }}
+                      tabIndex={0}
+                      aria-pressed={
+                        decision === undefined
+                          ? "mixed"
+                          : decision.accepted
+                            ? "true"
+                            : "false"
+                      }
                       style={{ cursor: "pointer" }}
                     >
                       <td>
@@ -413,7 +430,7 @@ export function Recategorise(): JSX.Element | null {
                 {...paginationProps(false)}
               />
               {Array.from({ length: Math.min(5, numPages) }, (_, i) => {
-                const firstPage = Math.max(0, page - 2);
+                const firstPage = Math.max(0, Math.min(page - 3, numPages - 5));
                 const p = firstPage + i + 1;
                 if (p > numPages) return null;
                 return (
