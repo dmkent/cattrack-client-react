@@ -6,7 +6,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import "bootstrap/dist/css/bootstrap.css";
+// THEME SELECTION - uncomment ONE:
+// import "bootstrap/dist/css/bootstrap.css";           // Default Bootstrap
+import "bootswatch/dist/cosmo/bootstrap.css"; //        Cosmo - bold, modern
+// import "bootswatch/dist/litera/bootstrap.css";       // Litera - light, elegant
 import { createRoot } from "react-dom/client";
 
 import { App } from "./components/App";
