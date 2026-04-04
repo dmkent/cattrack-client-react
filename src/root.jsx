@@ -8,8 +8,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // THEME SELECTION - uncomment ONE:
 // import "bootstrap/dist/css/bootstrap.css";           // Default Bootstrap
-import "bootswatch/dist/cosmo/bootstrap.css"; //        Cosmo - bold, modern
-// import "bootswatch/dist/litera/bootstrap.css";       // Litera - light, elegant
+// import "bootswatch/dist/cosmo/bootstrap.css"; //        Cosmo - bold, modern
+import "bootswatch/dist/litera/bootstrap.css";       // Litera - light, elegant
 import { createRoot } from "react-dom/client";
 
 import { App } from "./components/App";
