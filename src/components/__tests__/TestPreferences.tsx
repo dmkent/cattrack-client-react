@@ -34,7 +34,18 @@ const mockSavedModel: SavedModel = {
   to_date: "2025-12-31",
 };
 
+function setupDefaultModelMocks(mockAdapter: AxiosMockAdapter) {
+  mockAdapter
+    .onGet("/api/user-settings/me/")
+    .reply(200, { id: 1, selected_categorisor: null });
+  mockAdapter.onGet("/api/categorisor/").reply(200, [mockSavedModel]);
+  mockAdapter
+    .onPatch("/api/user-settings/me/")
+    .reply(200, { id: 1, selected_categorisor: 5 });
+}
+
 function setup(mockAdapter: AxiosMockAdapter) {
+  setupDefaultModelMocks(mockAdapter);
   mockAdapter
     .onPost("/api/categorisor/cross_validate/")
     .reply(200, mockResult);
@@ -47,6 +58,7 @@ function setup(mockAdapter: AxiosMockAdapter) {
 }
 
 function setupError(mockAdapter: AxiosMockAdapter) {
+  setupDefaultModelMocks(mockAdapter);
   mockAdapter.onPost("/api/categorisor/cross_validate/").reply(200, {
     status: "error",
     message: "Insufficient transactions for cross-validation.",
@@ -210,6 +222,7 @@ describe("Preferences", () => {
       <Preferences />,
       undefined,
       (mockAdapter: AxiosMockAdapter) => {
+        setupDefaultModelMocks(mockAdapter);
         mockAdapter
           .onPost("/api/categorisor/cross_validate/")
           .reply(200, mockResult);
@@ -244,6 +257,7 @@ describe("Preferences", () => {
       <Preferences />,
       undefined,
       (mockAdapter: AxiosMockAdapter) => {
+        setupDefaultModelMocks(mockAdapter);
         mockAdapter
           .onPost("/api/categorisor/cross_validate/")
           .reply(200, mockResult);
@@ -294,6 +308,7 @@ describe("Preferences", () => {
       <Preferences />,
       undefined,
       (mockAdapter: AxiosMockAdapter) => {
+        setupDefaultModelMocks(mockAdapter);
         mockAdapter
           .onPost("/api/categorisor/cross_validate/")
           .reply(200, mockResult);
