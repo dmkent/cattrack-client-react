@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Alert, Button } from "react-bootstrap";
 
+import { useQueryClient } from "@tanstack/react-query";
+
 import {
   CrossValidateRequest,
   CrossValidateResult,
@@ -9,11 +11,13 @@ import {
 import { useCrossValidation } from "../hooks/useCrossValidation";
 import { CrossValidationForm } from "./CrossValidationForm";
 import { CrossValidationResults } from "./CrossValidationResults";
+import { DefaultModelSection } from "./DefaultModelSection";
 import { SaveModelModal, SaveModelValues } from "./SaveModelModal";
 
 export function Preferences(): JSX.Element {
   const { runCrossValidation, saveModel, setDefaultModel } =
     useCrossValidation();
+  const queryClient = useQueryClient();
 
   const [isRunning, setIsRunning] = useState(false);
   const [result, setResult] = useState<CrossValidateResult | null>(null);
@@ -28,6 +32,7 @@ export function Preferences(): JSX.Element {
     if (!savedModel) return;
     try {
       await setDefaultModel(savedModel.id);
+      await queryClient.invalidateQueries({ queryKey: ["userSettings"] });
       setSavedModel(null);
       setSuccessMessage(
         `Model "${savedModel.name}" is now the default.`,
@@ -72,6 +77,10 @@ export function Preferences(): JSX.Element {
         }),
       };
       const saved = await saveModel(request);
+      await queryClient.invalidateQueries({ queryKey: ["categorisors"] });
+      if (values.set_as_default) {
+        await queryClient.invalidateQueries({ queryKey: ["userSettings"] });
+      }
       setShowSaveModal(false);
       setResult(null);
       setSavedModel(values.set_as_default ? null : saved);
@@ -90,6 +99,10 @@ export function Preferences(): JSX.Element {
   return (
     <div>
       <h2>Preferences</h2>
+
+      <DefaultModelSection />
+      <hr />
+
       <h4>Model Calibration</h4>
 
       {error && (
