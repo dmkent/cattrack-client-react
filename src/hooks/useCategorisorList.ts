@@ -10,10 +10,6 @@ export function useCategorisorList() {
   return useQuery<SavedModel[]>({
     queryKey: ["categorisors"],
     queryFn: () =>
-      axios
-        .get("/api/categorisor/")
-        .then(checkStatusAxios)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .then((data: any) => data.results as SavedModel[]),
+      axios.get("/api/categorisor/").then(checkStatusAxios),
   });
 }

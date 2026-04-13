@@ -39,12 +39,7 @@ const mockSettingsNoModel: UserSettings = {
 
 function setupWithModel(mockAdapter: AxiosMockAdapter) {
   mockAdapter.onGet("/api/user-settings/me/").reply(200, mockSettingsWithModel);
-  mockAdapter.onGet("/api/categorisor/").reply(200, {
-    count: 2,
-    next: null,
-    previous: null,
-    results: mockModels,
-  });
+  mockAdapter.onGet("/api/categorisor/").reply(200, mockModels);
   mockAdapter.onPatch("/api/user-settings/me/").reply(200, {
     id: 1,
     selected_categorisor: 2,
@@ -53,12 +48,7 @@ function setupWithModel(mockAdapter: AxiosMockAdapter) {
 
 function setupNoModel(mockAdapter: AxiosMockAdapter) {
   mockAdapter.onGet("/api/user-settings/me/").reply(200, mockSettingsNoModel);
-  mockAdapter.onGet("/api/categorisor/").reply(200, {
-    count: 2,
-    next: null,
-    previous: null,
-    results: mockModels,
-  });
+  mockAdapter.onGet("/api/categorisor/").reply(200, mockModels);
   mockAdapter.onPatch("/api/user-settings/me/").reply(200, {
     id: 1,
     selected_categorisor: 1,
@@ -143,12 +133,7 @@ describe("DefaultModelSection", () => {
         mockAdapter
           .onGet("/api/user-settings/me/")
           .reply(200, mockSettingsWithModel);
-        mockAdapter.onGet("/api/categorisor/").reply(200, {
-          count: 2,
-          next: null,
-          previous: null,
-          results: mockModels,
-        });
+        mockAdapter.onGet("/api/categorisor/").reply(200, mockModels);
         mockAdapter.onPatch("/api/user-settings/me/").networkError();
       },
     );
@@ -174,12 +159,7 @@ describe("DefaultModelSection", () => {
       undefined,
       (mockAdapter: AxiosMockAdapter) => {
         mockAdapter.onGet("/api/user-settings/me/").networkError();
-        mockAdapter.onGet("/api/categorisor/").reply(200, {
-          count: 0,
-          next: null,
-          previous: null,
-          results: [],
-        });
+        mockAdapter.onGet("/api/categorisor/").reply(200, []);
       },
     );
 

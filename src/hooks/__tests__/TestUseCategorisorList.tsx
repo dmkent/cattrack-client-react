@@ -42,12 +42,7 @@ describe("useCategorisorList", () => {
       <TestHarness />,
       undefined,
       (mockAdapter: AxiosMockAdapter) => {
-        mockAdapter.onGet("/api/categorisor/").reply(200, {
-          count: 2,
-          next: null,
-          previous: null,
-          results: mockModels,
-        });
+        mockAdapter.onGet("/api/categorisor/").reply(200, mockModels);
       },
     );
 

@@ -38,12 +38,7 @@ function setupDefaultModelMocks(mockAdapter: AxiosMockAdapter) {
   mockAdapter
     .onGet("/api/user-settings/me/")
     .reply(200, { id: 1, selected_categorisor: null });
-  mockAdapter.onGet("/api/categorisor/").reply(200, {
-    count: 1,
-    next: null,
-    previous: null,
-    results: [mockSavedModel],
-  });
+  mockAdapter.onGet("/api/categorisor/").reply(200, [mockSavedModel]);
   mockAdapter
     .onPatch("/api/user-settings/me/")
     .reply(200, { id: 1, selected_categorisor: 5 });
