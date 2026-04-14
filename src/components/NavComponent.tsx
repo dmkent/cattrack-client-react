@@ -23,6 +23,9 @@ export function NavComponent(): JSX.Element {
           <Nav.Link as={Link} to="/tracking">
             Tracking
           </Nav.Link>
+          <Nav.Link as={Link} to="/progress">
+            Progress
+          </Nav.Link>
           <Nav.Link as={Link} to="/transactions">
             Transactions
           </Nav.Link>

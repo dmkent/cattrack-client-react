@@ -17,8 +17,9 @@ import { Login } from "./Login";
 import { NavComponent } from "./NavComponent";
 import { PaymentSeries } from "./PaymentSeries";
 import { Preferences } from "./Preferences";
-import { Tracking } from "./Tracking";
 import { Recategorise } from "./Recategorise";
+import { SpendProgress } from "./SpendProgress";
+import { Tracking } from "./Tracking";
 import { Transactions } from "./Transactions";
 
 interface RequireAuthProps {
@@ -76,6 +77,14 @@ export function App(): JSX.Element {
                     element={
                       <RequireAuth redirectTo="/login">
                         <Recategorise />
+                      </RequireAuth>
+                    }
+                  />
+                  <Route
+                    path="/progress"
+                    element={
+                      <RequireAuth redirectTo="/login">
+                        <SpendProgress />
                       </RequireAuth>
                     }
                   />
