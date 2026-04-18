@@ -36,17 +36,18 @@ describe("components", () => {
   describe("NavComponent", () => {
     it("should render self and subcomponents when logged out", () => {
       setup(false);
-      expect(screen.getAllByRole("link").length).toBe(9);
+      expect(screen.getAllByRole("link").length).toBe(10);
       expect(screen.getByRole("link", { name: "Dashboard" })).toBeTruthy();
       expect(screen.getByRole("link", { name: "Accounts" })).toBeTruthy();
       expect(screen.getByRole("link", { name: "Progress" })).toBeTruthy();
+      expect(screen.getByRole("link", { name: "Budgets" })).toBeTruthy();
       expect(screen.getByRole("link", { name: "Recategorise" })).toBeTruthy();
       expect(screen.getByRole("link", { name: "Login" })).toBeTruthy();
     });
 
     it("should render self and subcomponents when logged in", () => {
       setup(true);
-      expect(screen.getAllByRole("link").length).toBe(10);
+      expect(screen.getAllByRole("link").length).toBe(11);
       expect(screen.getByRole("link", { name: "Dashboard" })).toBeTruthy();
       expect(screen.getByRole("link", { name: "Accounts" })).toBeTruthy();
       expect(screen.getByRole("link", { name: "Preferences" })).toBeTruthy();

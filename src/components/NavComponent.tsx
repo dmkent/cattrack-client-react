@@ -32,6 +32,9 @@ export function NavComponent(): JSX.Element {
           <Nav.Link as={Link} to="/bills">
             Bills
           </Nav.Link>
+          <Nav.Link as={Link} to="/budgets">
+            Budgets
+          </Nav.Link>
           <Nav.Link as={Link} to="/recategorise">
             Recategorise
           </Nav.Link>
