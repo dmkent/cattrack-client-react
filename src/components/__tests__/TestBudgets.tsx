@@ -1,4 +1,4 @@
-import { screen, waitFor, within } from "@testing-library/react";
+import { fireEvent, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
@@ -34,6 +34,15 @@ const existingBudgets: Budget[] = [
     valid_from: "2026-01-01",
     valid_to: "2026-12-31",
     categories: ["http://localhost:8000/api/categories/8/"],
+  },
+  {
+    url: "http://localhost:8000/api/budget/3/",
+    id: 3,
+    pretty_name: "Old Entertainment",
+    amount: "80.00",
+    valid_from: "2025-01-01",
+    valid_to: "2025-12-31",
+    categories: ["http://localhost:8000/api/categories/12/"],
   },
 ];
 
@@ -88,6 +97,115 @@ describe("Budgets", () => {
       screen.getByRole("button", { name: "Edit budget Utilities" }),
     ).toBeInTheDocument();
     expect(screen.getAllByText("2026-01-01").length).toBeGreaterThan(0);
+  });
+
+  test("filters out budgets outside the current year by default", async () => {
+    renderBudgets();
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: "Edit budget Groceries" }),
+      ).toBeInTheDocument();
+    });
+
+    expect(
+      screen.queryByRole("button", { name: "Edit budget Old Entertainment" }),
+    ).not.toBeInTheDocument();
+  });
+
+  test("shows budgets from a previous year via shortcut", async () => {
+    const user = userEvent.setup();
+    renderBudgets();
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: "Edit budget Groceries" }),
+      ).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByRole("button", { name: "Previous Year" }));
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: "Edit budget Old Entertainment" }),
+      ).toBeInTheDocument();
+    });
+    expect(
+      screen.queryByRole("button", { name: "Edit budget Groceries" }),
+    ).not.toBeInTheDocument();
+  });
+
+  test("'All' shortcut shows every budget", async () => {
+    const user = userEvent.setup();
+    renderBudgets();
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: "Edit budget Groceries" }),
+      ).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByRole("button", { name: "All" }));
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: "Edit budget Old Entertainment" }),
+      ).toBeInTheDocument();
+    });
+    expect(
+      screen.getByRole("button", { name: "Edit budget Groceries" }),
+    ).toBeInTheDocument();
+  });
+
+  test("manual date inputs narrow the results", async () => {
+    const user = userEvent.setup();
+    renderBudgets();
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: "Edit budget Groceries" }),
+      ).toBeInTheDocument();
+    });
+
+    fireEvent.change(screen.getByLabelText("Filter valid from"), {
+      target: { value: "2025-06-01" },
+    });
+    fireEvent.change(screen.getByLabelText("Filter valid to"), {
+      target: { value: "2025-12-31" },
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: "Edit budget Old Entertainment" }),
+      ).toBeInTheDocument();
+    });
+    expect(
+      screen.queryByRole("button", { name: "Edit budget Groceries" }),
+    ).not.toBeInTheDocument();
+  });
+
+  test("shows friendly message when no budgets match filter", async () => {
+    const user = userEvent.setup();
+    renderBudgets();
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: "Edit budget Groceries" }),
+      ).toBeInTheDocument();
+    });
+
+    fireEvent.change(screen.getByLabelText("Filter valid from"), {
+      target: { value: "2030-01-01" },
+    });
+    fireEvent.change(screen.getByLabelText("Filter valid to"), {
+      target: { value: "2030-12-31" },
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("No budgets match the selected period."),
+      ).toBeInTheDocument();
+    });
   });
 
   test("shows empty state message when no budgets", async () => {

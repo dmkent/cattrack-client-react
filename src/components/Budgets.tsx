@@ -1,7 +1,7 @@
 import { faPencil, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMemo, useState } from "react";
-import { Alert, Button, Table } from "react-bootstrap";
+import { Alert, Button, ButtonGroup, Form, Table } from "react-bootstrap";
 import { FormattedNumber } from "react-intl";
 
 import { Budget, BudgetInput, categoryIdFromUrl } from "../data/Budget";
@@ -11,8 +11,48 @@ import { useCategories } from "../hooks/useCategories";
 import { useUpdateBudgets } from "../hooks/useUpdateBudgets";
 import { BudgetFormModal } from "./BudgetFormModal";
 
-function formatDate(date: string): string {
-  return date;
+interface DateRange {
+  from_date: string | null;
+  to_date: string | null;
+}
+
+function currentYearRange(): DateRange {
+  const year = new Date().getFullYear();
+  return { from_date: `${year}-01-01`, to_date: `${year}-12-31` };
+}
+
+function previousYearRange(): DateRange {
+  const year = new Date().getFullYear() - 1;
+  return { from_date: `${year}-01-01`, to_date: `${year}-12-31` };
+}
+
+function nextYearRange(): DateRange {
+  const year = new Date().getFullYear() + 1;
+  return { from_date: `${year}-01-01`, to_date: `${year}-12-31` };
+}
+
+function currentMonthRange(): DateRange {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth();
+  const start = new Date(year, month, 1);
+  const end = new Date(year, month + 1, 0);
+  const fmt = (d: Date) => d.toISOString().slice(0, 10);
+  return { from_date: fmt(start), to_date: fmt(end) };
+}
+
+function overlapsRange(budget: Budget, range: DateRange): boolean {
+  if (range.from_date !== null && budget.valid_to < range.from_date) {
+    return false;
+  }
+  if (range.to_date !== null && budget.valid_from > range.to_date) {
+    return false;
+  }
+  return true;
+}
+
+function rangesEqual(a: DateRange, b: DateRange): boolean {
+  return a.from_date === b.from_date && a.to_date === b.to_date;
 }
 
 function categoryNames(budget: Budget, categories: Category[]): string {
@@ -34,10 +74,18 @@ export function Budgets(): JSX.Element | null {
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | undefined>();
   const [pageError, setPageError] = useState<string | null>(null);
+  const [filterRange, setFilterRange] = useState<DateRange>(() =>
+    currentYearRange(),
+  );
 
   const categoriesList = useMemo(
     () => [...(categories ?? [])].sort((a, b) => a.name.localeCompare(b.name)),
     [categories],
+  );
+
+  const filteredBudgets = useMemo(
+    () => (budgets ?? []).filter((b) => overlapsRange(b, filterRange)),
+    [budgets, filterRange],
   );
 
   if (isLoadingBudgets || isLoadingCategories) {
@@ -92,6 +140,14 @@ export function Budgets(): JSX.Element | null {
     }
   };
 
+  const shortcuts: { label: string; range: DateRange }[] = [
+    { label: "All", range: { from_date: null, to_date: null } },
+    { label: "Current Year", range: currentYearRange() },
+    { label: "Previous Year", range: previousYearRange() },
+    { label: "Next Year", range: nextYearRange() },
+    { label: "Current Month", range: currentMonthRange() },
+  ];
+
   return (
     <div>
       <h2>
@@ -109,6 +165,50 @@ export function Budgets(): JSX.Element | null {
           {pageError}
         </Alert>
       )}
+      <div className="d-flex flex-wrap align-items-end gap-3 mb-3">
+        <Form.Group controlId="budget_filter_from">
+          <Form.Label className="mb-1">Valid from (or later)</Form.Label>
+          <Form.Control
+            type="date"
+            aria-label="Filter valid from"
+            value={filterRange.from_date ?? ""}
+            max={filterRange.to_date ?? undefined}
+            onChange={(e) =>
+              setFilterRange((prev) => ({
+                ...prev,
+                from_date: e.target.value || null,
+              }))
+            }
+          />
+        </Form.Group>
+        <Form.Group controlId="budget_filter_to">
+          <Form.Label className="mb-1">Valid to (or earlier)</Form.Label>
+          <Form.Control
+            type="date"
+            aria-label="Filter valid to"
+            value={filterRange.to_date ?? ""}
+            min={filterRange.from_date ?? undefined}
+            onChange={(e) =>
+              setFilterRange((prev) => ({
+                ...prev,
+                to_date: e.target.value || null,
+              }))
+            }
+          />
+        </Form.Group>
+        <ButtonGroup size="sm" aria-label="Budget date shortcuts">
+          {shortcuts.map((shortcut) => (
+            <Button
+              key={shortcut.label}
+              variant="outline-secondary"
+              active={rangesEqual(filterRange, shortcut.range)}
+              onClick={() => setFilterRange(shortcut.range)}
+            >
+              {shortcut.label}
+            </Button>
+          ))}
+        </ButtonGroup>
+      </div>
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -121,14 +221,16 @@ export function Budgets(): JSX.Element | null {
           </tr>
         </thead>
         <tbody>
-          {(budgets ?? []).length === 0 && (
+          {filteredBudgets.length === 0 && (
             <tr>
               <td colSpan={6} className="text-center text-muted">
-                No budgets defined yet.
+                {(budgets ?? []).length === 0
+                  ? "No budgets defined yet."
+                  : "No budgets match the selected period."}
               </td>
             </tr>
           )}
-          {(budgets ?? []).map((budget) => (
+          {filteredBudgets.map((budget) => (
             <tr key={budget.id}>
               <td>{budget.pretty_name}</td>
               <td>{categoryNames(budget, categoriesList)}</td>
@@ -139,8 +241,8 @@ export function Budgets(): JSX.Element | null {
                   currency="AUD"
                 />
               </td>
-              <td>{formatDate(budget.valid_from)}</td>
-              <td>{formatDate(budget.valid_to)}</td>
+              <td>{budget.valid_from}</td>
+              <td>{budget.valid_to}</td>
               <td className="text-end">
                 <Button
                   variant="outline-secondary"
