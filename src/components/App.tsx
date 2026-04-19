@@ -12,6 +12,7 @@ import CONFIG from "ctrack_config";
 import { AuthProvider, useAuth } from "../hooks/AuthContext";
 import { AxiosProvider } from "../hooks/AxiosContext";
 import { Accounts } from "./Accounts";
+import { Budgets } from "./Budgets";
 import { Dashboard } from "./Dashboard";
 import { Login } from "./Login";
 import { NavComponent } from "./NavComponent";
@@ -93,6 +94,14 @@ export function App(): JSX.Element {
                     element={
                       <RequireAuth redirectTo="/login">
                         <PaymentSeries />
+                      </RequireAuth>
+                    }
+                  />
+                  <Route
+                    path="/budgets"
+                    element={
+                      <RequireAuth redirectTo="/login">
+                        <Budgets />
                       </RequireAuth>
                     }
                   />
