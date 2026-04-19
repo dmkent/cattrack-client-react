@@ -11,7 +11,7 @@ export interface UpcomingBill {
 }
 
 export interface ProgressRow {
-  id: number;
+  id: string;
   name: string;
   actual_spend: string;
   expected_remaining: string;

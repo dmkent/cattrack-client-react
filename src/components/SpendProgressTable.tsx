@@ -77,9 +77,9 @@ export function SpendProgressTable(
   props: SpendProgressTableProps,
 ): JSX.Element {
   const { rows, totals } = props;
-  const [expanded, setExpanded] = useState<Record<number, boolean>>({});
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
 
-  const toggleExpanded = (id: number) => {
+  const toggleExpanded = (id: ProgressRow["id"]) => {
     setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
@@ -105,14 +105,19 @@ export function SpendProgressTable(
           return (
             <Fragment key={row.id}>
               <tr>
-                <td
-                  style={{ cursor: hasBills ? "pointer" : "default" }}
-                  onClick={() => hasBills && toggleExpanded(row.id)}
-                >
+                <td>
                   {hasBills && (
-                    <FontAwesomeIcon
-                      icon={isExpanded ? faChevronDown : faChevronRight}
-                    />
+                    <button
+                      type="button"
+                      onClick={() => toggleExpanded(row.id)}
+                      aria-label={`${isExpanded ? "Collapse" : "Expand"} ${row.name}`}
+                      aria-expanded={isExpanded}
+                      className="btn btn-link p-0 border-0 text-decoration-none"
+                    >
+                      <FontAwesomeIcon
+                        icon={isExpanded ? faChevronDown : faChevronRight}
+                      />
+                    </button>
                   )}
                 </td>
                 <td>{row.name}</td>

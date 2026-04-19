@@ -32,7 +32,7 @@ const progressResponse: ProgressResponse = {
   },
   rows: [
     {
-      id: 5,
+      id: "5",
       name: "Groceries",
       actual_spend: "-342.50",
       expected_remaining: "-157.50",
@@ -40,7 +40,7 @@ const progressResponse: ProgressResponse = {
       upcoming_bills: [],
     },
     {
-      id: 8,
+      id: "8",
       name: "Utilities",
       actual_spend: "-89.00",
       expected_remaining: "-45.00",
@@ -54,7 +54,7 @@ const progressResponse: ProgressResponse = {
       ],
     },
     {
-      id: 12,
+      id: "12",
       name: "Entertainment",
       actual_spend: "-50.00",
       expected_remaining: "-30.00",
@@ -165,10 +165,8 @@ test("expands row to show upcoming bills", async () => {
   // Electricity bill should not be visible initially
   expect(screen.queryByText("Electricity")).not.toBeInTheDocument();
 
-  // Click the expand chevron on the Utilities row
-  const utilitiesRow = screen.getByText("Utilities").closest("tr")!;
-  const expandCell = utilitiesRow.querySelector("td:first-child")!;
-  await user.click(expandCell);
+  // Click the expand button on the Utilities row
+  await user.click(screen.getByRole("button", { name: "Expand Utilities" }));
 
   await waitFor(() => {
     expect(screen.getByText("Electricity")).toBeInTheDocument();
