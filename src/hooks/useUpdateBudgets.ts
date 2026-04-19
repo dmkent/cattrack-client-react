@@ -30,9 +30,7 @@ export const useUpdateBudgets = () => {
 
   const deleteBudget = async (id: number): Promise<void> => {
     const response = await axios.delete(`/api/budget/${id}/`);
-    if (response.status < 200 || response.status >= 300) {
-      throw new Error(`Failed to delete budget (status ${response.status})`);
-    }
+    await checkStatusAxios(response);
     await invalidate();
   };
 

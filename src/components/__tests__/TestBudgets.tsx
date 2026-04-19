@@ -1,6 +1,6 @@
 import { fireEvent, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, test, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 import { renderWithProviders } from "../../RenderWithProviders";
 import { Budget } from "../../data/Budget";
@@ -16,14 +16,17 @@ const categories = [
   },
 ];
 
+const currentYear = new Date().getFullYear();
+const previousYear = currentYear - 1;
+
 const existingBudgets: Budget[] = [
   {
     url: "http://localhost:8000/api/budget/1/",
     id: 1,
     pretty_name: "Groceries",
     amount: "500.00",
-    valid_from: "2026-01-01",
-    valid_to: "2026-12-31",
+    valid_from: `${currentYear}-01-01`,
+    valid_to: `${currentYear}-12-31`,
     categories: ["http://localhost:8000/api/categories/5/"],
   },
   {
@@ -31,8 +34,8 @@ const existingBudgets: Budget[] = [
     id: 2,
     pretty_name: "Utilities",
     amount: "150.00",
-    valid_from: "2026-01-01",
-    valid_to: "2026-12-31",
+    valid_from: `${currentYear}-01-01`,
+    valid_to: `${currentYear}-12-31`,
     categories: ["http://localhost:8000/api/categories/8/"],
   },
   {
@@ -40,8 +43,8 @@ const existingBudgets: Budget[] = [
     id: 3,
     pretty_name: "Old Entertainment",
     amount: "80.00",
-    valid_from: "2025-01-01",
-    valid_to: "2025-12-31",
+    valid_from: `${previousYear}-01-01`,
+    valid_to: `${previousYear}-12-31`,
     categories: ["http://localhost:8000/api/categories/12/"],
   },
 ];
@@ -51,7 +54,11 @@ const confirmSpy = vi.fn();
 beforeEach(() => {
   confirmSpy.mockReset();
   confirmSpy.mockReturnValue(true);
-  window.confirm = confirmSpy;
+  vi.stubGlobal("confirm", confirmSpy);
+});
+
+afterEach(() => {
+  vi.unstubAllGlobals();
 });
 
 function renderBudgets(options?: {
@@ -96,7 +103,9 @@ describe("Budgets", () => {
     expect(
       screen.getByRole("button", { name: "Edit budget Utilities" }),
     ).toBeInTheDocument();
-    expect(screen.getAllByText("2026-01-01").length).toBeGreaterThan(0);
+    expect(
+      screen.getAllByText(`${currentYear}-01-01`).length,
+    ).toBeGreaterThan(0);
   });
 
   test("filters out budgets outside the current year by default", async () => {
@@ -168,10 +177,10 @@ describe("Budgets", () => {
     });
 
     fireEvent.change(screen.getByLabelText("Filter valid from"), {
-      target: { value: "2025-06-01" },
+      target: { value: `${previousYear}-06-01` },
     });
     fireEvent.change(screen.getByLabelText("Filter valid to"), {
-      target: { value: "2025-12-31" },
+      target: { value: `${previousYear}-12-31` },
     });
 
     await waitFor(() => {

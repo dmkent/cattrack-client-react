@@ -65,6 +65,7 @@ export function BudgetFormModal({
     register,
     handleSubmit,
     reset,
+    getValues,
     formState: { errors },
   } = useForm<BudgetFormValues>({ defaultValues: defaults });
 
@@ -99,11 +100,12 @@ export function BudgetFormModal({
             <Form.Control
               type="number"
               step="0.01"
+              min="0"
               {...register("amount", {
                 required: "Amount is required",
                 pattern: {
-                  value: /^-?\d+(\.\d{1,2})?$/,
-                  message: "Enter a decimal value",
+                  value: /^\d+(\.\d{1,2})?$/,
+                  message: "Enter a non-negative decimal value",
                 },
               })}
               isInvalid={!!errors.amount}
@@ -135,6 +137,14 @@ export function BudgetFormModal({
                   type="date"
                   {...register("valid_to", {
                     required: "End date is required",
+                    validate: (value) => {
+                      const from = getValues("valid_from");
+                      if (!from || !value) return true;
+                      return (
+                        value >= from ||
+                        "End date must be on or after start date"
+                      );
+                    },
                   })}
                   isInvalid={!!errors.valid_to}
                 />
@@ -179,7 +189,11 @@ export function BudgetFormModal({
           <Button variant="outline-secondary" onClick={onHide}>
             Cancel
           </Button>
-          <Button type="submit" variant="primary" disabled={isSaving}>
+          <Button
+            type="submit"
+            variant="primary"
+            disabled={isSaving || categories.length === 0}
+          >
             {isSaving && (
               <Spinner
                 as="span"

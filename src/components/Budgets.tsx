@@ -37,7 +37,11 @@ function currentMonthRange(): DateRange {
   const month = today.getMonth();
   const start = new Date(year, month, 1);
   const end = new Date(year, month + 1, 0);
-  const fmt = (d: Date) => d.toISOString().slice(0, 10);
+  const fmt = (d: Date) => {
+    const monthPart = String(d.getMonth() + 1).padStart(2, "0");
+    const dayPart = String(d.getDate()).padStart(2, "0");
+    return `${d.getFullYear()}-${monthPart}-${dayPart}`;
+  };
   return { from_date: fmt(start), to_date: fmt(end) };
 }
 
@@ -65,8 +69,16 @@ function categoryNames(budget: Budget, categories: Category[]): string {
 }
 
 export function Budgets(): JSX.Element | null {
-  const { isLoading: isLoadingBudgets, data: budgets } = useBudgets();
-  const { isLoading: isLoadingCategories, data: categories } = useCategories();
+  const {
+    isLoading: isLoadingBudgets,
+    data: budgets,
+    isError: isBudgetsError,
+  } = useBudgets();
+  const {
+    isLoading: isLoadingCategories,
+    data: categories,
+    isError: isCategoriesError,
+  } = useCategories();
   const { createBudget, updateBudget, deleteBudget } = useUpdateBudgets();
 
   const [showModal, setShowModal] = useState(false);
@@ -90,6 +102,14 @@ export function Budgets(): JSX.Element | null {
 
   if (isLoadingBudgets || isLoadingCategories) {
     return null;
+  }
+
+  if (isBudgetsError || isCategoriesError) {
+    return (
+      <Alert variant="danger">
+        Failed to load budgets data. Please refresh and try again.
+      </Alert>
+    );
   }
 
   const openCreate = () => {
