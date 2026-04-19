@@ -243,24 +243,23 @@ export function Budgets(): JSX.Element | null {
               </td>
               <td>{budget.valid_from}</td>
               <td>{budget.valid_to}</td>
-              <td className="text-end">
-                <Button
-                  variant="outline-secondary"
-                  size="sm"
-                  className="me-2"
-                  onClick={() => openEdit(budget)}
-                  aria-label={`Edit budget ${budget.pretty_name}`}
-                >
-                  <FontAwesomeIcon icon={faPencil} />
-                </Button>
-                <Button
-                  variant="outline-danger"
-                  size="sm"
-                  onClick={() => handleDelete(budget)}
-                  aria-label={`Delete budget ${budget.pretty_name}`}
-                >
-                  <FontAwesomeIcon icon={faTrash} />
-                </Button>
+              <td className="text-end text-nowrap">
+                <ButtonGroup size="sm">
+                  <Button
+                    variant="outline-secondary"
+                    onClick={() => openEdit(budget)}
+                    aria-label={`Edit budget ${budget.pretty_name}`}
+                  >
+                    <FontAwesomeIcon icon={faPencil} />
+                  </Button>
+                  <Button
+                    variant="outline-danger"
+                    onClick={() => handleDelete(budget)}
+                    aria-label={`Delete budget ${budget.pretty_name}`}
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </Button>
+                </ButtonGroup>
               </td>
             </tr>
           ))}
