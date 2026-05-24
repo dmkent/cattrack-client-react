@@ -1,9 +1,19 @@
+export const ENHANCED_IMPLEMENTATION = "EnhancedSklearnCategoriser";
+
 export interface CrossValidateRequest {
   from_date: string;
   to_date: string;
   split_ratio: number;
   random_seed?: number;
   implementation: string;
+  threshold?: number;
+  margin?: number;
+  min_df?: number;
+  max_df?: number;
+  alpha?: number;
+  calibration_cv?: number;
+  min_category_samples?: number;
+  compare_against_baseline?: boolean;
 }
 
 export interface CrossValidateSaveRequest {
@@ -15,6 +25,13 @@ export interface CrossValidateSaveRequest {
   implementation: string;
   split_ratio?: number;
   random_seed?: number;
+  threshold?: number;
+  margin?: number;
+  min_df?: number;
+  max_df?: number;
+  alpha?: number;
+  calibration_cv?: number;
+  min_category_samples?: number;
 }
 
 export interface CategoryMetric {
@@ -22,6 +39,10 @@ export interface CategoryMetric {
   correct: number;
   total: number;
   precision: number;
+  auto_correct?: number;
+  auto_total?: number;
+  auto_precision?: number;
+  coverage?: number;
 }
 
 export interface FailedPrediction {
@@ -42,6 +63,32 @@ export interface FailedPrediction {
   };
 }
 
+export interface ExcludedCategory {
+  category_name: string;
+  count: number;
+}
+
+export interface ComparisonBaseline {
+  implementation: string;
+  accuracy: number;
+  overall_accuracy: number;
+  auto_precision: number;
+  coverage: number;
+  review_count: number;
+}
+
+export interface ComparisonDelta {
+  accuracy: number;
+  overall_accuracy: number;
+  auto_precision: number;
+  coverage: number;
+}
+
+export interface CrossValidateComparison {
+  baseline: ComparisonBaseline;
+  delta: ComparisonDelta;
+}
+
 export interface CrossValidateResult {
   status: "ok";
   random_seed: number;
@@ -56,6 +103,15 @@ export interface CrossValidateResult {
   matched: number;
   category_metrics: CategoryMetric[];
   failed: FailedPrediction[];
+  overall_accuracy?: number;
+  auto_matched?: number;
+  auto_precision?: number;
+  coverage?: number;
+  review_count?: number;
+  excluded_categories?: ExcludedCategory[];
+  included_category_count?: number;
+  included_transaction_count?: number;
+  comparison?: CrossValidateComparison;
 }
 
 export interface CrossValidateError {

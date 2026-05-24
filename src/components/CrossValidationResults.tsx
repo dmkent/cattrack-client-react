@@ -18,6 +18,21 @@ export interface CrossValidationResultsProps {
 
 const FAILED_PAGE_SIZE = 10;
 
+const formatPercent = (value: number | undefined): string =>
+  value === undefined ? "-" : `${(value * 100).toFixed(1)}%`;
+
+const deltaClass = (value: number): string => {
+  if (value > 0) return "text-success";
+  if (value < 0) return "text-danger";
+  return "";
+};
+
+const formatDelta = (value: number): string => {
+  const pct = (value * 100).toFixed(1);
+  const sign = value > 0 ? "+" : "";
+  return `${sign}${pct}%`;
+};
+
 export function CrossValidationResults({
   result,
   onSave,
@@ -41,6 +56,15 @@ export function CrossValidationResults({
     failedPage * FAILED_PAGE_SIZE,
     (failedPage + 1) * FAILED_PAGE_SIZE,
   );
+
+  const hasAutoMetrics = sortedMetrics.some(
+    (metric) => metric.auto_total !== undefined,
+  );
+  const hasCoverage = result.coverage !== undefined;
+  const hasExclusions =
+    result.excluded_categories !== undefined &&
+    result.excluded_categories.length > 0;
+  const comparison = result.comparison;
 
   return (
     <div>
@@ -67,8 +91,109 @@ export function CrossValidationResults({
               <p className="text-muted">Validation set</p>
             </Col>
           </Row>
+          {hasCoverage && (
+            <Row className="mt-3">
+              <Col sm={4}>
+                <h4>{formatPercent(result.coverage)}</h4>
+                <p className="text-muted">Coverage</p>
+              </Col>
+              <Col sm={4}>
+                <h4>{formatPercent(result.auto_precision)}</h4>
+                <p className="text-muted">Auto-precision</p>
+              </Col>
+              <Col sm={4}>
+                <h4>{result.review_count ?? "-"}</h4>
+                <p className="text-muted">Review count</p>
+              </Col>
+            </Row>
+          )}
         </Card.Body>
       </Card>
+
+      {hasExclusions && (
+        <Card className="mb-3">
+          <Card.Header>Excluded Categories</Card.Header>
+          <Card.Body>
+            <p className="text-muted mb-2">
+              Trained on {result.included_transaction_count} transactions across{" "}
+              {result.included_category_count} categories.
+            </p>
+            <Table striped bordered hover size="sm" className="mb-0">
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Transactions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {result.excluded_categories!.map((excluded) => (
+                  <tr key={excluded.category_name}>
+                    <td>{excluded.category_name}</td>
+                    <td>{excluded.count}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </Card.Body>
+        </Card>
+      )}
+
+      {comparison && (
+        <Card className="mb-3">
+          <Card.Header>Baseline Comparison</Card.Header>
+          <Card.Body>
+            <Table striped bordered hover size="sm" className="mb-2">
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th>{result.implementation}</th>
+                  <th>{comparison.baseline.implementation}</th>
+                  <th>Δ</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Accuracy</td>
+                  <td>{formatPercent(result.accuracy)}</td>
+                  <td>{formatPercent(comparison.baseline.accuracy)}</td>
+                  <td className={deltaClass(comparison.delta.accuracy)}>
+                    {formatDelta(comparison.delta.accuracy)}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Overall accuracy</td>
+                  <td>{formatPercent(result.overall_accuracy)}</td>
+                  <td>
+                    {formatPercent(comparison.baseline.overall_accuracy)}
+                  </td>
+                  <td className={deltaClass(comparison.delta.overall_accuracy)}>
+                    {formatDelta(comparison.delta.overall_accuracy)}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Auto-precision</td>
+                  <td>{formatPercent(result.auto_precision)}</td>
+                  <td>{formatPercent(comparison.baseline.auto_precision)}</td>
+                  <td className={deltaClass(comparison.delta.auto_precision)}>
+                    {formatDelta(comparison.delta.auto_precision)}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Coverage</td>
+                  <td>{formatPercent(result.coverage)}</td>
+                  <td>{formatPercent(comparison.baseline.coverage)}</td>
+                  <td className={deltaClass(comparison.delta.coverage)}>
+                    {formatDelta(comparison.delta.coverage)}
+                  </td>
+                </tr>
+              </tbody>
+            </Table>
+            <p className="text-muted mb-0">
+              Baseline review count: {comparison.baseline.review_count}
+            </p>
+          </Card.Body>
+        </Card>
+      )}
 
       <h5>Per-Category Precision</h5>
       <Table striped bordered hover size="sm" className="mb-3">
@@ -78,6 +203,12 @@ export function CrossValidationResults({
             <th>Correct</th>
             <th>Total</th>
             <th>Precision</th>
+            {hasAutoMetrics && (
+              <>
+                <th>Auto-precision</th>
+                <th>Coverage</th>
+              </>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -87,6 +218,20 @@ export function CrossValidationResults({
               <td>{metric.correct}</td>
               <td>{metric.total}</td>
               <td>{(metric.precision * 100).toFixed(1)}%</td>
+              {hasAutoMetrics && (
+                <>
+                  <td>
+                    {metric.auto_total !== undefined
+                      ? formatPercent(metric.auto_precision)
+                      : ""}
+                  </td>
+                  <td>
+                    {metric.auto_total !== undefined
+                      ? formatPercent(metric.coverage)
+                      : ""}
+                  </td>
+                </>
+              )}
             </tr>
           ))}
         </tbody>
