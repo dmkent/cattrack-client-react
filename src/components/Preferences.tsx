@@ -6,6 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import {
   CrossValidateRequest,
   CrossValidateResult,
+  CrossValidateSaveRequest,
   SavedModel,
 } from "../data/CrossValidation";
 import { useCrossValidation } from "../hooks/useCrossValidation";
@@ -21,6 +22,11 @@ export function Preferences(): JSX.Element {
 
   const [isRunning, setIsRunning] = useState(false);
   const [result, setResult] = useState<CrossValidateResult | null>(null);
+  // Hyperparameters aren't echoed back in the CV result, so we cache the
+  // request to forward them on save (training_config drives recalibrate).
+  const [lastRequest, setLastRequest] = useState<CrossValidateRequest | null>(
+    null,
+  );
   const [error, setError] = useState<string | null>(null);
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -46,11 +52,13 @@ export function Preferences(): JSX.Element {
     setIsRunning(true);
     setError(null);
     setResult(null);
+    setLastRequest(null);
     setSuccessMessage(null);
     setSavedModel(null);
     try {
       const cvResult = await runCrossValidation(request);
       setResult(cvResult);
+      setLastRequest(request);
     } catch (e: unknown) {
       setError((e as Error).message);
     } finally {
@@ -64,7 +72,32 @@ export function Preferences(): JSX.Element {
     setIsSaving(true);
     setSaveError(undefined);
     try {
-      const request = {
+      const hyperparams: Partial<CrossValidateSaveRequest> = lastRequest
+        ? {
+            ...(lastRequest.threshold !== undefined && {
+              threshold: lastRequest.threshold,
+            }),
+            ...(lastRequest.margin !== undefined && {
+              margin: lastRequest.margin,
+            }),
+            ...(lastRequest.min_df !== undefined && {
+              min_df: lastRequest.min_df,
+            }),
+            ...(lastRequest.max_df !== undefined && {
+              max_df: lastRequest.max_df,
+            }),
+            ...(lastRequest.alpha !== undefined && {
+              alpha: lastRequest.alpha,
+            }),
+            ...(lastRequest.calibration_cv !== undefined && {
+              calibration_cv: lastRequest.calibration_cv,
+            }),
+            ...(lastRequest.min_category_samples !== undefined && {
+              min_category_samples: lastRequest.min_category_samples,
+            }),
+          }
+        : {};
+      const request: CrossValidateSaveRequest = {
         name: values.name,
         from_date: result.from_date,
         to_date: result.to_date,
@@ -75,6 +108,7 @@ export function Preferences(): JSX.Element {
           split_ratio: result.split_ratio,
           random_seed: result.random_seed,
         }),
+        ...hyperparams,
       };
       const saved = await saveModel(request);
       await queryClient.invalidateQueries({ queryKey: ["categorisors"] });
@@ -83,6 +117,7 @@ export function Preferences(): JSX.Element {
       }
       setShowSaveModal(false);
       setResult(null);
+      setLastRequest(null);
       setSavedModel(values.set_as_default ? null : saved);
       setSuccessMessage(
         values.set_as_default

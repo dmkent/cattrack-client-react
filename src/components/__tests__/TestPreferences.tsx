@@ -350,6 +350,143 @@ describe("Preferences", () => {
     });
   });
 
+  it("should forward advanced params to cross_validate_save and omit compare_against_baseline", async () => {
+    const user = userEvent.setup();
+    let lastCvRequest: Record<string, unknown> | null = null;
+    let lastSaveRequest: Record<string, unknown> | null = null;
+
+    renderWithProviders(
+      <Preferences />,
+      undefined,
+      (mockAdapter: AxiosMockAdapter) => {
+        setupDefaultModelMocks(mockAdapter);
+        mockAdapter
+          .onPost("/api/categorisor/cross_validate/")
+          .reply((config) => {
+            lastCvRequest = JSON.parse(config.data);
+            return [
+              200,
+              { ...mockResult, implementation: "EnhancedSklearnCategoriser" },
+            ];
+          });
+        mockAdapter
+          .onPost("/api/categorisor/cross_validate_save/")
+          .reply((config) => {
+            lastSaveRequest = JSON.parse(config.data);
+            return [201, mockSavedModel];
+          });
+      },
+    );
+
+    fireEvent.change(screen.getByLabelText("From date"), {
+      target: { value: "2025-01-01" },
+    });
+    fireEvent.change(screen.getByLabelText("To date"), {
+      target: { value: "2025-12-31" },
+    });
+    await user.selectOptions(
+      screen.getByLabelText("Implementation"),
+      "EnhancedSklearnCategoriser",
+    );
+    await user.click(screen.getByText("Advanced options"));
+    await user.type(screen.getByLabelText("Threshold"), "0.55");
+    await user.type(screen.getByLabelText("Min samples per category"), "3");
+    await user.click(
+      screen.getByLabelText("Compare against SklearnCategoriser baseline"),
+    );
+    await user.click(screen.getByText("Run Cross-Validation"));
+
+    await waitFor(() => {
+      expect(screen.getByText("Save Model")).toBeTruthy();
+    });
+    expect(lastCvRequest).toMatchObject({
+      threshold: 0.55,
+      min_category_samples: 3,
+      compare_against_baseline: true,
+    });
+
+    await user.click(screen.getByText("Save Model"));
+    await waitFor(() => {
+      expect(screen.getByLabelText("Model name")).toBeTruthy();
+    });
+    await user.type(screen.getByLabelText("Model name"), "enhanced-model");
+    await user.click(screen.getByText("Save"));
+
+    await waitFor(() => {
+      expect(lastSaveRequest).not.toBeNull();
+    });
+    expect(lastSaveRequest).toMatchObject({
+      name: "enhanced-model",
+      implementation: "EnhancedSklearnCategoriser",
+      threshold: 0.55,
+      min_category_samples: 3,
+    });
+    expect(lastSaveRequest).not.toHaveProperty("compare_against_baseline");
+  });
+
+  it("should clear cached hyperparameters when a new cross-validation runs without them", async () => {
+    const user = userEvent.setup();
+    let lastSaveRequest: Record<string, unknown> | null = null;
+
+    renderWithProviders(
+      <Preferences />,
+      undefined,
+      (mockAdapter: AxiosMockAdapter) => {
+        setupDefaultModelMocks(mockAdapter);
+        mockAdapter
+          .onPost("/api/categorisor/cross_validate/")
+          .reply(200, mockResult);
+        mockAdapter
+          .onPost("/api/categorisor/cross_validate_save/")
+          .reply((config) => {
+            lastSaveRequest = JSON.parse(config.data);
+            return [201, mockSavedModel];
+          });
+      },
+    );
+
+    // First run: Enhanced + threshold
+    fireEvent.change(screen.getByLabelText("From date"), {
+      target: { value: "2025-01-01" },
+    });
+    fireEvent.change(screen.getByLabelText("To date"), {
+      target: { value: "2025-12-31" },
+    });
+    await user.selectOptions(
+      screen.getByLabelText("Implementation"),
+      "EnhancedSklearnCategoriser",
+    );
+    await user.click(screen.getByText("Advanced options"));
+    await user.type(screen.getByLabelText("Threshold"), "0.8");
+    await user.click(screen.getByText("Run Cross-Validation"));
+    await waitFor(() => {
+      expect(screen.getByText("Save Model")).toBeTruthy();
+    });
+
+    // Second run: switch back to default, do not re-fill threshold
+    await user.selectOptions(
+      screen.getByLabelText("Implementation"),
+      "SklearnCategoriser",
+    );
+    await user.click(screen.getByText("Run Cross-Validation"));
+    await waitFor(() => {
+      expect(screen.getByText("Save Model")).toBeTruthy();
+    });
+
+    await user.click(screen.getByText("Save Model"));
+    await waitFor(() => {
+      expect(screen.getByLabelText("Model name")).toBeTruthy();
+    });
+    await user.type(screen.getByLabelText("Model name"), "plain-model");
+    await user.click(screen.getByText("Save"));
+
+    await waitFor(() => {
+      expect(lastSaveRequest).not.toBeNull();
+    });
+    // Advanced params from the earlier run must not leak into this save.
+    expect(lastSaveRequest).not.toHaveProperty("threshold");
+  });
+
   it("should set saved model as default", async () => {
     const user = userEvent.setup();
     renderWithProviders(<Preferences />, undefined, setup);

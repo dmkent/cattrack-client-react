@@ -141,6 +141,96 @@ describe("CrossValidationResults", () => {
     expect(screen.queryByText(/Failed Predictions/)).toBeNull();
   });
 
+  it("should not render enhanced metric sections for a legacy response", () => {
+    render(<CrossValidationResults result={baseResult} onSave={vi.fn()} />);
+
+    expect(screen.queryByText("Coverage")).toBeNull();
+    expect(screen.queryByText("Auto-precision")).toBeNull();
+    expect(screen.queryByText("Excluded Categories")).toBeNull();
+    expect(screen.queryByText("Baseline Comparison")).toBeNull();
+  });
+
+  it("should render coverage, excluded-categories and baseline-comparison when present", () => {
+    const enhanced: CrossValidateResult = {
+      ...baseResult,
+      implementation: "EnhancedSklearnCategoriser",
+      overall_accuracy: 0.87,
+      auto_matched: 100,
+      auto_precision: 0.95,
+      coverage: 0.8,
+      review_count: 30,
+      included_category_count: 2,
+      included_transaction_count: 140,
+      excluded_categories: [{ category_name: "Rare", count: 1 }],
+      category_metrics: [
+        {
+          category_name: "Shopping",
+          correct: 45,
+          total: 50,
+          precision: 0.9,
+          auto_correct: 40,
+          auto_total: 42,
+          auto_precision: 0.952,
+          coverage: 0.84,
+        },
+      ],
+      comparison: {
+        baseline: {
+          implementation: "SklearnCategoriser",
+          accuracy: 0.8,
+          overall_accuracy: 0.8,
+          auto_precision: 0.85,
+          coverage: 0.7,
+          review_count: 45,
+        },
+        delta: {
+          accuracy: 0.07,
+          overall_accuracy: 0.07,
+          auto_precision: 0.1,
+          coverage: 0.1,
+        },
+      },
+    };
+
+    render(<CrossValidationResults result={enhanced} onSave={vi.fn()} />);
+
+    // Coverage tile row (label appears for tile + comparison row + per-cat col)
+    expect(screen.getAllByText("Coverage").length).toBeGreaterThan(0);
+    expect(screen.getByText("Review count")).toBeTruthy();
+    expect(screen.getAllByText("80.0%").length).toBeGreaterThan(0);
+
+    // Excluded categories card
+    expect(screen.getByText("Excluded Categories")).toBeTruthy();
+    expect(screen.getByText("Rare")).toBeTruthy();
+    expect(
+      screen.getByText(/Trained on 140 transactions across 2 categories/),
+    ).toBeTruthy();
+
+    // Baseline comparison card
+    expect(screen.getByText("Baseline Comparison")).toBeTruthy();
+    expect(screen.getAllByText("+7.0%").length).toBeGreaterThan(0);
+    expect(screen.getByText(/Baseline review count: 45/)).toBeTruthy();
+
+    // Extra per-category columns (label appears in tile + comparison + col)
+    expect(screen.getAllByText("Auto-precision").length).toBeGreaterThan(0);
+  });
+
+  it("should not render excluded-categories card when list is empty", () => {
+    const enhanced: CrossValidateResult = {
+      ...baseResult,
+      coverage: 0.9,
+      auto_precision: 0.92,
+      review_count: 10,
+      included_category_count: 2,
+      included_transaction_count: 150,
+      excluded_categories: [],
+    };
+
+    render(<CrossValidationResults result={enhanced} onSave={vi.fn()} />);
+
+    expect(screen.queryByText("Excluded Categories")).toBeNull();
+  });
+
   it("should reset pagination when result changes", async () => {
     const user = userEvent.setup();
     const failed = Array.from({ length: 15 }, (_, i) =>
