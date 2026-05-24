@@ -146,6 +146,10 @@ export function CrossValidationForm({
           <Form.Control.Feedback type="invalid">
             {errors.split_ratio?.message}
           </Form.Control.Feedback>
+          <Form.Text className="text-muted">
+            Fraction of transactions used to train the model; the remainder are
+            held back to validate it.
+          </Form.Text>
         </Form.Group>
         <Form.Group as={Col} sm={3} controlId="implementation">
           <Form.Label>Implementation</Form.Label>
@@ -155,6 +159,10 @@ export function CrossValidationForm({
               EnhancedSklearnCategoriser
             </option>
           </Form.Select>
+          <Form.Text className="text-muted">
+            Enhanced adds probability calibration, confidence gating and
+            sparse-category exclusion on top of the base model.
+          </Form.Text>
         </Form.Group>
         <Form.Group as={Col} sm={3} controlId="alpha">
           <Form.Label>Alpha</Form.Label>
@@ -171,10 +179,18 @@ export function CrossValidationForm({
           <Form.Control.Feedback type="invalid">
             {errors.alpha?.message}
           </Form.Control.Feedback>
+          <Form.Text className="text-muted">
+            L2 regularisation strength for the classifier. Higher values
+            simplify the model and reduce overfitting.
+          </Form.Text>
         </Form.Group>
         <Form.Group as={Col} sm={3} controlId="random_seed">
           <Form.Label>Random seed (optional)</Form.Label>
           <Form.Control type="number" {...register("random_seed")} />
+          <Form.Text className="text-muted">
+            Fixes the train/validation split so a run can be reproduced
+            exactly. Leave blank for a random split.
+          </Form.Text>
         </Form.Group>
       </Row>
       {isEnhanced && (
@@ -201,6 +217,11 @@ export function CrossValidationForm({
                     <Form.Control.Feedback type="invalid">
                       {errors.threshold?.message}
                     </Form.Control.Feedback>
+                    <Form.Text className="text-muted">
+                      Minimum confidence the top category must reach before a
+                      transaction is auto-categorised. Predictions below this go
+                      to manual review. Higher = more conservative.
+                    </Form.Text>
                   </Form.Group>
                   <Form.Group as={Col} sm={4} controlId="margin">
                     <Form.Label>Margin</Form.Label>
@@ -219,6 +240,10 @@ export function CrossValidationForm({
                     <Form.Control.Feedback type="invalid">
                       {errors.margin?.message}
                     </Form.Control.Feedback>
+                    <Form.Text className="text-muted">
+                      How far ahead of the runner-up the top category must be to
+                      be auto-applied. Guards against close, ambiguous calls.
+                    </Form.Text>
                   </Form.Group>
                   <Form.Group as={Col} sm={4} controlId="calibration_cv">
                     <Form.Label>Calibration CV splits</Form.Label>
@@ -235,6 +260,11 @@ export function CrossValidationForm({
                     <Form.Control.Feedback type="invalid">
                       {errors.calibration_cv?.message}
                     </Form.Control.Feedback>
+                    <Form.Text className="text-muted">
+                      Cross-validation folds used to calibrate the predicted
+                      probabilities. Categories with fewer transactions than
+                      this are dropped from training.
+                    </Form.Text>
                   </Form.Group>
                 </Row>
                 <Row className="mb-3">
@@ -253,6 +283,11 @@ export function CrossValidationForm({
                     <Form.Control.Feedback type="invalid">
                       {errors.min_df?.message}
                     </Form.Control.Feedback>
+                    <Form.Text className="text-muted">
+                      Ignore description terms that appear in fewer transactions
+                      than this. A whole number is a transaction count; a
+                      decimal ≤ 1 is a proportion. Raise it to drop rare noise.
+                    </Form.Text>
                   </Form.Group>
                   <Form.Group as={Col} sm={4} controlId="max_df">
                     <Form.Label>Max document frequency</Form.Label>
@@ -269,6 +304,12 @@ export function CrossValidationForm({
                     <Form.Control.Feedback type="invalid">
                       {errors.max_df?.message}
                     </Form.Control.Feedback>
+                    <Form.Text className="text-muted">
+                      Ignore description terms that appear in more transactions
+                      than this. A whole number is a transaction count; a
+                      decimal ≤ 1 is a proportion. Lower it to drop overly
+                      common terms.
+                    </Form.Text>
                   </Form.Group>
                   <Form.Group
                     as={Col}
@@ -289,18 +330,27 @@ export function CrossValidationForm({
                     <Form.Control.Feedback type="invalid">
                       {errors.min_category_samples?.message}
                     </Form.Control.Feedback>
+                    <Form.Text className="text-muted">
+                      Categories with fewer transactions than this are excluded
+                      from training entirely (listed in the results).
+                    </Form.Text>
                   </Form.Group>
                 </Row>
               </Accordion.Body>
             </Accordion.Item>
           </Accordion>
-          <Form.Check
-            type="checkbox"
-            id="compare_against_baseline"
-            label="Compare against SklearnCategoriser baseline"
-            className="mb-3"
-            {...register("compare_against_baseline")}
-          />
+          <Form.Group className="mb-3">
+            <Form.Check
+              type="checkbox"
+              id="compare_against_baseline"
+              label="Compare against SklearnCategoriser baseline"
+              {...register("compare_against_baseline")}
+            />
+            <Form.Text className="text-muted">
+              Also trains the base SklearnCategoriser on the same split and
+              reports how the enhanced model's metrics compare.
+            </Form.Text>
+          </Form.Group>
         </>
       )}
       <Button type="submit" variant="primary" disabled={isRunning}>
