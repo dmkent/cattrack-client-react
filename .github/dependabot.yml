@@ -6,3 +6,34 @@ updates:
       interval: "weekly"
     cooldown:
       default-days: 7
+    groups:
+      react:
+        patterns:
+          - "react"
+          - "react-*"
+          - "@types/react"
+          - "@types/react-dom"
+      testing:
+        patterns:
+          - "@testing-library/*"
+          - "vitest"
+          - "@vitest/*"
+          - "jsdom"
+          - "axios-mock-adapter"
+      typescript:
+        patterns:
+          - "typescript"
+          - "typescript-eslint"
+          - "@typescript-eslint/*"
+          - "@types/*"
+      linting:
+        patterns:
+          - "eslint"
+          - "eslint-*"
+          - "prettier"
+          - "prettier-*"
+          - "@trivago/prettier-plugin-sort-imports"
+      vite:
+        patterns:
+          - "vite"
+          - "@vitejs/*"
