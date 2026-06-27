@@ -33,9 +33,9 @@
     "react": "^19.2.7",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.2.7",
-    "react-hook-form": "^7.78.0",
+    "react-hook-form": "^7.80.0",
     "react-intl": "^10.1.13",
-    "react-router-dom": "^7.17.0"
+    "react-router-dom": "^7.18.0"
   },
   "resolutions": {
     "minimatch": "^9.0.7",
