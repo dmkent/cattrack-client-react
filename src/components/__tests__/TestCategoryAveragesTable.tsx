@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { IntlProvider } from "react-intl";
 import { expect, test } from "vitest";
@@ -118,5 +118,52 @@ test("CategoryAveragesTable shows income before expenses with subtotals", () => 
 
   expect(screen.getByText("Income subtotal")).toBeTruthy();
   expect(screen.getByText("Expenses subtotal")).toBeTruthy();
-  expect(screen.getByText("Total")).toBeTruthy();
+  // "Total" appears both as a column header and the grand-total row label.
+  expect(screen.getAllByText("Total").length).toBeGreaterThan(1);
+});
+
+test("CategoryAveragesTable shows raw total and extrapolated period rates", () => {
+  // 100 days in the period, $1000 total -> $10/day mean daily amount.
+  const summary: CategorySummary[] = [
+    {
+      category_id: "1",
+      category_name: "Consulting fees",
+      subcategory: "Consulting",
+      total: 1000,
+    },
+  ];
+  const filters: PeriodFilters = {
+    from_date: "2024-01-01",
+    to_date: "2024-04-09", // inclusive -> 100 days
+  };
+
+  setup(summary, filters);
+
+  const headerCells = within(screen.getAllByRole("row")[0]).getAllByRole(
+    "columnheader",
+  );
+  expect(headerCells.map((cell) => cell.textContent)).toEqual([
+    "Category",
+    "Total",
+    "Annual",
+    "Monthly",
+    "Fortnightly",
+    "Weekly",
+  ]);
+
+  const consultingRow = screen.getByText("Consulting").closest("tr");
+  // The "Consulting" group row is visible without expanding.
+  expect(consultingRow).not.toBeNull();
+  const cells = within(consultingRow as HTMLElement).getAllByRole("cell");
+
+  // Total is the raw amount regardless of the period length.
+  expect(cells[1].textContent).toBe("A$1,000");
+  // Annual = daily (10) * 365.25 = 3652.5 -> rounds to A$3,653.
+  expect(cells[2].textContent).toBe("A$3,653");
+  // Monthly = annual / 12 = 304.375 -> rounds to A$304.
+  expect(cells[3].textContent).toBe("A$304");
+  // Fortnightly = daily * 14 = 140.
+  expect(cells[4].textContent).toBe("A$140");
+  // Weekly = daily * 7 = 70.
+  expect(cells[5].textContent).toBe("A$70");
 });
