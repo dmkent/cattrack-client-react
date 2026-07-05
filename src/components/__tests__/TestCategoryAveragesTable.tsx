@@ -1,7 +1,7 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { IntlProvider } from "react-intl";
-import { expect, test } from "vitest";
+import { afterEach, expect, test, vi } from "vitest";
 
 import { CategorySummary } from "../../data/Transaction";
 import { PeriodFilters } from "../../data/TransactionFilters";
@@ -165,5 +165,43 @@ test("CategoryAveragesTable shows raw total and extrapolated period rates", () =
   // Fortnightly = daily * 14 = 140.
   expect(cells[4].textContent).toBe("A$140");
   // Weekly = daily * 7 = 70.
+  expect(cells[5].textContent).toBe("A$70");
+});
+
+afterEach(() => {
+  vi.useRealTimers();
+});
+
+test("CategoryAveragesTable caps future periods to today when extrapolating", () => {
+  // Today is 2024-01-11; the period runs 2024-01-01 through a future end date.
+  // Only the 11 elapsed days (inclusive) should count: $110 -> $10/day.
+  vi.useFakeTimers();
+  vi.setSystemTime(new Date("2024-01-11T12:00:00Z"));
+
+  const summary: CategorySummary[] = [
+    {
+      category_id: "1",
+      category_name: "Consulting fees",
+      subcategory: "Consulting",
+      total: 110,
+    },
+  ];
+  const filters: PeriodFilters = {
+    from_date: "2024-01-01",
+    to_date: "2024-12-31", // mostly in the future
+  };
+
+  setup(summary, filters);
+
+  const consultingRow = screen.getByText("Consulting").closest("tr");
+  expect(consultingRow).not.toBeNull();
+  const cells = within(consultingRow as HTMLElement).getAllByRole("cell");
+
+  // Total stays the raw amount.
+  expect(cells[1].textContent).toBe("A$110");
+  // Daily = 110 / 11 = 10, so the same extrapolation as a $10/day rate.
+  // Annual = 10 * 365.25 = 3652.5 -> A$3,653.
+  expect(cells[2].textContent).toBe("A$3,653");
+  // Weekly = 10 * 7 = 70.
   expect(cells[5].textContent).toBe("A$70");
 });

@@ -39,7 +39,14 @@ interface SubcategoryGroup {
 function calculateDaysBetween(fromDate: string, toDate: string): number {
   const from = new Date(fromDate);
   const to = new Date(toDate);
-  const diffTime = Math.abs(to.getTime() - from.getTime());
+  // Don't count days in the future: cap the end of the period to today so
+  // extrapolated rates aren't diluted by a period that hasn't elapsed yet.
+  const today = new Date();
+  const effectiveTo = to.getTime() > today.getTime() ? today : to;
+  const diffTime = effectiveTo.getTime() - from.getTime();
+  if (diffTime < 0) {
+    return 1;
+  }
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
   return diffDays;
 }
