@@ -17,14 +17,17 @@ interface CategoryAveragesTableProps {
 
 interface TimePeriod {
   label: string;
-  days: number;
+  // Multiplier applied to the mean daily amount to extrapolate the period rate.
+  perDayMultiplier: number;
 }
 
+const DAYS_PER_YEAR = 365.25;
+
 const TIME_PERIODS: TimePeriod[] = [
-  { label: "Annual", days: 365 },
-  { label: "Monthly", days: 30 },
-  { label: "Fortnightly", days: 14 },
-  { label: "Weekly", days: 7 },
+  { label: "Annual", perDayMultiplier: DAYS_PER_YEAR },
+  { label: "Monthly", perDayMultiplier: DAYS_PER_YEAR / 12 },
+  { label: "Fortnightly", perDayMultiplier: 14 },
+  { label: "Weekly", perDayMultiplier: 7 },
 ];
 
 interface SubcategoryGroup {
@@ -36,7 +39,14 @@ interface SubcategoryGroup {
 function calculateDaysBetween(fromDate: string, toDate: string): number {
   const from = new Date(fromDate);
   const to = new Date(toDate);
-  const diffTime = Math.abs(to.getTime() - from.getTime());
+  // Don't count days in the future: cap the end of the period to today so
+  // extrapolated rates aren't diluted by a period that hasn't elapsed yet.
+  const today = new Date();
+  const effectiveTo = to.getTime() > today.getTime() ? today : to;
+  const diffTime = effectiveTo.getTime() - from.getTime();
+  if (diffTime < 0) {
+    return 1;
+  }
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
   return diffDays;
 }
@@ -44,12 +54,13 @@ function calculateDaysBetween(fromDate: string, toDate: string): number {
 function calculateAverage(
   total: number,
   periodDays: number,
-  targetDays: number,
+  perDayMultiplier: number,
 ): number {
   if (periodDays === 0) {
     return 0;
   }
-  return (total / periodDays) * targetDays;
+  const dailyRate = total / periodDays;
+  return dailyRate * perDayMultiplier;
 }
 
 export function CategoryAveragesTable(
@@ -116,21 +127,31 @@ export function CategoryAveragesTable(
     }));
   };
 
-  const renderValueCells = (total: number, keyPrefix: string) =>
-    TIME_PERIODS.map((period) => {
-      const average = calculateAverage(total, periodDays, period.days);
-      return (
-        <td key={`${keyPrefix}-${period.label}`}>
-          <FormattedNumber
-            value={average}
-            style="currency"
-            currency="AUD"
-            minimumFractionDigits={0}
-            maximumFractionDigits={0}
-          />
-        </td>
-      );
-    });
+  const renderCurrencyCell = (value: number, key: string) => (
+    <td key={key}>
+      <FormattedNumber
+        value={value}
+        style="currency"
+        currency="AUD"
+        minimumFractionDigits={0}
+        maximumFractionDigits={0}
+      />
+    </td>
+  );
+
+  const renderValueCells = (total: number, keyPrefix: string) => (
+    <Fragment>
+      {renderCurrencyCell(total, `${keyPrefix}-total`)}
+      {TIME_PERIODS.map((period) => {
+        const average = calculateAverage(
+          total,
+          periodDays,
+          period.perDayMultiplier,
+        );
+        return renderCurrencyCell(average, `${keyPrefix}-${period.label}`);
+      })}
+    </Fragment>
+  );
 
   const renderGroupRows = (
     label: string,
@@ -145,7 +166,7 @@ export function CategoryAveragesTable(
     return (
       <Fragment>
         <tr>
-          <td colSpan={TIME_PERIODS.length + 1}>
+          <td colSpan={TIME_PERIODS.length + 2}>
             <strong>{label}</strong>
           </td>
         </tr>
@@ -196,6 +217,7 @@ export function CategoryAveragesTable(
         <thead>
           <tr>
             <th>Category</th>
+            <th>Total</th>
             {TIME_PERIODS.map((period) => (
               <th key={period.label}>{period.label}</th>
             ))}
