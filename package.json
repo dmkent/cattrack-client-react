@@ -39,7 +39,8 @@
   },
   "resolutions": {
     "minimatch": "^9.0.7",
-    "picomatch": ">=2.3.2"
+    "picomatch": ">=2.3.2",
+    "vite": "^7.3.5"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.1",
