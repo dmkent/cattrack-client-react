@@ -31,13 +31,6 @@ export default defineConfig(({ mode }) => {
         ),
       },
     },
-    optimizeDeps: {
-      esbuildOptions: {
-        loader: {
-          ".js": "jsx",
-        },
-      },
-    },
     build: {
       outDir: "dist",
       sourcemap: true,
@@ -46,15 +39,17 @@ export default defineConfig(({ mode }) => {
           main: path.resolve(__dirname, "index.html"),
         },
         output: {
-          manualChunks: {
-            vendor: [
-              "react",
-              "react-dom",
-              "react-bootstrap",
-              "react-router-dom",
-              "react-intl",
-            ],
-            plotly: ["plotly.js-basic-dist"],
+          manualChunks(id) {
+            if (id.includes("plotly.js-basic-dist")) {
+              return "plotly";
+            }
+            if (
+              /node_modules\/(react|react-dom|react-bootstrap|react-router-dom|react-router|react-intl)\//.test(
+                id,
+              )
+            ) {
+              return "vendor";
+            }
           },
         },
       },
