@@ -2994,10 +2994,10 @@ picomatch@>=2.3.2, picomatch@^4.0.3, picomatch@^4.0.4:
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-4.0.4.tgz#fd6f5e00a143086e074dffe4c924b8fb293b0589"
   integrity sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==
 
-plotly.js-basic-dist@^3.3.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/plotly.js-basic-dist/-/plotly.js-basic-dist-3.3.1.tgz#4051d449614cf965f166241d4c44131ec9097015"
-  integrity sha512-49kZid9FyZiAewaxhEomIYoawpvZR+6yesp470al08qJ6AIxQwRYi7zM8KoGmCKWVoEA12nrEnb5PDPAdBrlyw==
+plotly.js-basic-dist@^3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/plotly.js-basic-dist/-/plotly.js-basic-dist-3.7.0.tgz#32ebe6769990ebb34ad6929d6da0845bdcd2b341"
+  integrity sha512-lKOhdBCMBfxRW8MlkyGJTAzpnXqsZOCOhKHIgW2jZio+nY0a4JDKgIHvxeh9nBtjd+cojGB89aG20FE4VpNMVQ==
 
 possible-typed-array-names@^1.0.0:
   version "1.1.0"
