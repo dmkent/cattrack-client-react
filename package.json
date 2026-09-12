@@ -34,7 +34,7 @@
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.2.8",
     "react-hook-form": "^7.87.0",
-    "react-intl": "^10.1.25",
+    "react-intl": "^10.1.26",
     "react-router-dom": "^7.18.3"
   },
   "resolutions": {
@@ -52,7 +52,7 @@
     "@types/node": "^26.1.0",
     "@types/plotly.js-basic-dist": "^1.54.4",
     "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.5",
+    "@types/react-dom": "^19.2.7",
     "@typescript-eslint/parser": "^8.54.0",
     "@vitejs/plugin-react": "^6.0.3",
     "@vitest/coverage-v8": "^4.1.11",
