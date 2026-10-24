@@ -3099,10 +3099,10 @@ picomatch@>=2.3.2, picomatch@^4.0.3, picomatch@^4.0.4, picomatch@^4.0.7:
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-4.0.4.tgz#fd6f5e00a143086e074dffe4c924b8fb293b0589"
   integrity sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==
 
-plotly.js-basic-dist@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/plotly.js-basic-dist/-/plotly.js-basic-dist-4.1.1.tgz#9b5599373b8135ad53d47d69b99ee6884fb7c4cc"
-  integrity sha512-weMMOhCTpgXwgmyxLBZi5tkAcXa0PRdUjR1LJpfQn1PoRehLvHkNBxTTXXNTCiFoolqeBfYLyvlS4OMhfuvGLQ==
+plotly.js-basic-dist@^4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/plotly.js-basic-dist/-/plotly.js-basic-dist-4.1.2.tgz#d7c92ad062c1744c71b0c8c560d6006baaad64ac"
+  integrity sha512-X8hCR9O8OZv6ZcXDyiMWrytuQ1Wx9XWelgGCQyQrgkMhqDwg+q+dK4zDTo4CTn8mgARF+7OGDPa4Rk/tin7Xrw==
 
 possible-typed-array-names@^1.0.0:
   version "1.1.0"
